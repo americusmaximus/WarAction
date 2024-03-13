@@ -1,0 +1,6 @@
+LIBRARY
+EXPORTS
+	VModule_Done = ReleaseModule			@1
+	VModule_Handle = MessageModule			@2
+	VModule_Init = InitializeModule			@3
+	VModule_Play = ExecuteModule			@4

@@ -26,48 +26,48 @@ SOFTWARE.
 #pragma optimize("", off)
 #endif
 
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
+typedef unsigned char u8, U8;
+typedef unsigned short u16, U16;
+typedef unsigned int u32, U32;
 
 #if _MSC_VER <= 1200
-typedef unsigned __int64 u64;
+typedef unsigned __int64 u64, U64;
 #else
-typedef unsigned long long u64;
+typedef unsigned long long u64, U64;
 #endif
 
-typedef signed char s8;
-typedef short s16;
-typedef int s32;
+typedef signed char s8, S8;
+typedef short s16, S16;
+typedef int s32, S32;
 
 #if _MSC_VER <= 1200
-typedef __int64 s64;
+typedef __int64 s64, S64;
 #else
-typedef long long s64;
+typedef long long s64, S64;
 #endif
 
-typedef float f32;
-typedef double f64;
+typedef float f32, F32;
+typedef double f64, F64;
 
 typedef int BOOL;
 
 #ifdef _WIN64
-typedef unsigned long long addr;
+typedef unsigned long long addr, ADDR;
 #else
-typedef unsigned int addr;
+typedef unsigned int addr, ADDR;
 #endif
 
-struct f32x2 { f32 X, Y; };
-struct f32x3 { f32 X, Y, Z; };
-struct f32x4 { f32 X, Y, Z, W; };
+typedef struct f32x2 { f32 X, Y; } F32X2, * LPF32X2;
+typedef struct f32x3 { f32 X, Y, Z; } F32X3, * LPF32X3;
+typedef struct f32x4 { f32 X, Y, Z, W; } F32X4, * LPF32X4;
 
-struct f64x2 { f64 X, Y; };
-struct f64x3 { f64 X, Y, Z; };
-struct f64x4 { f64 X, Y, Z, W; };
+typedef struct f64x2 { f64 X, Y; } F64X2, * LPF64X2;
+typedef struct f64x3 { f64 X, Y, Z; } F64X3, * LPF64X3;
+typedef struct f64x4 { f64 X, Y, Z, W; } F64X4, * LPF64X4;
 
-struct u32x2 { u32 X, Y; };
-struct u32x3 { u32 X, Y, Z; };
-struct u32x4 { u32 X, Y, Z, W; };
+typedef struct u32x2 { u32 X, Y; } U32X2, * LPU32X2;
+typedef struct u32x3 { u32 X, Y, Z; } U32X3, * LPU32X3;
+typedef struct u32x4 { u32 X, Y, Z, W; } U32X4, * LPU32X4;
 
 #define DLLAPI extern "C"
 
@@ -99,3 +99,5 @@ struct u32x4 { u32 X, Y, Z, W; };
 
 #define F32_MIN (1.1754943508e-38f)
 #define F32_MAX (3.4028234664e+38f)
+
+#define EXTERN extern

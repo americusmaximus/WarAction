@@ -1,0 +1,50 @@
+/*
+Copyright (c) 2024 Americus Maximus
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#include "RendererState.hxx"
+#include "State.hxx"
+
+#include <RendererModuleExport.hxx>
+
+S32 RendererVideoMode = DEFAULT_RENDERER_VIDEO_MODE_VALUE;
+
+// 0x00401390
+BOOL InitializeRendererStateModule(LPCSTR file)
+{
+    ReleaseRenderStateModule();
+
+    State.Renderer.Module = LoadLibraryA(file);
+
+    RENDERERINITACTIONLAMBDA lambda = (RENDERERINITACTIONLAMBDA)GetProcAddress(State.Renderer.Module, RENDERER_MODULE_INIT_NAME);
+    
+    if (lambda == NULL) { ReleaseRenderStateModule(); return FALSE; }
+
+    State.Renderer.State = lambda();
+
+    return TRUE;
+}
+
+// 0x004013d0
+VOID ReleaseRenderStateModule()
+{
+    if (State.Renderer.Module != NULL) { FreeLibrary(State.Renderer.Module); }
+}
