@@ -202,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basic.hxx" />
+    <ClInclude Include="Resources.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Module.def" />
@@ -210,6 +211,9 @@
     <ProjectReference Include="..\winmm\winmm.vcxproj">
       <Project>{aaa8b810-76ed-4500-a1a5-3fca33c316ad}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

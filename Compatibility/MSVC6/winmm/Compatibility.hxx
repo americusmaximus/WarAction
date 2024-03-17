@@ -25,10 +25,19 @@ SOFTWARE.
 #define WIN32_MEAN_AND_LEAN
 #include <windows.h>
 
-#include <mmsystem.h>
+typedef DWORD DWORD_PTR;
 
-#if _MSC_VER <= 1200
-#include <Compatibility.hxx>
-#else
-#include <mmddk.h>
-#endif
+#define strcat_s(dst, size, src) strcat(dst, src)
+#define snprintf _snprintf
+
+#define _fseeki64 fseek
+
+#define MAKEMCIRESOURCE(wRet, wRes) MAKELRESULT((wRet), (wRes))
+
+#define MCI_FALSE                       (MCI_STRING_OFFSET + 19)
+#define MCI_TRUE                        (MCI_STRING_OFFSET + 20)
+
+typedef VOID (TASKCALLBACK) (DWORD_PTR dwInst);
+typedef TASKCALLBACK FAR *LPTASKCALLBACK;
+
+typedef DWORD (WINAPI *DRIVERMSGPROC)(DWORD, DWORD, DWORD_PTR, DWORD_PTR, DWORD_PTR);

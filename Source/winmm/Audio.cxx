@@ -264,9 +264,9 @@ BOOL PlayAudio()
 
     BOOL queued = FALSE;
 
-    for (INT x = 0; x < MAX_AUDIO_WAVE_HEADER_COUNT; x++)
+    for (INT xx = 0; xx < MAX_AUDIO_WAVE_HEADER_COUNT; xx++)
     {
-        LPWAVEHDR pwh = AudioState.Wave.Headers[x];
+        LPWAVEHDR pwh = AudioState.Wave.Headers[xx];
 
         if (pwh != NULL && (pwh->dwFlags & WHDR_DONE))
         {
@@ -277,13 +277,13 @@ BOOL PlayAudio()
 
             ModuleState.WaveOutUnprepareHeader(AudioState.Wave.Out, pwh, sizeof(WAVEHDR));
 
-            free(AudioState.Wave.Headers[x]->lpData);
-            free(AudioState.Wave.Headers[x]);
+            free(AudioState.Wave.Headers[xx]->lpData);
+            free(AudioState.Wave.Headers[xx]);
 
-            AudioState.Wave.Headers[x] = NULL;
+            AudioState.Wave.Headers[xx] = NULL;
         }
 
-        if (!queued && AudioState.Wave.Headers[x] == NULL)
+        if (!queued && AudioState.Wave.Headers[xx] == NULL)
         {
             if (ModuleState.WaveOutWrite == NULL)
             {
@@ -294,7 +294,7 @@ BOOL PlayAudio()
 
             queued = TRUE;
 
-            AudioState.Wave.Headers[x] = header;
+            AudioState.Wave.Headers[xx] = header;
         }
     }
 
@@ -381,7 +381,7 @@ FLOAT AcquireAudioPosition(VOID)
 
     EnterCriticalSection(&AudioState.Mutex);
 
-    CONST FLOAT result = ov_time_tell(&AudioState.Vorbis);
+    CONST FLOAT result = (FLOAT)ov_time_tell(&AudioState.Vorbis);
 
     LeaveCriticalSection(&AudioState.Mutex);
 

@@ -110,7 +110,7 @@ extern "C" MMRESULT WINAPI AuxSetVolume(UINT uDeviceID, DWORD dwVolume)
     {
         volume = dwVolume;
 
-        SelectAudioVolume((LOWORD(dwVolume) * 100) / 65535.0f);
+        SelectAudioVolume((INT)((LOWORD(dwVolume) * 100) / 65535.0f));
 
         State.Volume = dwVolume;
     }
