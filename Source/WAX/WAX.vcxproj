@@ -85,14 +85,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Bin\x86\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\x86\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName).x86</TargetName>
+    <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Bin\x86\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\x86\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName).x86</TargetName>
+    <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>

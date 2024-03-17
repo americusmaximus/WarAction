@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Bin\x86\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\x86\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX</IncludePath>
-    <TargetName>$(ProjectName).x86</TargetName>
+    <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Bin\x86\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\x86\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX</IncludePath>
-    <TargetName>$(ProjectName).x86</TargetName>
+    <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
@@ -205,6 +205,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basic.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\winmm\winmm.vcxproj">
+      <Project>{aaa8b810-76ed-4500-a1a5-3fca33c316ad}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

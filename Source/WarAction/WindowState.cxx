@@ -85,7 +85,7 @@ BOOL InitializeWindowStateAction()
 
     CHAR file[APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH];
 
-    if (!AcquireWindowStateArgumentValue("ini", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH)) { strcpy(file, ".\\SudTest.ini"); }
+    if (!AcquireWindowStateArgumentValue("ini", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH)) { strcpy(file, SETTINGS_FILE_NAME); }
 
     if (!InitializeApplicationState(file)) { return FALSE; }
 

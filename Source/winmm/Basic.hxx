@@ -22,21 +22,8 @@ SOFTWARE.
 
 #pragma once
 
-#include "Strings.hxx"
+#define WIN32_MEAN_AND_LEAN
+#include <windows.h>
 
-#define SETTINGS_INVALID_STRING_VALUE "!"
-#define SETTINGS_MAX_INVALID_STRING_VALUE_LENGTH 2
-
-// ORIGINAL: .\\SudTest.ini
-#ifdef _WIN64
-#define SETTINGS_FILE_NAME ".\\WarAction.x64.ini"
-#else
-#define SETTINGS_FILE_NAME ".\\WarAction.x32.ini"
-#endif
-
-S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value);
-
-BOOL AcquireRendererSettingsValue();
-
-VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...);
-VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVALUE value);
+#include <mmsystem.h>
+#include <mmddk.h>

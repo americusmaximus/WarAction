@@ -22,21 +22,43 @@ SOFTWARE.
 
 #pragma once
 
-#include "Strings.hxx"
+#include "Basic.hxx"
 
-#define SETTINGS_INVALID_STRING_VALUE "!"
-#define SETTINGS_MAX_INVALID_STRING_VALUE_LENGTH 2
+#define DEFAULT_VOLUME (-1)
 
-// ORIGINAL: .\\SudTest.ini
-#ifdef _WIN64
-#define SETTINGS_FILE_NAME ".\\WarAction.x64.ini"
-#else
-#define SETTINGS_FILE_NAME ".\\WarAction.x32.ini"
-#endif
+#define MAX_SOUND_TRACK_COUNT 99
 
-S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value);
+#define DEFAULT_TRACK_INDEX (-1)
 
-BOOL AcquireRendererSettingsValue();
+#define MAX_MODULE_NAME_LENGTH 2048
 
-VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...);
-VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVALUE value);
+struct SoundTrack
+{
+    CHAR Name[MAX_PATH];
+    UINT Length;
+    UINT Position;
+};
+
+struct StateContainer
+{
+    BOOL IsActive; // 0x6ad52038
+    INT Volume; // 0x6ad4c018
+    DWORD TimeFormat; // 0x6ad4c010
+
+    struct
+    {
+        INT Current; // 0x6ad4c014
+
+        INT Count; // 0x6ad52048
+
+        INT Max; // 0x6ad52044
+
+        SoundTrack Tracks[MAX_SOUND_TRACK_COUNT]; // 0x6ad52320
+    } Tracks;
+
+    CRITICAL_SECTION Mutex; // 0x6ad59500
+
+    CHAR ModuleName[MAX_MODULE_NAME_LENGTH]; // 0x6ad59520
+};
+
+extern StateContainer State;

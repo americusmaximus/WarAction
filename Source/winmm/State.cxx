@@ -20,23 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "State.hxx"
 
-#include "Strings.hxx"
-
-#define SETTINGS_INVALID_STRING_VALUE "!"
-#define SETTINGS_MAX_INVALID_STRING_VALUE_LENGTH 2
-
-// ORIGINAL: .\\SudTest.ini
-#ifdef _WIN64
-#define SETTINGS_FILE_NAME ".\\WarAction.x64.ini"
-#else
-#define SETTINGS_FILE_NAME ".\\WarAction.x32.ini"
-#endif
-
-S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value);
-
-BOOL AcquireRendererSettingsValue();
-
-VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...);
-VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVALUE value);
+StateContainer State;

@@ -1,0 +1,6 @@
+[submodule "SDK/ogg"]
+	path = SDK/ogg
+	url = https://github.com/americusmaximus/ogg
+[submodule "SDK/vorbis"]
+	path = SDK/vorbis
+	url = https://github.com/americusmaximus/vorbis
