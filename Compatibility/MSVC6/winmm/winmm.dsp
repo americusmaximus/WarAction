@@ -104,7 +104,7 @@ SOURCE=..\..\..\Source\winmm\Module.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Module.def
+SOURCE=..\..\..\Source\winmm\Module.def
 # End Source File
 # Begin Source File
 

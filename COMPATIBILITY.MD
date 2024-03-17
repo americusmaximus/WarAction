@@ -8,8 +8,7 @@ The original game was written and compiled in 2000, which these days create some
 ### Requirements
 1. [Microsoft Visual C++ 6](https://archive.org/details/en_vs6_ent)
 2. [Microsoft DirectX 7.0 SDK](https://archive.org/details/dx7sdk-7001)
-3. [OGG](https://github.com/xiph/ogg)
-4. [Vorbis](https://github.com/xiph/vorbis)
+3. [OGG](https://github.com/xiph/ogg) and [Vorbis](https://github.com/xiph/vorbis)
 
 ### Build & Use
 1. Install DirectX 7 SDK.

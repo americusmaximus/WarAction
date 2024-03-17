@@ -11,8 +11,7 @@ There are multiple goals this project tries to achieve:
 
 ## Requirements & Dependencies
 1. [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
-2. [OGG](https://github.com/xiph/ogg)
-3. [Vorbis](https://github.com/xiph/vorbis)
+2. [OGG](https://github.com/xiph/ogg) and [Vorbis](https://github.com/xiph/vorbis)
 
 ## Notes
 1. I used GOG.com's Sudden Strike Gold 1.2.1 version [13578](https://www.google.com/search?q=setup_sudden_strike_1.21_(13578).exe) of the game.
