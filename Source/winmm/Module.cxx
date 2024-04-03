@@ -1410,7 +1410,7 @@ extern "C" MMRESULT WINAPI MixerOpen(LPHMIXER phmx, UINT uMxId, DWORD_PTR dwCall
 // 0x6ad423e0
 extern "C" MMRESULT WINAPI MixerSetControlDetails(HMIXEROBJ hmxobj, LPMIXERCONTROLDETAILS pmxcd, DWORD fdwDetails)
 {
-    if (!((LPMIXERCONTROLDETAILS_BOOLEAN)pmxcd)->fValue) { return MMSYSERR_NOERROR; }
+    if (((LPMIXERCONTROLDETAILS_SIGNED)pmxcd->paDetails)->lValue == 0) { return MMSYSERR_NOERROR; }
 
     if (ModuleState.MixerSetControlDetails == NULL)
     {
