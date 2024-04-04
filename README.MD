@@ -1,4 +1,5 @@
 # War Action
+![War Action](./Extras/Logo.png)
 
 ## Project
 War Action is an open source implementation of Fireglow Games' [Sudden Strike](https://en.wikipedia.org/wiki/Sudden_Strike) from 2000, with the 1.2.1 patch.
@@ -15,7 +16,7 @@ There are multiple goals this project tries to achieve:
 
 ## Notes
 1. I used GOG.com's Sudden Strike Gold 1.2.1 version [13578](https://www.google.com/search?q=setup_sudden_strike_1.21_(13578).exe) of the game.
-2. The game is structured in a way so that the executable is just a glue for separate menu and game modules, which are in their turn can use different renderer modules.
+2. The game is structured in a way where the executable is just a glue for separate menu and game modules, which are in their turn can use different renderer modules.
 3. The GOG.com's version of the game uses Ogg Vorbis for the game's music. It looks like this was a recent change and a requirement for the game publishing, I believe original game shipped with mp3 files. In order to support Ogg Vorbis, the games has its own WinMM.dll library to support the file format, otherwise it is mostly a wrapper of the system library.
 
 ### Compatibility, Code Style & Standards
