@@ -27,16 +27,13 @@ SOFTWARE.
 
 typedef struct RendererDirectXState
 {
-    union
-    {
-        LPDIRECTDRAW DirectDraw;
-        LPDIRECTDRAW7 DirectDraw7;
-    };
-    union
-    {
+#ifdef ACTIVATE_MODERN_DIRECT_DRAW_FEATURES
+        LPDIRECTDRAW7 Instance;
+        LPDIRECTDRAWSURFACE7 Surface;
+#else
+        LPDIRECTDRAW Instance;
         LPDIRECTDRAWSURFACE Surface;
-        LPDIRECTDRAWSURFACE7 Surface7;
-    };
+#endif
 } RENDERERDIRECTXSTATE, * LPRENDERERDIRECTXSTATE;
 
 typedef VOID(*INITIALIZERENDERERACTION)(VOID);

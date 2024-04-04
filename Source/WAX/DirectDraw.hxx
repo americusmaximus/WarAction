@@ -26,3 +26,7 @@ SOFTWARE.
 
 #define DIRECTDRAW_VERSION 0x0700
 #include <ddraw.h>
+
+#ifdef _WIN64
+#define ACTIVATE_MODERN_DIRECT_DRAW_FEATURES TRUE
+#endif
