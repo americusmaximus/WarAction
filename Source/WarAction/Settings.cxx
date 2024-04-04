@@ -154,7 +154,7 @@ BOOL AcquireRendererSettingsValue()
     {
         RendererVideoMode = mode;
 
-        if (State.Renderer.State != NULL) { State.Renderer.State->Unknown0xaa68(); }
+        if (State.Renderer.State != NULL) { State.Renderer.State->Actions.ReleaseDirectDraw(); }
 
         ReleaseRenderStateModule();
 
@@ -185,9 +185,9 @@ BOOL AcquireRendererSettingsValue()
             STRINGVALUE configuration;
             AcquireSettingsValue(&configuration, IDS_FULL_SCREEN);
 
-            CONST BOOL mode = (BOOL)AcquireGameSettingsValue(configuration, TRUE);
+            CONST BOOL fullscreen = (BOOL)AcquireGameSettingsValue(configuration, TRUE);
 
-            if (!State.Renderer.State->Unknown0xa980(State.Window.WindowState->HWND, mode)) { return FALSE; }
+            if (!State.Renderer.State->Actions.InitializeDirectDraw(State.Window.WindowState->HWND, fullscreen)) { return FALSE; }
         }
 
         State.ModuleState->RendererState = State.Renderer.State;

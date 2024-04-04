@@ -20,22 +20,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Module.hxx"
 
-#include "Basic.hxx"
-#include "Native.Basic.hxx"
-
-typedef VOID(*UNKNOWN0XAA68)(VOID);
-typedef VOID(*UNKNOWN0XA984)(VOID);
-typedef BOOL(*UNKNOWN0XA980)(HWND, BOOL);
-
-typedef struct RendererStateContainer
-{
-    BYTE Unknown000[0xa97c]; // TODO
-    LPVOID Unknown0xa97c; // METHOD // TODO
-    UNKNOWN0XA980 Unknown0xa980; // BOOL SetFullScreen // TODO
-    UNKNOWN0XA984 Unknown0xa984; // VOID? Release? // TODO
-    LPVOID Unknown0xa988; // METHOD // TODO
-    UNKNOWN0XAA68 Unknown0xaa68; // VOID Release? // TODO
-    // TODO
-} RENDERERSTATECONTAINER, * LPRENDERERSTATECONTAINER;

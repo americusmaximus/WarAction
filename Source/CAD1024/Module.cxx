@@ -20,18 +20,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Module.hxx"
 
-#include "WindowStateHandler.hxx"
+// 0x10012af0
+RENDERERSTATECONTAINER ModuleState;
 
-#include <WindowState.hxx>
+// 0x10001960
+LPRENDERERSTATECONTAINER Initialize()
+{
+    // TODO NOT IMPLEMENTED
 
-EXTERN WINDOWSTATECONTAINER WindowState;
-
-VOID ActivateWindowStateContainer(VOID);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, WINDOWSTATEHANDLERLAMBDA start, WINDOWSTATEHANDLERLAMBDA init, WINDOWSTATEHANDLERLAMBDA action, WINDOWSTATEHANDLERLAMBDA release, WINDOWSTATEHANDLERLAMBDA message);
-
-VOID InitializeWindowStateArguments(VOID);
-VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);
-BOOL AcquireWindowStateArgumentValue(LPCSTR name, CHAR* value, CONST U32 length);
+    return &ModuleState;
+}

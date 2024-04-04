@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\DX70\Include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\SDK\DX70\Include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -64,8 +64,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\..\DX70\Include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ  /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\..\SDK\DX70\Include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -91,7 +91,7 @@ LIB32=link.exe -lib
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\AppStateContainer.hxx
+SOURCE=..\..\..\Source\WAX\AppState.hxx
 # End Source File
 # Begin Source File
 
@@ -99,11 +99,15 @@ SOURCE=..\..\..\Source\WAX\Basic.hxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Source\WAX\DirectDraw.hxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Source\WAX\DirectSound.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\LoggerStateContainer.hxx
+SOURCE=..\..\..\Source\WAX\LoggerState.hxx
 # End Source File
 # Begin Source File
 
@@ -111,7 +115,7 @@ SOURCE=..\..\..\Source\WAX\Mathematics.Basic.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\ModuleStateContainer.hxx
+SOURCE=..\..\..\Source\WAX\ModuleState.hxx
 # End Source File
 # Begin Source File
 
@@ -119,23 +123,31 @@ SOURCE=..\..\..\Source\WAX\Native.Basic.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\RendererModuleExport.hxx
+SOURCE=..\..\..\Source\WAX\RendererModule.Basic.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\RendererStateContainer.hxx
+SOURCE=..\..\..\Source\WAX\RendererModule.Export.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\SoundStateContainer.hxx
+SOURCE=..\..\..\Source\WAX\RendererModule.Import.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\VisualModuleExport.hxx
+SOURCE=..\..\..\Source\WAX\SoundState.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\WindowStateContainer.hxx
+SOURCE=..\..\..\Source\WAX\VisualModule.Export.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WAX\VisualModule.Import.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WAX\WindowState.hxx
 # End Source File
 # End Group
 # End Target

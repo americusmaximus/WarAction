@@ -357,7 +357,7 @@ BOOL ReleaseWindowStateAction(VOID)
 
     if (State.Renderer.State != NULL)
     {
-        State.Renderer.State->Unknown0xa984();
+        State.Renderer.State->Actions.RestoreDisplayMode();
 
         ReleaseRenderStateModule();
     }

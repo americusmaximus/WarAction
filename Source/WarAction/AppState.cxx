@@ -24,7 +24,8 @@ SOFTWARE.
 #include "Settings.hxx"
 #include "State.hxx"
 
-#include <VisualModuleExport.hxx>
+#include <VisualModule.Export.hxx>
+#include <VisualModule.Import.hxx>
 
 #define MAX_MODULE_TEMPLATE_LENGTH 16
 

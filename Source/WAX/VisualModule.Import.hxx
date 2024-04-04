@@ -22,16 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "WindowStateHandler.hxx"
-
-#include <WindowState.hxx>
-
-EXTERN WINDOWSTATECONTAINER WindowState;
-
-VOID ActivateWindowStateContainer(VOID);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, WINDOWSTATEHANDLERLAMBDA start, WINDOWSTATEHANDLERLAMBDA init, WINDOWSTATEHANDLERLAMBDA action, WINDOWSTATEHANDLERLAMBDA release, WINDOWSTATEHANDLERLAMBDA message);
-
-VOID InitializeWindowStateArguments(VOID);
-VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);
-BOOL AcquireWindowStateArgumentValue(LPCSTR name, CHAR* value, CONST U32 length);
+#define VISUAL_MODULE_INIT_NAME "VModule_Init"
+#define VISUAL_MODULE_PLAY_NAME "VModule_Play"
+#define VISUAL_MODULE_DONE_NAME "VModule_Done"
+#define VISUAL_MODULE_HANDLE_NAME "VModule_Handle"

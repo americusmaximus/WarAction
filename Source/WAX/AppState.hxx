@@ -22,12 +22,11 @@ SOFTWARE.
 
 #pragma once
 
-#include "LoggerStateContainer.hxx"
-#include "ModuleStateContainer.hxx"
-#include "RendererModuleExport.hxx"
-#include "RendererStateContainer.hxx"
-#include "VisualModuleExport.hxx"
-#include "WindowStateContainer.hxx"
+#include "LoggerState.hxx"
+#include "ModuleState.hxx"
+#include "RendererModule.Export.hxx"
+#include "VisualModule.Export.hxx"
+#include "WindowState.hxx"
 
 #define APP_STATE_CONTAINER_INVALID_MODULE_INDEX 0
 #define APP_STATE_CONTAINER_MIN_VALID_MODULE_INDEX 1

@@ -22,16 +22,12 @@ SOFTWARE.
 
 #pragma once
 
-#include "WindowStateHandler.hxx"
+#include "Basic.hxx"
+#include "Native.Basic.hxx"
 
-#include <WindowState.hxx>
+struct AppStateContainer;
 
-EXTERN WINDOWSTATECONTAINER WindowState;
-
-VOID ActivateWindowStateContainer(VOID);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, WINDOWSTATEHANDLERLAMBDA start, WINDOWSTATEHANDLERLAMBDA init, WINDOWSTATEHANDLERLAMBDA action, WINDOWSTATEHANDLERLAMBDA release, WINDOWSTATEHANDLERLAMBDA message);
-
-VOID InitializeWindowStateArguments(VOID);
-VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);
-BOOL AcquireWindowStateArgumentValue(LPCSTR name, CHAR* value, CONST U32 length);
+typedef BOOL(*VISUALMODULEINITACTIONLAMBDA)(AppStateContainer*);
+typedef BOOL(*VISUALMODULEEXECUTEACTIONLAMBDA)(VOID);
+typedef BOOL(*VISUALMODULEDONEACTIONLAMBDA)(VOID);
+typedef BOOL(*VISUALMODULEHANDLEACTIONLAMBDA)(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result);

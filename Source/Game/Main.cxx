@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#include <AppStateContainer.hxx>
+#include <AppState.hxx>
 
 BOOL APIENTRY Main(HMODULE, DWORD, LPVOID) { return TRUE; }
 

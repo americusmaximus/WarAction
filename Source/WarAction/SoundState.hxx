@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include <SoundStateContainer.hxx>
+#include <SoundState.hxx>
 
 #define SOUND_STATE_DEFAULT_CHANNEL_COUNT 16
 

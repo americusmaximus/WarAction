@@ -22,17 +22,8 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
-#include "Native.Basic.hxx"
+#include "RendererModule.Basic.hxx"
 
-#define VISUAL_MODULE_INIT_NAME "VModule_Init"
-#define VISUAL_MODULE_PLAY_NAME "VModule_Play"
-#define VISUAL_MODULE_DONE_NAME "VModule_Done"
-#define VISUAL_MODULE_HANDLE_NAME "VModule_Handle"
+typedef LPRENDERERSTATECONTAINER(*RENDERERINITACTIONLAMBDA)(VOID);
 
-struct AppStateContainer;
-
-typedef BOOL(*VISUALMODULEINITACTIONLAMBDA)(AppStateContainer*);
-typedef BOOL(*VISUALMODULEEXECUTEACTIONLAMBDA)(VOID);
-typedef BOOL(*VISUALMODULEDONEACTIONLAMBDA)(VOID);
-typedef BOOL(*VISUALMODULEHANDLEACTIONLAMBDA)(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result);
+typedef BOOL(*ACQUIRERENDERERSETTINGSVALUELAMBDA)(VOID);

@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#include <AppStateContainer.hxx>
+#include <AppState.hxx>
 
 #define MODULE_VERSION_VALUE 271
 

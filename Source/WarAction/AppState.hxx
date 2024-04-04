@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include <AppStateContainer.hxx>
+#include <AppState.hxx>
 
 BOOL ApplicationStateWindowStateActionHandler(VOID);
 BOOL InitializeApplicationState(LPCSTR file);

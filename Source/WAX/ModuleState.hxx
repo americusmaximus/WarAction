@@ -22,16 +22,29 @@ SOFTWARE.
 
 #pragma once
 
-#include "WindowStateHandler.hxx"
+#include "RendererModule.Basic.hxx"
+#include "SoundState.hxx"
 
-#include <WindowState.hxx>
+typedef struct ModuleStateContainer
+{
+    HMODULE Handle;
+    S32 Unknown0x04; // TODO
+    S32 Unknown0x08; // TODO
+    S32 Unknown0x0c; // TODO
+    S32 Unknown0x10; // TODO
+    S32 Unknown0x14; // TODO
+    S32 Unknown0x18; // TODO
+    S32 Unknown0x1c; // TODO
+    S32 Unknown0x20; // TODO
+    S32 Unknown0x24; // TODO
+    S32 Unknown0x28; // TODO
+    S32 Unknown0x2c; // TODO
+    S32 Unknown0x30; // TODO
 
-EXTERN WINDOWSTATECONTAINER WindowState;
+    BYTE Unknown[1420]; // TODO
 
-VOID ActivateWindowStateContainer(VOID);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, WINDOWSTATEHANDLERLAMBDA start, WINDOWSTATEHANDLERLAMBDA init, WINDOWSTATEHANDLERLAMBDA action, WINDOWSTATEHANDLERLAMBDA release, WINDOWSTATEHANDLERLAMBDA message);
-
-VOID InitializeWindowStateArguments(VOID);
-VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);
-BOOL AcquireWindowStateArgumentValue(LPCSTR name, CHAR* value, CONST U32 length);
+    LPSOUNDSTATECONTAINER SoundState;
+    LPRENDERERSTATECONTAINER RendererState;
+    HMODULE TextModule;
+    LPUNKNOWN Unknown0x5cc; // TODO
+} MODULESTATECONTAINER, * LPMODULESTATECONTAINER;

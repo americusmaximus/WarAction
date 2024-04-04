@@ -20,31 +20,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Module.hxx"
 
-#include "RendererStateContainer.hxx"
-#include "SoundStateContainer.hxx"
+// 0x10012af0
+RENDERERSTATECONTAINER ModuleState;
 
-typedef struct ModuleStateContainer
+// 0x10001970
+LPRENDERERSTATECONTAINER Initialize()
 {
-    HMODULE Handle;
-    S32 Unknown0x04; // TODO
-    S32 Unknown0x08; // TODO
-    S32 Unknown0x0c; // TODO
-    S32 Unknown0x10; // TODO
-    S32 Unknown0x14; // TODO
-    S32 Unknown0x18; // TODO
-    S32 Unknown0x1c; // TODO
-    S32 Unknown0x20; // TODO
-    S32 Unknown0x24; // TODO
-    S32 Unknown0x28; // TODO
-    S32 Unknown0x2c; // TODO
-    S32 Unknown0x30; // TODO
+    // TODO NOT IMPLEMENTED
 
-    BYTE Unknown[1420]; // TODO
-
-    LPSOUNDSTATECONTAINER SoundState;
-    LPRENDERERSTATECONTAINER RendererState;
-    HMODULE TextModule;
-    LPUNKNOWN Unknown0x5cc; // TODO
-} MODULESTATECONTAINER, * LPMODULESTATECONTAINER;
+    return &ModuleState;
+}

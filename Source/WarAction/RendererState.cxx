@@ -23,7 +23,7 @@ SOFTWARE.
 #include "RendererState.hxx"
 #include "State.hxx"
 
-#include <RendererModuleExport.hxx>
+#include <RendererModule.Import.hxx>
 
 S32 RendererVideoMode = DEFAULT_RENDERER_VIDEO_MODE_VALUE;
 
