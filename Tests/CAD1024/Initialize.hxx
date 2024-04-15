@@ -22,46 +22,11 @@ SOFTWARE.
 
 #pragma once
 
-#include "AppState.hxx"
-#include "SoundState.hxx"
-#include "WindowState.hxx"
+#include "Module.hxx"
 
-typedef struct StateContainer
-{
-    BOOL IsIniActive; // 0x00410370
+VOID Initialize(LPRENDERERMODULESTATECONTAINER state);
 
-    struct
-    {
-        HMODULE Module; // 0x00410374
-        LPRENDERERMODULESTATECONTAINER State; // 0x00410378
-    } Renderer;
-
-    LPMODULESTATECONTAINER ModuleState; // 0x00410380
-
-    struct
-    {
-        HMODULE Handle; // 0x00410384
-    } Text;
-
-    LPAPPSTATECONTAINER AppState; // 0x004104fc
-
-    LPSOUNDSTATECONTAINER SoundState; // 0x00410504
-
-    struct
-    {
-        LPWINDOWSTATECONTAINERHANDLER Handlers[WINDOW_STATE_MAX_HANDLER_COUNT]; // 0x00410508
-        LPWINDOWSTATECONTAINERHANDLER ActiveHandler; // 0x0041051c
-        LPWINDOWSTATECONTAINER WindowState; // 0x00410520
-    } Window;
-
-    struct
-    {
-        CHAR* All; // 0x00410524
-        CHAR** Args; // 0x00410528
-        U32 Count; // 0x0041052c
-    } Arguments;
-
-    LPLOGGERSTATECONTAINER Logger; // 0x00410530
-} STATECONTAINER, * LPSTATECONTAINER;
-
-extern STATECONTAINER State;
+BOOL RegisterWindowClass(VOID);
+BOOL ReleaseWindowClass(VOID);
+HWND InitializeWindow(VOID);
+BOOL ReleaseWindow(HWND hWnd);

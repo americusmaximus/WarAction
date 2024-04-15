@@ -22,46 +22,31 @@ SOFTWARE.
 
 #pragma once
 
-#include "AppState.hxx"
-#include "SoundState.hxx"
-#include "WindowState.hxx"
+#include <Basic.hxx>
+#include <Native.Basic.hxx>
+#include <RendererModule.Import.hxx>
+#include <RendererModule.Export.hxx>
 
-typedef struct StateContainer
+#define MAX_RENDERER_WIDTH 1024
+#define MAX_RENDERER_HEIGHT 768
+
+#if ACTIVATE_COMPLETE_RGBA_MODE
+#define BLACK_PIXEL 0
+#define WHITE_PIXEL 0xFFFFFFFF
+#else
+#define BLACK_PIXEL 0
+#define WHITE_PIXEL 0xFFFF
+#endif
+
+typedef struct ModuleEvent
 {
-    BOOL IsIniActive; // 0x00410370
+    LPCSTR Name;
+    LPCSTR Action;
+    BOOL Result;
+} MODULEEVENT, * LPMODULEEVENT;
 
-    struct
-    {
-        HMODULE Module; // 0x00410374
-        LPRENDERERMODULESTATECONTAINER State; // 0x00410378
-    } Renderer;
+#define MIN(a, b) (a < b ? a : b)
+#define MAX(a, b) (a > b ? a : b)
 
-    LPMODULESTATECONTAINER ModuleState; // 0x00410380
-
-    struct
-    {
-        HMODULE Handle; // 0x00410384
-    } Text;
-
-    LPAPPSTATECONTAINER AppState; // 0x004104fc
-
-    LPSOUNDSTATECONTAINER SoundState; // 0x00410504
-
-    struct
-    {
-        LPWINDOWSTATECONTAINERHANDLER Handlers[WINDOW_STATE_MAX_HANDLER_COUNT]; // 0x00410508
-        LPWINDOWSTATECONTAINERHANDLER ActiveHandler; // 0x0041051c
-        LPWINDOWSTATECONTAINER WindowState; // 0x00410520
-    } Window;
-
-    struct
-    {
-        CHAR* All; // 0x00410524
-        CHAR** Args; // 0x00410528
-        U32 Count; // 0x0041052c
-    } Arguments;
-
-    LPLOGGERSTATECONTAINER Logger; // 0x00410530
-} STATECONTAINER, * LPSTATECONTAINER;
-
-extern STATECONTAINER State;
+#define WIDTH(x, width)  MAX(0, MIN(MAX_RENDERER_WIDTH, x + width))
+#define HEIGHT(y, height)  MAX(0, MIN(MAX_RENDERER_HEIGHT, y + height))

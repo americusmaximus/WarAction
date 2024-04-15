@@ -22,46 +22,34 @@ SOFTWARE.
 
 #pragma once
 
-#include "AppState.hxx"
-#include "SoundState.hxx"
-#include "WindowState.hxx"
+#include "Module.hxx"
 
-typedef struct StateContainer
+typedef struct ColorMaskResult
 {
-    BOOL IsIniActive; // 0x00410370
+    U16 ActualColorMask;
+    U16 ActualRedMask;
+    U16 ActualGreenMask;
+    U16 ActualBlueMask;
 
-    struct
-    {
-        HMODULE Module; // 0x00410374
-        LPRENDERERMODULESTATECONTAINER State; // 0x00410378
-    } Renderer;
+    U16 InitialColorMask;
+    U16 InitialRedMask;
+    U16 InitialGreenMask;
+    U16 InitialBlueMask;
 
-    LPMODULESTATECONTAINER ModuleState; // 0x00410380
+    U16 RedOffset;
+    U16 GreenOffset;
+    U16 BlueOffset;
 
-    struct
-    {
-        HMODULE Handle; // 0x00410384
-    } Text;
+    U16 Unk18;
+    U16 Unk21;
+    U16 Unk22;
+    U16 Unk23;
+    U32 Unk24;
+    U32 Unk25;
+    U32 Unk27;
+    U16 Unk29;
+    U16 Unk30;
+} COLORMASKRESULT, * LPCOLORMASKRESULT;
 
-    LPAPPSTATECONTAINER AppState; // 0x004104fc
-
-    LPSOUNDSTATECONTAINER SoundState; // 0x00410504
-
-    struct
-    {
-        LPWINDOWSTATECONTAINERHANDLER Handlers[WINDOW_STATE_MAX_HANDLER_COUNT]; // 0x00410508
-        LPWINDOWSTATECONTAINERHANDLER ActiveHandler; // 0x0041051c
-        LPWINDOWSTATECONTAINER WindowState; // 0x00410520
-    } Window;
-
-    struct
-    {
-        CHAR* All; // 0x00410524
-        CHAR** Args; // 0x00410528
-        U32 Count; // 0x0041052c
-    } Arguments;
-
-    LPLOGGERSTATECONTAINER Logger; // 0x00410530
-} STATECONTAINER, * LPSTATECONTAINER;
-
-extern STATECONTAINER State;
+VOID InitializePixelMasks(LPRENDERERMODULESTATECONTAINER state);
+VOID SetPixelColorMasks(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);

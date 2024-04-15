@@ -23,6 +23,7 @@
     <ClInclude Include="Basic.hxx" />
     <ClInclude Include="DirectDraw.hxx" />
     <ClInclude Include="DirectSound.hxx" />
+    <ClInclude Include="Graphics.Basic.hxx" />
     <ClInclude Include="LoggerState.hxx" />
     <ClInclude Include="Mathematics.Basic.hxx" />
     <ClInclude Include="ModuleState.hxx" />
