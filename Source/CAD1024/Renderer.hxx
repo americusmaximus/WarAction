@@ -89,7 +89,7 @@ VOID FUN_100016c0(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
 VOID FUN_100023e0(S32 x, S32 y, S32 width, S32 height, PIXEL pixel); // TODO
 VOID FUN_10002020(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 VOID FUN_10002b90(S32 x, S32 y, S32 width, S32 height);
-VOID WriteRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
+VOID WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID FUN_100018a0(S32 x, S32 y, S32 width, S32 height, S32 param_5, S32 param_6, S32 param_7, S32 param_8); // TODO
 VOID FUN_10002780(S32 x, S32 y, S32 width, S32 height); // TODO
 VOID DrawBackSurfaceWindowRectangle(VOID);

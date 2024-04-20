@@ -998,7 +998,7 @@ VOID FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x10002a90
-VOID WriteRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
+VOID WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 {
     BOOL locked = FALSE;
 
