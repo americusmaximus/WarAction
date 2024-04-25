@@ -29,10 +29,12 @@ SOFTWARE.
 #include "DrawMainSurfaceColorRectangle.hxx"
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
+#include "DrawStencilSurfaceWindowRectangle.hxx"
 #include "OffsetSurfaces.hxx"
 #include "SetPixelColorMasks.hxx"
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
 #include "WriteMainSurfaceRendererSurfaceRectangle.hxx"
+#include "WriteRendererSurfaceSurfaceRectangle.hxx"
 
 #include <stdio.h>
 
@@ -41,7 +43,7 @@ SOFTWARE.
         A(S, E); if (E->Result) { printf(#A "... [OK]\r\n");} else { printf(#A "... [ERROR] @ %s\r\n", E->Action); }    \
     }
     
-VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
 {
     ACTION(ConvertColors, state, event);
     ACTION(ConvertColorsExtra, state, event);
@@ -50,10 +52,12 @@ VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
     ACTION(DrawMainSurfaceColorRectangle, state, event);
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
+    ACTION(DrawStencilSurfaceWindowRectangle, state, event);
     ACTION(OffsetSurfaces, state, event);
     ACTION(SetPixelColorMasks, state, event);
     ACTION(WriteBackSurfaceMainSurfaceRectangle, state, event);
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
+    ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);
 
     // TODO
 }

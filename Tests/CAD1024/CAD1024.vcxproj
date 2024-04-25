@@ -163,6 +163,7 @@
     <ClCompile Include="DrawMainSurfaceColorRectangle.cxx" />
     <ClCompile Include="DrawMainSurfaceHorizontalColorLine.cxx" />
     <ClCompile Include="DrawMainSurfaceVerticalColorLine.cxx" />
+    <ClCompile Include="DrawStencilSurfaceWindowRectangle.cxx" />
     <ClCompile Include="FilePath.cxx" />
     <ClCompile Include="Initialize.cxx" />
     <ClCompile Include="Main.cxx" />
@@ -170,6 +171,7 @@
     <ClCompile Include="SetPixelColorMasks.cxx" />
     <ClCompile Include="WriteBackSurfaceMainSurfaceRectangle.cxx" />
     <ClCompile Include="WriteMainSurfaceRendererSurfaceRectangle.cxx" />
+    <ClCompile Include="WriteRendererSurfaceSurfaceRectangle.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitMap.hxx" />
@@ -180,6 +182,7 @@
     <ClInclude Include="DrawMainSurfaceColorRectangle.hxx" />
     <ClInclude Include="DrawMainSurfaceHorizontalColorLine.hxx" />
     <ClInclude Include="DrawMainSurfaceVerticalColorLine.hxx" />
+    <ClInclude Include="DrawStencilSurfaceWindowRectangle.hxx" />
     <ClInclude Include="FilePath.hxx" />
     <ClInclude Include="Initialize.hxx" />
     <ClInclude Include="Module.hxx" />
@@ -187,6 +190,7 @@
     <ClInclude Include="SetPixelColorMasks.hxx" />
     <ClInclude Include="WriteBackSurfaceMainSurfaceRectangle.hxx" />
     <ClInclude Include="WriteMainSurfaceRendererSurfaceRectangle.hxx" />
+    <ClInclude Include="WriteRendererSurfaceSurfaceRectangle.hxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

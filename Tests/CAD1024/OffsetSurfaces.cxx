@@ -25,13 +25,11 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "OffsetSurfaces.hxx"
 
-VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y)
+static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y)
 {
-    // TODO
-    
-    // SavePixels(MakeFileName("OffsetSurfacesMain", "bmp", event->Action), state->Surface.Surfaces.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    // SavePixels(MakeFileName("OffsetSurfacesBack", "bmp", event->Action), state->Surface.Surfaces.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    // SavePixels(MakeFileName("OffsetSurfacesStencil", "bmp", event->Action), state->Surface.Surfaces.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+     //SavePixels(MakeFileName("OffsetSurfacesMain", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+     //SavePixels(MakeFileName("OffsetSurfacesBack", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+     //SavePixels(MakeFileName("OffsetSurfacesStencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     event->Result = TRUE;
 }

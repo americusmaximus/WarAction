@@ -93,8 +93,8 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
     if (!success)
     {
-        SavePixels(MakeFileName("DrawMainSurfaceColorBox", "bmp", event->Action), pixels,
-            MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+        SavePixels(MakeFileName("DrawMainSurfaceColorBox", "bmp", event->Action),
+            pixels, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
     }
 
     event->Result = success;

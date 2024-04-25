@@ -29,13 +29,10 @@ static VOID Init(LPRENDERERMODULESTATECONTAINER state)
 {
     Initialize(state);
 
-    if (state->Surface.Renderer != NULL)
-    {
-        ZeroMemory(state->Surface.Renderer, MAX_RENDERER_HEIGHT * state->Pitch * sizeof(PIXEL));
-    }
+    if (state->Surface.Renderer != NULL) { ZeroMemory(state->Surface.Renderer, MAX_RENDERER_HEIGHT * state->Pitch * sizeof(PIXEL)); }
 }
 
-VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y, S32 width, S32 height, S32 count, LPRECTANGLE rect)
+static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y, S32 width, S32 height, S32 count, LPRECTANGLE rect)
 {
     //SavePixels(MakeFileName("WriteMainSurfaceRendererSurfaceRectangle", "bmp", event->Action), state->Surface.Renderer, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT, state->Pitch / sizeof(PIXEL));
 

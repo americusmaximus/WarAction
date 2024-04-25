@@ -24,6 +24,7 @@ SOFTWARE.
 #include "Renderer.hxx"
 
 #define PIXEL_COLOR_BIT_MASK 0x8000
+#define STENCIL_PIXEL_COLOR_ITERATOR 32
 
 RENDERERSTATECONTAINER RendererState;
 
@@ -309,7 +310,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
 
     if (-1 < offset)
     {
-        CONST PIXEL pixel = offset * 32; // TODO
+        CONST PIXEL pixel = offset * STENCIL_PIXEL_COLOR_ITERATOR;
 
         if (y < ModuleState.Surface.Y)
         {
@@ -321,7 +322,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] + pixel; }
 
-                    pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                    pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
                 }
             }
             else
@@ -330,7 +331,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] + pixel; }
 
-                    pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                    pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
                 }
 
                 pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
@@ -339,7 +340,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] + pixel; }
 
-                    pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                    pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
                 }
             }
         }
@@ -351,13 +352,13 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] + pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
             }
         }
     }
     else
     {
-        CONST PIXEL pixel = -offset * 32; // TODO
+        CONST PIXEL pixel = -offset * STENCIL_PIXEL_COLOR_ITERATOR;
 
         if (y < ModuleState.Surface.Y)
         {
@@ -369,7 +370,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] - pixel; }
 
-                    pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                    pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
                 }
             }
             else
@@ -378,7 +379,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] - pixel; }
 
-                    pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                    pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
                 }
 
                 pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
@@ -387,7 +388,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] - pixel; }
 
-                    pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                    pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
                 }
             }
         }
@@ -399,7 +400,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixels[xx] - pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)stride);
+                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
             }
         }
     }
@@ -990,21 +991,21 @@ VOID FUN_10002020(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 }
 
 // 0x10002b90
-// Copies a rectangle from the renderer surface to the main surface.
-VOID FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
+BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
+
+    return TRUE;
 }
 
 // 0x10002a90
-VOID WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
+BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 {
     BOOL locked = FALSE;
 
     if (ModuleState.Surface.Renderer == NULL)
     {
-        if (!LockRendererSurface()) { return; }
+        if (!LockRendererSurface()) { return FALSE; }
 
         locked = TRUE;
     }
@@ -1062,6 +1063,8 @@ VOID WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
     }
 
     if (locked) { UnlockRendererSurface(); }
+
+    return locked;
 }
 
 // 0x100018a0
@@ -1079,17 +1082,99 @@ VOID FUN_10002780(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x100026e0
-VOID DrawBackSurfaceWindowRectangle()
+VOID DrawStencilSurfaceWindowRectangle()
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    PIXEL* pixels = (PIXEL*)((addr)RendererState.Surfaces.Stencil +
+        (addr)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * (addr)sizeof(PIXEL));
+
+    CONST S32 height = ModuleState.Window.Height - ModuleState.Window.Y + 1;
+    CONST S32 width = ModuleState.Window.Width - ModuleState.Window.X + 1;
+    CONST S32 stride = (MAX_RENDERER_WIDTH - width) * sizeof(PIXEL);
+
+    PIXEL pixel = (PIXEL)(ModuleState.Window.Y << 5);
+
+    if (ModuleState.Window.Y < ModuleState.Surface.Y)
+    {
+        CONST S32 delta = ModuleState.Window.Y + height - ModuleState.Surface.Y;
+
+        if ((ModuleState.Window.Y + height) < ModuleState.Surface.Y || delta == 0)
+        {
+            for (S32 yy = 0; yy < height; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
+
+                pixel = pixel + STENCIL_PIXEL_COLOR_ITERATOR;
+
+                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+            }
+        }
+        else
+        {
+            for (S32 yy = 0; yy < height - delta; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
+
+                pixel = pixel + STENCIL_PIXEL_COLOR_ITERATOR;
+
+                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+            }
+
+            pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+
+            for (S32 yy = 0; yy < delta; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
+
+                pixel = pixel + STENCIL_PIXEL_COLOR_ITERATOR;
+
+                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+            }
+        }
+    }
+    else
+    {
+        pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+
+        for (S32 yy = 0; yy < height; yy++)
+        {
+            for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
+
+            pixel = pixel + STENCIL_PIXEL_COLOR_ITERATOR;
+
+            pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+        }
+    }
 }
 
 // 0x10002990
-VOID FUN_10002990(S32 x, S32 y, S32 param_3, S32 sx, S32 sy, S32 param_6, S32 param_7, PIXEL* pixels)
+BOOL WriteRendererSurfaceSurfaceRectangle(S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    BOOL locked = FALSE;
+
+    if (ModuleState.Surface.Renderer == NULL)
+    {
+        if (!LockRendererSurface()) { return FALSE; }
+
+        locked = TRUE;
+    }
+
+    PIXEL* src = (PIXEL*)((addr)pixels + (addr)((stride * y + x) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((addr)ModuleState.Surface.Renderer + (addr)(ModuleState.Pitch * dy + dx * sizeof(PIXEL)));
+
+    // Round down to an even width.
+    CONST S32 length = (width / sizeof(PIXEL)) * sizeof(PIXEL);
+
+    for (S32 yy = 0; yy < height; yy++)
+    {
+        for (S32 xx = 0; xx < length; xx++) { dst[xx] = src[xx]; }
+
+        src = (PIXEL*)((addr)src + (addr)(stride * sizeof(PIXEL)));
+        dst = (PIXEL*)((addr)dst + (addr)ModuleState.Pitch);
+    }
+
+    if (locked) { UnlockRendererSurface(); }
+
+    return locked;
 }
 
 // 0x10002a30

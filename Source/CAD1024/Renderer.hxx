@@ -88,12 +88,12 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID FUN_100016c0(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
 VOID FUN_100023e0(S32 x, S32 y, S32 width, S32 height, PIXEL pixel); // TODO
 VOID FUN_10002020(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
-VOID FUN_10002b90(S32 x, S32 y, S32 width, S32 height);
-VOID WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
+BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height);
+BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID FUN_100018a0(S32 x, S32 y, S32 width, S32 height, S32 param_5, S32 param_6, S32 param_7, S32 param_8); // TODO
 VOID FUN_10002780(S32 x, S32 y, S32 width, S32 height); // TODO
-VOID DrawBackSurfaceWindowRectangle(VOID);
-VOID FUN_10002990(S32 x, S32 y, S32 param_3, S32 sx, S32 sy, S32 param_6, S32 param_7, PIXEL* pixels); // TODO
+VOID DrawStencilSurfaceWindowRectangle(VOID);
+BOOL WriteRendererSurfaceSurfaceRectangle(S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 VOID FUN_10002a30(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7, S32 param_8, S32 param_9, S32 param_10); // TODO
 VOID FUN_10008ecd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
