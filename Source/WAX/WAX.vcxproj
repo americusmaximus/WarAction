@@ -28,6 +28,7 @@
     <ClInclude Include="Mathematics.Basic.hxx" />
     <ClInclude Include="ModuleState.hxx" />
     <ClInclude Include="Native.Basic.hxx" />
+    <ClInclude Include="Renderer.Basic.hxx" />
     <ClInclude Include="RendererModule.Basic.hxx" />
     <ClInclude Include="RendererModule.Import.hxx" />
     <ClInclude Include="RendererModule.Export.hxx" />

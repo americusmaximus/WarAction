@@ -26,6 +26,7 @@ SOFTWARE.
 #include "ConvertColorsExtra.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
 #include "DrawMainSurfaceColorBox.hxx"
+#include "DrawMainSurfaceColorOutline.hxx"
 #include "DrawMainSurfaceColorRectangle.hxx"
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
@@ -49,6 +50,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
     ACTION(ConvertColorsExtra, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);
+    ACTION(DrawMainSurfaceColorOutline, state, event);
     ACTION(DrawMainSurfaceColorRectangle, state, event);
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);

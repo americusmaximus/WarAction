@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include "Basic.hxx"
 #include "DirectDraw.hxx"
+#include "Renderer.Basic.hxx"
 
 typedef struct RendererModuleDirectXState
 {
@@ -64,8 +65,8 @@ typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
 typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
-typedef VOID(*FUN_100050DFACTION)(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
-typedef VOID(*FUN_100064B6ACTION)(S32 x, S32 y, LPVOID param_3); // TODO
+typedef VOID(*FUN_100050DFACTION)(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
+typedef VOID(*FUN_100064B6ACTION)(S32 x, S32 y, LPSPRITE sprite); // TODO
 typedef VOID(*FUN_1000618DACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10004DB0ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_10006EF8ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
@@ -82,7 +83,7 @@ typedef VOID(*DRAWMAINSURFACECOLORBOXACTION)(S32 x, S32 y, S32 width, S32 height
 typedef VOID(*DRAWMAINSURFACEHORIZONTALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*FUN_100016C0ACTION)(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
-typedef VOID(*FUN_100023E0ACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel); // TODO
+typedef VOID(*DRAWMAINSURFACECOLOROUTLINEACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*FUN_10002020ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
@@ -144,7 +145,7 @@ typedef struct RendererStateActions
     DRAWMAINSURFACEHORIZONTALCOLORLINEACTION        DrawMainSurfaceHorizontalColorLine;
     DRAWMAINSURFACEVERTICALCOLORLINEACTION          DrawMainSurfaceVerticalColorLine;
     FUN_100016C0ACTION FUN_100016c0; // TODO
-    FUN_100023E0ACTION FUN_100023e0; // TODO
+    DRAWMAINSURFACECOLOROUTLINEACTION               DrawMainSurfaceColorOutline;
     FUN_10002020ACTION FUN_10002020; // TODO
     READRENDERERSURFACERECTANGLEACTION              ReadRendererSurfaceRectangle;
     WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION  WriteMainSurfaceRendererSurfaceRectangle;

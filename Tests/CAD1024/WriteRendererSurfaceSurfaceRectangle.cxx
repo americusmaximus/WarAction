@@ -124,9 +124,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
         if (!success)
         {
-            SavePixels(MakeFileName("WriteRendererSurfaceSurfaceRectangleI", "bmp", event->Action),
-                pixels, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT, stride);
-            SavePixels(MakeFileName("WriteRendererSurfaceSurfaceRectangleO", "bmp", event->Action),
+            SavePixels(MakeFileName("WriteRendererSurfaceSurfaceRectangle", "bmp", event->Action),
                 surface, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT, pitch);
         }
     }

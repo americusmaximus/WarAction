@@ -22,33 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
-#include <RendererModule.Import.hxx>
-#include <RendererModule.Export.hxx>
+#include "Module.hxx"
 
-#define MAX_RENDERER_WIDTH 1024
-#define MAX_RENDERER_HEIGHT 768
-
-#if ACTIVATE_COMPLETE_RGBA_MODE
-#define BLACK_PIXEL     0x00000000
-#define MAGENTA_PIXEL   0xFFFF00FF
-#define WHITE_PIXEL     0xFFFFFFFF
-#else
-#define BLACK_PIXEL     0x0000
-#define MAGENTA_PIXEL   0xF01F
-#define WHITE_PIXEL     0xFFFF
-#endif
-
-typedef struct ModuleEvent
-{
-    LPCSTR Name;
-    LPCSTR Action;
-    BOOL Result;
-} MODULEEVENT, * LPMODULEEVENT;
-
-#define MIN(a, b) (a < b ? a : b)
-#define MAX(a, b) (a > b ? a : b)
-
-#define WIDTH(x, width)  MAX(0, MIN(MAX_RENDERER_WIDTH, x + width))
-#define HEIGHT(y, height)  MAX(0, MIN(MAX_RENDERER_HEIGHT, y + height))
+VOID DrawMainSurfaceColorOutline(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);

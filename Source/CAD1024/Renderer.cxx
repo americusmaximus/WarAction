@@ -32,6 +32,7 @@ RENDERERSTATECONTAINER RendererState;
 VOID InitializeRenderer()
 {
     ModuleState.Surface.Offset = 0;
+
     ModuleState.Surface.Y = MAX_RENDERER_HEIGHT;
     ModuleState.Surface.Width = MAX_RENDERER_WIDTH;
     ModuleState.Surface.Height = MAX_RENDERER_HEIGHT;
@@ -497,6 +498,7 @@ VOID OffsetSurfaces(S32 x, S32 y)
 }
 
 // 0x10001be0
+// TODO: Better name.
 // TODO: Implement 32-bit colors.
 VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count)
 {
@@ -707,14 +709,14 @@ VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x100050df
-VOID FUN_100050df(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4)
+VOID FUN_100050df(S32 x, S32 y, LPVOID param_3, LPVOID param_4)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
 }
 
 // 0x100064b6
-VOID FUN_100064b6(S32 x, S32 y, LPVOID param_3)
+VOID FUN_100064b6(S32 x, S32 y, LPSPRITE sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -977,10 +979,184 @@ VOID FUN_100016c0(S32 x, S32 y, S32 width, S32 height, S32 param_5)
 }
 
 // 0x100023e0
-VOID FUN_100023e0(S32 x, S32 y, S32 width, S32 height, PIXEL pixel)
+VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    S32 offset = ModuleState.Surface.Offset & (0x80000000 | (MAX_RENDERER_WIDTH - 1));
+
+    if (offset < 0) { offset = ((offset - 1) | (-MAX_RENDERER_WIDTH)) + 1; }
+
+    PIXEL* src = (PIXEL*)((addr)RendererState.Surfaces.Main
+        + (addr)((offset + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT) * sizeof(PIXEL)));
+
+    RendererState.Outline.Width = ModuleState.Window.Width - ModuleState.Window.X;
+    RendererState.Outline.Height = ModuleState.Window.Height + 1 - ModuleState.Window.Y;
+
+    x = x - ModuleState.Window.X;
+    y = y - ModuleState.Window.Y;
+
+    RendererState.Outline.Options = RENDERER_OUTLINE_OPTIONS_SKIP_NONE;
+
+    if (y < 0)
+    {
+        height = height + y;
+
+        if (height < 1) { RendererState.Outline.Options = RENDERER_OUTLINE_OPTIONS_SKIP_NONE; return; }
+
+        y = 0;
+        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_TOP);
+    }
+
+    if (RendererState.Outline.Height <= y)
+    {
+        height = height + y;
+        y = RendererState.Outline.Height - 1;
+        height = height - y;
+
+        if (-1 < height) { return; }
+
+        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_TOP);
+    }
+
+    {
+        CONST S32 max = y + 1 + height;
+
+        if (y + 1 + height <= 0 != max < 0)
+        {
+            height = height - max - 1;
+            RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM);
+        }
+    }
+
+    {
+        CONST S32 max = y - 1 + height;
+
+        if (RendererState.Outline.Height <= max)
+        {
+            height = height + RendererState.Outline.Height - max;
+            RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM);
+        }
+    }
+
+    if (x < 1)
+    {
+        width = width + x;
+
+        if (width < 2) { return; }
+
+        x = 1;
+        width = width - 1;
+
+        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_LEFT);
+    }
+
+    if (RendererState.Outline.Width + 2 <= x)
+    {
+        width = width + x + 1 - RendererState.Outline.Width - 2;
+        x = RendererState.Outline.Width + 1;
+
+        if (-1 < width) { return; }
+
+        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_LEFT);
+    }
+
+    if (x + width <= 0 != x + width < 0)
+    {
+        width = width - x - width;
+
+        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT);
+    }
+
+    {
+        S32 max = x - 2 + width;
+
+        if (RendererState.Outline.Width < max)
+        {
+            width = width + RendererState.Outline.Width - max;
+
+            RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT);
+        }
+    }
+
+    RendererState.Outline.HorizontalDirection = 1;
+
+    if (width < 0)
+    {
+        RendererState.Outline.HorizontalDirection = -RendererState.Outline.HorizontalDirection;
+        width = -width;
+    }
+
+    RendererState.Outline.VerticalDirection = 1;
+    RendererState.Outline.Stride = ModuleState.Surface.Stride;
+
+    if (height < 0)
+    {
+        RendererState.Outline.Stride = -ModuleState.Surface.Stride;
+        height = -height;
+        RendererState.Outline.VerticalDirection = -RendererState.Outline.VerticalDirection;
+    }
+
+    PIXEL* dst = (PIXEL*)((addr)RendererState.Surfaces.Main
+        + (addr)(ModuleState.Surface.Offset * sizeof(PIXEL) + y * ModuleState.Surface.Stride + x * sizeof(PIXEL))
+        + (addr)(ModuleState.Window.Y * ModuleState.Surface.Stride + ModuleState.Window.X * sizeof(PIXEL)));
+
+    if ((RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_TOP) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    {
+        height = height - 1;
+
+        PIXEL* pixels = dst;
+
+        if (src <= dst) { pixels = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+
+        for (S32 xx = 0; xx < width; xx++)
+        {
+            pixels[RendererState.Outline.HorizontalDirection * xx] = pixel;
+        }
+
+        dst = (PIXEL*)((addr)dst + (addr)RendererState.Outline.Stride);
+    }
+
+    if ((RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    {
+        S32 off = (width - 1) * sizeof(PIXEL);
+        if (RendererState.Outline.HorizontalDirection < 0) { off = -off; }
+
+        PIXEL* pixels = (PIXEL*)((addr)dst + (addr)off);
+
+        for (S32 yy = 0; yy < height - 1; yy++)
+        {
+            if (src <= pixels) { pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+
+            pixels[0] = pixel;
+
+            pixels = (PIXEL*)((addr)pixels + (addr)RendererState.Outline.Stride);
+        }
+    }
+
+    if ((RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_LEFT) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    {
+        for (S32 yy = 0; yy < height - 1; yy++)
+        {
+            if (src <= dst) { dst = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+
+            dst[0] = pixel;
+
+            dst = (PIXEL*)((addr)dst + (addr)RendererState.Outline.Stride);
+        }
+    }
+    else
+    {
+        dst = (PIXEL*)((addr)dst + (addr)(RendererState.Outline.Stride * (height - 1)));
+    }
+
+    if (height != 0 && (RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    {
+        if (src <= dst) { dst = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+
+        for (S32 xx = 0; xx < width; xx++)
+        {
+            dst[RendererState.Outline.HorizontalDirection * xx] = pixel;
+        }
+    }
 }
 
 // 0x10002020

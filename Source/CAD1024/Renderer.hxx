@@ -28,6 +28,16 @@ SOFTWARE.
 #define MAX_RENDERER_WIDTH 1024
 #define MAX_RENDERER_HEIGHT 768
 
+typedef enum RendererOutlineSkipOptions
+{
+    RENDERER_OUTLINE_OPTIONS_SKIP_NONE           = 0,
+    RENDERER_OUTLINE_OPTIONS_SKIP_TOP            = 1,
+    RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM         = 2,
+    RENDERER_OUTLINE_OPTIONS_SKIP_LEFT           = 4,
+    RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT          = 8,
+    RENDERER_OUTLINE_OPTIONS_SKIP_FORCE_DWORD    = 0x7fffffff
+} RENDEREROUTLINESKIPOPTIONS, *LPRENDEREROUTLINESKIPOPTIONS;
+
 typedef struct RendererStateContainer
 {
     struct
@@ -36,6 +46,16 @@ typedef struct RendererStateContainer
         PIXEL Back[MAX_RENDERER_WIDTH * (MAX_RENDERER_HEIGHT + 1)];     // 0x1019ddac
         PIXEL Stencil[MAX_RENDERER_WIDTH * (MAX_RENDERER_HEIGHT + 1)];  // 0x1031e5d0
     } Surfaces;
+
+    struct
+    {
+        RENDEREROUTLINESKIPOPTIONS Options; // 0x1001d55c
+        S32 HorizontalDirection; // 0x1001d560
+        S32 Stride; // 0x1001d564
+        S32 VerticalDirection; // 0x1001d568
+        S32 Height; // 0x1001d56c
+        S32 Width; // 0x1001d570
+    } Outline;
 } RENDERERSTATECONTAINER, * LPRENDERERSTATECONTAINER;
 
 EXTERN RENDERERSTATECONTAINER RendererState;
@@ -68,8 +88,8 @@ VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID FUN_10001ed0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_10001f40(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height); // TODO
-VOID FUN_100050df(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
-VOID FUN_100064b6(S32 x, S32 y, LPVOID param_3); // TODO
+VOID FUN_100050df(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
+VOID FUN_100064b6(S32 x, S32 y, LPSPRITE sprite); // TODO
 VOID FUN_1000618d(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10004db0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10006ef8(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
@@ -86,7 +106,7 @@ VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 width, PIXEL pixel);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID FUN_100016c0(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
-VOID FUN_100023e0(S32 x, S32 y, S32 width, S32 height, PIXEL pixel); // TODO
+VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel); // TODO
 VOID FUN_10002020(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height);
 BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);

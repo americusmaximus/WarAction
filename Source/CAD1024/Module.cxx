@@ -82,7 +82,7 @@ LPRENDERERMODULESTATECONTAINER Initialize()
     ModuleState.Actions.DrawMainSurfaceHorizontalColorLine          = DrawMainSurfaceHorizontalColorLine;
     ModuleState.Actions.DrawMainSurfaceVerticalColorLine            = DrawMainSurfaceVerticalColorLine;
     ModuleState.Actions.FUN_100016c0                                = FUN_100016c0; // TODO
-    ModuleState.Actions.FUN_100023e0                                = FUN_100023e0; // TODO
+    ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.FUN_10002020                                = FUN_10002020; // TODO
     ModuleState.Actions.ReadRendererSurfaceRectangle                = FUN_10002b90;
     ModuleState.Actions.WriteMainSurfaceRendererSurfaceRectangle    = WriteMainSurfaceRendererSurfaceRectangle;
