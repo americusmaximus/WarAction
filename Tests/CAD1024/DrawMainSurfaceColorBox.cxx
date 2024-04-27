@@ -62,10 +62,7 @@ static BOOL IsInsideArea(PIXEL* pixels, U32 count, LPRECTANGLE rects, PIXEL pixe
                 if (((x <= xx && xx < (w + x)) && (y == yy || yy == (h + y - 1)))
                     || (x == xx || xx == (w + x - 1)) && (y == yy && yy == (h + y)))
                 {
-                    if (pixels[indx] != pixel) {
-                        mismatch = TRUE; break;
-                    // TODO
-                    }
+                    if (pixels[indx] != pixel) { mismatch = TRUE; break; }
 
                     //pixels[indx] = BLACK_PIXEL;
                 }

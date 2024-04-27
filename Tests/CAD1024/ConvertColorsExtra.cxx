@@ -28,8 +28,8 @@ static PIXEL Convert(PIXEL pixel, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm
 #if ACTIVATE_COMPLETE_RGBA_MODE
     // TODO
 #else
-    CONST PIXEL r = (((pixel & 0xF800) << 0) >> (ro & 0x1f)) & rm;
-    CONST PIXEL g = (((pixel & 0x07E0) << 5) >> (go & 0x1f)) & gm;
+    CONST PIXEL r = (((pixel & 0xF800) <<  0) >> (ro & 0x1f)) & rm;
+    CONST PIXEL g = (((pixel & 0x07E0) <<  5) >> (go & 0x1f)) & gm;
     CONST PIXEL b = (((pixel & 0x001F) << 11) >> (bo & 0x1f)) & bm;
 
     return (PIXEL)(r | g | b);

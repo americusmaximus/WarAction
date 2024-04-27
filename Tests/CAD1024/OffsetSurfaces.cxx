@@ -25,7 +25,7 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "OffsetSurfaces.hxx"
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y)
+static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
 {
      //SavePixels(MakeFileName("OffsetSurfacesMain", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
      //SavePixels(MakeFileName("OffsetSurfacesBack", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
@@ -34,7 +34,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
     event->Result = TRUE;
 }
 
-#define EXECUTE(A, S, E, X, Y) { E->Action = A; Execute(S, E, X, Y); if (!E->Result) { return; } }
+#define EXECUTE(A, S, E) { E->Action = A; Execute(S, E); if (!E->Result) { return; } }
 
 
 VOID OffsetSurfaces(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
@@ -53,13 +53,28 @@ VOID OffsetSurfaces(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
             }
         }
 
-        EXECUTE("X: 225 Y: 173", state, event, 225, 173);
+        EXECUTE("X: 225 Y: 173", state, event);
     }
 
-    // Move from 225:173 to 0:0
+    // Move from 225:173 to -99:-89 (-324: -262)
+    {
+        state->Actions.OffsetSurfaces(-324, -262);
+
+        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
+        {
+            for (U32 yy = 0; yy < MAX_RENDERER_HEIGHT; yy++)
+            {
+                state->Actions.DrawMainSurfaceColorRectangle(xx, yy, 1, 1, (PIXEL)(WHITE_PIXEL - (xx + xx * yy)));
+            }
+        }
+
+        EXECUTE("X: -99 Y: -89", state, event);
+    }
+
+    // Move from -99:-89 to 0:0 (99:89)
     {
         state->Actions.OffsetSurfaces(-225, -173);
 
-        EXECUTE("X: 0 Y: 0", state, event, 225, 173);
+        EXECUTE("X: 0 Y: 0", state, event);
     }
 }

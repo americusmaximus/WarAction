@@ -31,6 +31,7 @@ SOFTWARE.
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
 #include "DrawStencilSurfaceWindowRectangle.hxx"
+#include "MaskStencilSurfaceRectangle.hxx"
 #include "OffsetSurfaces.hxx"
 #include "SetPixelColorMasks.hxx"
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
@@ -55,6 +56,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
     ACTION(DrawStencilSurfaceWindowRectangle, state, event);
+    ACTION(MaskStencilSurfaceRectangle, state, event);
     ACTION(OffsetSurfaces, state, event);
     ACTION(SetPixelColorMasks, state, event);
     ACTION(WriteBackSurfaceMainSurfaceRectangle, state, event);
