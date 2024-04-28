@@ -173,6 +173,7 @@ VOID ReleaseWindowStateActionHandler(WINDOWSTATEHANDLERLAMBDA lambda)
     ReleaseWindowStateHandler(State.Window.Handlers[WINDOW_STATE_ACTION_HANDLER_INDEX], lambda);
 }
 
+// 0x00402830
 VOID ReleaseWindowStateMessageHandler(WINDOWSTATEMESSAGEHANDLERLAMBDA lambda)
 {
     ReleaseWindowStateHandler(State.Window.Handlers[WINDOW_STATE_MESSAGE_HANDLER_INDEX], (WINDOWSTATEHANDLERLAMBDA)lambda);

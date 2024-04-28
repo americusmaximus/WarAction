@@ -125,7 +125,7 @@ BOOL InitializeWindowStateAction()
     State.ModuleState->SoundState = &SoundState;
     State.ModuleState->TextModule = State.Text.Handle;
 
-    State.ModuleState->Unknown0x5cc = 0; // TODO
+    State.ModuleState->Network = NULL;
     State.ModuleState->Handle = GetModuleHandleA(NULL);
     State.ModuleState->Unknown0x30 = 0; // TODO
 
@@ -345,10 +345,7 @@ BOOL ReleaseWindowStateAction(VOID)
 
     if (State.AppState != NULL && State.AppState->ModuleState != NULL)
     {
-        if (State.ModuleState->Unknown0x5cc != NULL)
-        {
-            State.ModuleState->Unknown0x5cc->Release(); // TODO
-        }
+        if (State.ModuleState->Network != NULL) { State.ModuleState->Network->Release(); }
 
         free(State.AppState->ModuleState);
     }

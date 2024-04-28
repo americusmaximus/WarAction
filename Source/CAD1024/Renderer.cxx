@@ -514,7 +514,7 @@ VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count)
     {
         CONST PIXEL pixel = input[x];
 
-        if (pixel == 0xF81F) { output[x] = 0xF81F; continue; }
+        if (pixel == MAGENTA_PIXEL) { output[x] = MAGENTA_PIXEL; continue; }
 
         CONST PIXEL r = (((pixel & 0xF800) << 0) >> (ModuleState.RedOffset & 0x1f)) & ModuleState.ActualRedMask;
         CONST PIXEL g = (((pixel & 0x07E0) << 5) >> (ModuleState.GreenOffset & 0x1f)) & ModuleState.ActualGreenMask;
@@ -1252,10 +1252,59 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
 }
 
 // 0x100018a0
-VOID FUN_100018a0(S32 x, S32 y, S32 width, S32 height, S32 param_5, S32 param_6, S32 param_7, S32 param_8)
+VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* surface)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    PIXEL* src = (PIXEL*)((addr)RendererState.Surfaces.Main
+        + (addr)((ModuleState.Surface.Offset + (sy * MAX_RENDERER_WIDTH + sx)) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((addr)surface + (addr)((stride * dy + dx) * sizeof(PIXEL)));
+
+    if (sy < ModuleState.Surface.Y)
+    {
+        CONST S32 delta = sy + height - ModuleState.Surface.Y;
+
+        if ((sy + height) < ModuleState.Surface.Y || delta == 0)
+        {
+            for (S32 yy = 0; yy < height; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+
+                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+            }
+        }
+        else
+        {
+            for (S32 yy = 0; yy < height - delta; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+
+                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+            }
+
+            src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+
+            for (S32 yy = 0; yy < delta; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+
+                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+            }
+        }
+    }
+    else
+    {
+        src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+
+        for (S32 yy = 0; yy < height; yy++)
+        {
+            for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+
+            src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+        }
+    }
 }
 
 // 0x10002780
@@ -1381,7 +1430,7 @@ VOID DrawStencilSurfaceWindowRectangle()
 }
 
 // 0x10002990
-BOOL WriteRendererSurfaceSurfaceRectangle(S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels)
+BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels)
 {
     BOOL locked = FALSE;
 
@@ -1392,7 +1441,7 @@ BOOL WriteRendererSurfaceSurfaceRectangle(S32 x, S32 y, S32 width, S32 height, S
         locked = TRUE;
     }
 
-    PIXEL* src = (PIXEL*)((addr)pixels + (addr)((stride * y + x) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((addr)pixels + (addr)((stride * sy + sx) * sizeof(PIXEL)));
     PIXEL* dst = (PIXEL*)((addr)ModuleState.Surface.Renderer + (addr)(ModuleState.Pitch * dy + dx * sizeof(PIXEL)));
 
     CONST S32 length = ACQUIREWIDTH(width);

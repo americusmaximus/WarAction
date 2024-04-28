@@ -22,23 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
-#include <RendererModule.Import.hxx>
-#include <RendererModule.Export.hxx>
+#include "Module.hxx"
 
-#define MAX_RENDERER_WIDTH 1024
-#define MAX_RENDERER_HEIGHT 768
-
-typedef struct ModuleEvent
-{
-    LPCSTR Name;
-    LPCSTR Action;
-    BOOL Result;
-} MODULEEVENT, * LPMODULEEVENT;
-
-#define MIN(a, b) (a < b ? a : b)
-#define MAX(a, b) (a > b ? a : b)
-
-#define WIDTH(x, width)  MAX(0, MIN(MAX_RENDERER_WIDTH, x + width))
-#define HEIGHT(y, height)  MAX(0, MIN(MAX_RENDERER_HEIGHT, y + height))
+VOID ReadMainSurfaceSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);

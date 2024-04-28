@@ -22,6 +22,7 @@ SOFTWARE.
 
 #pragma once
 
+#include "DirectPlay.hxx"
 #include "RendererModule.Basic.hxx"
 #include "SoundState.hxx"
 
@@ -46,5 +47,5 @@ typedef struct ModuleStateContainer
     LPSOUNDSTATECONTAINER SoundState;
     LPRENDERERMODULESTATECONTAINER RendererState;
     HMODULE TextModule;
-    LPUNKNOWN Unknown0x5cc; // TODO
+    LPDIRECTPLAY3A Network;
 } MODULESTATECONTAINER, * LPMODULESTATECONTAINER;

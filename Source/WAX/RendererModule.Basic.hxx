@@ -87,10 +87,10 @@ typedef VOID(*DRAWMAINSURFACECOLOROUTLINEACTION)(S32 x, S32 y, S32 width, S32 he
 typedef VOID(*FUN_10002020ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
-typedef VOID(*FUN_100018A0ACTION)(S32 x, S32 y, S32 width, S32 height, S32 param_5, S32 param_6, S32 param_7, S32 param_8); // TODO
+typedef VOID(*READMAINSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* surface);
 typedef VOID(*MASKSTENCILSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef VOID(*DRAWSTENCILSURFACEWINDOWRECTANGLEACTION)(VOID);
-typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
+typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
 typedef VOID(*FUN_10008ECDACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_1000A4F3ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
@@ -150,7 +150,7 @@ typedef struct RendererStateActions
     READRENDERERSURFACERECTANGLEACTION              ReadRendererSurfaceRectangle;
     WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION  WriteMainSurfaceRendererSurfaceRectangle;
     FUN_10002FB0ACTION FUN_10002fb0_1; // TODO
-    FUN_100018A0ACTION FUN_100018a0; // TODO
+    READMAINSURFACESURFACERECTANGLEACTION           ReadMainSurfaceSurfaceRectangle;
     MASKSTENCILSURFACERECTANGLEACTION               MaskStencilSurfaceRectangle;
     DRAWSTENCILSURFACEWINDOWRECTANGLEACTION         DrawStencilSurfaceWindowRectangle;
     WRITERENDERERSURFACESURFACERECTANGLEACTION      WriteRendererSurfaceSurfaceRectangle;

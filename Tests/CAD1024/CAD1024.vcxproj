@@ -169,6 +169,7 @@
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="MaskStencilSurfaceRectangle.cxx" />
     <ClCompile Include="OffsetSurfaces.cxx" />
+    <ClCompile Include="ReadMainSurfaceSurfaceRectangle.cxx" />
     <ClCompile Include="SetPixelColorMasks.cxx" />
     <ClCompile Include="DrawMainSurfaceColorOutline.cxx" />
     <ClCompile Include="WriteBackSurfaceMainSurfaceRectangle.cxx" />
@@ -191,6 +192,7 @@
     <ClInclude Include="MaskStencilSurfaceRectangle.hxx" />
     <ClInclude Include="Module.hxx" />
     <ClInclude Include="OffsetSurfaces.hxx" />
+    <ClInclude Include="ReadMainSurfaceSurfaceRectangle.hxx" />
     <ClInclude Include="SetPixelColorMasks.hxx" />
     <ClInclude Include="DrawMainSurfaceColorOutline.hxx" />
     <ClInclude Include="WriteBackSurfaceMainSurfaceRectangle.hxx" />

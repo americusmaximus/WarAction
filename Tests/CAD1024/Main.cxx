@@ -33,6 +33,7 @@ SOFTWARE.
 #include "DrawStencilSurfaceWindowRectangle.hxx"
 #include "MaskStencilSurfaceRectangle.hxx"
 #include "OffsetSurfaces.hxx"
+#include "ReadMainSurfaceSurfaceRectangle.hxx"
 #include "SetPixelColorMasks.hxx"
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
 #include "WriteMainSurfaceRendererSurfaceRectangle.hxx"
@@ -59,6 +60,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
     ACTION(DrawStencilSurfaceWindowRectangle, state, event);
     ACTION(MaskStencilSurfaceRectangle, state, event);
     ACTION(OffsetSurfaces, state, event);
+    ACTION(ReadMainSurfaceSurfaceRectangle, state, event);
     ACTION(SetPixelColorMasks, state, event);
     ACTION(WriteBackSurfaceMainSurfaceRectangle, state, event);
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
