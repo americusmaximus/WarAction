@@ -91,7 +91,7 @@ typedef VOID(*FUN_100018A0ACTION)(S32 x, S32 y, S32 width, S32 height, S32 param
 typedef VOID(*MASKSTENCILSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef VOID(*DRAWSTENCILSURFACEWINDOWRECTANGLEACTION)(VOID);
 typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
-typedef VOID(*FUN_10002A30ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7, S32 param_8, S32 param_9, S32 param_10); // TODO
+typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
 typedef VOID(*FUN_10008ECDACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_1000A4F3ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 typedef VOID(*FUN_10009EB3ACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
@@ -154,7 +154,7 @@ typedef struct RendererStateActions
     MASKSTENCILSURFACERECTANGLEACTION               MaskStencilSurfaceRectangle;
     DRAWSTENCILSURFACEWINDOWRECTANGLEACTION         DrawStencilSurfaceWindowRectangle;
     WRITERENDERERSURFACESURFACERECTANGLEACTION      WriteRendererSurfaceSurfaceRectangle;
-    FUN_10002A30ACTION FUN_10002a30; // TODO
+    WRITESURFACESURFACERECTANGLEACTION              WriteSurfaceSurfaceRectangle;
     FUN_10008ECDACTION FUN_10008ecd; // TODO
     FUN_1000A4F3ACTION FUN_1000a4f3; // TODO
     FUN_10009EB3ACTION FUN_10009eb3; // TODO

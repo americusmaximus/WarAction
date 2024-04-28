@@ -211,6 +211,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.hxx" />
+    <ClInclude Include="Resources.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,32 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
+#include "Module.hxx"
 
-namespace Mathematics
-{
-    template <typename T>
-    inline T Clamp(T value, T min, T max)
-    {
-        if (max < value) { return max; }
-        if (value < min) { return min; }
-
-        return value;
-    }
-
-    template <typename T>
-    inline T Min(T value1, T value2)
-    {
-        if (value1 < value2) { return value1; }
-
-        return value2;
-    }
-
-    template <typename T>
-    inline T Max(T value1, T value2)
-    {
-        if (value1 < value2) { return value2; }
-
-        return value1;
-    }
-}
+VOID WriteSurfaceSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);

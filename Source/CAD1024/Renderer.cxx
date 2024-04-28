@@ -1411,10 +1411,18 @@ BOOL WriteRendererSurfaceSurfaceRectangle(S32 x, S32 y, S32 width, S32 height, S
 }
 
 // 0x10002a30
-VOID FUN_10002a30(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7, S32 param_8, S32 param_9, S32 param_10)
+VOID WriteSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    PIXEL* src = (PIXEL*)((addr)input + (addr)((sstr * sy + sx) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((addr)output + (addr)((dstr * dy + dx) * sizeof(PIXEL)));
+
+    for (s32 yy = 0; yy < height; yy++)
+    {
+        for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+
+        src = (PIXEL*)((addr)src + (addr)(sstr * sizeof(PIXEL)));
+        dst = (PIXEL*)((addr)dst + (addr)(dstr * sizeof(PIXEL)));
+    }
 }
 
 // 0x10008ecd

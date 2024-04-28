@@ -37,6 +37,7 @@ SOFTWARE.
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
 #include "WriteMainSurfaceRendererSurfaceRectangle.hxx"
 #include "WriteRendererSurfaceSurfaceRectangle.hxx"
+#include "WriteSurfaceSurfaceRectangle.hxx"
 
 #include <stdio.h>
 
@@ -62,6 +63,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
     ACTION(WriteBackSurfaceMainSurfaceRectangle, state, event);
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
     ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);
+    ACTION(WriteSurfaceSurfaceRectangle, state, event);
 
     // TODO
 }

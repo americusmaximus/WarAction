@@ -90,7 +90,7 @@ LPRENDERERMODULESTATECONTAINER Initialize()
     ModuleState.Actions.MaskStencilSurfaceRectangle                 = MaskStencilSurfaceRectangle;
     ModuleState.Actions.DrawStencilSurfaceWindowRectangle           = DrawStencilSurfaceWindowRectangle;
     ModuleState.Actions.WriteRendererSurfaceSurfaceRectangle        = WriteRendererSurfaceSurfaceRectangle;
-    ModuleState.Actions.FUN_10002a30                                = FUN_10002a30; // TODO
+    ModuleState.Actions.WriteSurfaceSurfaceRectangle                = WriteSurfaceSurfaceRectangle;
     ModuleState.Actions.FUN_10008ecd                                = FUN_10008ecd; // TODO
     ModuleState.Actions.FUN_1000a4f3                                = FUN_1000a4f3; // TODO
     ModuleState.Actions.FUN_10009eb3                                = FUN_10009eb3; // TODO

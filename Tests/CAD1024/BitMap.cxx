@@ -42,7 +42,10 @@ BOOL SavePixels(LPCSTR name, CONST PIXEL* pixels, CONST U32 width, CONST U32 hei
     BITMAPFILEHEADER header;
     BITMAPINFOHEADER info;
 
-    CONST U32 size = width * height * sizeof(COLOR);
+    CONST U32 bits = sizeof(COLOR) << 3;
+    CONST U32 bistride = ((((width * bits) + 31) & ~31) >> 3);
+
+    CONST U32 size = bistride * height;
 
     header.bfType = 0x4D42; // 'BM'
     header.bfSize = size + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
@@ -53,8 +56,8 @@ BOOL SavePixels(LPCSTR name, CONST PIXEL* pixels, CONST U32 width, CONST U32 hei
     info.biWidth = width;
     info.biHeight = height;
     info.biPlanes = 1;
-    info.biBitCount = 24;
-    info.biCompression = 0;
+    info.biBitCount = bits;
+    info.biCompression = BI_RGB;
     info.biSizeImage = size;
     info.biXPelsPerMeter = 0;
     info.biYPelsPerMeter = 0;
@@ -67,19 +70,20 @@ BOOL SavePixels(LPCSTR name, CONST PIXEL* pixels, CONST U32 width, CONST U32 hei
 
     ZeroMemory(colors, size);
 
-    for (U32 x = 0; x < width; x++)
+    for (U32 y = 0; y < height; y++)
     {
-        for (U32 y = 0; y < height; y++)
+        LPCOLOR line = (LPCOLOR)((addr)colors + (addr)((height - y - 1) * bistride));
+
+        for (U32 x = 0; x < width; x++)
         {
             CONST PIXEL pixel = pixels[y * stride + x];
-            CONST U32 indx = (height - y - 1) * width + x;
 
 #if ACTIVATE_COMPLETE_RGBA_MODE
             DebugBreak(); // TODO
 #else
-            colors[indx].R = (((U32)(pixel >> 11) & 0x1f) * 527 + 23) >> 6;
-            colors[indx].G = (((U32)(pixel >> 5) & 0x3f) * 259 + 33) >> 6;
-            colors[indx].B = (((U32)(pixel >> 0) & 0x1f) * 527 + 23) >> 6;
+            line[x].R = (((U32)(pixel >> 11) & 0x1f) * 527 + 23) >> 6;
+            line[x].G = (((U32)(pixel >> 5) & 0x3f) * 259 + 33) >> 6;
+            line[x].B = (((U32)(pixel >> 0) & 0x1f) * 527 + 23) >> 6;
 #endif
         }
     }
