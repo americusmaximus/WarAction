@@ -141,8 +141,8 @@ VOID WriteRendererSurfaceSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, 
     // Initialize.
     HWND hwnd = InitializeWindow();
 
-    state->Actions.InitializeRenderer();
-    state->Actions.InitializeDirectDraw(hwnd, FALSE);
+    state->Actions.Initialize();
+    state->Actions.InitializeDirectX(hwnd, FALSE);
     state->Actions.InitializeWindow(MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
     state->Actions.LockRendererSurface();
 

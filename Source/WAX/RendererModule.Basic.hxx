@@ -37,8 +37,8 @@ typedef struct RendererModuleDirectXState
 #endif
 } RENDERERMODULEDIRECTXSTATE, * LPRENDERERMODULEDIRECTXSTATE;
 
-typedef VOID(*INITIALIZERENDERERACTION)(VOID);
-typedef BOOL(*INITIALIZEDIRECTDRAWACTION)(HWND hwnd, BOOL fullscreen);
+typedef VOID(*INITIALIZEACTION)(VOID);
+typedef BOOL(*INITIALIZEDIRECTXACTION)(HWND hwnd, BOOL fullscreen);
 typedef VOID(*RESTOREDISPLAYMODEACTION)(VOID);
 typedef BOOL(*INITIALIZEWINDOWACTION)(S32 width, S32 height);
 typedef VOID(*SETPIXELCOLORMASKSACTION)(CONST U32 r, CONST U32 g, CONST U32 b);
@@ -65,13 +65,13 @@ typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
 typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
-typedef VOID(*FUN_100050DFACTION)(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
-typedef VOID(*FUN_100064B6ACTION)(S32 x, S32 y, LPSPRITE sprite); // TODO
+typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
+typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, LPSPRITE sprite); // TODO
 typedef VOID(*FUN_1000618DACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10004DB0ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_10006EF8ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_10007292ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-typedef VOID(*FUN_10006B21ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
+typedef VOID(*DRAWMAINSURFACECURSORACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_100067ADACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007662ACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007FBCACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
@@ -82,7 +82,7 @@ typedef VOID(*DRAWMAINSURFACECOLORRECTANGLEACTION)(S32 x, S32 y, S32 width, S32 
 typedef VOID(*DRAWMAINSURFACECOLORBOXACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACEHORIZONTALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
-typedef VOID(*FUN_100016C0ACTION)(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
+typedef VOID(*DRAWMAINSURFACECOLORRECTANGLEOVERLAYACTION)(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
 typedef VOID(*DRAWMAINSURFACECOLOROUTLINEACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*FUN_10002020ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
@@ -95,12 +95,12 @@ typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXE
 typedef VOID(*FUN_10008ECDACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_1000A4F3ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 typedef VOID(*FUN_10009EB3ACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
-typedef VOID(*RELEASEDIRECTDRAWACTION)(VOID);
+typedef VOID(*RELEASEDIRECTXACTION)(VOID);
 
 typedef struct RendererStateActions
 {
-    INITIALIZERENDERERACTION                        InitializeRenderer;
-    INITIALIZEDIRECTDRAWACTION                      InitializeDirectDraw;
+    INITIALIZEACTION                                Initialize;
+    INITIALIZEDIRECTXACTION                         InitializeDirectX;
     RESTOREDISPLAYMODEACTION                        RestoreDisplayMode;
     INITIALIZEWINDOWACTION                          InitializeWindow;
     SETPIXELCOLORMASKSACTION                        SetPixelColorMasks;
@@ -127,13 +127,13 @@ typedef struct RendererStateActions
     FUN_10001ED0ACTION FUN_10001ed0; // TODO
     FUN_10001F40ACTION FUN_10001f40; // TODO
     FUN_10002FB0ACTION FUN_10002fb0_0; // TODO
-    FUN_100050DFACTION FUN_100050df; // TODO
-    FUN_100064B6ACTION FUN_100064b6; // TODO
+    DRAWMAINSURFACETEXTACTION                       DrawMainSurfaceText;
+    DRAWMAINSURFACESPRITEACTION                     DrawMainSurfaceSprite;
     FUN_1000618DACTION FUN_1000618d; // TODO
     FUN_10004DB0ACTION FUN_10004db0; // TODO
     FUN_10006EF8ACTION FUN_10006ef8; // TODO
     FUN_10007292ACTION FUN_10007292; // TODO
-    FUN_10006B21ACTION FUN_10006b21; // TODO
+    DRAWMAINSURFACECURSORACTION                     DrawMainSurfaceCursor;
     FUN_100067ADACTION FUN_100067ad; // TODO
     FUN_10007662ACTION FUN_10007662; // TODO
     FUN_10007FBCACTION FUN_10007fbc; // TODO
@@ -144,10 +144,10 @@ typedef struct RendererStateActions
     DRAWMAINSURFACECOLORBOXACTION                   DrawMainSurfaceColorBox;
     DRAWMAINSURFACEHORIZONTALCOLORLINEACTION        DrawMainSurfaceHorizontalColorLine;
     DRAWMAINSURFACEVERTICALCOLORLINEACTION          DrawMainSurfaceVerticalColorLine;
-    FUN_100016C0ACTION FUN_100016c0; // TODO
+    DRAWMAINSURFACECOLORRECTANGLEOVERLAYACTION      DrawMainSurfaceRectangleColorOverlay;
     DRAWMAINSURFACECOLOROUTLINEACTION               DrawMainSurfaceColorOutline;
     FUN_10002020ACTION FUN_10002020; // TODO
-    READRENDERERSURFACERECTANGLEACTION              ReadRendererSurfaceRectangle;
+    READRENDERERSURFACERECTANGLEACTION              FUN_10002b90;
     WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION  WriteMainSurfaceRendererSurfaceRectangle;
     FUN_10002FB0ACTION FUN_10002fb0_1; // TODO
     READMAINSURFACESURFACERECTANGLEACTION           ReadMainSurfaceSurfaceRectangle;
@@ -158,7 +158,7 @@ typedef struct RendererStateActions
     FUN_10008ECDACTION FUN_10008ecd; // TODO
     FUN_1000A4F3ACTION FUN_1000a4f3; // TODO
     FUN_10009EB3ACTION FUN_10009eb3; // TODO
-    RELEASEDIRECTDRAWACTION                         ReleaseDirectDraw;
+    RELEASEDIRECTXACTION                            ReleaseDirectX;
 } RENDERERMODULESTATEACTIONS, * LPRENDERERMODULESTATEACTIONS;
 
 typedef struct Rectangle
@@ -169,7 +169,7 @@ typedef struct Rectangle
     S32 Height;
 } RECTANGLE, * LPRECTANGLE;
 
-typedef struct RendererModuleSurface
+typedef struct RendererModuleSurface // TODO Refactor the struct out.
 {
     S32 Offset; // Offset within the surface data. Originally in bytes, presently in pixels.
     S32 Y; // The surface offset along the "Y" axis in pixels.
@@ -222,6 +222,6 @@ typedef struct RendererModuleStateContainer
 
     HWND HWND;
     BOOL IsFullScreen;
-    RENDERERMODULEDIRECTXSTATE DirectDraw;
+    RENDERERMODULEDIRECTXSTATE DirectX;
     RENDERERMODULESTATEACTIONS Actions;
 } RENDERERMODULESTATECONTAINER, * LPRENDERERMODULESTATECONTAINER;

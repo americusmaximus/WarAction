@@ -27,18 +27,18 @@ SOFTWARE.
 RENDERERMODULESTATECONTAINER ModuleState;
 
 // 0x10001960
-LPRENDERERMODULESTATECONTAINER Initialize()
+LPRENDERERMODULESTATECONTAINER InitializeModule()
 {
     ModuleState.Surface.Main    = RendererState.Surfaces.Main;
     ModuleState.Surface.Back    = RendererState.Surfaces.Back;
     ModuleState.Surface.Stencil = RendererState.Surfaces.Stencil;
 
-    InitializeRenderer();
+    Initialize();
 
     ModuleState.Actions.FUN_10002fb0_0                              = FUN_10002fb0; // TODO
     ModuleState.Actions.FUN_10002fb0_1                              = FUN_10002fb0; // TODO
-    ModuleState.Actions.InitializeRenderer                          = InitializeRenderer;
-    ModuleState.Actions.InitializeDirectDraw                        = InitializeDirectDraw;
+    ModuleState.Actions.Initialize                                  = Initialize;
+    ModuleState.Actions.InitializeDirectX                           = InitializeDirectX;
     ModuleState.Actions.RestoreDisplayMode                          = RestoreDisplayMode;
     ModuleState.Actions.InitializeWindow                            = InitializeWindow;
     ModuleState.Actions.SetPixelColorMasks                          = SetPixelColorMasks;
@@ -64,13 +64,13 @@ LPRENDERERMODULESTATECONTAINER Initialize()
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
     ModuleState.Actions.FUN_10001ed0                                = FUN_10001ed0; // TODO
     ModuleState.Actions.FUN_10001f40                                = FUN_10001f40; // TODO
-    ModuleState.Actions.FUN_100050df                                = FUN_100050df; // TODO
-    ModuleState.Actions.FUN_100064b6                                = FUN_100064b6; // TODO
+    ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
+    ModuleState.Actions.DrawMainSurfaceSprite                       = DrawMainSurfaceSprite;
     ModuleState.Actions.FUN_1000618d                                = FUN_1000618d; // TODO
     ModuleState.Actions.FUN_10004db0                                = FUN_10004db0; // TODO
     ModuleState.Actions.FUN_10006ef8                                = FUN_10006ef8; // TODO
     ModuleState.Actions.FUN_10007292                                = FUN_10007292; // TODO
-    ModuleState.Actions.FUN_10006b21                                = FUN_10006b21; // TODO
+    ModuleState.Actions.DrawMainSurfaceCursor                       = DrawMainSurfaceCursor;
     ModuleState.Actions.FUN_100067ad                                = FUN_100067ad; // TODO
     ModuleState.Actions.FUN_10007662                                = FUN_10007662; // TODO
     ModuleState.Actions.FUN_10007fbc                                = FUN_10007fbc; // TODO
@@ -81,10 +81,10 @@ LPRENDERERMODULESTATECONTAINER Initialize()
     ModuleState.Actions.DrawMainSurfaceColorBox                     = DrawMainSurfaceColorBox;
     ModuleState.Actions.DrawMainSurfaceHorizontalColorLine          = DrawMainSurfaceHorizontalColorLine;
     ModuleState.Actions.DrawMainSurfaceVerticalColorLine            = DrawMainSurfaceVerticalColorLine;
-    ModuleState.Actions.FUN_100016c0                                = FUN_100016c0; // TODO
+    ModuleState.Actions.DrawMainSurfaceRectangleColorOverlay        = DrawMainSurfaceColorRectangleOverlay;
     ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.FUN_10002020                                = FUN_10002020; // TODO
-    ModuleState.Actions.ReadRendererSurfaceRectangle                = FUN_10002b90;
+    ModuleState.Actions.FUN_10002b90                                = FUN_10002b90;
     ModuleState.Actions.WriteMainSurfaceRendererSurfaceRectangle    = WriteMainSurfaceRendererSurfaceRectangle;
     ModuleState.Actions.ReadMainSurfaceSurfaceRectangle             = ReadMainSurfaceSurfaceRectangle;
     ModuleState.Actions.MaskStencilSurfaceRectangle                 = MaskStencilSurfaceRectangle;
@@ -94,7 +94,7 @@ LPRENDERERMODULESTATECONTAINER Initialize()
     ModuleState.Actions.FUN_10008ecd                                = FUN_10008ecd; // TODO
     ModuleState.Actions.FUN_1000a4f3                                = FUN_1000a4f3; // TODO
     ModuleState.Actions.FUN_10009eb3                                = FUN_10009eb3; // TODO
-    ModuleState.Actions.ReleaseDirectDraw                           = ReleaseDirectDraw;
+    ModuleState.Actions.ReleaseDirectX                              = ReleaseDirectX;
 
     return &ModuleState;
 }
