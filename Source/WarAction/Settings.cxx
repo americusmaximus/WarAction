@@ -187,7 +187,7 @@ BOOL AcquireRendererSettingsValue()
 
             CONST BOOL fullscreen = (BOOL)AcquireGameSettingsValue(configuration, TRUE);
 
-            if (!State.Renderer.State->Actions.InitializeDirectX(State.Window.WindowState->HWND, fullscreen)) { return FALSE; }
+            if (!State.Renderer.State->Actions.InitializeDirectX(State.Window->HWND, fullscreen)) { return FALSE; }
         }
 
         State.ModuleState->RendererState = State.Renderer.State;

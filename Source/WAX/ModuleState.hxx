@@ -26,11 +26,16 @@ SOFTWARE.
 #include "RendererModule.Basic.hxx"
 #include "SoundState.hxx"
 
+// a.k.a. XCHG
 typedef struct ModuleStateContainer
 {
     HMODULE Handle;
     S32 Unknown0x04; // TODO
-    S32 Unknown0x08; // TODO
+
+    struct
+    {
+        S32 Difficulty; // TODO Type
+    } Game;
     S32 Unknown0x0c; // TODO
     S32 Unknown0x10; // TODO
     S32 Unknown0x14; // TODO

@@ -63,15 +63,15 @@ BOOL InitializeApplicationState(LPCSTR file)
 
     State.AppState->Logger = State.Logger;
 
-    State.AppState->WindowState = State.Window.WindowState;
+    State.AppState->WindowState = State.Window;
     State.AppState->AcquireRendererSettingsValue = NULL;
 
     State.AppState->Unknown0x1170 = NULL;
 
     if (!InitializeApplicationStateModules(file)) { Message("Can't load profile %s.\n", file); return FALSE; }
 
-    InitializeWindowStateActionHandler(WINDOW_STATE_HANDLER_DEFAULT_PRIORITY_VALUE, ApplicationStateWindowStateActionHandler);
-    InitializeWindowStateMessageHandler(WINDOW_STATE_HANDLER_DEFAULT_PRIORITY_VALUE, ApplicationStateWindowStateMessageHandler);
+    InitializeActionHandler(ACTION_HANDLER_DEFAULT_PRIORITY, ApplicationStateWindowStateActionHandler);
+    InitializeWindowActionHandler(ACTION_HANDLER_DEFAULT_PRIORITY, ApplicationStateWindowStateMessageHandler);
 
     return TRUE;
 }
@@ -132,8 +132,8 @@ BOOL ReleaseApplicationState()
 
     State.AppState = NULL;
 
-    ReleaseWindowStateActionHandler(ApplicationStateWindowStateActionHandler);
-    ReleaseWindowStateMessageHandler(ApplicationStateWindowStateMessageHandler);
+    ReleaseActionHandler(ApplicationStateWindowStateActionHandler);
+    ReleaseWindowActionHandler(ApplicationStateWindowStateMessageHandler);
 
     return TRUE;
 }

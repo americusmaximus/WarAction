@@ -49,10 +49,16 @@ typedef struct StateContainer
 
     struct
     {
-        LPWINDOWSTATECONTAINERHANDLER Handlers[WINDOW_STATE_MAX_HANDLER_COUNT]; // 0x00410508
-        LPWINDOWSTATECONTAINERHANDLER ActiveHandler; // 0x0041051c
-        LPWINDOWSTATECONTAINER WindowState; // 0x00410520
-    } Window;
+        LPACTIONHANDLER Activate; // 0x00410508
+        LPACTIONHANDLER Initialize; // 0x0041050c
+        LPACTIONHANDLER Action; // 0x00410510
+        LPACTIONHANDLER Release; // 0x00410514
+        LPACTIONHANDLER Message; // 0x00410518
+
+        LPACTIONHANDLER Active; // 0x0041051c
+    } Handlers;
+
+    LPWINDOWSTATECONTAINER Window; // 0x00410520
 
     struct
     {
@@ -64,4 +70,4 @@ typedef struct StateContainer
     LPLOGGERSTATECONTAINER Logger; // 0x00410530
 } STATECONTAINER, * LPSTATECONTAINER;
 
-extern STATECONTAINER State;
+EXTERN STATECONTAINER State;

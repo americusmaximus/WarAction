@@ -208,7 +208,7 @@
     <ClInclude Include="Strings.hxx" />
     <ClInclude Include="WarAction.hxx" />
     <ClInclude Include="WindowState.hxx" />
-    <ClInclude Include="WindowStateHandler.hxx" />
+    <ClInclude Include="ActionHandler.hxx" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppState.cxx" />
@@ -219,7 +219,7 @@
     <ClCompile Include="SoundState.cxx" />
     <ClCompile Include="Strings.cxx" />
     <ClCompile Include="WindowState.cxx" />
-    <ClCompile Include="WindowStateHandler.cxx" />
+    <ClCompile Include="ActionHandler.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WarAction.rc" />

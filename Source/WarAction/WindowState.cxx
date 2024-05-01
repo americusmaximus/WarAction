@@ -28,7 +28,7 @@ SOFTWARE.
 #include <Mathematics.Basic.hxx>
 #include <..\Text\Resources.hxx>
 
-#define CS_NONE 0
+#define WINDOW_CLASS_STYLE_NONE 0
 
 #define WINDOW_STATE_MAX_SETTING_VALUE_LENGTH 256
 
@@ -38,16 +38,8 @@ SOFTWARE.
 // ORIGINAL: Just a simple VITYA window :-)
 #define WINDOW_STATE_DEFAULT_WINDOW_TITLE_NAME "War Action"
 
-#define WINDOW_STATE_DEFAULT_WINDOW_HEIGHT_VALUE 200
-#define WINDOW_STATE_DEFAULT_WINDOW_WIDTH_VALUE 200
-
-#define INITIALIZEWINDOWSTATEHANDLER(I, A)                                                                                          \
-    if (A != NULL) {                                                                                                                \
-        LPWINDOWSTATECONTAINERHANDLER handler = (LPWINDOWSTATECONTAINERHANDLER)malloc(sizeof(WINDOWSTATECONTAINERHANDLER));         \
-        if (handler != NULL) {                                                                                                      \
-            InitializeWindowStateHandler(handler, &State.Window.Handlers[I], WINDOW_STATE_HANDLER_DEFAULT_PRIORITY_VALUE, A);       \
-        }                                                                                                                           \
-    }
+#define WINDOW_STATE_DEFAULT_WINDOW_WIDTH 200
+#define WINDOW_STATE_DEFAULT_WINDOW_HEIGHT 200
 
 using namespace Mathematics;
 
@@ -67,12 +59,12 @@ VOID AcquireStringValue(CONST U32 indx, LPSTR value, CONST U32 length)
 }
 
 // 0x00401870
-BOOL StartWindowStateAction()
+BOOL ActivateWindowStateAction()
 {
-    State.Window.WindowState->Class.hIcon = LoadIconA(State.Window.WindowState->Instance, MAKEINTRESOURCEA(IDI_WARACTION));
-    State.Window.WindowState->Class.hCursor = NULL;
+    State.Window->Class.hIcon = LoadIconA(State.Window->Instance, MAKEINTRESOURCEA(IDI_WARACTION));
+    State.Window->Class.hCursor = NULL;
 
-    strcpy(State.Window.WindowState->Title, "Starting...");
+    strcpy(State.Window->Title, "Starting...");
 
     return TRUE;
 }
@@ -110,7 +102,7 @@ BOOL InitializeWindowStateAction()
         STRINGVALUE configuration;
         AcquireSettingsValue(&configuration, IDS_CHANNELS);
 
-        if (!InitializeSoundState(&SoundState, State.Window.WindowState->HWND,
+        if (!InitializeSoundState(&SoundState, State.Window->HWND,
             AcquireGameSettingsValue(configuration, SOUND_STATE_DEFAULT_CHANNEL_COUNT)))
         {
             CHAR value[WINDOW_STATE_MAX_SETTING_VALUE_LENGTH];
@@ -129,40 +121,40 @@ BOOL InitializeWindowStateAction()
     State.ModuleState->Handle = GetModuleHandleA(NULL);
     State.ModuleState->Unknown0x30 = 0; // TODO
 
-    SetWindowTextA(State.Window.WindowState->HWND, State.AppState->Title);
+    SetWindowTextA(State.Window->HWND, State.AppState->Title);
 
     return TRUE;
 }
 
 // 0x00401930
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, WINDOWSTATEHANDLERLAMBDA start, WINDOWSTATEHANDLERLAMBDA init, WINDOWSTATEHANDLERLAMBDA action, WINDOWSTATEHANDLERLAMBDA release, WINDOWSTATEHANDLERLAMBDA message)
+VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message)
 {
-    INITIALIZEWINDOWSTATEHANDLER(WINDOW_STATE_START_HANDLER_INDEX, start);
-    INITIALIZEWINDOWSTATEHANDLER(WINDOW_STATE_INITIALIZE_HANDLER_INDEX, init);;
-    INITIALIZEWINDOWSTATEHANDLER(WINDOW_STATE_ACTION_HANDLER_INDEX, action);
-    INITIALIZEWINDOWSTATEHANDLER(WINDOW_STATE_RELEASE_HANDLER_INDEX, release);
-    INITIALIZEWINDOWSTATEHANDLER(WINDOW_STATE_MESSAGE_HANDLER_INDEX, message);
+    INITIALIZEACTIONHANDLER(&State.Handlers.Activate, activate);
+    INITIALIZEACTIONHANDLER(&State.Handlers.Initialize, initialize);
+    INITIALIZEACTIONHANDLER(&State.Handlers.Action, action);
+    INITIALIZEACTIONHANDLER(&State.Handlers.Release, release);
+    INITIALIZEACTIONHANDLER(&State.Handlers.Message, message);
 
     ActivateWindowStateContainer(self);
 }
 
 // 0x004026c0
-LRESULT WINAPI WindowStateEventHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+LRESULT WINAPI WindowStateMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
     switch (msg)
     {
     case WM_DESTROY: { PostQuitMessage(EXIT_SUCCESS); break; }
-    case WM_SETFOCUS: { State.Window.WindowState->IsActive = TRUE; break; }
-    case WM_KILLFOCUS: {State.Window.WindowState->IsActive = FALSE; break; }
+    case WM_SETFOCUS: { State.Window->IsActive = TRUE; break; }
+    case WM_KILLFOCUS: {State.Window->IsActive = FALSE; break; }
     }
 
-    for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_MESSAGE_HANDLER_INDEX];
-        State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+    for (State.Handlers.Active = State.Handlers.Message;
+        State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
     {
         LRESULT result = 0;
-        if (!INVOKEWINDOWSTATEMESSAGEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke, hwnd, msg, wp, lp, &result)) { return result; }
+        if (!INVOKEWINDOWACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke, hwnd, msg, wp, lp, &result)) { return result; }
 
-        if (State.Window.ActiveHandler == NULL) { break; }
+        if (State.Handlers.Active == NULL) { break; }
     }
 
     return DefWindowProcA(hwnd, msg, wp, lp);
@@ -175,10 +167,10 @@ VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self)
     self->Args = NULL;
     self->HWND = NULL;
 
-    State.Window.WindowState = self;
+    State.Window = self;
 
-    self->Class.style = CS_NONE;
-    self->Class.lpfnWndProc = WindowStateEventHandler;
+    self->Class.style = WINDOW_CLASS_STYLE_NONE;
+    self->Class.lpfnWndProc = WindowStateMessageHandler;
     self->Class.cbClsExtra = 0;
     self->Class.cbWndExtra = 0;
     self->Class.hInstance = NULL;
@@ -194,8 +186,8 @@ VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self)
 
     self->Y = 0;
     self->X = 0;
-    self->Height = WINDOW_STATE_DEFAULT_WINDOW_HEIGHT_VALUE;
-    self->Width = WINDOW_STATE_DEFAULT_WINDOW_WIDTH_VALUE;
+    self->Height = WINDOW_STATE_DEFAULT_WINDOW_HEIGHT;
+    self->Width = WINDOW_STATE_DEFAULT_WINDOW_WIDTH;
 
     self->Menu = NULL;
 
@@ -208,12 +200,12 @@ VOID InitializeWindowStateArguments()
     U32 count = 0;
     U32 length = 0;
 
-    SplitWindowStateArguments(State.Window.WindowState->Args, NULL, NULL, &count, &length);
+    SplitWindowStateArguments(State.Window->Args, NULL, NULL, &count, &length);
 
     State.Arguments.All = (CHAR*)malloc(length);
     State.Arguments.Args = (CHAR**)malloc(count * sizeof(CHAR*));
     
-    SplitWindowStateArguments(State.Window.WindowState->Args, State.Arguments.Args, State.Arguments.All, &count, &length);
+    SplitWindowStateArguments(State.Window->Args, State.Arguments.Args, State.Arguments.All, &count, &length);
     
     State.Arguments.Count = count;
 }
@@ -386,6 +378,6 @@ BOOL ReleaseWindowStateAction(VOID)
  // 0x004018f0
  VOID ActivateWindowStateContainer()
  {
-     ActivateWindowStateContainer(&WindowState, StartWindowStateAction,
-         InitializeWindowStateAction, NULL, ReleaseWindowStateAction, (WINDOWSTATEHANDLERLAMBDA)MessageWindowStateAction);
+     ActivateWindowStateContainer(&WindowState, ActivateWindowStateAction,
+         InitializeWindowStateAction, NULL, ReleaseWindowStateAction, (ACTIONHANDLERLAMBDA)MessageWindowStateAction);
  }

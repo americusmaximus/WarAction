@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "WindowStateHandler.hxx"
+#include "ActionHandler.hxx"
 
 #include <WindowState.hxx>
 
@@ -30,7 +30,7 @@ EXTERN WINDOWSTATECONTAINER WindowState;
 
 VOID ActivateWindowStateContainer(VOID);
 VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, WINDOWSTATEHANDLERLAMBDA start, WINDOWSTATEHANDLERLAMBDA init, WINDOWSTATEHANDLERLAMBDA action, WINDOWSTATEHANDLERLAMBDA release, WINDOWSTATEHANDLERLAMBDA message);
+VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message);
 
 VOID InitializeWindowStateArguments(VOID);
 VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);

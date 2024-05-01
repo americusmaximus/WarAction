@@ -38,35 +38,35 @@ VOID InitializeState(VOID)
 // 0x00402440
 BOOL InitializeWindow(CONST INT command)
 {
-    if (State.Window.WindowState->Class.hInstance == NULL)
+    if (State.Window->Class.hInstance == NULL)
     {
-        State.Window.WindowState->Class.hInstance = State.Window.WindowState->Instance;
+        State.Window->Class.hInstance = State.Window->Instance;
     }
 
-    if (State.Window.WindowState->Class.hCursor == NULL)
+    if (State.Window->Class.hCursor == NULL)
     {
-        State.Window.WindowState->Class.hCursor = LoadCursorA(NULL, (LPCSTR)IDC_ARROW);
+        State.Window->Class.hCursor = LoadCursorA(NULL, (LPCSTR)IDC_ARROW);
     }
 
-    if (State.Window.WindowState->Class.hIcon == NULL)
+    if (State.Window->Class.hIcon == NULL)
     {
-        State.Window.WindowState->Class.hIcon = LoadIconA(NULL, (LPCSTR)IDI_APPLICATION);
+        State.Window->Class.hIcon = LoadIconA(NULL, (LPCSTR)IDI_APPLICATION);
     }
 
-    RegisterClassA(&State.Window.WindowState->Class);
+    RegisterClassA(&State.Window->Class);
 
-    State.Window.WindowState->HWND = CreateWindowExA(WS_EX_NONE,
-        State.Window.WindowState->Class.lpszClassName,
-        State.Window.WindowState->Title, State.Window.WindowState->Style,
-        State.Window.WindowState->X, State.Window.WindowState->Y,
-        State.Window.WindowState->Width, State.Window.WindowState->Height,
-        NULL, State.Window.WindowState->Menu, State.Window.WindowState->Instance, NULL);
+    State.Window->HWND = CreateWindowExA(WS_EX_NONE,
+        State.Window->Class.lpszClassName,
+        State.Window->Title, State.Window->Style,
+        State.Window->X, State.Window->Y,
+        State.Window->Width, State.Window->Height,
+        NULL, State.Window->Menu, State.Window->Instance, NULL);
 
-    if (State.Window.WindowState->HWND == NULL) { return FALSE; }
+    if (State.Window->HWND == NULL) { return FALSE; }
 
-    ShowWindow(State.Window.WindowState->HWND, command);
+    ShowWindow(State.Window->HWND, command);
 
-    UpdateWindow(State.Window.WindowState->HWND);
+    UpdateWindow(State.Window->HWND);
 
     return TRUE;
 }
@@ -76,22 +76,22 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
 {
     InitializeState();
 
-    if (State.Window.WindowState == NULL)
+    if (State.Window == NULL)
     {
         MessageBoxA(NULL, "Problem with process description.", "Fatal Error", MB_ICONHAND); return EXIT_SUCCESS;
     }
 
-    State.Window.WindowState->Instance = instance;
-    State.Window.WindowState->Args = args;
-    State.Window.WindowState->IsActive = TRUE;
+    State.Window->Instance = instance;
+    State.Window->Args = args;
+    State.Window->IsActive = TRUE;
 
-    // Run all start events.
-    for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_START_HANDLER_INDEX];
-        State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+    // Run all activate events.
+    for (State.Handlers.Active = State.Handlers.Activate;
+        State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
     {
-        if (!INVOKEWINDOWSTATEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke)) { return EXIT_SUCCESS; }
+        if (!INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke)) { return EXIT_SUCCESS; }
 
-        if (State.Window.ActiveHandler == NULL) { break; }
+        if (State.Handlers.Active == NULL) { break; }
     }
 
     if (!InitializeWindow(command))
@@ -100,24 +100,24 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
     }
 
     // Run all initialize events.
-    for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_INITIALIZE_HANDLER_INDEX];
-        State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+    for (State.Handlers.Active = State.Handlers.Initialize;
+        State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
     {
-        if (!INVOKEWINDOWSTATEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke))
+        if (!INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke))
         {
             // Run release events in case at least one initialize event failed.
-            for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_RELEASE_HANDLER_INDEX];
-                State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+            for (State.Handlers.Active = State.Handlers.Release;
+                State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
             {
-                INVOKEWINDOWSTATEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke);
+                INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke);
 
-                if (State.Window.ActiveHandler == NULL) { break; }
+                if (State.Handlers.Active == NULL) { break; }
             }
 
             return EXIT_FAILURE;
         }
 
-        if (State.Window.ActiveHandler == NULL) { break; }
+        if (State.Handlers.Active == NULL) { break; }
     }
 
     while (TRUE)
@@ -129,12 +129,12 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
             if (!GetMessageA(&message, NULL, 0, 0))
             {
                 // Run all release events.
-                for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_RELEASE_HANDLER_INDEX];
-                    State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+                for (State.Handlers.Active = State.Handlers.Release;
+                    State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
                 {
-                    INVOKEWINDOWSTATEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke);
+                    INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke);
 
-                    if (State.Window.ActiveHandler == NULL) { break; }
+                    if (State.Handlers.Active == NULL) { break; }
                 }
 
                 return EXIT_FAILURE;
@@ -147,24 +147,24 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
         }
 
         // Run all action events.
-        for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_ACTION_HANDLER_INDEX];
-            State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+        for (State.Handlers.Active = State.Handlers.Action;
+            State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
         {
-            if (!INVOKEWINDOWSTATEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke))
+            if (!INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke))
             {
                 // Run release events in case at least one action event failed.
-                for (State.Window.ActiveHandler = State.Window.Handlers[WINDOW_STATE_RELEASE_HANDLER_INDEX];
-                    State.Window.ActiveHandler != NULL; State.Window.ActiveHandler = State.Window.ActiveHandler->Next)
+                for (State.Handlers.Active = State.Handlers.Release;
+                    State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
                 {
-                    INVOKEWINDOWSTATEHANDLERLAMBDA(State.Window.ActiveHandler->Invoke);
+                    INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke);
 
-                    if (State.Window.ActiveHandler == NULL) { break; }
+                    if (State.Handlers.Active == NULL) { break; }
                 }
 
                 return EXIT_FAILURE;
             }
 
-            if (State.Window.ActiveHandler == NULL) { break; }
+            if (State.Handlers.Active == NULL) { break; }
         }
     }
 
