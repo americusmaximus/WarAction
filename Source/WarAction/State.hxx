@@ -36,16 +36,16 @@ typedef struct StateContainer
         LPRENDERERMODULESTATECONTAINER State; // 0x00410378
     } Renderer;
 
-    LPMODULESTATECONTAINER ModuleState; // 0x00410380
+    LPMODULESTATECONTAINER Module; // 0x00410380
 
     struct
     {
         HMODULE Handle; // 0x00410384
     } Text;
 
-    LPAPPSTATECONTAINER AppState; // 0x004104fc
+    LPAPPSTATECONTAINER App; // 0x004104fc
 
-    LPSOUNDSTATECONTAINER SoundState; // 0x00410504
+    LPSOUNDSTATECONTAINER Sound; // 0x00410504
 
     struct
     {

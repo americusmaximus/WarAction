@@ -49,7 +49,7 @@ WINDOWSTATECONTAINER WindowState;
 // 0x00401130
 VOID AcquireIniFileState()
 {
-    State.IsIniActive = GetPrivateProfileIntA("debug", "useinifile", FALSE, State.AppState->Ini);
+    State.IsIniActive = GetPrivateProfileIntA("debug", "useinifile", FALSE, State.App->Ini);
 }
 
 // 0x00401430
@@ -81,20 +81,20 @@ BOOL InitializeWindowStateAction()
 
     if (!InitializeApplicationState(file)) { return FALSE; }
 
-    State.AppState->AcquireRendererSettingsValue = AcquireRendererSettingsValue;
+    State.App->AcquireRendererSettingsValue = AcquireRendererSettingsValue;
 
-    State.AppState->ModuleState = (LPMODULESTATECONTAINER)malloc(sizeof(MODULESTATECONTAINER));
-    ZeroMemory(State.AppState->ModuleState, sizeof(MODULESTATECONTAINER));
+    State.App->ModuleState = (LPMODULESTATECONTAINER)malloc(sizeof(MODULESTATECONTAINER));
+    ZeroMemory(State.App->ModuleState, sizeof(MODULESTATECONTAINER));
 
-    State.ModuleState = State.AppState->ModuleState;
+    State.Module = State.App->ModuleState;
 
-    GetPrivateProfileStringA("StartUp", "TextResource", ".", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH, State.AppState->Ini);
+    GetPrivateProfileStringA("StartUp", "TextResource", ".", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH, State.App->Ini);
 
     State.Text.Handle = LoadLibraryA(file);
 
     if (State.Text.Handle == NULL) { return FALSE; }
 
-    State.ModuleState->TextModule = State.Text.Handle;
+    State.Module->Text = State.Text.Handle;
 
     AcquireIniFileState();
 
@@ -114,14 +114,14 @@ BOOL InitializeWindowStateAction()
         }
     }
 
-    State.ModuleState->SoundState = &SoundState;
-    State.ModuleState->TextModule = State.Text.Handle;
+    State.Module->Sound = &SoundState;
+    State.Module->Text = State.Text.Handle;
 
-    State.ModuleState->Network = NULL;
-    State.ModuleState->Handle = GetModuleHandleA(NULL);
-    State.ModuleState->Unknown0x30 = 0; // TODO
+    State.Module->Network = NULL;
+    State.Module->Handle = GetModuleHandleA(NULL);
+    State.Module->Game.Command = GAME_COMMAND_NONE;
 
-    SetWindowTextA(State.Window->HWND, State.AppState->Title);
+    SetWindowTextA(State.Window->HWND, State.App->Title);
 
     return TRUE;
 }
@@ -335,11 +335,11 @@ BOOL ReleaseWindowStateAction(VOID)
 {
     ReleaseApplicationStateModules();
 
-    if (State.AppState != NULL && State.AppState->ModuleState != NULL)
+    if (State.App != NULL && State.App->ModuleState != NULL)
     {
-        if (State.ModuleState->Network != NULL) { State.ModuleState->Network->Release(); }
+        if (State.Module->Network != NULL) { State.Module->Network->Release(); }
 
-        free(State.AppState->ModuleState);
+        free(State.App->ModuleState);
     }
 
     ReleaseApplicationState();

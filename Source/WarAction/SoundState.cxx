@@ -42,7 +42,7 @@ VOID InitializeDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self)
 // 0x00401fd0
 VOID ReleaseDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self)
 {
-    if (State.SoundState->Instance != NULL)
+    if (State.Sound->Instance != NULL)
     {
         if (self->Unk04 != NULL)
         {
@@ -87,7 +87,7 @@ LPSOUNDSTATECONTAINER InitializeSoundState(LPSOUNDSTATECONTAINER self)
     self->Unk07 = 500; // TODO
     self->Unk08 = -10000; // TODO
 
-    State.SoundState = self;
+    State.Sound = self;
 
     return self;
 }

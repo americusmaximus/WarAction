@@ -22,18 +22,36 @@ SOFTWARE.
 
 #pragma once
 
-#include "DirectPlay.hxx"
-#include "GameState.hxx"
-#include "RendererModule.Basic.hxx"
-#include "SoundState.hxx"
+#define GAME_STATE_MAX_SAVE_FILE_NAME_LENGTH 256
 
-// a.k.a. XCHG
-typedef struct ModuleStateContainer
+typedef enum GameCommand
 {
-    HMODULE Handle;
-    GAMESTATECONTAINER Game;
-    LPSOUNDSTATECONTAINER Sound;
-    LPRENDERERMODULESTATECONTAINER Renderer;
-    HMODULE Text;
-    LPDIRECTPLAY3A Network;
-} MODULESTATECONTAINER, * LPMODULESTATECONTAINER;
+    GAME_COMMAND_NONE           = 0,
+    GAME_COMMAND_UNKNOWN_1      = 1,
+    GAME_COMMAND_UNKNOWN_2      = 2,
+    GAME_COMMAND_UNKNOWN_3      = 3,
+    GAME_COMMAND_LOAD_GAME      = 4,
+    GAME_COMMAND_QUIT           = 5, // RK_EXITTOOS
+    GAME_COMMAND_RESTART        = 6, // RK_RESTART
+    GAME_COMMAND_FORCE_DWORD    = 0x7fffffff
+} GAMECOMMAND;
+
+typedef struct GameStateContainer
+{
+    BOOL IsNetwork;
+    S32 Difficulty; // TODO Type
+    S32 Unknown0x0c; // TODO
+    S32 Unknown0x10; // TODO
+    S32 Unknown0x14; // TODO
+    S32 Unknown0x18; // TODO
+    S32 Unknown0x1c; // TODO
+    S32 Unknown0x20; // TODO
+    S32 Unknown0x24; // TODO
+    S32 Unknown0x28; // TODO
+    DWORD TickCount;
+    GAMECOMMAND Command;
+
+    BYTE Unknown[1164]; // TODO
+
+    CHAR SaveFile[GAME_STATE_MAX_SAVE_FILE_NAME_LENGTH];
+} GAMESTATECONTAINER, * LPGAMESTATECONTAINER;

@@ -2,11 +2,11 @@
 // Microsoft Visual C++ generated include file.
 // Used by Resources.rc
 //
-#define IDS_STRING1                     1
-#define IDS_STRING2                     2
-#define IDS_STRING3                     3
-#define IDS_STRING4                     4
-#define IDS_STRING22                    22
+#define IDS_STARTING                    1
+#define IDS_FINISHING                   2
+#define IDS_STARTED                     3
+#define IDS_FINISHED                    4
+#define IDS_OUT_OF_MEMORY               22
 #define IDS_STRING26                    26
 #define IDS_STRING27                    27
 #define IDS_STRING29                    29
@@ -21,21 +21,15 @@
 #define IDS_STRING41                    41
 #define IDS_STRING42                    42
 #define IDS_STRING44                    44
-#define IDS_STRING45                    45
 #define IDS_GAME                        45
 #define IDS_STRING46                    46
-#define IDS_STRING47                    47
 #define IDS_CHANNELS                    47
-#define IDS_STRING48                    48
 #define IDS_REVERSE_STEREO              48
 #define IDS_STRING49                    49
 #define IDS_STRING51                    51
 #define IDS_STRING52                    52
-#define IDS_STRING53                    53
 #define IDS_VIDEO_MODE                  53
-#define IDS_STRING54                    54
 #define IDS_DRAW_MODE_INDEX             54
-#define IDS_STRING55                    55
 #define IDS_FULL_SCREEN                 55
 #define IDS_STRING57                    57
 #define IDS_STRING59                    59
@@ -46,7 +40,6 @@
 #define IDS_STRING64                    64
 #define IDS_STRING65                    65
 #define IDS_STRING66                    66
-#define IDS_STRING67                    67
 #define IDS_REGISTRY_KEY                67
 #define IDS_STRING68                    68
 #define IDS_STRING69                    69
@@ -68,9 +61,9 @@
 #define IDS_STRING85                    85
 #define IDS_STRING86                    86
 #define IDS_STRING87                    87
-#define IDS_STRING89                    89
-#define IDS_STRING90                    90
-#define IDS_STRING91                    91
+#define IDS_BRIEF_DELAY_1               89
+#define IDS_BRIEF_DELAY_2               90
+#define IDS_BRIEF_DELAY_3               91
 #define IDS_STRING92                    92
 #define IDS_STRING93                    93
 #define IDS_STRING94                    94

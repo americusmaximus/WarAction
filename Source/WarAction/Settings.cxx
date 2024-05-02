@@ -37,7 +37,7 @@ SOFTWARE.
 VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...)
 {
     CHAR setting[MAX_SETTINGS_VALUE_LENGTH];
-    LoadStringA(State.ModuleState->TextModule, indx, setting, MAX_SETTINGS_VALUE_LENGTH);
+    LoadStringA(State.Module->Text, indx, setting, MAX_SETTINGS_VALUE_LENGTH);
 
     CHAR output[MAX_SETTINGS_OUTPUT_VALUE_LENGTH];
 
@@ -55,17 +55,17 @@ VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...)
 VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVALUE value)
 {
     CHAR setting[MAX_SETTINGS_VALUE_LENGTH];
-    LoadStringA(State.ModuleState->TextModule, IDS_GAME, setting, MAX_SETTINGS_VALUE_LENGTH);
+    LoadStringA(State.Module->Text, IDS_GAME, setting, MAX_SETTINGS_VALUE_LENGTH);
 
     if (State.IsIniActive)
     {
         CHAR output[MAX_SETTINGS_DATA_VALUE_LENGTH];
-        GetPrivateProfileStringA(setting, name.Value, value.Value, output, MAX_SETTINGS_DATA_VALUE_LENGTH, State.AppState->Ini);
+        GetPrivateProfileStringA(setting, name.Value, value.Value, output, MAX_SETTINGS_DATA_VALUE_LENGTH, State.App->Ini);
         AcquireStringValue(result, output);
     }
     else
     {
-        LoadStringA(State.ModuleState->TextModule, IDS_REGISTRY_KEY, setting, MAX_SETTINGS_VALUE_LENGTH);
+        LoadStringA(State.Module->Text, IDS_REGISTRY_KEY, setting, MAX_SETTINGS_VALUE_LENGTH);
 
         HKEY key = NULL;
         if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, setting, REG_OPTION_NON_VOLATILE, KEY_READ, &key) == ERROR_SUCCESS)
@@ -100,11 +100,11 @@ VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVA
 S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value)
 {
     CHAR input[MAX_SETTINGS_VALUE_LENGTH];
-    LoadStringA(State.ModuleState->TextModule, IDS_GAME, input, MAX_SETTINGS_VALUE_LENGTH);
+    LoadStringA(State.Module->Text, IDS_GAME, input, MAX_SETTINGS_VALUE_LENGTH);
 
     if (State.IsIniActive)
     {
-        CONST S32 result = GetPrivateProfileIntA(input, name.Value, value, State.AppState->Ini);
+        CONST S32 result = GetPrivateProfileIntA(input, name.Value, value, State.App->Ini);
 
         ReleaseStringValue(&name);
 
@@ -159,7 +159,7 @@ BOOL AcquireRendererSettingsValue()
         ReleaseRenderStateModule();
 
         State.Renderer.State = NULL;
-        State.ModuleState->RendererState = NULL;
+        State.Module->Renderer = NULL;
 
         // Draw Mode
         {
@@ -190,7 +190,7 @@ BOOL AcquireRendererSettingsValue()
             if (!State.Renderer.State->Actions.InitializeDirectX(State.Window->HWND, fullscreen)) { return FALSE; }
         }
 
-        State.ModuleState->RendererState = State.Renderer.State;
+        State.Module->Renderer = State.Renderer.State;
     }
 
     return TRUE;

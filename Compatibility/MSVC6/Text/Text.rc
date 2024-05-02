@@ -100,15 +100,15 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_STRING1             "Starting.\n"
-    IDS_STRING2             "Finishing.\n"
-    IDS_STRING3             "Started.\n"
-    IDS_STRING4             "Finished.\n"
+    IDS_STARTING            "Starting.\n"
+    IDS_FINISHING           "Finishing.\n"
+    IDS_STARTED             "Started.\n"
+    IDS_FINISHED            "Finished.\n"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_STRING22            "Out of memory.\n"
+    IDS_OUT_OF_MEMORY       "Out of memory.\n"
     IDS_STRING26            "File not found or unable to load. %s\n"
     IDS_STRING27            "Loading rhombs.\n"
     IDS_STRING29            "Loading data.\n"
@@ -179,9 +179,9 @@ BEGIN
     IDS_STRING85            "+3trqwl"
     IDS_STRING86            "+3yx{mwoku"
     IDS_STRING87            "+3ywlzhtkmx"
-    IDS_STRING89            "BriefDelay"
-    IDS_STRING90            "BriefDelay2"
-    IDS_STRING91            "BriefDelay3"
+    IDS_BRIEF_DELAY_1       "BriefDelay"
+    IDS_BRIEF_DELAY_2       "BriefDelay2"
+    IDS_BRIEF_DELAY_3       "BriefDelay3"
     IDS_STRING92            "SuddenStrike22"
     IDS_STRING93            "0-9"
     IDS_STRING94            "Map%iNew"

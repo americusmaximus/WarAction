@@ -26,11 +26,11 @@ SOFTWARE.
 
 typedef enum SoundState
 {
-    SOUND_STATE_NONE = 0,
-    SOUND_STATE_INIT_ERROR = 1,
-    SOUND_STATE_SETUP_ERROR = 2,
-    SOUND_STATE_BUFFER_ERROR = 3,
-    SOUND_STATE_FORCE_DWORD = 0x7fffffff
+    SOUND_STATE_NONE            = 0,
+    SOUND_STATE_INIT_ERROR      = 1,
+    SOUND_STATE_SETUP_ERROR     = 2,
+    SOUND_STATE_BUFFER_ERROR    = 3,
+    SOUND_STATE_FORCE_DWORD     = 0x7fffffff
 } SOUNDSTATE;
 
 typedef struct SoundStateUnk0x18 /* TODO */

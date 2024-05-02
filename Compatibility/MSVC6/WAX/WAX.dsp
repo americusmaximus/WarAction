@@ -103,7 +103,19 @@ SOURCE=..\..\..\Source\WAX\DirectDraw.hxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Source\WAX\DirectPlay.hxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Source\WAX\DirectSound.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WAX\GameState.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WAX\Graphics.Basic.hxx
 # End Source File
 # Begin Source File
 
@@ -120,6 +132,10 @@ SOURCE=..\..\..\Source\WAX\ModuleState.hxx
 # Begin Source File
 
 SOURCE=..\..\..\Source\WAX\Native.Basic.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WAX\Renderer.Basic.hxx
 # End Source File
 # Begin Source File
 
