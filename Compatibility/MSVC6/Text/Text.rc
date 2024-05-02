@@ -141,7 +141,7 @@ BEGIN
     IDS_VIDEO_MODE          "VideoMode"
     IDS_DRAW_MODE_INDEX     "SSDraw%i"
     IDS_FULL_SCREEN         "FullScreen"
-    IDS_STRING57            "SoundResource"
+    IDS_SOUND_RESOURCE      "SoundResource"
     IDS_STRING59            "MsgFadeoutTime"
     IDS_STRING60            "MusicVolume"
     IDS_STRING61            "SoundVolume"
@@ -156,23 +156,23 @@ BEGIN
     IDS_STRING66            "KeyboardScroll"
     IDS_REGISTRY_KEY        "SOFTWARE\\Sudden Strike"
     IDS_STRING68            "CampaignDir"
-    IDS_STRING69            "MultiMapDir"
+    IDS_MULTI_MAP_DIR       "MultiMapDir"
     IDS_STRING70            "MenuResource"
     IDS_STRING71            "BriefingsDir"
-    IDS_STRING72            "Saves"
+    IDS_SAVES               "Saves"
     IDS_STRING73            "PingForLan"
     IDS_STRING74            "PingTcpIp"
     IDS_STRING75            "PingForModem"
-    IDS_STRING76            "SingleMapDir"
-    IDS_STRING77            "MultiSpeed"
-    IDS_STRING78            "BaseSaves"
+    IDS_SINGLE_MAP_DIR      "SingleMapDir"
+    IDS_MULTI_SPEED         "MultiSpeed"
+    IDS_BASE_SAVES          "BaseSaves"
     IDS_STRING79            "CDTracksNumber"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_STRING80            "RatingsPath"
-    IDS_STRING81            "MoviesPath"
+    IDS_RATINGS_PATH        "RatingsPath"
+    IDS_MOVIES_PATH         "MoviesPath"
     IDS_STRING82            "<>:""""/\\|&*+,.;=?@[]^"
     IDS_STRING83            "BackWavPath"
     IDS_STRING84            "+3ywl|nepvk"
@@ -192,8 +192,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_STRING96            "LimitChatInput"
     IDS_STRING97            "LimitEditInput"
-    IDS_STRING98            "LimitMenuInput"
-    IDS_STRING99            "Difficulty"
+    IDS_LIMIT_MENU_INPUT    "LimitMenuInput"
+    IDS_DIFFICULTY          "Difficulty"
 END
 
 #endif    // English (U.S.) resources

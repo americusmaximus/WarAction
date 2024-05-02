@@ -31,7 +31,7 @@ SOFTWARE.
 typedef struct ModuleStateContainer
 {
     HMODULE Handle;
-    GAMESTATECONTAINER Game;
+    GAMESTATECONTAINER Game; // ToGame
     LPSOUNDSTATECONTAINER Sound;
     LPRENDERERMODULESTATECONTAINER Renderer;
     HMODULE Text;

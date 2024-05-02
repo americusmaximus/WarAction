@@ -36,7 +36,7 @@ BOOL ApplicationStateWindowStateActionHandler(VOID)
     {
         if (State.App->ActiveModule == APP_STATE_CONTAINER_INVALID_MODULE_INDEX) { return FALSE; }
 
-        if (!State.App->ExecuteAction()) { return FALSE; }
+        if (!State.App->Actions.Execute()) { return FALSE; }
     }
     else if (!InitializeApplicationStateModule()) { return FALSE; }
 
@@ -46,9 +46,9 @@ BOOL ApplicationStateWindowStateActionHandler(VOID)
 // 0x00401f60
 BOOL ApplicationStateWindowStateMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
 {
-    if (State.App != NULL && State.App->HandleAction != NULL)
+    if (State.App != NULL && State.App->Actions.Handle != NULL)
     {
-        if (!State.App->HandleAction(hwnd, msg, wp, lp, result)) { return FALSE; }
+        if (!State.App->Actions.Handle(hwnd, msg, wp, lp, result)) { return FALSE; }
     }
 
     return TRUE;
@@ -63,7 +63,7 @@ BOOL InitializeApplicationState(LPCSTR file)
 
     State.App->Logger = State.Logger;
 
-    State.App->WindowState = State.Window;
+    State.App->Window = State.Window;
     State.App->AcquireRendererSettingsValue = NULL;
 
     State.App->Unknown0x1170 = NULL;
@@ -104,7 +104,7 @@ VOID ReleaseApplicationStateModules()
 {
     if (State.App == NULL || State.App->ActiveModule == APP_STATE_CONTAINER_INVALID_MODULE_INDEX) { return; }
 
-    if (State.App->DoneAction != NULL) { State.App->DoneAction(); }
+    if (State.App->Actions.Done != NULL) { State.App->Actions.Done(); }
 
     if (State.App->ModuleHandle != NULL)
     {
@@ -115,10 +115,10 @@ VOID ReleaseApplicationStateModules()
         State.App->ModuleHandle = NULL;
     }
 
-    State.App->InitAction = NULL;
-    State.App->ExecuteAction = NULL;
-    State.App->DoneAction = NULL;
-    State.App->HandleAction = NULL;
+    State.App->Actions.Initialize = NULL;
+    State.App->Actions.Execute = NULL;
+    State.App->Actions.Done = NULL;
+    State.App->Actions.Handle = NULL;
 
     State.App->ActiveModule = APP_STATE_CONTAINER_INVALID_MODULE_INDEX;
 }
@@ -164,9 +164,9 @@ BOOL InitializeApplicationStateModule()
         State.App->ActiveModule = State.App->InitModule;
         State.App->InitModule = APP_STATE_CONTAINER_INVALID_MODULE_INDEX;
 
-        State.App->InitAction = (VISUALMODULEINITACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_INIT_NAME);
+        State.App->Actions.Initialize = (VISUALMODULEINITACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_INIT_NAME);
 
-        if (State.App->InitAction == NULL)
+        if (State.App->Actions.Initialize == NULL)
         {
             Message("Can't retrive VModule_Init function address.\n");
 
@@ -175,9 +175,9 @@ BOOL InitializeApplicationStateModule()
             return FALSE;
         }
 
-        State.App->ExecuteAction = (VISUALMODULEEXECUTEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_PLAY_NAME);
+        State.App->Actions.Execute = (VISUALMODULEEXECUTEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_PLAY_NAME);
 
-        if (State.App->ExecuteAction == NULL)
+        if (State.App->Actions.Execute == NULL)
         {
             Message("Can't retrive VModule_Play function address.\n");
 
@@ -186,9 +186,9 @@ BOOL InitializeApplicationStateModule()
             return FALSE;
         }
 
-        State.App->DoneAction = (VISUALMODULEDONEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_DONE_NAME);
+        State.App->Actions.Done = (VISUALMODULEDONEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_DONE_NAME);
 
-        if (State.App->DoneAction == NULL)
+        if (State.App->Actions.Done == NULL)
         {
             Message("Can't retrive VModule_Done function address.\n");
 
@@ -197,9 +197,9 @@ BOOL InitializeApplicationStateModule()
             return FALSE;
         }
 
-        State.App->HandleAction = (VISUALMODULEHANDLEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_HANDLE_NAME);
+        State.App->Actions.Handle = (VISUALMODULEHANDLEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_HANDLE_NAME);
 
-        if (State.App->HandleAction == NULL)
+        if (State.App->Actions.Handle == NULL)
         {
             Message("Can't retrive VModule_Handle function address.\n");
 
@@ -208,7 +208,7 @@ BOOL InitializeApplicationStateModule()
             return FALSE;
         }
 
-        if (!State.App->InitAction(State.App))
+        if (!State.App->Actions.Initialize(State.App))
         {
             ReleaseApplicationStateModules(); return FALSE;
         }

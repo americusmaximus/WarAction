@@ -2,6 +2,7 @@
 // Microsoft Developer Studio generated include file.
 // Used by Text.rc
 //
+#define IDS_NULL                        0
 #define IDS_STARTING                    1
 #define IDS_FINISHING                   2
 #define IDS_STARTED                     3
@@ -31,7 +32,7 @@
 #define IDS_VIDEO_MODE                  53
 #define IDS_DRAW_MODE_INDEX             54
 #define IDS_FULL_SCREEN                 55
-#define IDS_STRING57                    57
+#define IDS_SOUND_RESOURCE              57
 #define IDS_STRING59                    59
 #define IDS_STRING60                    60
 #define IDS_STRING61                    61
@@ -42,25 +43,26 @@
 #define IDS_STRING66                    66
 #define IDS_REGISTRY_KEY                67
 #define IDS_STRING68                    68
-#define IDS_STRING69                    69
+#define IDS_MULTI_MAP_DIR               69
 #define IDS_STRING70                    70
 #define IDS_STRING71                    71
-#define IDS_STRING72                    72
+#define IDS_SAVES                       72
 #define IDS_STRING73                    73
 #define IDS_STRING74                    74
 #define IDS_STRING75                    75
-#define IDS_STRING76                    76
-#define IDS_STRING77                    77
-#define IDS_STRING78                    78
+#define IDS_SINGLE_MAP_DIR              76
+#define IDS_MULTI_SPEED                 77
+#define IDS_BASE_SAVES                  78
 #define IDS_STRING79                    79
-#define IDS_STRING80                    80
-#define IDS_STRING81                    81
+#define IDS_RATINGS_PATH                80
+#define IDS_MOVIES_PATH                 81
 #define IDS_STRING82                    82
 #define IDS_STRING83                    83
 #define IDS_STRING84                    84
 #define IDS_STRING85                    85
 #define IDS_STRING86                    86
 #define IDS_STRING87                    87
+#define IDS_STRING88                    88
 #define IDS_BRIEF_DELAY_1               89
 #define IDS_BRIEF_DELAY_2               90
 #define IDS_BRIEF_DELAY_3               91
@@ -70,8 +72,8 @@
 #define IDS_STRING95                    95
 #define IDS_STRING96                    96
 #define IDS_STRING97                    97
-#define IDS_STRING98                    98
-#define IDS_STRING99                    99
+#define IDS_LIMIT_MENU_INPUT            98
+#define IDS_DIFFICULTY                  99
 
 // Next default values for new objects
 // 

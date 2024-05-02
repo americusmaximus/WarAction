@@ -83,10 +83,10 @@ BOOL InitializeWindowStateAction()
 
     State.App->AcquireRendererSettingsValue = AcquireRendererSettingsValue;
 
-    State.App->ModuleState = (LPMODULESTATECONTAINER)malloc(sizeof(MODULESTATECONTAINER));
-    ZeroMemory(State.App->ModuleState, sizeof(MODULESTATECONTAINER));
+    State.App->Module = (LPMODULESTATECONTAINER)malloc(sizeof(MODULESTATECONTAINER));
+    ZeroMemory(State.App->Module, sizeof(MODULESTATECONTAINER));
 
-    State.Module = State.App->ModuleState;
+    State.Module = State.App->Module;
 
     GetPrivateProfileStringA("StartUp", "TextResource", ".", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH, State.App->Ini);
 
@@ -335,11 +335,11 @@ BOOL ReleaseWindowStateAction(VOID)
 {
     ReleaseApplicationStateModules();
 
-    if (State.App != NULL && State.App->ModuleState != NULL)
+    if (State.App != NULL && State.App->Module != NULL)
     {
         if (State.Module->Network != NULL) { State.Module->Network->Release(); }
 
-        free(State.App->ModuleState);
+        free(State.App->Module);
     }
 
     ReleaseApplicationState();

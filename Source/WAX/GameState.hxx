@@ -39,7 +39,7 @@ typedef enum GameCommand
 typedef struct GameStateContainer
 {
     BOOL IsNetwork;
-    S32 Difficulty; // TODO Type
+    S32 Difficulty; // difficulty // TODO Type
     S32 Unknown0x0c; // TODO
     S32 Unknown0x10; // TODO
     S32 Unknown0x14; // TODO
