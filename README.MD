@@ -26,6 +26,7 @@ Modern Visual Studio makes the binary dependent on modern runtime libraries that
 
 ## Thanks
 1. [Hifi](https://github.com/hifi-unmaintained/ogg-winmm) for the original implementation of WinMM.dll with the Ogg Vorbis support. Even though the game's version is very customized, access to the original code was very useful.
+2. [elwray](https://github.com/elwray/N2CadX) for some initial hits toward the structure if the rendering modules.
 
 ## Legal
 1. This is not a complete game. Please purchase software you like!
