@@ -99,10 +99,10 @@ typedef VOID(*RELEASEDIRECTXACTION)(VOID);
 
 typedef struct RendererStateActions
 {
-    INITIALIZEACTION                                Initialize;
+    INITIALIZEACTION                                Initialize; // CADraw_Reset
     INITIALIZEDIRECTXACTION                         InitializeDirectX;
     RESTOREDISPLAYMODEACTION                        RestoreDisplayMode;
-    INITIALIZEWINDOWACTION                          InitializeWindow;
+    INITIALIZEWINDOWACTION                          InitializeWindow; // CADraw_Set640x480
     SETPIXELCOLORMASKSACTION                        SetPixelColorMasks;
     RELEASERENDERERSURFACEACTION                    ReleaseRendererSurface;
     LOCKRENDERERSURFACEACTION                       LockRendererSurface;

@@ -18,6 +18,33 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\SDK\ZLib\adler32.c" />
+    <ClCompile Include="..\..\SDK\ZLib\compress.c" />
+    <ClCompile Include="..\..\SDK\ZLib\crc32.c" />
+    <ClCompile Include="..\..\SDK\ZLib\deflate.c" />
+    <ClCompile Include="..\..\SDK\ZLib\gzio.c" />
+    <ClCompile Include="..\..\SDK\ZLib\infblock.c" />
+    <ClCompile Include="..\..\SDK\ZLib\infcodes.c" />
+    <ClCompile Include="..\..\SDK\ZLib\inffast.c" />
+    <ClCompile Include="..\..\SDK\ZLib\inflate.c" />
+    <ClCompile Include="..\..\SDK\ZLib\inftrees.c" />
+    <ClCompile Include="..\..\SDK\ZLib\infutil.c" />
+    <ClCompile Include="..\..\SDK\ZLib\uncompr.c" />
+    <ClCompile Include="..\..\SDK\ZLib\zutil.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SDK\ZLib\deflate.h" />
+    <ClInclude Include="..\..\SDK\ZLib\infblock.h" />
+    <ClInclude Include="..\..\SDK\ZLib\infcodes.h" />
+    <ClInclude Include="..\..\SDK\ZLib\inffast.h" />
+    <ClInclude Include="..\..\SDK\ZLib\inffixed.h" />
+    <ClInclude Include="..\..\SDK\ZLib\inftrees.h" />
+    <ClInclude Include="..\..\SDK\ZLib\infutil.h" />
+    <ClInclude Include="..\..\SDK\ZLib\zconf.h" />
+    <ClInclude Include="..\..\SDK\ZLib\zlib.h" />
+    <ClInclude Include="..\..\SDK\ZLib\zutil.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -98,12 +125,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-	  <OmitFramePointers>true</OmitFramePointers>
+      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -120,12 +147,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-	  <OmitFramePointers>true</OmitFramePointers>
+      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -142,12 +169,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-	  <OmitFramePointers>true</OmitFramePointers>
+      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -164,12 +191,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-	  <OmitFramePointers>true</OmitFramePointers>
+      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

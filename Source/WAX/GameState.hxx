@@ -48,10 +48,12 @@ typedef struct GameStateContainer
     S32 Unknown0x20; // TODO
     S32 Unknown0x24; // TODO
     S32 Unknown0x28; // TODO
-    DWORD TickCount;
+    DWORD Ticks;
     GAMECOMMAND Command;
+    S32 NextMap;
+    S32 NextMission;
 
-    BYTE Unknown[1164]; // TODO
+    BYTE Unknown[1156]; // TODO
 
     CHAR SaveFile[GAME_STATE_MAX_SAVE_FILE_NAME_LENGTH];
 } GAMESTATECONTAINER, * LPGAMESTATECONTAINER;

@@ -56,6 +56,31 @@ typedef struct RendererStateContainer
         S32 Height; // 0x1001d56c
         S32 Width; // 0x1001d570
     } Outline;
+
+    struct
+    {
+        S32 MinOffset; // 0x1001005c
+        S32 MaxOffset; // 0x10010060
+        S32 Width; // 0x10010064
+
+        LPVOID DrawCall; // 0x1001006c
+
+        struct
+        {
+            S16 X; // 0x10010070
+            S16 Y; // 0x10010072
+            S16 Width; // 0x10010074
+            S16 Height; // 0x10010076
+        } Window;
+
+        S32 X; // 0x1001007c
+        S32 Unknown; // 0x10010080 // TODO
+        U32 ColorMask; // 0x10010084
+        U32 AdjustedColorMask; // 0x10010088
+
+        S32 Height; // 0x1001009a
+        S32 Y; // 0x1001009e
+    } Sprite;
 } RENDERERSTATECONTAINER, * LPRENDERERSTATECONTAINER;
 
 EXTERN RENDERERSTATECONTAINER RendererState;
