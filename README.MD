@@ -1,8 +1,8 @@
 # War Action
-![War Action](./Extras/Logo.png)
+![War Action](./Extras/LogoMedium.jpg)
 
 ## Project
-War Action is an open source implementation of Fireglow Games' [Sudden Strike](https://en.wikipedia.org/wiki/Sudden_Strike) from 2000, with the 1.2.1 patch.
+War Action is an open source implementation of Fireglow Games' [Sudden Strike](https://en.wikipedia.org/wiki/Sudden_Strike) Gold from 2000, with the 1.2.1 patch.
 
 ## Goals
 There are multiple goals this project tries to achieve:
@@ -13,6 +13,7 @@ There are multiple goals this project tries to achieve:
 ## Requirements & Dependencies
 1. [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
 2. [OGG](https://github.com/xiph/ogg) and [Vorbis](https://github.com/xiph/vorbis)
+3. [ZLib](https://www.zlib.net/fossils/)
 
 ## Notes
 1. I used GOG.com's Sudden Strike Gold 1.2.1 version [13578](https://www.google.com/search?q=setup_sudden_strike_1.21_(13578).exe) of the game.
@@ -24,9 +25,12 @@ In order to be able to run the code not only in the modern operating systems, bu
 
 Modern Visual Studio makes the binary dependent on modern runtime libraries that are not available in the legacy systems, therefore the game won't work. In order to make the code work on legacy systems please see [detailed instructions on compatibility](COMPATIBILITY.MD).
 
+## Similar & Related Projects
+1. [FZFS](https://github.com/americusmaximus/FZFS) a tool to work with SUE file archives.
+
 ## Thanks
 1. [Hifi](https://github.com/hifi-unmaintained/ogg-winmm) for the original implementation of WinMM.dll with the Ogg Vorbis support. Even though the game's version is very customized, access to the original code was very useful.
-2. [elwray](https://github.com/elwray/N2CadX) for the initial research of the rendering modules.
+3. [elwray](https://github.com/elwray/N2CadX) for the initial research of the rendering modules.
 
 ## Legal
 1. This is not a complete game. Please purchase software you like!
