@@ -4,3 +4,6 @@
 [submodule "SDK/vorbis"]
 	path = SDK/vorbis
 	url = https://github.com/americusmaximus/vorbis
+[submodule "SDK/zlib"]
+	path = SDK/zlib
+	url = https://github.com/americusmaximus/zlib.git

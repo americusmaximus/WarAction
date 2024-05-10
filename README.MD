@@ -6,19 +6,20 @@ War Action is an open source implementation of Fireglow Games' [Sudden Strike](h
 
 ## Goals
 There are multiple goals this project tries to achieve:
-1. Learn how games were made in an era when things had to be done in the code, and not through fancy game engines like today.
-2. Have a fully playable game implemented end-to-end, including resource management, audio, and video rendering, as well as support of large screen resolutions.
-3. Eventually, to support 64-bit compilation for modern systems, and provide an avenue for development of modern renderer implementations such as DirectX or Vulkan, and, eventually, to port to Linux or Mac.
+- [x] Learn how games were made in an era when things had to be done in the code, and not through fancy game engines like today.
+- [ ] Have a fully playable game implemented end-to-end, including resource management, audio, and video rendering, as well as support of large screen resolutions.
+- [ ] Eventually, to support 64-bit compilation for modern systems, and provide an avenue for development of modern renderer implementations such as DirectX or Vulkan, and, eventually, to port to Linux or Mac.
 
 ## Requirements & Dependencies
 1. [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
 2. [OGG](https://github.com/xiph/ogg) and [Vorbis](https://github.com/xiph/vorbis)
-3. [ZLib](https://www.zlib.net/fossils/)
+3. [ZLib](https://github.com/madler/zlib)
 
 ## Notes
 1. I used GOG.com's Sudden Strike Gold 1.2.1 version [13578](https://www.google.com/search?q=setup_sudden_strike_1.21_(13578).exe) of the game.
 2. The game is structured in a way where the executable is just a glue for separate menu and game modules, which are in their turn can use different renderer modules.
 3. The GOG.com's version of the game uses Ogg Vorbis for the game's music. It looks like this was a recent change and a requirement for the game publishing, I believe original game shipped with mp3 files. In order to support Ogg Vorbis, the games has its own WinMM.dll library to support the file format, otherwise it is mostly a wrapper of the system library.
+4. The original game used zlib version 1.1.3, which I upgraded to 1.3.1 for proper 64-bit support.
 
 ### Compatibility, Code Style & Standards
 In order to be able to run the code not only in the modern operating systems, but also in legacy environments, such as Windows XP, the code base has to abstain from usage of modern C++ language features.
