@@ -29,6 +29,6 @@ typedef struct StringValue
     LPSTR Value;
 } STRINGVALUE, * LPSTRINGVALUE;
 
-VOID AcquireStringCopy(LPSTRINGVALUE self, LPSTRINGVALUE value);
+VOID AcquireStringValue(LPSTRINGVALUE self, LPSTRINGVALUE value);
 VOID AcquireStringValue(LPSTRINGVALUE self, LPCSTR format, ...);
 VOID ReleaseStringValue(LPSTRINGVALUE self);

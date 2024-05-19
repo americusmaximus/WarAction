@@ -89,7 +89,7 @@ VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVA
 
         RegCloseKey(key);
 
-        AcquireStringCopy(result, &value);
+        AcquireStringValue(result, &value);
     }
 
     ReleaseStringValue(&name);
@@ -115,7 +115,7 @@ S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value)
     AcquireStringValue(&val, SETTINGS_INVALID_STRING_VALUE);
 
     STRINGVALUE nm;
-    AcquireStringCopy(&nm, &name);
+    AcquireStringValue(&nm, &name);
 
     STRINGVALUE actual;
     AcquireActualSettingsValue(&actual, nm, val);

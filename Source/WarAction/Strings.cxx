@@ -28,7 +28,7 @@ SOFTWARE.
 #define DEFAULT_BUFFER_LENGTH 64
 
 // 0x004010e0
-VOID AcquireStringCopy(LPSTRINGVALUE self, LPSTRINGVALUE value)
+VOID AcquireStringValue(LPSTRINGVALUE self, LPSTRINGVALUE value)
 {
     self->Value = (CHAR*)malloc(strlen(value->Value) + 1);
 
