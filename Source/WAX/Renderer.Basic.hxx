@@ -34,4 +34,4 @@ typedef struct Sprite
     //U8 Unk04; // TODO
     LPVOID Unk05; // TODO
     // TODO
-} SPRITE, * LPSPRITE;
+} SPRITE, * SPRITEPTR;

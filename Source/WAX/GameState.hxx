@@ -22,18 +22,18 @@ SOFTWARE.
 
 #pragma once
 
-#define GAME_STATE_MAX_SAVE_FILE_NAME_LENGTH 256
+#define MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH 256
 
 typedef enum GameCommand
 {
-    GAME_COMMAND_NONE           = 0,
-    GAME_COMMAND_UNKNOWN_1      = 1,
-    GAME_COMMAND_UNKNOWN_2      = 2,
-    GAME_COMMAND_UNKNOWN_3      = 3,
-    GAME_COMMAND_LOAD_GAME      = 4,
-    GAME_COMMAND_QUIT           = 5, // RK_EXITTOOS
-    GAME_COMMAND_RESTART        = 6, // RK_RESTART
-    GAME_COMMAND_FORCE_DWORD    = 0x7fffffff
+    GAMECOMMAND_NONE            = 0,
+    GAMECOMMAND_UNKNOWN_1       = 1,
+    GAMECOMMAND_UNKNOWN_2       = 2,
+    GAMECOMMAND_UNKNOWN_3       = 3,
+    GAMECOMMAND_LOAD_GAME       = 4,
+    GAMECOMMAND_QUIT            = 5, // RK_EXITTOOS
+    GAMECOMMAND_RESTART         = 6, // RK_RESTART
+    GAMECOMMAND_FORCE_DWORD     = 0x7fffffff
 } GAMECOMMAND;
 
 typedef struct GameStateContainer
@@ -52,8 +52,7 @@ typedef struct GameStateContainer
     GAMECOMMAND Command;
     S32 NextMap;
     S32 NextMission;
-
-    BYTE Unknown[1156]; // TODO
-
-    CHAR SaveFile[GAME_STATE_MAX_SAVE_FILE_NAME_LENGTH];
-} GAMESTATECONTAINER, * LPGAMESTATECONTAINER;
+    CHAR Values[12][96]; // TODO
+    S32 Unknown15; // TODO
+    CHAR SaveFile[MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH];
+} GAMESTATECONTAINER, * GAMESTATECONTAINERPTR;

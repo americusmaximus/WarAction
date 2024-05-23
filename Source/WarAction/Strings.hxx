@@ -27,8 +27,8 @@ SOFTWARE.
 typedef struct StringValue
 {
     LPSTR Value;
-} STRINGVALUE, * LPSTRINGVALUE;
+} STRINGVALUE, * STRINGVALUEPTR;
 
-VOID AcquireStringValue(LPSTRINGVALUE self, LPSTRINGVALUE value);
-VOID AcquireStringValue(LPSTRINGVALUE self, LPCSTR format, ...);
-VOID ReleaseStringValue(LPSTRINGVALUE self);
+STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value);
+VOID AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...);
+VOID CLASSCALL ReleaseStringValue(STRINGVALUEPTR self);

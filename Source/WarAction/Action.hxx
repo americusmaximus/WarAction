@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#define ACTION_HANDLER_DEFAULT_PRIORITY 0x10000000
+#define DEFAULT_ACTION_HANDLER_PRIORITY 0x10000000
 
 typedef BOOL(*ACTIONHANDLERLAMBDA)(VOID);
 typedef BOOL(*WINDOWACTIONHANDLERLAMBDA)(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result);
@@ -34,23 +34,23 @@ typedef BOOL(*WINDOWACTIONHANDLERLAMBDA)(HWND hwnd, UINT msg, WPARAM wp, LPARAM 
 
 typedef struct ActionHandler
 {
-    LPVOID Invoke;
+    LPVOID Action;
     U32 Priority;
     ActionHandler* Next;
-} ACTIONHANDLER, * LPACTIONHANDLER;
+} ACTIONHANDLER, * ACTIONHANDLERPTR;
 
 #define INITIALIZEACTIONHANDLER(H, A)                                                               \
     if (A != NULL) {                                                                                \
-        LPACTIONHANDLER handler = (LPACTIONHANDLER)malloc(sizeof(ACTIONHANDLER));                   \
+        ACTIONHANDLERPTR handler = (ACTIONHANDLERPTR)malloc(sizeof(ACTIONHANDLER));                 \
         if (handler != NULL) {                                                                      \
-            InitializeActionHandler(handler, H, ACTION_HANDLER_DEFAULT_PRIORITY, A);                \
+            InitializeActionHandler(handler, H, DEFAULT_ACTION_HANDLER_PRIORITY, A);                \
         }                                                                                           \
     }
 
-VOID InitializeActionHandler(LPACTIONHANDLER self, LPACTIONHANDLER* destination, U32 priority, ACTIONHANDLERLAMBDA lambda);
+VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR* destination, U32 priority, ACTIONHANDLERLAMBDA action);
 
-VOID InitializeActionHandler(U32 priority, ACTIONHANDLERLAMBDA lambda);
-VOID InitializeWindowActionHandler(U32 priority, WINDOWACTIONHANDLERLAMBDA lambda);
+VOID InitializeActionHandler(U32 priority, ACTIONHANDLERLAMBDA action);
+VOID InitializeWindowActionHandler(U32 priority, WINDOWACTIONHANDLERLAMBDA action);
 
-VOID ReleaseActionHandler(ACTIONHANDLERLAMBDA lambda);
-VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA lambda);
+VOID ReleaseActionHandler(ACTIONHANDLERLAMBDA action);
+VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA action);

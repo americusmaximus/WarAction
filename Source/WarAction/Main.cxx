@@ -21,12 +21,11 @@ SOFTWARE.
 */
 
 #include "Basic.hxx"
+#include "Module.hxx"
 #include "State.hxx"
 #include "WarAction.hxx"
 
 #define WS_EX_NONE 0
-
-STATECONTAINER State;
 
 // NOTE: A substitute for dynamic initialization preceding Main in the original game.
 VOID InitializeState(VOID)
@@ -86,12 +85,12 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
     State.Window->IsActive = TRUE;
 
     // Run all activate events.
-    for (State.Handlers.Active = State.Handlers.Activate;
-        State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+    for (State.Actions.Active = State.Actions.Activate;
+        State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
     {
-        if (!INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke)) { return EXIT_SUCCESS; }
+        if (!INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action)) { return EXIT_SUCCESS; }
 
-        if (State.Handlers.Active == NULL) { break; }
+        if (State.Actions.Active == NULL) { break; }
     }
 
     if (!InitializeWindow(command))
@@ -100,24 +99,24 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
     }
 
     // Run all initialize events.
-    for (State.Handlers.Active = State.Handlers.Initialize;
-        State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+    for (State.Actions.Active = State.Actions.Initialize;
+        State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
     {
-        if (!INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke))
+        if (!INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action))
         {
             // Run release events in case at least one initialize event failed.
-            for (State.Handlers.Active = State.Handlers.Release;
-                State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+            for (State.Actions.Active = State.Actions.Release;
+                State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
             {
-                INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke);
+                INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action);
 
-                if (State.Handlers.Active == NULL) { break; }
+                if (State.Actions.Active == NULL) { break; }
             }
 
             return EXIT_FAILURE;
         }
 
-        if (State.Handlers.Active == NULL) { break; }
+        if (State.Actions.Active == NULL) { break; }
     }
 
     while (TRUE)
@@ -129,12 +128,12 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
             if (!GetMessageA(&message, NULL, 0, 0))
             {
                 // Run all release events.
-                for (State.Handlers.Active = State.Handlers.Release;
-                    State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+                for (State.Actions.Active = State.Actions.Release;
+                    State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
                 {
-                    INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke);
+                    INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action);
 
-                    if (State.Handlers.Active == NULL) { break; }
+                    if (State.Actions.Active == NULL) { break; }
                 }
 
                 return EXIT_FAILURE;
@@ -147,24 +146,24 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
         }
 
         // Run all action events.
-        for (State.Handlers.Active = State.Handlers.Action;
-            State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+        for (State.Actions.Active = State.Actions.Action;
+            State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
         {
-            if (!INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke))
+            if (!INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action))
             {
                 // Run release events in case at least one action event failed.
-                for (State.Handlers.Active = State.Handlers.Release;
-                    State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+                for (State.Actions.Active = State.Actions.Release;
+                    State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
                 {
-                    INVOKEACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke);
+                    INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action);
 
-                    if (State.Handlers.Active == NULL) { break; }
+                    if (State.Actions.Active == NULL) { break; }
                 }
 
                 return EXIT_FAILURE;
             }
 
-            if (State.Handlers.Active == NULL) { break; }
+            if (State.Actions.Active == NULL) { break; }
         }
     }
 

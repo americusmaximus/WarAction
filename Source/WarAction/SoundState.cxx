@@ -20,8 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "State.hxx"
 #include "SoundState.hxx"
+#include "State.hxx"
 
 #include <stdlib.h>
 
@@ -29,7 +29,7 @@ SOFTWARE.
 SOUNDSTATECONTAINER SoundState;
 
 // 0x00401fa0
-VOID InitializeDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self)
+VOID CLASSCALL ActivateDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self)
 {
     self->Unk00 = 0; // TODO
     self->Unk01 = -10000; // TODO
@@ -40,13 +40,13 @@ VOID InitializeDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self)
 
 // 0x00401fc0
 // 0x00401fd0
-VOID ReleaseDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self)
+VOID CLASSCALL ReleaseDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self)
 {
     if (State.Sound->Instance != NULL)
     {
         if (self->Unk04 != NULL)
         {
-            // TODO
+            // TODO NOT IMPLEMENTED
         }
 
         self->Unk00 = 0; // TODO
@@ -54,13 +54,13 @@ VOID ReleaseDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self)
 }
 
 // 0x00401400
-VOID InitializeSoundStateContainer()
+VOID ActivateSoundState()
 {
-    InitializeSoundState(&SoundState);
+    ActivateSoundState(&SoundState);
 }
 
 // 0x00401410
-VOID ActivateReleaseSoundStateContainer()
+VOID ActivateReleaseSoundState()
 {
     atexit(ReleaseSoundStateContainer);
 }
@@ -68,12 +68,12 @@ VOID ActivateReleaseSoundStateContainer()
 // 0x004013f0
 VOID ActivateSoundStateContainer()
 {
-    InitializeSoundStateContainer();
-    ActivateReleaseSoundStateContainer();
+    ActivateSoundState();
+    ActivateReleaseSoundState();
 }
 
 // 0x00402010
-LPSOUNDSTATECONTAINER InitializeSoundState(LPSOUNDSTATECONTAINER self)
+SOUNDSTATECONTAINERPTR CLASSCALL ActivateSoundState(SOUNDSTATECONTAINERPTR self)
 {
     self->Instance = NULL;
     self->Buffer = NULL;
@@ -99,7 +99,7 @@ VOID ReleaseSoundStateContainer()
 }
 
 // 0x00402200
-VOID ReleaseSoundState(LPSOUNDSTATECONTAINER self)
+VOID CLASSCALL ReleaseSoundState(SOUNDSTATECONTAINERPTR self)
 {
     if (self->Items != NULL)
     {
@@ -120,7 +120,7 @@ VOID ReleaseSoundState(LPSOUNDSTATECONTAINER self)
 }
 
 // 0x00402060
-BOOL InitializeSoundState(LPSOUNDSTATECONTAINER self, HWND window, CONST U32 count)
+BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CONST U32 count)
 {
     ReleaseSoundState(self);
 
@@ -180,13 +180,13 @@ BOOL InitializeSoundState(LPSOUNDSTATECONTAINER self, HWND window, CONST U32 cou
     self->Buffer->Play(0, 0, DSBPLAY_LOOPING);
 
     self->Count = count;
-    self->Items = (LPSOUNDSTATEUNK0X18)malloc(count * sizeof(SOUNDSTATEUNK0X18));
+    self->Items = (SOUNDSTATEUNK0X18PTR)malloc(count * sizeof(SOUNDSTATEUNK0X18));
 
     if (self->Items == NULL) { self->Count = 0; }
 
     for (U32 x = 0; x < self->Count; x++)
     {
-        InitializeDirectSoundState0x18(&self->Items[x]);
+        ActivateDirectSoundState0x18(&self->Items[x]);
     }
 
     return TRUE;

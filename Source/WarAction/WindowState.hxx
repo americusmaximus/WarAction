@@ -22,16 +22,12 @@ SOFTWARE.
 
 #pragma once
 
-#include "ActionHandler.hxx"
+#include "Action.hxx"
 
 #include <WindowState.hxx>
 
 EXTERN WINDOWSTATECONTAINER WindowState;
 
 VOID ActivateWindowStateContainer(VOID);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self);
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message);
-
-VOID InitializeWindowStateArguments(VOID);
-VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);
-BOOL AcquireWindowStateArgumentValue(LPCSTR name, CHAR* value, CONST U32 length);
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self);
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message);

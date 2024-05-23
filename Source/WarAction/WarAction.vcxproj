@@ -201,6 +201,7 @@
     <ClInclude Include="AppState.hxx" />
     <ClInclude Include="Basic.hxx" />
     <ClInclude Include="Message.hxx" />
+    <ClInclude Include="Module.hxx" />
     <ClInclude Include="RendererState.hxx" />
     <ClInclude Include="Settings.hxx" />
     <ClInclude Include="SoundState.hxx" />
@@ -208,18 +209,20 @@
     <ClInclude Include="Strings.hxx" />
     <ClInclude Include="WarAction.hxx" />
     <ClInclude Include="WindowState.hxx" />
-    <ClInclude Include="ActionHandler.hxx" />
+    <ClInclude Include="Action.hxx" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppState.cxx" />
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="Message.cxx" />
+    <ClCompile Include="Module.cxx" />
     <ClCompile Include="RendererState.cxx" />
     <ClCompile Include="Settings.cxx" />
     <ClCompile Include="SoundState.cxx" />
+    <ClCompile Include="State.cxx" />
     <ClCompile Include="Strings.cxx" />
     <ClCompile Include="WindowState.cxx" />
-    <ClCompile Include="ActionHandler.cxx" />
+    <ClCompile Include="Action.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WarAction.rc" />

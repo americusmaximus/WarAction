@@ -24,8 +24,8 @@ SOFTWARE.
 
 #include "Strings.hxx"
 
-#define SETTINGS_INVALID_STRING_VALUE "!"
-#define SETTINGS_MAX_INVALID_STRING_VALUE_LENGTH 2
+#define INVALID_SETTINGS_STRING_VALUE "!"
+#define MAX_INVALID_SETTINGS_STRING_VALUE_LENGTH 2
 
 // ORIGINAL: .\\SudTest.ini
 #ifdef _WIN64
@@ -34,9 +34,10 @@ SOFTWARE.
 #define SETTINGS_FILE_NAME ".\\WarAction.x32.ini"
 #endif
 
+U32 AcquireSettingsValue(CONST U32 indx, LPSTR value, CONST U32 length);
+STRINGVALUEPTR CLASSCALL AcquireSettingsValue(STRINGVALUEPTR result, CONST U32 indx, ...);
+STRINGVALUEPTR AcquireSettingsValue(STRINGVALUEPTR result, STRINGVALUE name, STRINGVALUE value);
+
 S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value);
 
-BOOL AcquireRendererSettingsValue();
-
-VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...);
-VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVALUE value);
+BOOL AcquireRendererSettingsValue(VOID);

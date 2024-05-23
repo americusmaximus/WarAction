@@ -25,7 +25,7 @@ SOFTWARE.
 #include "Basic.hxx"
 #include "Native.Basic.hxx"
 
-#define WINDOW_STATE_MAX_TITLE_LENGTH 256
+#define MAX_WINDOW_STATE_TITLE_LENGTH 256
 
 typedef struct WindowStateContainer
 {
@@ -33,7 +33,7 @@ typedef struct WindowStateContainer
     LPCSTR Args;
     HWND HWND;
     WNDCLASSA Class;
-    CHAR Title[WINDOW_STATE_MAX_TITLE_LENGTH];
+    CHAR Title[MAX_WINDOW_STATE_TITLE_LENGTH];
     DWORD Style;
     S32 X;
     S32 Y;
@@ -41,4 +41,4 @@ typedef struct WindowStateContainer
     S32 Height;
     HMENU Menu;
     BOOL IsActive;
-} WINDOWSTATECONTAINER, * LPWINDOWSTATECONTAINER;
+} WINDOWSTATECONTAINER, * WINDOWSTATECONTAINERPTR;

@@ -20,38 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "State.hxx"
 
-#include "DirectSound.hxx"
-
-typedef enum SoundState
-{
-    SOUND_STATE_NONE            = 0,
-    SOUND_STATE_INIT_ERROR      = 1,
-    SOUND_STATE_SETUP_ERROR     = 2,
-    SOUND_STATE_BUFFER_ERROR    = 3,
-    SOUND_STATE_FORCE_DWORD     = 0x7fffffff
-} SOUNDSTATE;
-
-typedef struct SoundStateUnk0x18 /* TODO */
-{
-    U32 Unk00; // TODO
-    S32 Unk01; // TODO
-    U32 Unk02; // TODO
-    S32 Unk03; // TODO
-    LPVOID Unk04; // TODO
-    U32 Unk05; // TODO
-} SOUNDSTATEUNK0X18, * SOUNDSTATEUNK0X18PTR;
-
-typedef struct SoundStateContainer
-{
-    LPDIRECTSOUND Instance;
-    LPDIRECTSOUNDBUFFER Buffer;
-    SOUNDSTATE State;
-    HRESULT Result;
-    U32 Count;
-    SOUNDSTATEUNK0X18PTR Items;
-    BOOL IsReverseStereo;
-    U32 Unk07; // TODO
-    S32 Unk08; // TODO
-} SOUNDSTATECONTAINER, * SOUNDSTATECONTAINERPTR;
+STATECONTAINER State;

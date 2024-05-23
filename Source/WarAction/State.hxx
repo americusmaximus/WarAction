@@ -33,32 +33,32 @@ typedef struct StateContainer
     struct
     {
         HMODULE Module; // 0x00410374
-        LPRENDERERMODULESTATECONTAINER State; // 0x00410378
+        RENDERERMODULESTATECONTAINERPTR State; // 0x00410378
     } Renderer;
 
-    LPMODULESTATECONTAINER Module; // 0x00410380
+    MODULESTATECONTAINERPTR Module; // 0x00410380
 
     struct
     {
         HMODULE Handle; // 0x00410384
     } Text;
 
-    LPAPPSTATECONTAINER App; // 0x004104fc
+    APPSTATECONTAINERPTR App; // 0x004104fc
 
-    LPSOUNDSTATECONTAINER Sound; // 0x00410504
+    SOUNDSTATECONTAINERPTR Sound; // 0x00410504
 
     struct
     {
-        LPACTIONHANDLER Activate; // 0x00410508
-        LPACTIONHANDLER Initialize; // 0x0041050c
-        LPACTIONHANDLER Action; // 0x00410510
-        LPACTIONHANDLER Release; // 0x00410514
-        LPACTIONHANDLER Message; // 0x00410518
+        ACTIONHANDLERPTR Activate; // 0x00410508
+        ACTIONHANDLERPTR Initialize; // 0x0041050c
+        ACTIONHANDLERPTR Action; // 0x00410510
+        ACTIONHANDLERPTR Release; // 0x00410514
+        ACTIONHANDLERPTR Message; // 0x00410518
 
-        LPACTIONHANDLER Active; // 0x0041051c
-    } Handlers;
+        ACTIONHANDLERPTR Active; // 0x0041051c
+    } Actions;
 
-    LPWINDOWSTATECONTAINER Window; // 0x00410520
+    WINDOWSTATECONTAINERPTR Window; // 0x00410520
 
     struct
     {
@@ -67,7 +67,7 @@ typedef struct StateContainer
         U32 Count; // 0x0041052c
     } Arguments;
 
-    LPLOGGERSTATECONTAINER Logger; // 0x00410530
+    LOGGERSTATECONTAINERPTR Logger; // 0x00410530
 } STATECONTAINER, * LPSTATECONTAINER;
 
 EXTERN STATECONTAINER State;

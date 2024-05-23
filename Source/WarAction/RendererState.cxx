@@ -34,11 +34,11 @@ BOOL InitializeRendererStateModule(LPCSTR file)
 
     State.Renderer.Module = LoadLibraryA(file);
 
-    RENDERERINITACTIONLAMBDA lambda = (RENDERERINITACTIONLAMBDA)GetProcAddress(State.Renderer.Module, RENDERER_MODULE_INIT_NAME);
+    RENDERERINITACTIONLAMBDA action = (RENDERERINITACTIONLAMBDA)GetProcAddress(State.Renderer.Module, RENDERER_MODULE_INIT_NAME);
     
-    if (lambda == NULL) { ReleaseRenderStateModule(); return FALSE; }
+    if (action == NULL) { ReleaseRenderStateModule(); return FALSE; }
 
-    State.Renderer.State = lambda();
+    State.Renderer.State = action();
 
     return TRUE;
 }

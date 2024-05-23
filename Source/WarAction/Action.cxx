@@ -20,25 +20,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "Action.hxx"
 #include "State.hxx"
 
 // 0x00402270
-VOID InitializeActionHandler(LPACTIONHANDLER self, LPACTIONHANDLER * destination, U32 priority, ACTIONHANDLERLAMBDA lambda)
+VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR * destination, U32 priority, ACTIONHANDLERLAMBDA action)
 {
-    self->Invoke = lambda;
+    self->Action = action;
     self->Priority = priority;
 
-    LPACTIONHANDLER first = *destination;
-    LPACTIONHANDLER current = NULL;
-    LPACTIONHANDLER next = first;
+    ACTIONHANDLERPTR first = *destination;
+    ACTIONHANDLERPTR current = NULL;
+    ACTIONHANDLERPTR next = first;
 
     if (first != NULL)
     {
-        LPACTIONHANDLER following = NULL;
+        ACTIONHANDLERPTR following = NULL;
 
         do
         {
-            if (first == State.Handlers.Release)
+            if (first == State.Actions.Release)
             {
                 if (next->Priority < priority) { break; }
             }
@@ -65,30 +66,30 @@ VOID InitializeActionHandler(LPACTIONHANDLER self, LPACTIONHANDLER * destination
 }
 
 // 0x00402770
-VOID InitializeActionHandler(LPACTIONHANDLER* destination, U32 priority, ACTIONHANDLERLAMBDA lambda)
+VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, U32 priority, ACTIONHANDLERLAMBDA action)
 {
-    if (lambda != NULL)
+    if (action != NULL)
     {
-        LPACTIONHANDLER handler = (LPACTIONHANDLER)malloc(sizeof(ACTIONHANDLER));
+        ACTIONHANDLERPTR handler = (ACTIONHANDLERPTR)malloc(sizeof(ACTIONHANDLER));
 
-        if (handler != NULL) { InitializeActionHandler(handler, destination, priority, lambda); }
+        if (handler != NULL) { InitializeActionHandler(handler, destination, priority, action); }
     }
 }
 
 // 0x004027d0
-VOID InitializeActionHandler(U32 priority, ACTIONHANDLERLAMBDA lambda)
+VOID InitializeActionHandler(U32 priority, ACTIONHANDLERLAMBDA action)
 {
-    InitializeActionHandler(&State.Handlers.Action, priority, lambda);
+    InitializeActionHandler(&State.Actions.Action, priority, action);
 }
 
 // 0x00402770
-VOID InitializeWindowActionHandler(U32 priority, WINDOWACTIONHANDLERLAMBDA lambda)
+VOID InitializeWindowActionHandler(U32 priority, WINDOWACTIONHANDLERLAMBDA action)
 {
-    InitializeActionHandler(&State.Handlers.Message, priority, (ACTIONHANDLERLAMBDA)lambda);
+    InitializeActionHandler(&State.Actions.Message, priority, (ACTIONHANDLERLAMBDA)action);
 }
 
 // 0x00402390
-BOOL ContainsWindowStateHandler(LPACTIONHANDLER self, LPACTIONHANDLER handler)
+BOOL ContainsWindowStateHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR handler)
 {
     while (handler != NULL)
     {
@@ -101,26 +102,26 @@ BOOL ContainsWindowStateHandler(LPACTIONHANDLER self, LPACTIONHANDLER handler)
 }
 
 // 0x004022d0
-VOID ReleaseWindowStateHandler(LPACTIONHANDLER self)
+VOID CLASSCALL ReleaseWindowStateHandler(ACTIONHANDLERPTR self)
 {
-    if (State.Handlers.Active == self) { State.Handlers.Active = self->Next; }
+    if (State.Actions.Active == self) { State.Actions.Active = self->Next; }
 
-    LPACTIONHANDLER* destination = NULL;
+    ACTIONHANDLERPTR* destination = NULL;
 
-    if (ContainsWindowStateHandler(self, State.Handlers.Activate)) { destination = &State.Handlers.Activate; }
-    else if (ContainsWindowStateHandler(self, State.Handlers.Initialize)) { destination = &State.Handlers.Initialize; }
-    else if (ContainsWindowStateHandler(self, State.Handlers.Action)) { destination = &State.Handlers.Action; }
-    else if (ContainsWindowStateHandler(self, State.Handlers.Release)) { destination = &State.Handlers.Release; }
-    else if (ContainsWindowStateHandler(self, State.Handlers.Message)) { destination = &State.Handlers.Message; }
+    if (ContainsWindowStateHandler(self, State.Actions.Activate)) { destination = &State.Actions.Activate; }
+    else if (ContainsWindowStateHandler(self, State.Actions.Initialize)) { destination = &State.Actions.Initialize; }
+    else if (ContainsWindowStateHandler(self, State.Actions.Action)) { destination = &State.Actions.Action; }
+    else if (ContainsWindowStateHandler(self, State.Actions.Release)) { destination = &State.Actions.Release; }
+    else if (ContainsWindowStateHandler(self, State.Actions.Message)) { destination = &State.Actions.Message; }
     else { return; }
 
-    LPACTIONHANDLER current = *destination;
+    ACTIONHANDLERPTR current = *destination;
 
     if (current != self)
     {
         if (current != NULL)
         {
-            LPACTIONHANDLER next = NULL;
+            ACTIONHANDLERPTR next = NULL;
 
             while (next = current->Next, next != self)
             {
@@ -139,11 +140,11 @@ VOID ReleaseWindowStateHandler(LPACTIONHANDLER self)
 }
 
 // 0x004027a0
-VOID ReleaseActionHandler(LPACTIONHANDLER self, ACTIONHANDLERLAMBDA lambda)
+VOID ReleaseActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERLAMBDA action)
 {
     if (self != NULL)
     {
-        while (self->Invoke != lambda)
+        while (self->Action != action)
         {
             self = self->Next;
 
@@ -159,11 +160,11 @@ VOID ReleaseActionHandler(LPACTIONHANDLER self, ACTIONHANDLERLAMBDA lambda)
 // 0x004027f0
 VOID ReleaseActionHandler(ACTIONHANDLERLAMBDA lambda)
 {
-    ReleaseActionHandler(State.Handlers.Action, lambda);
+    ReleaseActionHandler(State.Actions.Action, lambda);
 }
 
 // 0x00402830
 VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA lambda)
 {
-    ReleaseActionHandler(State.Handlers.Message, (ACTIONHANDLERLAMBDA)lambda);
+    ReleaseActionHandler(State.Actions.Message, (ACTIONHANDLERLAMBDA)lambda);
 }

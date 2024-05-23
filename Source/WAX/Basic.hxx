@@ -73,7 +73,7 @@ typedef struct u32x4 { u32 X, Y, Z, W; } U32X4, * LPU32X4;
 
 #define STDCALLAPI __stdcall
 #define CDECLAPI __cdecl
-#define CLASSCALL __thiscall
+#define CLASSCALL
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1

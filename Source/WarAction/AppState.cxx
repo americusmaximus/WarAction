@@ -32,9 +32,9 @@ SOFTWARE.
 // 0x00401f20
 BOOL ApplicationStateWindowStateActionHandler(VOID)
 {
-    if (State.App->InitModule == APP_STATE_CONTAINER_INVALID_MODULE_INDEX)
+    if (State.App->InitModule == INVALID_APP_STATE_MODULE_INDEX)
     {
-        if (State.App->ActiveModule == APP_STATE_CONTAINER_INVALID_MODULE_INDEX) { return FALSE; }
+        if (State.App->ActiveModule == INVALID_APP_STATE_MODULE_INDEX) { return FALSE; }
 
         if (!State.App->Actions.Execute()) { return FALSE; }
     }
@@ -57,7 +57,7 @@ BOOL ApplicationStateWindowStateMessageHandler(HWND hwnd, UINT msg, WPARAM wp, L
 // 0x00401e30
 BOOL InitializeApplicationState(LPCSTR file)
 {
-    State.App = (LPAPPSTATECONTAINER)malloc(sizeof(APPSTATECONTAINER));
+    State.App = (APPSTATECONTAINERPTR)malloc(sizeof(APPSTATECONTAINER));
 
     ZeroMemory(State.App, sizeof(APPSTATECONTAINER));
 
@@ -70,8 +70,8 @@ BOOL InitializeApplicationState(LPCSTR file)
 
     if (!InitializeApplicationStateModules(file)) { Message("Can't load profile %s.\n", file); return FALSE; }
 
-    InitializeActionHandler(ACTION_HANDLER_DEFAULT_PRIORITY, ApplicationStateWindowStateActionHandler);
-    InitializeWindowActionHandler(ACTION_HANDLER_DEFAULT_PRIORITY, ApplicationStateWindowStateMessageHandler);
+    InitializeActionHandler(DEFAULT_ACTION_HANDLER_PRIORITY, ApplicationStateWindowStateActionHandler);
+    InitializeWindowActionHandler(DEFAULT_ACTION_HANDLER_PRIORITY, ApplicationStateWindowStateMessageHandler);
 
     return TRUE;
 }
@@ -81,20 +81,20 @@ BOOL InitializeApplicationStateModules(LPCSTR file)
 {
     strcpy(State.App->Ini, file);
 
-    GetPrivateProfileStringA("StartUp", "ProcessName", SETTINGS_INVALID_STRING_VALUE, State.App->Title, APP_STATE_CONTAINER_MAX_WINDOW_TITLE_LENGTH, file);
+    GetPrivateProfileStringA("StartUp", "ProcessName", INVALID_SETTINGS_STRING_VALUE, State.App->Title, MAX_APP_STATE_WINDOW_TITLE_LENGTH, file);
 
-    if (strncmp(State.App->Title, SETTINGS_INVALID_STRING_VALUE, SETTINGS_MAX_INVALID_STRING_VALUE_LENGTH) == 0) { return FALSE; }
+    if (strncmp(State.App->Title, INVALID_SETTINGS_STRING_VALUE, MAX_INVALID_SETTINGS_STRING_VALUE_LENGTH) == 0) { return FALSE; }
 
-    for (U32 x = 0; x < APP_STATE_CONTAINER_MAX_MODULE_COUNT; x++)
+    for (U32 x = 0; x < MAX_APP_STATE_MODULE_COUNT; x++)
     {
         CHAR name[MAX_MODULE_TEMPLATE_LENGTH];
 
         wsprintfA(name, "Module%i", x + 1);
 
-        GetPrivateProfileStringA("StartUp", name, NULL, State.App->Modules[x], APP_STATE_CONTAINER_MAX_MODULE_NAME_LENGTH, file);
+        GetPrivateProfileStringA("StartUp", name, NULL, State.App->Modules[x], MAX_APP_STATE_MODULE_NAME_LENGTH, file);
     }
 
-    State.App->InitModule = GetPrivateProfileIntA("StartUp", "StartModule", APP_STATE_CONTAINER_INVALID_MODULE_INDEX, file);
+    State.App->InitModule = GetPrivateProfileIntA("StartUp", "StartModule", INVALID_APP_STATE_MODULE_INDEX, file);
 
     return TRUE;
 }
@@ -102,7 +102,7 @@ BOOL InitializeApplicationStateModules(LPCSTR file)
 // 0x00401bd0
 VOID ReleaseApplicationStateModules()
 {
-    if (State.App == NULL || State.App->ActiveModule == APP_STATE_CONTAINER_INVALID_MODULE_INDEX) { return; }
+    if (State.App == NULL || State.App->ActiveModule == INVALID_APP_STATE_MODULE_INDEX) { return; }
 
     if (State.App->Actions.Done != NULL) { State.App->Actions.Done(); }
 
@@ -120,7 +120,7 @@ VOID ReleaseApplicationStateModules()
     State.App->Actions.Done = NULL;
     State.App->Actions.Handle = NULL;
 
-    State.App->ActiveModule = APP_STATE_CONTAINER_INVALID_MODULE_INDEX;
+    State.App->ActiveModule = INVALID_APP_STATE_MODULE_INDEX;
 }
 
 // 0x00401ee0
@@ -141,11 +141,11 @@ BOOL ReleaseApplicationState()
 // 0x00401c70
 BOOL InitializeApplicationStateModule()
 {
-    if (State.App->InitModule < APP_STATE_CONTAINER_MIN_VALID_MODULE_INDEX)
+    if (State.App->InitModule < MIN_APP_STATE_VALID_MODULE_INDEX)
     {
         ReleaseApplicationStateModules();
 
-        State.App->InitModule = APP_STATE_CONTAINER_INVALID_MODULE_INDEX;
+        State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
     }
     else
     {
@@ -162,7 +162,7 @@ BOOL InitializeApplicationStateModule()
         }
 
         State.App->ActiveModule = State.App->InitModule;
-        State.App->InitModule = APP_STATE_CONTAINER_INVALID_MODULE_INDEX;
+        State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
 
         State.App->Actions.Initialize = (VISUALMODULEINITACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_INIT_NAME);
 

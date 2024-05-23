@@ -23,7 +23,7 @@
 #define IDS_STRING42                    42
 #define IDS_STRING43                    44
 #define IDS_GAME                        45
-#define IDS_STRING46                    46
+#define IDS_BRIGHTNESS                  46
 #define IDS_CHANNELS                    47
 #define IDS_REVERSE_STEREO              48
 #define IDS_STRING49                    49
@@ -44,8 +44,8 @@
 #define IDS_REGISTRY_KEY                67
 #define IDS_STRING68                    68
 #define IDS_MULTI_MAP_DIR               69
-#define IDS_STRING70                    70
-#define IDS_STRING71                    71
+#define IDS_MENU_RESOURCE               70
+#define IDS_BRIEFINGS                   71
 #define IDS_SAVES                       72
 #define IDS_STRING73                    73
 #define IDS_STRING74                    74

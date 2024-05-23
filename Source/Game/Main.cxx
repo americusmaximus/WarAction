@@ -28,7 +28,7 @@ BOOL APIENTRY Main(HMODULE, DWORD, LPVOID) { return TRUE; }
 
 // 0x10056550
 // a.k.a. VModule_Init
-BOOL InitializeModule(LPAPPSTATECONTAINER state)
+BOOL InitializeModule(APPSTATECONTAINERPTR state)
 {
     // TODO NOT IMPLEMENTED
 

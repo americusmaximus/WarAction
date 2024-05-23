@@ -33,8 +33,14 @@ SOFTWARE.
 #define MAX_SETTINGS_DATA_VALUE_LENGTH 256
 #define MAX_SETTINGS_OUTPUT_VALUE_LENGTH 512
 
+// 0x00401430
+U32 AcquireSettingsValue(CONST U32 indx, LPSTR value, CONST U32 length)
+{
+    return LoadStringA(State.Text.Handle, indx, value, length);
+}
+
 // 0x00401060
-VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...)
+STRINGVALUEPTR CLASSCALL AcquireSettingsValue(STRINGVALUEPTR self, CONST U32 indx, ...)
 {
     CHAR setting[MAX_SETTINGS_VALUE_LENGTH];
     LoadStringA(State.Module->Text, indx, setting, MAX_SETTINGS_VALUE_LENGTH);
@@ -46,13 +52,15 @@ VOID AcquireSettingsValue(LPSTRINGVALUE result, CONST U32 indx, ...)
     vsprintf(output, setting, args);
     va_end(args);
 
-    result->Value = (CHAR*)malloc(strlen(output) + 1);
+    self->Value = (CHAR*)malloc(strlen(output) + 1);
 
-    strcpy(result->Value, output);
+    strcpy(self->Value, output);
+
+    return self;
 }
 
 // 0x00401160
-VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVALUE value)
+STRINGVALUEPTR AcquireSettingsValue(STRINGVALUEPTR result, STRINGVALUE name, STRINGVALUE value)
 {
     CHAR setting[MAX_SETTINGS_VALUE_LENGTH];
     LoadStringA(State.Module->Text, IDS_GAME, setting, MAX_SETTINGS_VALUE_LENGTH);
@@ -83,7 +91,7 @@ VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVA
                 ReleaseStringValue(&name);
                 ReleaseStringValue(&value);
 
-                return;
+                return result;
             }
         }
 
@@ -94,6 +102,8 @@ VOID AcquireActualSettingsValue(LPSTRINGVALUE result, STRINGVALUE name, STRINGVA
 
     ReleaseStringValue(&name);
     ReleaseStringValue(&value);
+
+    return result;
 }
 
 // 0x004012a0
@@ -112,31 +122,29 @@ S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value)
     }
 
     STRINGVALUE val;
-    AcquireStringValue(&val, SETTINGS_INVALID_STRING_VALUE);
+    AcquireStringValue(&val, INVALID_SETTINGS_STRING_VALUE);
 
     STRINGVALUE nm;
     AcquireStringValue(&nm, &name);
 
-    STRINGVALUE actual;
-    AcquireActualSettingsValue(&actual, nm, val);
+    STRINGVALUE setting;
+    STRINGVALUEPTR actual = AcquireSettingsValue(&setting, nm, val);
 
     CHAR output[MAX_SETTINGS_OUTPUT_VALUE_LENGTH];
-    strcpy(output, actual.Value);
+    strcpy(output, actual->Value);
 
-    ReleaseStringValue(&actual);
+    ReleaseStringValue(&setting);
 
-    if (strncmp(output, SETTINGS_INVALID_STRING_VALUE, SETTINGS_MAX_INVALID_STRING_VALUE_LENGTH) == 0)
+    if (strncmp(output, INVALID_SETTINGS_STRING_VALUE, MAX_INVALID_SETTINGS_STRING_VALUE_LENGTH) == 0)
     {
         ReleaseStringValue(&name);
 
         return value;
     }
 
-    CONST S32 result = atoi(output);
-
     ReleaseStringValue(&name);
 
-    return result;
+    return atoi(output);
 }
 
 // 0x004015f0
@@ -169,13 +177,13 @@ BOOL AcquireRendererSettingsValue()
             STRINGVALUE configuration;
             AcquireSettingsValue(&configuration, IDS_DRAW_MODE_INDEX, RendererVideoMode);
 
-            STRINGVALUE actual;
-            AcquireActualSettingsValue(&actual, configuration, value);
+            STRINGVALUE setting;
+            STRINGVALUEPTR actual = AcquireSettingsValue(&setting, configuration, value);
 
             CHAR output[MAX_SETTINGS_OUTPUT_VALUE_LENGTH];
-            strcpy(output, actual.Value);
+            strcpy(output, actual->Value);
 
-            ReleaseStringValue(&actual);
+            ReleaseStringValue(&setting);
 
             if (!InitializeRendererStateModule(output)) { return FALSE; }
         }

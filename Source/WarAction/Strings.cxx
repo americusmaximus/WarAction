@@ -28,15 +28,17 @@ SOFTWARE.
 #define DEFAULT_BUFFER_LENGTH 64
 
 // 0x004010e0
-VOID AcquireStringValue(LPSTRINGVALUE self, LPSTRINGVALUE value)
+STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value)
 {
     self->Value = (CHAR*)malloc(strlen(value->Value) + 1);
 
     strcpy(self->Value, value->Value);
+
+    return self;
 }
 
 // 0x00401000
-VOID AcquireStringValue(LPSTRINGVALUE self, LPCSTR format, ...)
+VOID AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...)
 {
     CHAR buffer[DEFAULT_BUFFER_LENGTH];
 
@@ -51,7 +53,7 @@ VOID AcquireStringValue(LPSTRINGVALUE self, LPCSTR format, ...)
 }
 
 // 0x00401120
-VOID ReleaseStringValue(LPSTRINGVALUE self)
+VOID CLASSCALL ReleaseStringValue(STRINGVALUEPTR self)
 {
     if (self->Value != NULL) { free(self->Value); }
 }

@@ -20,43 +20,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "Module.hxx"
 #include "RendererState.hxx"
 #include "Settings.hxx"
 #include "State.hxx"
 #include "WarAction.hxx"
 
-#include <Mathematics.Basic.hxx>
 #include <..\Text\Resources.hxx>
 
 #define WINDOW_CLASS_STYLE_NONE 0
 
-#define WINDOW_STATE_MAX_SETTING_VALUE_LENGTH 256
+#define MAX_WINDOW_STATE_SETTING_VALUE_LENGTH 256
 
 // ORIGINAL: VITYACLASS
-#define WINDOW_STATE_DEFAULT_WINDOW_CLASS_NAME "WarAction"
+#define DEFAULT_WINDOW_STATE_CLASS_NAME "WarAction"
 
 // ORIGINAL: Just a simple VITYA window :-)
-#define WINDOW_STATE_DEFAULT_WINDOW_TITLE_NAME "War Action"
+#define DEFAULT_WINDOW_STATE_TITLE_NAME "War Action"
 
-#define WINDOW_STATE_DEFAULT_WINDOW_WIDTH 200
-#define WINDOW_STATE_DEFAULT_WINDOW_HEIGHT 200
-
-using namespace Mathematics;
+#define DEFAULT_WINDOW_STATE_WIDTH 200
+#define DEFAULT_WINDOW_STATE_HEIGHT 200
 
 // 0x00410388
 WINDOWSTATECONTAINER WindowState;
-
-// 0x00401130
-VOID AcquireIniFileState()
-{
-    State.IsIniActive = GetPrivateProfileIntA("debug", "useinifile", FALSE, State.App->Ini);
-}
-
-// 0x00401430
-VOID AcquireStringValue(CONST U32 indx, LPSTR value, CONST U32 length)
-{
-    LoadStringA(State.Text.Handle, indx, value, length);
-}
 
 // 0x00401870
 BOOL ActivateWindowStateAction()
@@ -73,22 +59,22 @@ BOOL ActivateWindowStateAction()
 BOOL InitializeWindowStateAction()
 {
     CoInitialize(NULL);
-    InitializeWindowStateArguments();
+    AcquireStartArguments();
 
-    CHAR file[APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH];
+    CHAR file[MAX_APP_STATE_FILE_NAME_LENGTH];
 
-    if (!AcquireWindowStateArgumentValue("ini", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH)) { strcpy(file, SETTINGS_FILE_NAME); }
+    if (!AcquireStartArguments("ini", file, MAX_APP_STATE_FILE_NAME_LENGTH)) { strcpy(file, SETTINGS_FILE_NAME); }
 
     if (!InitializeApplicationState(file)) { return FALSE; }
 
     State.App->AcquireRendererSettingsValue = AcquireRendererSettingsValue;
 
-    State.App->Module = (LPMODULESTATECONTAINER)malloc(sizeof(MODULESTATECONTAINER));
+    State.App->Module = (MODULESTATECONTAINERPTR)malloc(sizeof(MODULESTATECONTAINER));
     ZeroMemory(State.App->Module, sizeof(MODULESTATECONTAINER));
 
     State.Module = State.App->Module;
 
-    GetPrivateProfileStringA("StartUp", "TextResource", ".", file, APP_STATE_CONTAINER_MAX_FILE_NAME_LENGTH, State.App->Ini);
+    GetPrivateProfileStringA("StartUp", "TextResource", ".", file, MAX_APP_STATE_FILE_NAME_LENGTH, State.App->Ini);
 
     State.Text.Handle = LoadLibraryA(file);
 
@@ -103,11 +89,11 @@ BOOL InitializeWindowStateAction()
         AcquireSettingsValue(&configuration, IDS_CHANNELS);
 
         if (!InitializeSoundState(&SoundState, State.Window->HWND,
-            AcquireGameSettingsValue(configuration, SOUND_STATE_DEFAULT_CHANNEL_COUNT)))
+            AcquireGameSettingsValue(configuration, DEFAULT_SOUND_STATE_CHANNEL_COUNT)))
         {
-            CHAR value[WINDOW_STATE_MAX_SETTING_VALUE_LENGTH];
+            CHAR value[MAX_WINDOW_STATE_SETTING_VALUE_LENGTH];
 
-            AcquireStringValue(IDS_REVERSE_STEREO, value, WINDOW_STATE_MAX_SETTING_VALUE_LENGTH);
+            AcquireSettingsValue(IDS_REVERSE_STEREO, value, MAX_WINDOW_STATE_SETTING_VALUE_LENGTH);
             AcquireSettingsValue(&configuration, IDS_REVERSE_STEREO, value);
 
             SoundState.IsReverseStereo = (BOOL)AcquireGameSettingsValue(configuration, FALSE);
@@ -119,7 +105,7 @@ BOOL InitializeWindowStateAction()
 
     State.Module->Network = NULL;
     State.Module->Handle = GetModuleHandleA(NULL);
-    State.Module->Game.Command = GAME_COMMAND_NONE;
+    State.Module->Game.Command = GAMECOMMAND_NONE;
 
     SetWindowTextA(State.Window->HWND, State.App->Title);
 
@@ -127,13 +113,13 @@ BOOL InitializeWindowStateAction()
 }
 
 // 0x00401930
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message)
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message)
 {
-    INITIALIZEACTIONHANDLER(&State.Handlers.Activate, activate);
-    INITIALIZEACTIONHANDLER(&State.Handlers.Initialize, initialize);
-    INITIALIZEACTIONHANDLER(&State.Handlers.Action, action);
-    INITIALIZEACTIONHANDLER(&State.Handlers.Release, release);
-    INITIALIZEACTIONHANDLER(&State.Handlers.Message, message);
+    INITIALIZEACTIONHANDLER(&State.Actions.Activate, activate);
+    INITIALIZEACTIONHANDLER(&State.Actions.Initialize, initialize);
+    INITIALIZEACTIONHANDLER(&State.Actions.Action, action);
+    INITIALIZEACTIONHANDLER(&State.Actions.Release, release);
+    INITIALIZEACTIONHANDLER(&State.Actions.Message, message);
 
     ActivateWindowStateContainer(self);
 }
@@ -148,20 +134,20 @@ LRESULT WINAPI WindowStateMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM 
     case WM_KILLFOCUS: {State.Window->IsActive = FALSE; break; }
     }
 
-    for (State.Handlers.Active = State.Handlers.Message;
-        State.Handlers.Active != NULL; State.Handlers.Active = State.Handlers.Active->Next)
+    for (State.Actions.Active = State.Actions.Message;
+        State.Actions.Active != NULL; State.Actions.Active = State.Actions.Active->Next)
     {
         LRESULT result = 0;
-        if (!INVOKEWINDOWACTIONHANDLERLAMBDA(State.Handlers.Active->Invoke, hwnd, msg, wp, lp, &result)) { return result; }
+        if (!INVOKEWINDOWACTIONHANDLERLAMBDA(State.Actions.Active->Action, hwnd, msg, wp, lp, &result)) { return result; }
 
-        if (State.Handlers.Active == NULL) { break; }
+        if (State.Actions.Active->Next == NULL) { break; }
     }
 
     return DefWindowProcA(hwnd, msg, wp, lp);
 }
 
 // 0x004023b0
-VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self)
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self)
 {
     self->Instance = NULL;
     self->Args = NULL;
@@ -178,156 +164,20 @@ VOID ActivateWindowStateContainer(LPWINDOWSTATECONTAINER self)
     self->Class.hCursor = NULL;
     self->Class.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
     self->Class.lpszMenuName = NULL;
-    self->Class.lpszClassName = WINDOW_STATE_DEFAULT_WINDOW_CLASS_NAME;
+    self->Class.lpszClassName = DEFAULT_WINDOW_STATE_CLASS_NAME;
 
-    strcpy(self->Title, WINDOW_STATE_DEFAULT_WINDOW_TITLE_NAME);
+    strcpy(self->Title, DEFAULT_WINDOW_STATE_TITLE_NAME);
 
     self->Style = WS_POPUP;
 
-    self->Y = 0;
     self->X = 0;
-    self->Height = WINDOW_STATE_DEFAULT_WINDOW_HEIGHT;
-    self->Width = WINDOW_STATE_DEFAULT_WINDOW_WIDTH;
+    self->Y = 0;
+    self->Width = DEFAULT_WINDOW_STATE_WIDTH;
+    self->Height = DEFAULT_WINDOW_STATE_HEIGHT;
 
     self->Menu = NULL;
 
     self->IsActive = TRUE;
-}
-
-// 0x00402850
-VOID InitializeWindowStateArguments()
-{
-    U32 count = 0;
-    U32 length = 0;
-
-    SplitWindowStateArguments(State.Window->Args, NULL, NULL, &count, &length);
-
-    State.Arguments.All = (CHAR*)malloc(length);
-    State.Arguments.Args = (CHAR**)malloc(count * sizeof(CHAR*));
-    
-    SplitWindowStateArguments(State.Window->Args, State.Arguments.Args, State.Arguments.All, &count, &length);
-    
-    State.Arguments.Count = count;
-}
-
-// 0x004028d0
-VOID SplitWindowStateArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length)
-{
-    BOOL start = FALSE;
-    BOOL end = FALSE;
-
-    *length = 0;
-    *count = 0;
-
-    if (value == NULL) { return; }
-
-    while (*value != NULL)
-    {
-        // Skip spaces and tabs.
-        for (; *value == ' ' || *value == '\t'; value = value + 1) {}
-
-        if (*value == NULL) { break; }
-
-        if (args != NULL)
-        {
-            *args = values;
-            args = args + 1;
-        }
-
-        *count = *count + 1;
-
-        while (TRUE)
-        {
-            U32 slashes = 0;
-            BOOL append = TRUE;
-            CHAR current = *value;
-
-            // Count contiguous slashes.
-            while (current == '\\')
-            {
-                value = value + 1;
-                slashes = slashes + 1;
-                current = *value;
-            }
-
-            if (*value == '\"')
-            {
-                if ((slashes & 1) == 0)
-                {
-                    if (start && value[1] == '\"')
-                    {
-                        value = value + 1;
-                    }
-                    else { append = FALSE; }
-
-                    start = !end;
-                    end = start;
-                }
-
-                slashes = slashes >> 1;
-            }
-
-            for (; slashes != 0; slashes = slashes - 1)
-            {
-                if (values != NULL)
-                {
-                    *values = '\\';
-                    values = values + 1;
-                }
-
-                *length = *length + 1;
-            }
-
-            current = *value;
-
-            if (current == NULL || (!start && (current == ' ' || current == '\t'))) { break; }
-
-            if (append)
-            {
-                if (values != NULL)
-                {
-                    *values = current;
-                    values = values + 1;
-                }
-
-                *length = *length + 1;
-            }
-
-            value = value + 1;
-        }
-
-        if (values != NULL)
-        {
-            *values = NULL;
-            values = values + 1;
-        }
-
-        *length = *length + 1;
-    }
-}
-
-// 0x004029c0
-BOOL AcquireWindowStateArgumentValue(LPCSTR name, CHAR* value, CONST U32 length)
-{
-    for (U32 x = 0; x < State.Arguments.Count; x++)
-    {
-        CHAR* value = State.Arguments.Args[x];
-        CHAR* current = strchr(value, '=');
-
-        if (current != NULL)
-        {
-            if (strnicmp(value, name, (size_t)current - (size_t)value) == 0)
-            {
-                current++;
-
-                strncpy(value, current, Min(length, strlen(current)));
-
-                return TRUE;
-            }
-        }
-    }
-
-    return FALSE;
 }
 
 // 0x004017e0

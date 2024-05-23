@@ -27,7 +27,7 @@ SOFTWARE.
 RENDERERMODULESTATECONTAINER ModuleState;
 
 // 0x10001960
-LPRENDERERMODULESTATECONTAINER InitializeModule()
+RENDERERMODULESTATECONTAINERPTR InitializeModule()
 {
     ModuleState.Surface.Main    = RendererState.Surfaces.Main;
     ModuleState.Surface.Back    = RendererState.Surfaces.Back;

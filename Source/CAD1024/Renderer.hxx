@@ -23,10 +23,11 @@ SOFTWARE.
 #pragma once
 
 #include <Basic.hxx>
+#include <Graphics.Basic.hxx>
 #include <Native.Basic.hxx>
 
-#define MAX_RENDERER_WIDTH 1024
-#define MAX_RENDERER_HEIGHT 768
+#define MAX_RENDERER_WIDTH GRAPHICS_RESOLUTION_1024
+#define MAX_RENDERER_HEIGHT GRAPHICS_RESOLUTION_768
 
 typedef enum RendererOutlineSkipOptions
 {
@@ -101,7 +102,7 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
 VOID DrawMainSurfaceCursor(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 width, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangleOverlay(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
-VOID DrawMainSurfaceSprite(S32 x, S32 y, LPSPRITE sprite); // TODO
+VOID DrawMainSurfaceSprite(S32 x, S32 y, SPRITEPTR sprite); // TODO
 VOID DrawMainSurfaceText(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);

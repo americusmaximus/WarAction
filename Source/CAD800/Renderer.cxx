@@ -1428,7 +1428,7 @@ VOID FUN_1000619d(S32 x, S32 y, S32 param_3, LPVOID param_4)
 }
 
 // 0x100064c6
-VOID DrawMainSurfaceSprite(S32 x, S32 y, LPSPRITE sprite)
+VOID DrawMainSurfaceSprite(S32 x, S32 y, SPRITEPTR sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED

@@ -22,22 +22,21 @@ SOFTWARE.
 
 #pragma once
 
+#include "Basic.hxx"
+
 #include <SoundState.hxx>
 
-#define SOUND_STATE_DEFAULT_CHANNEL_COUNT 16
+#define DEFAULT_SOUND_STATE_CHANNEL_COUNT 16
 
 EXTERN SOUNDSTATECONTAINER SoundState;
 
-VOID InitializeDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self); // TODO
-VOID ReleaseDirectSoundState0x18(LPSOUNDSTATEUNK0X18 self); // TODO
+VOID CLASSCALL ActivateDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self); // TODO
+VOID CLASSCALL ReleaseDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self); // TODO
 
 VOID ActivateSoundStateContainer(VOID);
-VOID ActivateReleaseSoundStateContainer(VOID);
-
-VOID InitializeSoundState(VOID);
-LPSOUNDSTATECONTAINER InitializeSoundState(LPSOUNDSTATECONTAINER self);
-
+VOID ActivateReleaseSoundState(VOID);
 VOID ReleaseSoundStateContainer(VOID);
-VOID ReleaseSoundState(LPSOUNDSTATECONTAINER self);
 
-BOOL InitializeSoundState(LPSOUNDSTATECONTAINER self, HWND window, CONST U32 count);
+SOUNDSTATECONTAINERPTR CLASSCALL ActivateSoundState(SOUNDSTATECONTAINERPTR self);
+BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CONST U32 count);
+VOID CLASSCALL ReleaseSoundState(SOUNDSTATECONTAINERPTR self);

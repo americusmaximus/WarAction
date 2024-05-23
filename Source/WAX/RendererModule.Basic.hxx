@@ -66,7 +66,7 @@ typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 par
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
 typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
-typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, LPSPRITE sprite); // TODO
+typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, SPRITEPTR sprite); // TODO
 typedef VOID(*FUN_1000618DACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10004DB0ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_10006EF8ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
@@ -159,7 +159,7 @@ typedef struct RendererStateActions
     FUN_1000A4F3ACTION FUN_1000a4f3; // TODO
     FUN_10009EB3ACTION FUN_10009eb3; // TODO
     RELEASEDIRECTXACTION                            ReleaseDirectX;
-} RENDERERMODULESTATEACTIONS, * LPRENDERERMODULESTATEACTIONS;
+} RENDERERMODULESTATEACTIONS, * RENDERERMODULESTATEACTIONSPTR;
 
 typedef struct Rectangle
 {
@@ -167,7 +167,7 @@ typedef struct Rectangle
     S32 Y;
     S32 Width;
     S32 Height;
-} RECTANGLE, * LPRECTANGLE;
+} RECTANGLE, * RECTANGLEPTR;
 
 typedef struct RendererModuleSurface // TODO Refactor the struct out.
 {
@@ -184,7 +184,7 @@ typedef struct RendererModuleSurface // TODO Refactor the struct out.
     PIXEL* Stencil; // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
 
     PIXEL* Renderer; // The DirectDraw surface.
-} RENDERERMODULESURFACE, * LPRENDERERMODULESURFACE;
+} RENDERERMODULESURFACE, * RENDERERMODULESURFACEPTR;
 
 typedef struct RendererModuleStateContainer
 {
@@ -224,4 +224,4 @@ typedef struct RendererModuleStateContainer
     BOOL IsFullScreen;
     RENDERERMODULEDIRECTXSTATE DirectX;
     RENDERERMODULESTATEACTIONS Actions;
-} RENDERERMODULESTATECONTAINER, * LPRENDERERMODULESTATECONTAINER;
+} RENDERERMODULESTATECONTAINER, * RENDERERMODULESTATECONTAINERPTR;

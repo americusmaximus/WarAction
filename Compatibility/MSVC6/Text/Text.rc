@@ -128,7 +128,7 @@ BEGIN
     IDS_STRING42            "File %s to big.\n"
     IDS_STRING43            "DataPathScm%i_%i"
     IDS_GAME                "Game"
-    IDS_STRING46            "BrightnessScm%i"
+    IDS_BRIGHTNESS          "BrightnessScm%i"
     IDS_CHANNELS            "Channels"
 END
 
@@ -157,8 +157,8 @@ BEGIN
     IDS_REGISTRY_KEY        "SOFTWARE\\Sudden Strike"
     IDS_STRING68            "CampaignDir"
     IDS_MULTI_MAP_DIR       "MultiMapDir"
-    IDS_STRING70            "MenuResource"
-    IDS_STRING71            "BriefingsDir"
+    IDS_MENU_RESOURCE       "MenuResource"
+    IDS_BRIEFINGS           "BriefingsDir"
     IDS_SAVES               "Saves"
     IDS_STRING73            "PingForLan"
     IDS_STRING74            "PingTcpIp"
