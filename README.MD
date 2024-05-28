@@ -10,6 +10,11 @@ There are multiple goals this project tries to achieve:
 - [ ] Have a fully playable game implemented end-to-end, including resource management, audio, and video rendering, as well as support of large screen resolutions.
 - [ ] Eventually, to support 64-bit compilation for modern systems, and provide an avenue for development of modern renderer implementations such as DirectX or Vulkan, and, eventually, to port to Linux or Mac.
 
+## Code
+```
+git clone --recurse-submodules https://github.com/americusmaximus/WarAction
+```
+
 ## Requirements & Dependencies
 1. [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
 2. [OGG](https://github.com/xiph/ogg) and [Vorbis](https://github.com/xiph/vorbis)
@@ -27,7 +32,7 @@ In order to be able to run the code not only in the modern operating systems, bu
 Modern Visual Studio makes the binary dependent on modern runtime libraries that are not available in the legacy systems, therefore the game won't work. In order to make the code work on legacy systems please see [detailed instructions on compatibility](COMPATIBILITY.MD).
 
 ## Similar & Related Projects
-1. [FZFS](https://github.com/americusmaximus/FZFS) a tool to work with SUE file archives.
+1. [FZFS](https://github.com/americusmaximus/FZFS)
 
 ## Thanks
 1. [Hifi](https://github.com/hifi-unmaintained/ogg-winmm) for the original implementation of WinMM.dll with the Ogg Vorbis support. Even though the game's version is very customized, access to the original code was very useful.
@@ -36,4 +41,4 @@ Modern Visual Studio makes the binary dependent on modern runtime libraries that
 ## Legal
 1. This is not a complete game. Please purchase software you like!
 2. The source code in this repository is mostly produced by reverse engineering the original binaries. There are a couple of exceptions for reverse engineering under DMCA -- documentation, interoperability, fair use. See goals section for the interoperability and fair use cases. The documentation is needed to support those. Also please see an article about [software preservation](https://en.wikipedia.org/wiki/Digital_preservation).
-3. Fireglow Games, Sudden Strike, Ogg Vorbis, DirectX, OpenGL, Vulkan, and others are trademarks of their respective owners.
+3. Fireglow Games, Sudden Strike, CDV, Ogg Vorbis, DirectX, OpenGL, Vulkan, and others are trademarks of their respective owners.
