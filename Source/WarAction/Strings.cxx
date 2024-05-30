@@ -30,7 +30,7 @@ SOFTWARE.
 // 0x004010e0
 STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value)
 {
-    self->Value = (CHAR*)malloc(strlen(value->Value) + 1);
+    self->Value = (LPSTR)malloc(strlen(value->Value) + 1);
 
     strcpy(self->Value, value->Value);
 
@@ -47,7 +47,7 @@ VOID AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...)
     vsprintf(buffer, format, args);
     va_end(args);
 
-    self->Value = (CHAR*)malloc(strlen(buffer) + 1);
+    self->Value = (LPSTR)malloc(strlen(buffer) + 1);
     
     strcpy(self->Value, buffer);
 }

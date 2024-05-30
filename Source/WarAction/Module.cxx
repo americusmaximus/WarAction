@@ -35,8 +35,8 @@ VOID AcquireStartArguments()
 
     AcquireStartArguments(State.Window->Args, NULL, NULL, &count, &length);
 
-    State.Arguments.All = (CHAR*)malloc(length);
-    State.Arguments.Args = (CHAR**)malloc(count * sizeof(CHAR*));
+    State.Arguments.All = (LPSTR)malloc(length);
+    State.Arguments.Args = (LPSTR*)malloc(count * sizeof(LPSTR));
 
     AcquireStartArguments(State.Window->Args, State.Arguments.Args, State.Arguments.All, &count, &length);
 
@@ -44,7 +44,7 @@ VOID AcquireStartArguments()
 }
 
 // 0x004028d0
-VOID AcquireStartArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length)
+VOID AcquireStartArguments(LPCSTR value, LPSTR* args, LPSTR values, U32* count, U32* length)
 {
     BOOL start = FALSE;
     BOOL end = FALSE;
@@ -140,12 +140,12 @@ VOID AcquireStartArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, 
 }
 
 // 0x004029c0
-BOOL AcquireStartArguments(LPCSTR name, CHAR* value, CONST U32 length)
+BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length)
 {
     for (U32 x = 0; x < State.Arguments.Count; x++)
     {
-        CHAR* value = State.Arguments.Args[x];
-        CHAR* current = strchr(value, '=');
+        LPSTR value = State.Arguments.Args[x];
+        LPSTR current = strchr(value, '=');
 
         if (current != NULL)
         {
@@ -153,7 +153,7 @@ BOOL AcquireStartArguments(LPCSTR name, CHAR* value, CONST U32 length)
             {
                 current++;
 
-                strncpy(value, current, Min(length, strlen(current)));
+                strncpy(value, current, Min<size_t>(length, strlen(current)));
 
                 return TRUE;
             }

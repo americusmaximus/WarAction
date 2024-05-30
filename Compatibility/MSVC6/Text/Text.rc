@@ -146,7 +146,7 @@ BEGIN
     IDS_STRING60            "MusicVolume"
     IDS_STRING61            "SoundVolume"
     IDS_STRING62            "InterfaceVolume"
-    IDS_STRING63            "TurnDelay"
+    IDS_TURN_DELAY          "TurnDelay"
 END
 
 STRINGTABLE DISCARDABLE 

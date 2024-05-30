@@ -22,11 +22,18 @@ SOFTWARE.
 
 #pragma once
 
-#include <AppState.hxx>
+#include "DirectPlay.hxx"
+#include "Game.hxx"
+#include "RendererModule.Basic.hxx"
+#include "Sound.hxx"
 
-BOOL ApplicationStateWindowStateActionHandler(VOID);
-BOOL InitializeApplicationState(LPCSTR file);
-BOOL InitializeApplicationStateModule(VOID);
-BOOL InitializeApplicationStateModules(LPCSTR file);
-BOOL ReleaseApplicationState(VOID);
-VOID ReleaseApplicationStateModules(VOID);
+// a.k.a. XCHG
+typedef struct ModuleStateContainer
+{
+    HMODULE Handle;
+    GAMESTATECONTAINER Game; // ToGame
+    SOUNDSTATECONTAINERPTR Sound;
+    RENDERERMODULESTATECONTAINERPTR Renderer;
+    HMODULE Text;
+    LPDIRECTPLAY3A Network;
+} MODULESTATECONTAINER, * MODULESTATECONTAINERPTR;

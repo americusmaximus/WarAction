@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#include <AppState.hxx>
+#include <App.hxx>
 
 #define MODULE_VERSION_VALUE 271
 
@@ -34,7 +34,7 @@ U32 AcquireModuleVersion() { return MODULE_VERSION_VALUE; }
 
 // 0x1000cf20
 // a.k.a. VModule_Init
-BOOL InitializeModule(LPAPPSTATECONTAINER state)
+BOOL InitializeModule(APPSTATECONTAINERPTR state)
 {
     // TODO NOT IMPLEMENTED
 

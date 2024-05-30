@@ -141,77 +141,81 @@ BOOL ReleaseApplicationState()
 // 0x00401c70
 BOOL InitializeApplicationStateModule()
 {
-    if (State.App->InitModule < MIN_APP_STATE_VALID_MODULE_INDEX)
+    if (State.App->InitModule < MENU_APP_STATE_MODULE_INDEX)
     {
         ReleaseApplicationStateModules();
 
         State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
+
+        return TRUE;
     }
-    else
+
+    ReleaseApplicationStateModules();
+
+    if (State.App->AcquireRendererSettingsValue != NULL
+        && !State.App->AcquireRendererSettingsValue()) { return FALSE; }
+
+    State.App->ModuleHandle = LoadLibraryA(State.App->Modules[State.App->InitModule - 1]);
+
+    if (State.App->ModuleHandle == NULL)
+    {
+        Message("Can't load %s: %i\n", State.App->Modules[State.App->InitModule - 1], GetLastError());
+
+        return FALSE;
+    }
+
+    State.App->ActiveModule = State.App->InitModule;
+    State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
+
+    State.App->Actions.Initialize = (VISUALMODULEINITACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_INIT_NAME);
+
+    if (State.App->Actions.Initialize == NULL)
+    {
+        Message("Can't retrive VModule_Init function address.\n");
+
+        ReleaseApplicationStateModules();
+
+        return FALSE;
+    }
+
+    State.App->Actions.Execute = (VISUALMODULEEXECUTEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_PLAY_NAME);
+
+    if (State.App->Actions.Execute == NULL)
+    {
+        Message("Can't retrive VModule_Play function address.\n");
+
+        ReleaseApplicationStateModules();
+
+        return FALSE;
+    }
+
+    State.App->Actions.Done = (VISUALMODULEDONEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_DONE_NAME);
+
+    if (State.App->Actions.Done == NULL)
+    {
+        Message("Can't retrive VModule_Done function address.\n");
+
+        ReleaseApplicationStateModules();
+
+        return FALSE;
+    }
+
+    State.App->Actions.Handle = (VISUALMODULEHANDLEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_HANDLE_NAME);
+
+    if (State.App->Actions.Handle == NULL)
+    {
+        Message("Can't retrive VModule_Handle function address.\n");
+
+        ReleaseApplicationStateModules();
+
+        return FALSE;
+    }
+
+    if (!State.App->Actions.Initialize(State.App))
     {
         ReleaseApplicationStateModules();
 
-        if (State.App->AcquireRendererSettingsValue != NULL
-            && !State.App->AcquireRendererSettingsValue()) { return FALSE; }
-
-        State.App->ModuleHandle = LoadLibraryA(State.App->Modules[State.App->InitModule - 1]);
-
-        if (State.App->ModuleHandle == NULL)
-        {
-            Message("Can't load %s: %i\n", State.App->Modules[State.App->InitModule - 1], GetLastError()); return FALSE;
-        }
-
-        State.App->ActiveModule = State.App->InitModule;
-        State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
-
-        State.App->Actions.Initialize = (VISUALMODULEINITACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_INIT_NAME);
-
-        if (State.App->Actions.Initialize == NULL)
-        {
-            Message("Can't retrive VModule_Init function address.\n");
-
-            ReleaseApplicationStateModules();
-
-            return FALSE;
-        }
-
-        State.App->Actions.Execute = (VISUALMODULEEXECUTEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_PLAY_NAME);
-
-        if (State.App->Actions.Execute == NULL)
-        {
-            Message("Can't retrive VModule_Play function address.\n");
-
-            ReleaseApplicationStateModules();
-
-            return FALSE;
-        }
-
-        State.App->Actions.Done = (VISUALMODULEDONEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_DONE_NAME);
-
-        if (State.App->Actions.Done == NULL)
-        {
-            Message("Can't retrive VModule_Done function address.\n");
-
-            ReleaseApplicationStateModules();
-
-            return FALSE;
-        }
-
-        State.App->Actions.Handle = (VISUALMODULEHANDLEACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_HANDLE_NAME);
-
-        if (State.App->Actions.Handle == NULL)
-        {
-            Message("Can't retrive VModule_Handle function address.\n");
-
-            ReleaseApplicationStateModules();
-
-            return FALSE;
-        }
-
-        if (!State.App->Actions.Initialize(State.App))
-        {
-            ReleaseApplicationStateModules(); return FALSE;
-        }
+        return FALSE;
     }
 
     return TRUE;

@@ -24,9 +24,9 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#include <SoundState.hxx>
+#include <Sound.hxx>
 
-#define DEFAULT_SOUND_STATE_CHANNEL_COUNT 16
+#define MAX_SOUND_STATE_CHANNEL_COUNT 16
 
 EXTERN SOUNDSTATECONTAINER SoundState;
 

@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "SoundState.hxx"
+#include "Sound.hxx"
 #include "State.hxx"
 
 #include <stdlib.h>
@@ -82,7 +82,7 @@ SOUNDSTATECONTAINERPTR CLASSCALL ActivateSoundState(SOUNDSTATECONTAINERPTR self)
     self->Count = 0;
 
     self->Result = DS_OK;
-    self->State = SOUND_STATE_NONE;
+    self->State = SOUNDSTATE_NONE;
 
     self->Unk07 = 500; // TODO
     self->Unk08 = -10000; // TODO
@@ -126,7 +126,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
 
     self->Result = DirectSoundCreate(NULL, &self->Instance, NULL);
 
-    if (FAILED(self->Result)) { self->State = SOUND_STATE_INIT_ERROR; return FALSE; }
+    if (FAILED(self->Result)) { self->State = SOUNDSTATE_INIT_ERROR; return FALSE; }
 
     self->Result = self->Instance->SetCooperativeLevel(window, DSSCL_PRIORITY);
 
@@ -134,7 +134,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
     {
         DIRECTSOUNDRELEASE(self->Instance);
 
-        self->State = SOUND_STATE_SETUP_ERROR;
+        self->State = SOUNDSTATE_SETUP_ERROR;
 
         return FALSE;
     }
@@ -151,7 +151,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
     {
         DIRECTSOUNDRELEASE(self->Instance);
 
-        self->State = SOUND_STATE_BUFFER_ERROR;
+        self->State = SOUNDSTATE_BUFFER_ERROR;
 
         return FALSE;
     }

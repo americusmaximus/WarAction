@@ -37,7 +37,7 @@
 #define IDS_STRING60                    60
 #define IDS_STRING61                    61
 #define IDS_STRING62                    62
-#define IDS_STRING63                    63
+#define IDS_TURN_DELAY                  63
 #define IDS_STRING64                    64
 #define IDS_STRING65                    65
 #define IDS_STRING66                    66

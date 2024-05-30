@@ -21,7 +21,7 @@ SOFTWARE.
 */
 
 #include "Module.hxx"
-#include "RendererState.hxx"
+#include "Renderer.hxx"
 #include "Settings.hxx"
 #include "State.hxx"
 #include "WarAction.hxx"
@@ -89,14 +89,14 @@ BOOL InitializeWindowStateAction()
         AcquireSettingsValue(&configuration, IDS_CHANNELS);
 
         if (!InitializeSoundState(&SoundState, State.Window->HWND,
-            AcquireGameSettingsValue(configuration, DEFAULT_SOUND_STATE_CHANNEL_COUNT)))
+            AcquireSettingsValue(configuration, MAX_SOUND_STATE_CHANNEL_COUNT)))
         {
             CHAR value[MAX_WINDOW_STATE_SETTING_VALUE_LENGTH];
 
             AcquireSettingsValue(IDS_REVERSE_STEREO, value, MAX_WINDOW_STATE_SETTING_VALUE_LENGTH);
             AcquireSettingsValue(&configuration, IDS_REVERSE_STEREO, value);
 
-            SoundState.IsReverseStereo = (BOOL)AcquireGameSettingsValue(configuration, FALSE);
+            SoundState.IsReverseStereo = (BOOL)AcquireSettingsValue(configuration, FALSE);
         }
     }
 

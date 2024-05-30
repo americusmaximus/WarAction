@@ -20,44 +20,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Basic.hxx"
+#pragma once
 
-#include <App.hxx>
+#include "Action.hxx"
 
-BOOL APIENTRY Main(HMODULE, DWORD, LPVOID) { return TRUE; }
+#include <Window.hxx>
 
-// 0x10056550
-// a.k.a. VModule_Init
-BOOL InitializeModule(APPSTATECONTAINERPTR state)
-{
-    // TODO NOT IMPLEMENTED
+EXTERN WINDOWSTATECONTAINER WindowState;
 
-    return TRUE;
-}
-
-// 0x10056650
-// a.k.a. VModule_Handle
-BOOL MessageModule(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
-{
-    // TODO NOT IMPLEMENTED
-
-    return TRUE;
-}
-
-// 0x100565e0
-// a.k.a. VModule_Play
-BOOL ExecuteModule()
-{
-    // TODO NOT IMPLEMENTED
-
-    return TRUE;
-}
-
-// 0x10056620
-// a.k.a. VModule_Done
-BOOL ReleaseModule()
-{
-    // TODO NOT IMPLEMENTED
-
-    return TRUE;
-}
+VOID ActivateWindowStateContainer(VOID);
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self);
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message);

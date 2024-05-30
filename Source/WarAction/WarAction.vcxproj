@@ -198,31 +198,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AppState.hxx" />
+    <ClInclude Include="Action.hxx" />
+    <ClInclude Include="App.hxx" />
     <ClInclude Include="Basic.hxx" />
     <ClInclude Include="Message.hxx" />
     <ClInclude Include="Module.hxx" />
-    <ClInclude Include="RendererState.hxx" />
+    <ClInclude Include="Renderer.hxx" />
     <ClInclude Include="Settings.hxx" />
-    <ClInclude Include="SoundState.hxx" />
+    <ClInclude Include="Sound.hxx" />
     <ClInclude Include="State.hxx" />
     <ClInclude Include="Strings.hxx" />
     <ClInclude Include="WarAction.hxx" />
-    <ClInclude Include="WindowState.hxx" />
-    <ClInclude Include="Action.hxx" />
+    <ClInclude Include="Window.hxx" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AppState.cxx" />
+    <ClCompile Include="Action.cxx" />
+    <ClCompile Include="App.cxx" />
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="Message.cxx" />
     <ClCompile Include="Module.cxx" />
-    <ClCompile Include="RendererState.cxx" />
+    <ClCompile Include="Renderer.cxx" />
     <ClCompile Include="Settings.cxx" />
-    <ClCompile Include="SoundState.cxx" />
+    <ClCompile Include="Sound.cxx" />
     <ClCompile Include="State.cxx" />
     <ClCompile Include="Strings.cxx" />
-    <ClCompile Include="WindowState.cxx" />
-    <ClCompile Include="Action.cxx" />
+    <ClCompile Include="Window.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WarAction.rc" />

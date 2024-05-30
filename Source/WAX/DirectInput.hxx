@@ -22,12 +22,8 @@ SOFTWARE.
 
 #pragma once
 
-#include "Action.hxx"
+#define DIRECTINPUT_VERSION 0x0300
+#include <dinput.h>
 
-#include <WindowState.hxx>
-
-EXTERN WINDOWSTATECONTAINER WindowState;
-
-VOID ActivateWindowStateContainer(VOID);
-VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self);
-VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message);
+#define DIDOI_NONE          0x00000000
+#define DIDFT_OPTIONAL	    0x80000000

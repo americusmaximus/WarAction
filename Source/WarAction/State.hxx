@@ -22,9 +22,9 @@ SOFTWARE.
 
 #pragma once
 
-#include "AppState.hxx"
-#include "SoundState.hxx"
-#include "WindowState.hxx"
+#include "App.hxx"
+#include "Sound.hxx"
+#include "Window.hxx"
 
 typedef struct StateContainer
 {
@@ -62,8 +62,8 @@ typedef struct StateContainer
 
     struct
     {
-        CHAR* All; // 0x00410524
-        CHAR** Args; // 0x00410528
+        LPSTR All; // 0x00410524
+        LPSTR* Args; // 0x00410528
         U32 Count; // 0x0041052c
     } Arguments;
 

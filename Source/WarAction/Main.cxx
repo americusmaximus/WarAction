@@ -77,7 +77,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
 
     if (State.Window == NULL)
     {
-        MessageBoxA(NULL, "Problem with process description.", "Fatal Error", MB_ICONHAND); return EXIT_SUCCESS;
+        MessageBoxA(NULL, "Problem with process description.", "Fatal Error", MB_ICONHAND);
+
+        return EXIT_SUCCESS;
     }
 
     State.Window->Instance = instance;
@@ -90,12 +92,14 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
     {
         if (!INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action)) { return EXIT_SUCCESS; }
 
-        if (State.Actions.Active == NULL) { break; }
+        if (State.Actions.Active->Next == NULL) { break; }
     }
 
     if (!InitializeWindow(command))
     {
-        MessageBoxA(NULL, "Internal-init process failed", "Error", MB_ICONHAND); return EXIT_SUCCESS;
+        MessageBoxA(NULL, "Internal-init process failed", "Error", MB_ICONHAND);
+
+        return EXIT_SUCCESS;
     }
 
     // Run all initialize events.
@@ -110,13 +114,13 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
             {
                 INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action);
 
-                if (State.Actions.Active == NULL) { break; }
+                if (State.Actions.Active->Next == NULL) { break; }
             }
 
             return EXIT_FAILURE;
         }
 
-        if (State.Actions.Active == NULL) { break; }
+        if (State.Actions.Active->Next == NULL) { break; }
     }
 
     while (TRUE)
@@ -133,7 +137,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
                 {
                     INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action);
 
-                    if (State.Actions.Active == NULL) { break; }
+                    if (State.Actions.Active->Next == NULL) { break; }
                 }
 
                 return EXIT_FAILURE;
@@ -157,13 +161,13 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
                 {
                     INVOKEACTIONHANDLERLAMBDA(State.Actions.Active->Action);
 
-                    if (State.Actions.Active == NULL) { break; }
+                    if (State.Actions.Active->Next == NULL) { break; }
                 }
 
                 return EXIT_FAILURE;
             }
 
-            if (State.Actions.Active == NULL) { break; }
+            if (State.Actions.Active->Next == NULL) { break; }
         }
     }
 

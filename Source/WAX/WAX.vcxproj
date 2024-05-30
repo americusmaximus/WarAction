@@ -19,25 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AppState.hxx" />
+    <ClInclude Include="App.hxx" />
     <ClInclude Include="Basic.hxx" />
     <ClInclude Include="DirectDraw.hxx" />
+    <ClInclude Include="DirectInput.hxx" />
     <ClInclude Include="DirectPlay.hxx" />
     <ClInclude Include="DirectSound.hxx" />
-    <ClInclude Include="GameState.hxx" />
+    <ClInclude Include="Game.hxx" />
     <ClInclude Include="Graphics.Basic.hxx" />
-    <ClInclude Include="LoggerState.hxx" />
+    <ClInclude Include="Logger.hxx" />
     <ClInclude Include="Mathematics.Basic.hxx" />
-    <ClInclude Include="ModuleState.hxx" />
+    <ClInclude Include="Module.hxx" />
     <ClInclude Include="Native.Basic.hxx" />
     <ClInclude Include="Renderer.Basic.hxx" />
     <ClInclude Include="RendererModule.Basic.hxx" />
-    <ClInclude Include="RendererModule.Import.hxx" />
     <ClInclude Include="RendererModule.Export.hxx" />
-    <ClInclude Include="SoundState.hxx" />
+    <ClInclude Include="RendererModule.Import.hxx" />
+    <ClInclude Include="Sound.hxx" />
     <ClInclude Include="VisualModule.Export.hxx" />
     <ClInclude Include="VisualModule.Import.hxx" />
-    <ClInclude Include="WindowState.hxx" />
+    <ClInclude Include="Window.hxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

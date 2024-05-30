@@ -20,31 +20,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "RendererState.hxx"
-#include "State.hxx"
+#pragma once
 
-#include <RendererModule.Import.hxx>
+#include "DirectSound.hxx"
 
-S32 RendererVideoMode = DEFAULT_RENDERER_VIDEO_MODE_VALUE;
-
-// 0x00401390
-BOOL InitializeRendererStateModule(LPCSTR file)
+typedef enum SoundState
 {
-    ReleaseRenderStateModule();
+    SOUNDSTATE_NONE            = 0,
+    SOUNDSTATE_INIT_ERROR      = 1,
+    SOUNDSTATE_SETUP_ERROR     = 2,
+    SOUNDSTATE_BUFFER_ERROR    = 3,
+    SOUNDSTATE_FORCE_DWORD     = 0x7fffffff
+} SOUNDSTATE;
 
-    State.Renderer.Module = LoadLibraryA(file);
-
-    RENDERERINITACTIONLAMBDA action = (RENDERERINITACTIONLAMBDA)GetProcAddress(State.Renderer.Module, RENDERER_MODULE_INIT_NAME);
-    
-    if (action == NULL) { ReleaseRenderStateModule(); return FALSE; }
-
-    State.Renderer.State = action();
-
-    return TRUE;
-}
-
-// 0x004013d0
-VOID ReleaseRenderStateModule()
+typedef struct SoundStateUnk0x18 /* TODO */
 {
-    if (State.Renderer.Module != NULL) { FreeLibrary(State.Renderer.Module); }
-}
+    U32 Unk00; // TODO
+    S32 Unk01; // TODO
+    U32 Unk02; // TODO
+    S32 Unk03; // TODO
+    LPVOID Unk04; // TODO
+    U32 Unk05; // TODO
+} SOUNDSTATEUNK0X18, * SOUNDSTATEUNK0X18PTR;
+
+typedef struct SoundStateContainer
+{
+    LPDIRECTSOUND Instance;
+    LPDIRECTSOUNDBUFFER Buffer;
+    SOUNDSTATE State;
+    HRESULT Result;
+    U32 Count;
+    SOUNDSTATEUNK0X18PTR Items;
+    BOOL IsReverseStereo;
+    U32 Unk07; // TODO
+    S32 Unk08; // TODO
+} SOUNDSTATECONTAINER, * SOUNDSTATECONTAINERPTR;

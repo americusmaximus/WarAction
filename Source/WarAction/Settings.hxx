@@ -38,6 +38,6 @@ U32 AcquireSettingsValue(CONST U32 indx, LPSTR value, CONST U32 length);
 STRINGVALUEPTR CLASSCALL AcquireSettingsValue(STRINGVALUEPTR result, CONST U32 indx, ...);
 STRINGVALUEPTR AcquireSettingsValue(STRINGVALUEPTR result, STRINGVALUE name, STRINGVALUE value);
 
-S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value);
+S32 AcquireSettingsValue(STRINGVALUE name, S32 value);
 
 BOOL AcquireRendererSettingsValue(VOID);

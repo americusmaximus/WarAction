@@ -22,6 +22,7 @@ SOFTWARE.
 
 #pragma once
 
+#define MAX_GAME_STATE_NETWORK_NAME_LENGTH 96
 #define MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH 256
 
 typedef enum GameCommand
@@ -36,23 +37,33 @@ typedef enum GameCommand
     GAMECOMMAND_FORCE_DWORD     = 0x7fffffff
 } GAMECOMMAND;
 
+typedef enum GameDifficulty
+{
+    GAMEDIFFICULTY_NONE         = 0,
+    GAMEDIFFICULTY_EASY         = 1, // TODO
+    GAMEDIFFICULTY_MEDIUM       = 2, // TODO
+    GAMEDIFFICULTY_HARD         = 3, // TODO
+    GAMEDIFFICULTY_FORCE_DWORD = 0x7fffffff
+} GAMEDIFFICULTY;
+
 typedef struct GameStateContainer
 {
     BOOL IsNetwork;
-    S32 Difficulty; // difficulty // TODO Type
+    GAMEDIFFICULTY Difficulty;
     S32 Unknown0x0c; // TODO
     S32 Unknown0x10; // TODO
     S32 Unknown0x14; // TODO
     S32 Unknown0x18; // TODO
     S32 Unknown0x1c; // TODO
     S32 Unknown0x20; // TODO
-    S32 Unknown0x24; // TODO
+    U32 TurnDelay;
     S32 Unknown0x28; // TODO
     DWORD Ticks;
     GAMECOMMAND Command;
     S32 NextMap;
     S32 NextMission;
-    CHAR Values[12][96]; // TODO
+    CHAR Network[MAX_GAME_STATE_NETWORK_NAME_LENGTH]; // TODO ???
+    CHAR Values[11][96]; // TODO
     S32 Unknown15; // TODO
     CHAR SaveFile[MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH];
 } GAMESTATECONTAINER, * GAMESTATECONTAINERPTR;

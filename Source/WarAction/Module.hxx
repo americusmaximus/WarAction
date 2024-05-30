@@ -25,7 +25,7 @@ SOFTWARE.
 #include "Basic.hxx"
 
 VOID AcquireStartArguments(VOID);
-VOID AcquireStartArguments(LPCSTR value, CHAR** args, CHAR* values, U32* count, U32* length);
-BOOL AcquireStartArguments(LPCSTR name, CHAR* value, CONST U32 length);
+VOID AcquireStartArguments(LPCSTR value, LPSTR* args, LPSTR values, U32* count, U32* length);
+BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length);
 
 VOID AcquireIniFileState(VOID);

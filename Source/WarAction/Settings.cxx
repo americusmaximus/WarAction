@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "RendererState.hxx"
+#include "Renderer.hxx"
 #include "Settings.hxx"
 #include "State.hxx"
 #include "Strings.hxx"
@@ -52,7 +52,7 @@ STRINGVALUEPTR CLASSCALL AcquireSettingsValue(STRINGVALUEPTR self, CONST U32 ind
     vsprintf(output, setting, args);
     va_end(args);
 
-    self->Value = (CHAR*)malloc(strlen(output) + 1);
+    self->Value = (LPSTR)malloc(strlen(output) + 1);
 
     strcpy(self->Value, output);
 
@@ -107,7 +107,7 @@ STRINGVALUEPTR AcquireSettingsValue(STRINGVALUEPTR result, STRINGVALUE name, STR
 }
 
 // 0x004012a0
-S32 AcquireGameSettingsValue(STRINGVALUE name, S32 value)
+S32 AcquireSettingsValue(STRINGVALUE name, S32 value)
 {
     CHAR input[MAX_SETTINGS_VALUE_LENGTH];
     LoadStringA(State.Module->Text, IDS_GAME, input, MAX_SETTINGS_VALUE_LENGTH);
@@ -154,7 +154,7 @@ BOOL AcquireRendererSettingsValue()
     STRINGVALUE setting;
     AcquireSettingsValue(&setting, IDS_VIDEO_MODE);
 
-    CONST S32 mode = AcquireGameSettingsValue(setting, INVALID_RENDERER_VIDEO_MODE_VALUE);
+    CONST S32 mode = AcquireSettingsValue(setting, INVALID_RENDERER_VIDEO_MODE_VALUE);
 
     if (mode == INVALID_RENDERER_VIDEO_MODE_VALUE) { return FALSE; }
 
@@ -193,7 +193,7 @@ BOOL AcquireRendererSettingsValue()
             STRINGVALUE configuration;
             AcquireSettingsValue(&configuration, IDS_FULL_SCREEN);
 
-            CONST BOOL fullscreen = (BOOL)AcquireGameSettingsValue(configuration, TRUE);
+            CONST BOOL fullscreen = (BOOL)AcquireSettingsValue(configuration, TRUE);
 
             if (!State.Renderer.State->Actions.InitializeDirectX(State.Window->HWND, fullscreen)) { return FALSE; }
         }

@@ -22,14 +22,15 @@ SOFTWARE.
 
 #pragma once
 
-#include "LoggerState.hxx"
-#include "ModuleState.hxx"
+#include "Logger.hxx"
+#include "Module.hxx"
 #include "RendererModule.Export.hxx"
 #include "VisualModule.Export.hxx"
-#include "WindowState.hxx"
+#include "Window.hxx"
 
 #define INVALID_APP_STATE_MODULE_INDEX 0
-#define MIN_APP_STATE_VALID_MODULE_INDEX 1
+#define MENU_APP_STATE_MODULE_INDEX 1
+#define GAME_APP_STATE_MODULE_INDEX 2
 
 #define MAX_APP_STATE_FILE_NAME_LENGTH 256
 #define MAX_APP_STATE_WINDOW_TITLE_LENGTH 64
@@ -44,7 +45,7 @@ typedef VOID(*UNKNOWN0X1170)(AppStateContainer*); // TODO
 typedef struct AppStateContainer
 {
     S32 InitModule;
-    LPSTR ModuleName;
+    LPCSTR ModuleName;
     HMODULE ModuleHandle;
     CHAR Ini[MAX_APP_STATE_FILE_NAME_LENGTH];
     CHAR Title[MAX_APP_STATE_WINDOW_TITLE_LENGTH];

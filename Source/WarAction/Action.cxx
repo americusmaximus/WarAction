@@ -102,7 +102,7 @@ BOOL ContainsWindowStateHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR handler)
 }
 
 // 0x004022d0
-VOID CLASSCALL ReleaseWindowStateHandler(ACTIONHANDLERPTR self)
+VOID CLASSCALL ReleaseActionHandler(ACTIONHANDLERPTR self)
 {
     if (State.Actions.Active == self) { State.Actions.Active = self->Next; }
 
@@ -151,7 +151,7 @@ VOID ReleaseActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERLAMBDA action)
             if (self == NULL) { return; }
         }
 
-        ReleaseWindowStateHandler(self);
+        ReleaseActionHandler(self);
 
         free(self);
     }
