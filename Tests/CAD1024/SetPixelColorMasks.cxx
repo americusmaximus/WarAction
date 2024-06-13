@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "SetPixelColorMasks.hxx"
 
-VOID InitializePixelMasks(LPRENDERERMODULESTATECONTAINER state)
+VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state)
 {
     state->ActualColorMask = 0;
     state->ActualRedMask = 0;
@@ -51,7 +51,7 @@ VOID InitializePixelMasks(LPRENDERERMODULESTATECONTAINER state)
     state->Unk30 = 0;
 }
 
-BOOL Check(LPRENDERERMODULESTATECONTAINER state, LPCOLORMASKRESULT result)
+BOOL Check(RENDERERMODULESTATECONTAINERPTR state, LPCOLORMASKRESULT result)
 {
     BOOL value = TRUE;
 
@@ -82,7 +82,7 @@ BOOL Check(LPRENDERERMODULESTATECONTAINER state, LPCOLORMASKRESULT result)
     return value;
 }
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, U32 r, U32 g, U32 b, LPCOLORMASKRESULT result)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, U32 r, U32 g, U32 b, LPCOLORMASKRESULT result)
 {
     InitializePixelMasks(state);
 
@@ -93,7 +93,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, U
 
 #define EXECUTE(A, S, E, R, G, B, RRR) { E->Action = A; Execute(S, E, R, G, B, RRR); if (!E->Result) { return; } }
 
-VOID SetPixelColorMasks(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID SetPixelColorMasks(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     InitializePixelMasks(state);

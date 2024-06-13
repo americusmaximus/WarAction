@@ -26,7 +26,7 @@ SOFTWARE.
 
 #define DEFAULT_VOLUME (-1)
 
-#define MAX_SOUND_TRACK_COUNT 99
+#define MAX_AUDIO_TRACK_COUNT 99
 
 #define DEFAULT_TRACK_INDEX (-1)
 
@@ -53,7 +53,7 @@ struct StateContainer
 
         INT Max; // 0x6ad52044
 
-        SoundTrack Tracks[MAX_SOUND_TRACK_COUNT]; // 0x6ad52320
+        SoundTrack Tracks[MAX_AUDIO_TRACK_COUNT]; // 0x6ad52320
     } Tracks;
 
     CRITICAL_SECTION Mutex; // 0x6ad59500

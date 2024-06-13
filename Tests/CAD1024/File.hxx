@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#define VISUAL_MODULE_INIT_NAME     "VModule_Init"
-#define VISUAL_MODULE_PLAY_NAME     "VModule_Play"
-#define VISUAL_MODULE_DONE_NAME     "VModule_Done"
-#define VISUAL_MODULE_HANDLE_NAME   "VModule_Handle"
+#include <Native.Basic.hxx>
+
+HANDLE OpenFile(LPCSTR name);
+BOOL ReadFile(HANDLE file, LPVOID content, CONST DWORD size);

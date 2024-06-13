@@ -52,7 +52,7 @@ static VOID ReleasePixels(PIXEL* pixels)
     if (pixels != NULL) { free(pixels); }
 }
 
-static BOOL IsInsideArea(PIXEL* pixels, S32 width, S32 height, S32 stride, U32 count, LPRECTANGLE rects, PIXEL pixel)
+static BOOL IsInsideArea(PIXEL* pixels, S32 width, S32 height, S32 stride, U32 count, RECTANGLEPTR rects, PIXEL pixel)
 {
     U32 match = 0;
 
@@ -98,7 +98,7 @@ static BOOL IsInsideArea(PIXEL* pixels, S32 width, S32 height, S32 stride, U32 c
     return match == sum && !mismatch;
 }
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, S32 result, S32 count, LPRECTANGLE rects)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, S32 result, S32 count, RECTANGLEPTR rects)
 {
     Initialize(state);
 
@@ -136,7 +136,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
 #define EXECUTE(A, S, E, SX, SY, W, H, DX, DY, STR, R, RC, RECT) { E->Action = A; Execute(S, E, SX, SY, W, H, DX, DY, STR, R, RC, RECT); if (!E->Result) { return; } }
 
-VOID ReadMainSurfaceSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID ReadMainSurfaceSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     Initialize(state);

@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceColorOutline(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);
+VOID DrawMainSurfaceColorOutline(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

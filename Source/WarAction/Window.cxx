@@ -28,18 +28,18 @@ SOFTWARE.
 
 #include <..\Text\Resources.hxx>
 
-#define WINDOW_CLASS_STYLE_NONE 0
+#define WINDOW_CLASS_STYLE_NONE                 0
 
-#define MAX_WINDOW_STATE_SETTING_VALUE_LENGTH 256
+#define MAX_WINDOW_STATE_SETTING_VALUE_LENGTH   256
 
 // ORIGINAL: VITYACLASS
-#define DEFAULT_WINDOW_STATE_CLASS_NAME "WarAction"
+#define DEFAULT_WINDOW_STATE_CLASS_NAME         "WarAction"
 
 // ORIGINAL: Just a simple VITYA window :-)
-#define DEFAULT_WINDOW_STATE_TITLE_NAME "War Action"
+#define DEFAULT_WINDOW_STATE_TITLE_NAME         "War Action"
 
-#define DEFAULT_WINDOW_STATE_WIDTH 200
-#define DEFAULT_WINDOW_STATE_HEIGHT 200
+#define DEFAULT_WINDOW_STATE_WIDTH              200
+#define DEFAULT_WINDOW_STATE_HEIGHT             200
 
 // 0x00410388
 WINDOWSTATECONTAINER WindowState;
@@ -219,14 +219,14 @@ BOOL ReleaseWindowStateAction(VOID)
 
         SetCursor(NULL);
 
-        *result = 1;
+        *result = TRUE;
     }
 
     return FALSE;
 }
 
  // 0x004018f0
- VOID ActivateWindowStateContainer()
+ VOID ActivateWindowState()
  {
      ActivateWindowStateContainer(&WindowState, ActivateWindowStateAction,
          InitializeWindowStateAction, NULL, ReleaseWindowStateAction, (ACTIONHANDLERLAMBDA)MessageWindowStateAction);

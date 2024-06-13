@@ -25,7 +25,7 @@ SOFTWARE.
 #include "FilePath.hxx"
 #include "Initialize.hxx"
 
-static VOID Init(LPRENDERERMODULESTATECONTAINER state)
+static VOID Init(RENDERERMODULESTATECONTAINERPTR state)
 {
     Initialize(state);
 
@@ -38,7 +38,7 @@ static VOID Init(LPRENDERERMODULESTATECONTAINER state)
     }
 }
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y, S32 width, S32 height)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height)
 {
     Init(state);
 
@@ -51,7 +51,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
 #define EXECUTE(A, S, E, X, Y, OX, OY) { E->Action = A; Execute(S, E, X, Y, OX, OY); if (!E->Result) { return; } }
 
-VOID MaskStencilSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID MaskStencilSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

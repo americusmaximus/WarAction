@@ -47,10 +47,10 @@ typedef struct ActionHandler
         }                                                                                           \
     }
 
-VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR* destination, U32 priority, ACTIONHANDLERLAMBDA action);
+VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action);
 
-VOID InitializeActionHandler(U32 priority, ACTIONHANDLERLAMBDA action);
-VOID InitializeWindowActionHandler(U32 priority, WINDOWACTIONHANDLERLAMBDA action);
+VOID InitializeActionHandler(CONST U32 priority, ACTIONHANDLERLAMBDA action);
+VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action);
 
 VOID ReleaseActionHandler(ACTIONHANDLERLAMBDA action);
 VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA action);

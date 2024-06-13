@@ -25,18 +25,14 @@ SOFTWARE.
 
 static PIXEL Convert(PIXEL pixel, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm)
 {
-#if ACTIVATE_COMPLETE_RGBA_MODE
-    // TODO
-#else
     CONST PIXEL r = (((pixel & 0xF800) <<  0) >> (ro & 0x1f)) & rm;
     CONST PIXEL g = (((pixel & 0x07E0) <<  5) >> (go & 0x1f)) & gm;
     CONST PIXEL b = (((pixel & 0x001F) << 11) >> (bo & 0x1f)) & bm;
 
     return (PIXEL)(r | g | b);
-#endif
 }
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm)
 {
     CONST U32 count = 1 << (sizeof(PIXEL) << 3);
 
@@ -57,7 +53,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, U
 
 #define EXECUTE(A, S, E, RO, GO, BO, RM, GM, BM) { E->Action = A; Execute(S, E, RO, GO, BO, RM, GM, BM); if (!E->Result) { return; } }
 
-VOID ConvertColors(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID ConvertColors(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     InitializePixelMasks(state);

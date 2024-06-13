@@ -102,3 +102,4 @@ typedef struct u32x4 { u32 X, Y, Z, W; } U32X4, * LPU32X4;
 #define F32_MAX (3.4028234664e+38f)
 
 #define EXTERN extern
+#define INLINE inline

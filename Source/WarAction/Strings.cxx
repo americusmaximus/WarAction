@@ -25,7 +25,7 @@ SOFTWARE.
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DEFAULT_BUFFER_LENGTH 64
+#define DEFAULT_STRING_BUFFER_LENGTH 64
 
 // 0x004010e0
 STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value)
@@ -40,7 +40,7 @@ STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR 
 // 0x00401000
 VOID AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...)
 {
-    CHAR buffer[DEFAULT_BUFFER_LENGTH];
+    CHAR buffer[DEFAULT_STRING_BUFFER_LENGTH];
 
     va_list args;
     va_start(args, format);

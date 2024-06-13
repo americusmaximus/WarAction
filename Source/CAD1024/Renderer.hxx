@@ -22,25 +22,27 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
+#include <BinAsset.hxx>
 #include <Graphics.Basic.hxx>
 #include <Native.Basic.hxx>
 
-#define MAX_RENDERER_WIDTH GRAPHICS_RESOLUTION_1024
+#define MAX_RENDERER_WIDTH  GRAPHICS_RESOLUTION_1024
 #define MAX_RENDERER_HEIGHT GRAPHICS_RESOLUTION_768
 
-typedef enum RendererOutlineSkipOptions
+typedef enum OutlineSkipOptions
 {
-    RENDERER_OUTLINE_OPTIONS_SKIP_NONE           = 0,
-    RENDERER_OUTLINE_OPTIONS_SKIP_TOP            = 1,
-    RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM         = 2,
-    RENDERER_OUTLINE_OPTIONS_SKIP_LEFT           = 4,
-    RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT          = 8,
-    RENDERER_OUTLINE_OPTIONS_SKIP_FORCE_DWORD    = 0x7fffffff
-} RENDEREROUTLINESKIPOPTIONS, *LPRENDEREROUTLINESKIPOPTIONS;
+    OUTLINESKIPOPTIONS_NONE         = 0,
+    OUTLINESKIPOPTIONS_TOP          = 1,
+    OUTLINESKIPOPTIONS_BOTTOM       = 2,
+    OUTLINESKIPOPTIONS_LEFT         = 4,
+    OUTLINESKIPOPTIONS_RIGHT        = 8,
+    OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7fffffff
+} OUTLINESKIPOPTIONS;
 
 typedef struct RendererStateContainer
 {
+    BOOL IsTrueColor;
+
     struct
     {
         PIXEL Main[MAX_RENDERER_WIDTH * (MAX_RENDERER_HEIGHT + 1)];     // 0x1001d588
@@ -50,39 +52,37 @@ typedef struct RendererStateContainer
 
     struct
     {
-        RENDEREROUTLINESKIPOPTIONS Options; // 0x1001d55c
-        S32 HorizontalDirection; // 0x1001d560
-        S32 Stride; // 0x1001d564
-        S32 VerticalDirection; // 0x1001d568
-        S32 Height; // 0x1001d56c
-        S32 Width; // 0x1001d570
+        OUTLINESKIPOPTIONS Options; // 0x1001d55c
+        S32 HorizontalDirection;    // 0x1001d560
+        S32 Stride;                 // 0x1001d564
+        S32 VerticalDirection;      // 0x1001d568
+        S32 Height;                 // 0x1001d56c
+        S32 Width;                  // 0x1001d570
     } Outline;
 
     struct
     {
-        S32 MinOffset; // 0x1001005c
-        S32 MaxOffset; // 0x10010060
-        S32 Width; // 0x10010064
-
-        LPVOID DrawCall; // 0x1001006c
+        PIXEL*  MinX;   // 0x1001005c
+        PIXEL*  MaxX;   // 0x10010060
+        U32     Width;  // 0x10010064
 
         struct
         {
-            S16 X; // 0x10010070
-            S16 Y; // 0x10010072
-            S16 Width; // 0x10010074
+            S16 X;      // 0x10010070
+            S16 Y;      // 0x10010072
+            S16 Width;  // 0x10010074
             S16 Height; // 0x10010076
         } Window;
 
-        S32 X; // 0x1001007c
-        S32 Unknown; // 0x10010080 // TODO
-        U32 ColorMask; // 0x10010084
-        U32 AdjustedColorMask; // 0x10010088
+        PIXEL*  X;                  // 0x1001007c
+        S32     Unknown;            // 0x10010080 // TODO
+        U32     ColorMask;          // 0x10010084
+        U32     AdjustedColorMask;  // 0x10010088
 
-        S32 Height; // 0x1001009a
-        S32 Y; // 0x1001009e
+        S32     Height;     // 0x1001009a
+        S32     Overage;    // 0x1001009e
     } Sprite;
-} RENDERERSTATECONTAINER, * LPRENDERERSTATECONTAINER;
+} RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
 EXTERN RENDERERSTATECONTAINER RendererState;
 
@@ -97,13 +97,13 @@ VOID ConvertColors(PIXEL* input, PIXEL* output, S32 count);
 VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count); // TODO: Better name.
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
-VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel); // TODO
+VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceCursor(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 width, PIXEL pixel);
+VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangleOverlay(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
-VOID DrawMainSurfaceSprite(S32 x, S32 y, SPRITEPTR sprite); // TODO
-VOID DrawMainSurfaceText(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
+VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
+VOID DrawMainSurfaceText(S32 x, S32 y, PIXEL* palette, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
 VOID FUN_100017e0(S32 x, S32 y, PIXEL pixel); // TODO

@@ -31,7 +31,7 @@ SOFTWARE.
 VOID InitializeState(VOID)
 {
     ActivateSoundStateContainer();
-    ActivateWindowStateContainer();
+    ActivateWindowState();
 }
 
 // 0x00402440

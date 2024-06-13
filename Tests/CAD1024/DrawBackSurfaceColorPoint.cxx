@@ -25,7 +25,7 @@ SOFTWARE.
 #include "FilePath.hxx"
 #include "Initialize.hxx"
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y, S32 result, S32 rx, S32 ry)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 result, S32 rx, S32 ry)
 {
     Initialize(state);
 
@@ -49,7 +49,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
 #define EXECUTE(A, S, E, X, Y, R, RX, RY) { E->Action = A; Execute(S, E, X, Y, R, RX, RY); if (!E->Result) { return; } }
 
-VOID DrawBackSurfaceColorPoint(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID DrawBackSurfaceColorPoint(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

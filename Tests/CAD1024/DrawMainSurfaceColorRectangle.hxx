@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceColorRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);
+VOID DrawMainSurfaceColorRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

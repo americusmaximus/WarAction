@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID WriteSurfaceSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);
+VOID WriteSurfaceSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

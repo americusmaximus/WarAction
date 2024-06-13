@@ -24,7 +24,7 @@ SOFTWARE.
 #include "State.hxx"
 
 // 0x00402270
-VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR * destination, U32 priority, ACTIONHANDLERLAMBDA action)
+VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR * destination, CONST U32 priority, ACTIONHANDLERLAMBDA action)
 {
     self->Action = action;
     self->Priority = priority;
@@ -66,7 +66,7 @@ VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR *
 }
 
 // 0x00402770
-VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, U32 priority, ACTIONHANDLERLAMBDA action)
+VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action)
 {
     if (action != NULL)
     {
@@ -77,13 +77,13 @@ VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, U32 priority, ACTION
 }
 
 // 0x004027d0
-VOID InitializeActionHandler(U32 priority, ACTIONHANDLERLAMBDA action)
+VOID InitializeActionHandler(CONST U32 priority, ACTIONHANDLERLAMBDA action)
 {
     InitializeActionHandler(&State.Actions.Action, priority, action);
 }
 
 // 0x00402770
-VOID InitializeWindowActionHandler(U32 priority, WINDOWACTIONHANDLERLAMBDA action)
+VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action)
 {
     InitializeActionHandler(&State.Actions.Message, priority, (ACTIONHANDLERLAMBDA)action);
 }

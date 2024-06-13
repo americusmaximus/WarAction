@@ -22,13 +22,14 @@ SOFTWARE.
 
 #pragma once
 
-#define MAX_GAME_STATE_NETWORK_NAME_LENGTH 96
+#define MAX_GAME_STATE_PLAYER_COUNT 12
+#define MAX_GAME_STATE_PLAYER_NAME_LENGTH 32 /* TODO */
 #define MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH 256
 
 typedef enum GameCommand
 {
     GAMECOMMAND_NONE            = 0,
-    GAMECOMMAND_UNKNOWN_1       = 1,
+    GAMECOMMAND_VICTORY         = 1,
     GAMECOMMAND_UNKNOWN_2       = 2,
     GAMECOMMAND_UNKNOWN_3       = 3,
     GAMECOMMAND_LOAD_GAME       = 4,
@@ -40,30 +41,50 @@ typedef enum GameCommand
 typedef enum GameDifficulty
 {
     GAMEDIFFICULTY_NONE         = 0,
-    GAMEDIFFICULTY_EASY         = 1, // TODO
-    GAMEDIFFICULTY_MEDIUM       = 2, // TODO
-    GAMEDIFFICULTY_HARD         = 3, // TODO
-    GAMEDIFFICULTY_FORCE_DWORD = 0x7fffffff
+    GAMEDIFFICULTY_EASY         = 1,
+    GAMEDIFFICULTY_MEDIUM       = 2,
+    GAMEDIFFICULTY_HARD         = 3,
+    GAMEDIFFICULTY_FORCE_DWORD  = 0x7fffffff
 } GAMEDIFFICULTY;
+
+typedef struct GamePlayerStateContainer
+{
+    CHAR    Name[MAX_GAME_STATE_PLAYER_NAME_LENGTH];
+    U32     Unk01; // TODO
+    U32     Unk02; // TODO
+    U32     Unk03; // TODO
+    U32     Unk04; // TODO
+    U32     Unk05; // TODO
+    U32     Unk06; // TODO
+    U32     Unk07; // TODO
+    U32     Unk08; // TODO
+    U32     Unk09; // TODO
+    U32     Unk10; // TODO
+    U32     Unk11; // TODO
+    U32     Unk12; // TODO
+    U32     Unk13; // TODO
+    U32     Unk14; // TODO
+    U32     Unk15; // TODO
+    U32     Unk16; // TODO
+} GAMEPLAYERSTATECONTAINER, * GAMEPLAYERSTATECONTAINERPTR;
 
 typedef struct GameStateContainer
 {
-    BOOL IsNetwork;
-    GAMEDIFFICULTY Difficulty;
-    S32 Unknown0x0c; // TODO
-    S32 Unknown0x10; // TODO
-    S32 Unknown0x14; // TODO
-    S32 Unknown0x18; // TODO
-    S32 Unknown0x1c; // TODO
-    S32 Unknown0x20; // TODO
-    U32 TurnDelay;
-    S32 Unknown0x28; // TODO
-    DWORD Ticks;
-    GAMECOMMAND Command;
-    S32 NextMap;
-    S32 NextMission;
-    CHAR Network[MAX_GAME_STATE_NETWORK_NAME_LENGTH]; // TODO ???
-    CHAR Values[11][96]; // TODO
-    S32 Unknown15; // TODO
-    CHAR SaveFile[MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH];
+    BOOL                        IsNetwork;
+    GAMEDIFFICULTY              Difficulty;
+    S32                         Unknown0x0c; // TODO
+    S32                         Unknown0x10; // TODO
+    S32                         Unknown0x14; // TODO
+    S32                         Unknown0x18; // TODO
+    S32                         Unknown0x1c; // TODO
+    S32                         Unknown0x20; // TODO
+    U32                         TurnDelay;
+    S32                         Unknown0x28; // TODO
+    DWORD                       Ticks;
+    GAMECOMMAND                 Command;
+    S32                         NextMap;
+    S32                         NextMission;
+    GAMEPLAYERSTATECONTAINER    Players[MAX_GAME_STATE_PLAYER_COUNT];
+    U32                         Time;
+    CHAR                        SaveFile[MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH];
 } GAMESTATECONTAINER, * GAMESTATECONTAINERPTR;

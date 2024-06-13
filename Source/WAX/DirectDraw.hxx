@@ -28,40 +28,4 @@ SOFTWARE.
 #define DIRECTDRAW_VERSION 0x0700
 #include <ddraw.h>
 
-// Defines graphics interface to be used by the renderer:
-// DirectDraw7, is the option is enabled,
-// DirectDraw, if the option is disabled.
-// NOTE: The options is disabled by default to, as in the original game.
-#ifdef _WIN64
-#define ACTIVATE_MODERN_MODE TRUE
-#endif
-
-// Defines the graphics mode to be used by the renderer:
-// 32-bit colors, if the option is enabled,
-// 16-bit colors, if the option is enabled.
-// NOTE: The option is disabled by default, to match the original game. TODO
-#define ACTIVATE_COMPLETE_RGBA_MODE FALSE
-
-#if ACTIVATE_COMPLETE_RGBA_MODE
-#define DEFAULT_SCREEN_DEPTH_BITS           GRAPHICS_BITS_PER_PIXEL_32
-#define DEFAULT_SCREEN_DEPTH_BYTES          (DEFAULT_SCREEN_DEPTH_BITS >> 3)
-#define DEFAULT_SCREEN_DEPTH_COLOR_MASK     0xFFFFFFFF
-
-#define BLACK_PIXEL         0x00000000
-#define MAGENTA_PIXEL       0xFFFF00FF
-#define WHITE_PIXEL         0xFFFFFFFF
-
-typedef U32 PIXEL;
-typedef U64 DOUBLEPIXEL;
-#else
-#define DEFAULT_SCREEN_DEPTH_BITS           GRAPHICS_BITS_PER_PIXEL_16
-#define DEFAULT_SCREEN_DEPTH_BYTES          (DEFAULT_SCREEN_DEPTH_BITS >> 3)
-#define DEFAULT_SCREEN_DEPTH_COLOR_MASK     0x0000FFFF
-
-#define BLACK_PIXEL         0x0000
-#define MAGENTA_PIXEL       0xF81F
-#define WHITE_PIXEL         0xFFFF
-
-typedef U16 PIXEL;
-typedef U32 DOUBLEPIXEL;
-#endif
+#define DIRECTDRAWRELEASE(x) if (x != NULL) { x->Release(); x = NULL; }

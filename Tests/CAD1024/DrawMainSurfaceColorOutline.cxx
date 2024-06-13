@@ -21,11 +21,11 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
+#include "DrawMainSurfaceColorOutline.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
-#include "DrawMainSurfaceColorOutline.hxx"
 
-static BOOL IsInsideArea(PIXEL* pixels, U32 count, LPRECTANGLE rects, PIXEL pixel)
+static BOOL IsInsideArea(PIXEL* pixels, U32 count, RECTANGLEPTR rects, PIXEL pixel)
 {
     U32 match = 0;
 
@@ -71,7 +71,7 @@ static BOOL IsInsideArea(PIXEL* pixels, U32 count, LPRECTANGLE rects, PIXEL pixe
     return match == sum && !mismatch;
 }
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y, S32 width, S32 height, S32 result, U32 count, LPRECTANGLE rects)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 result, U32 count, RECTANGLEPTR rects)
 {
     Initialize(state);
 
@@ -95,7 +95,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
 #define EXECUTE(A, S, E, X, Y, W, H, R, RC, RCT) { E->Action = A; Execute(S, E, X, Y, W, H, R, RC, RCT); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceColorOutline(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID DrawMainSurfaceColorOutline(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

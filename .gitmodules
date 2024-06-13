@@ -6,4 +6,7 @@
 	url = https://github.com/americusmaximus/vorbis
 [submodule "SDK/zlib"]
 	path = SDK/zlib
-	url = https://github.com/americusmaximus/zlib.git
+	url = https://github.com/americusmaximus/zlib
+[submodule "SDK/Yoink"]
+	path = SDK/Yoink
+	url = https://github.com/americusmaximus/Yoink

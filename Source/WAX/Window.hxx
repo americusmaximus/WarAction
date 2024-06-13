@@ -29,16 +29,16 @@ SOFTWARE.
 
 typedef struct WindowStateContainer
 {
-    HINSTANCE Instance;
-    LPCSTR Args;
-    HWND HWND;
-    WNDCLASSA Class;
-    CHAR Title[MAX_WINDOW_STATE_TITLE_LENGTH];
-    DWORD Style;
-    S32 X;
-    S32 Y;
-    S32 Width;
-    S32 Height;
-    HMENU Menu;
-    BOOL IsActive;
+    HINSTANCE   Instance;
+    LPCSTR      Args;
+    HWND        HWND;
+    WNDCLASSA   Class;
+    CHAR        Title[MAX_WINDOW_STATE_TITLE_LENGTH];
+    DWORD       Style;
+    S32         X;
+    S32         Y;
+    S32         Width;
+    S32         Height;
+    HMENU       Menu;
+    BOOL        IsActive;
 } WINDOWSTATECONTAINER, * WINDOWSTATECONTAINERPTR;

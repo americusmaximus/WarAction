@@ -23,6 +23,7 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
+#include "Native.Basic.hxx"
 
 #include <mmsystem.h>
 

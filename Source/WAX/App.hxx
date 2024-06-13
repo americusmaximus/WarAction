@@ -28,15 +28,17 @@ SOFTWARE.
 #include "VisualModule.Export.hxx"
 #include "Window.hxx"
 
-#define INVALID_APP_STATE_MODULE_INDEX 0
-#define MENU_APP_STATE_MODULE_INDEX 1
-#define GAME_APP_STATE_MODULE_INDEX 2
+/* TODO better Names */
+#define UNKNOWN_APP_STATE_MODULE_INDEX      (-1)
+#define INVALID_APP_STATE_MODULE_INDEX      0
+#define MENU_APP_STATE_MODULE_INDEX         1
+#define GAME_APP_STATE_MODULE_INDEX         2
 
-#define MAX_APP_STATE_FILE_NAME_LENGTH 256
-#define MAX_APP_STATE_WINDOW_TITLE_LENGTH 64
+#define MAX_APP_STATE_FILE_NAME_LENGTH      256
+#define MAX_APP_STATE_WINDOW_TITLE_LENGTH   64
 
-#define MAX_APP_STATE_MODULE_COUNT 16
-#define MAX_APP_STATE_MODULE_NAME_LENGTH 256
+#define MAX_APP_STATE_MODULE_COUNT          16
+#define MAX_APP_STATE_MODULE_NAME_LENGTH    256
 
 struct AppStateContainer;
 
@@ -44,24 +46,24 @@ typedef VOID(*UNKNOWN0X1170)(AppStateContainer*); // TODO
 
 typedef struct AppStateContainer
 {
-    S32 InitModule;
-    LPCSTR ModuleName;
-    HMODULE ModuleHandle;
-    CHAR Ini[MAX_APP_STATE_FILE_NAME_LENGTH];
-    CHAR Title[MAX_APP_STATE_WINDOW_TITLE_LENGTH];
-    CHAR Modules[MAX_APP_STATE_MODULE_COUNT][MAX_APP_STATE_MODULE_NAME_LENGTH];
-    WINDOWSTATECONTAINERPTR Window;
-    MODULESTATECONTAINERPTR Module;
-    S32 Unknown0x1154; // TODO
-    LOGGERSTATECONTAINERPTR Logger;
-    S32 ActiveModule;
+    S32                                 InitModule;
+    LPCSTR                              ModuleName;
+    HMODULE                             ModuleHandle;
+    CHAR                                Ini[MAX_APP_STATE_FILE_NAME_LENGTH];
+    CHAR                                Title[MAX_APP_STATE_WINDOW_TITLE_LENGTH];
+    CHAR                                Modules[MAX_APP_STATE_MODULE_COUNT][MAX_APP_STATE_MODULE_NAME_LENGTH];
+    WINDOWSTATECONTAINERPTR             Window;
+    MODULESTATECONTAINERPTR             Module;
+    S32                                 Unknown0x1154; // TODO
+    LOGGERSTATECONTAINERPTR             Logger;
+    S32                                 ActiveModule;
     struct
     {
-        VISUALMODULEINITACTIONLAMBDA Initialize;
+        VISUALMODULEINITACTIONLAMBDA    Initialize;
         VISUALMODULEEXECUTEACTIONLAMBDA Execute;
-        VISUALMODULEDONEACTIONLAMBDA Done;
-        VISUALMODULEHANDLEACTIONLAMBDA Handle;
+        VISUALMODULEDONEACTIONLAMBDA    Done;
+        VISUALMODULEHANDLEACTIONLAMBDA  Handle;
     } Actions;
-    UNKNOWN0X1170 Unknown0x1170; // TODO
-    ACQUIRERENDERERSETTINGSVALUELAMBDA AcquireRendererSettingsValue;
+    UNKNOWN0X1170                       Unknown0x1170; // TODO
+    ACQUIRERENDERERSETTINGSVALUELAMBDA  AcquireRendererSettingsValue;
 } APPSTATECONTAINER, * APPSTATECONTAINERPTR;

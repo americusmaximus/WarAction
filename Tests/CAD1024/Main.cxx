@@ -29,6 +29,7 @@ SOFTWARE.
 #include "DrawMainSurfaceColorOutline.hxx"
 #include "DrawMainSurfaceColorRectangle.hxx"
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
+#include "DrawMainSurfaceSprite.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
 #include "DrawStencilSurfaceWindowRectangle.hxx"
 #include "MaskStencilSurfaceRectangle.hxx"
@@ -47,7 +48,7 @@ SOFTWARE.
         A(S, E); if (E->Result) { printf(#A "... [OK]\r\n");} else { printf(#A "... [ERROR] @ %s\r\n", E->Action); }    \
     }
     
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     ACTION(ConvertColors, state, event);
     ACTION(ConvertColorsExtra, state, event);
@@ -56,6 +57,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
     ACTION(DrawMainSurfaceColorOutline, state, event);
     ACTION(DrawMainSurfaceColorRectangle, state, event);
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
+    ACTION(DrawMainSurfaceSprite, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
     ACTION(DrawStencilSurfaceWindowRectangle, state, event);
     ACTION(MaskStencilSurfaceRectangle, state, event);
@@ -91,7 +93,7 @@ S32 main(S32 argc, CHAR** argv)
 
     if (modules == NULL) { return EXIT_FAILURE; }
 
-    LPRENDERERMODULESTATECONTAINER* states = (LPRENDERERMODULESTATECONTAINER*)malloc(argc * sizeof(LPRENDERERMODULESTATECONTAINER*));
+    RENDERERMODULESTATECONTAINERPTR* states = (RENDERERMODULESTATECONTAINERPTR*)malloc(argc * sizeof(RENDERERMODULESTATECONTAINERPTR*));
 
     if (states == NULL) { return EXIT_FAILURE; }
 
@@ -108,7 +110,7 @@ S32 main(S32 argc, CHAR** argv)
 
         if (module == NULL) { printf("[ERROR]\r\n"); FreeLibrary(module); continue; }
 
-        LPRENDERERMODULESTATECONTAINER state = lambda();
+        RENDERERMODULESTATECONTAINERPTR state = lambda();
 
         {
             names[count] = argv[x];

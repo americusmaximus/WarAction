@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceVerticalColorLine(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event);
+VOID DrawMainSurfaceVerticalColorLine(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

@@ -25,14 +25,14 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "WriteMainSurfaceRendererSurfaceRectangle.hxx"
 
-static VOID Init(LPRENDERERMODULESTATECONTAINER state)
+static VOID Init(RENDERERMODULESTATECONTAINERPTR state)
 {
     Initialize(state);
 
     if (state->Surface.Renderer != NULL) { ZeroMemory(state->Surface.Renderer, MAX_RENDERER_HEIGHT * state->Pitch * sizeof(PIXEL)); }
 }
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S32 x, S32 y, S32 width, S32 height, S32 count, LPRECTANGLE rect)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 count, RECTANGLEPTR rect)
 {
     //SavePixels(MakeFileName("WriteMainSurfaceRendererSurfaceRectangle", "bmp", event->Action), state->Surface.Renderer, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT, state->Pitch / sizeof(PIXEL));
 
@@ -41,7 +41,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event, S
 
 #define EXECUTE(A, S, E, X, Y, W, H, RC, RCT) { E->Action = A; Execute(S, E, X, Y, W, H, RC, RCT); if (!E->Result) { return; } }
 
-VOID WriteMainSurfaceRendererSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID WriteMainSurfaceRendererSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     HWND hwnd = InitializeWindow();

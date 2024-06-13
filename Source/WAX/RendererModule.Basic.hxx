@@ -22,18 +22,18 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
+#include "BinAsset.hxx"
 #include "DirectDraw.hxx"
 #include "Renderer.Basic.hxx"
 
 typedef struct RendererModuleDirectXState
 {
 #ifdef ACTIVATE_MODERN_MODE
-        LPDIRECTDRAW7 Instance;
-        LPDIRECTDRAWSURFACE7 Surface;
+        LPDIRECTDRAW7           Instance;
+        LPDIRECTDRAWSURFACE7    Surface;
 #else
-        LPDIRECTDRAW Instance;
-        LPDIRECTDRAWSURFACE Surface;
+        LPDIRECTDRAW            Instance;
+        LPDIRECTDRAWSURFACE     Surface;
 #endif
 } RENDERERMODULEDIRECTXSTATE, * LPRENDERERMODULEDIRECTXSTATE;
 
@@ -65,8 +65,8 @@ typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
 typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
-typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, LPVOID param_3, LPVOID param_4); // TODO
-typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, SPRITEPTR sprite); // TODO
+typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, PIXEL* pixels, IMAGESPRITEPTR sprite);
+typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, IMAGESPRITEPTR sprite);
 typedef VOID(*FUN_1000618DACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10004DB0ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_10006EF8ACTION)(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
@@ -102,7 +102,7 @@ typedef struct RendererStateActions
     INITIALIZEACTION                                Initialize; // CADraw_Reset
     INITIALIZEDIRECTXACTION                         InitializeDirectX;
     RESTOREDISPLAYMODEACTION                        RestoreDisplayMode;
-    INITIALIZEWINDOWACTION                          InitializeWindow; // CADraw_Set640x480
+    INITIALIZEWINDOWACTION                          InitializeWindow; // CADraw_Set
     SETPIXELCOLORMASKSACTION                        SetPixelColorMasks;
     RELEASERENDERERSURFACEACTION                    ReleaseRendererSurface;
     LOCKRENDERERSURFACEACTION                       LockRendererSurface;
@@ -144,7 +144,7 @@ typedef struct RendererStateActions
     DRAWMAINSURFACECOLORBOXACTION                   DrawMainSurfaceColorBox;
     DRAWMAINSURFACEHORIZONTALCOLORLINEACTION        DrawMainSurfaceHorizontalColorLine;
     DRAWMAINSURFACEVERTICALCOLORLINEACTION          DrawMainSurfaceVerticalColorLine;
-    DRAWMAINSURFACECOLORRECTANGLEOVERLAYACTION      DrawMainSurfaceRectangleColorOverlay;
+    DRAWMAINSURFACECOLORRECTANGLEOVERLAYACTION      DrawMainSurfaceColorRectangleOverlay;
     DRAWMAINSURFACECOLOROUTLINEACTION               DrawMainSurfaceColorOutline;
     FUN_10002020ACTION FUN_10002020; // TODO
     READRENDERERSURFACERECTANGLEACTION              FUN_10002b90;
@@ -171,57 +171,57 @@ typedef struct Rectangle
 
 typedef struct RendererModuleSurface // TODO Refactor the struct out.
 {
-    S32 Offset; // Offset within the surface data. Originally in bytes, presently in pixels.
-    S32 Y; // The surface offset along the "Y" axis in pixels.
+    S32     Offset; // Offset within the surface data. Originally in bytes, presently in pixels.
+    S32     Y; // The surface offset along the "Y" axis in pixels.
 
-    S32 Width;
-    S32 Height;
+    S32     Width;
+    S32     Height;
 
-    S32 Stride;
+    S32     Stride;
 
-    PIXEL* Main; // Holds the final frame image, excluding UI.
-    PIXEL* Back; // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
-    PIXEL* Stencil; // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
+    PIXEL*  Main; // Holds the final frame image, excluding UI.
+    PIXEL*  Back; // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
+    PIXEL*  Stencil; // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
 
-    PIXEL* Renderer; // The DirectDraw surface.
+    LPVOID  Renderer; // The DirectDraw surface.
 } RENDERERMODULESURFACE, * RENDERERMODULESURFACEPTR;
 
 typedef struct RendererModuleStateContainer
 {
-    RECTANGLE Window;
-    RENDERERMODULESURFACE Surface;
+    RECTANGLE                   Window;
+    RENDERERMODULESURFACE       Surface;
 
-    U16 ActualRedMask;
-    U16 InitialRedMask;
-    U16 ActualGreenMask;
-    U16 InitialGreenMask;
-    U16 ActualBlueMask;
-    U16 InitialBlueMask;
+    U16                         ActualRedMask;
+    U16                         InitialRedMask;
+    U16                         ActualGreenMask;
+    U16                         InitialGreenMask;
+    U16                         ActualBlueMask;
+    U16                         InitialBlueMask;
 
-    U16 RedOffset;
-    U16 GreenOffset;
-    U16 BlueOffset;
+    U16                         RedOffset;
+    U16                         GreenOffset;
+    U16                         BlueOffset;
 
-    U16 Unk16; // TODO
-    U16 ActualColorBits;
-    U16 Unk18; // TODO
-    U16 ActualColorMask;
-    U16 InitialColorMask;
-    U16 Unk21; // TODO
-    U16 Unk22; // TODO
-    U16 Unk23; // TODO
-    U16 Unk24; // TODO
-    U32 Unk25; // TODO
-    U32 Unk26; // TODO
-    U32 Unk27; // TODO
-    U32 Pitch;
-    U16 Unk29; // TODO
-    U16 Unk30; // TODO
+    U16                         Unk16; // TODO
+    U16                         ActualColorBits;
+    U16                         Unk18; // TODO
+    U16                         ActualColorMask;
+    U16                         InitialColorMask;
+    U16                         Unk21; // TODO
+    U16                         Unk22; // TODO
+    U16                         Unk23; // TODO
+    U16                         Unk24; // TODO
+    U32                         Unk25; // TODO
+    U32                         Unk26; // TODO
+    U32                         Unk27; // TODO
+    U32                         Pitch;
+    U16                         Unk29; // TODO
+    U16                         Unk30; // TODO
 
-    U8 Unknown000[43264]; // TODO
+    U8                          Unknown000[43264]; // TODO
 
-    HWND HWND;
-    BOOL IsFullScreen;
-    RENDERERMODULEDIRECTXSTATE DirectX;
-    RENDERERMODULESTATEACTIONS Actions;
+    HWND                        HWND;
+    BOOL                        IsFullScreen;
+    RENDERERMODULEDIRECTXSTATE  DirectX;
+    RENDERERMODULESTATEACTIONS  Actions;
 } RENDERERMODULESTATECONTAINER, * RENDERERMODULESTATECONTAINERPTR;

@@ -18,11 +18,29 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Base.hxx" />
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Bink.h" />
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Module.hxx" />
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Rad.h" />
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Resource.hxx" />
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\State.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\SDK\Yoink\Source\1.0.Q\Module.cxx" />
+    <ClCompile Include="..\..\SDK\Yoink\Source\1.0.Q\State.cxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SDK\Yoink\Source\1.0.Q\Module.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\SDK\Yoink\Source\1.0.Q\Resource.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{aaa8b810-76ed-4500-a1a5-3fca33c316ad}</ProjectGuid>
-    <RootNamespace>winmm</RootNamespace>
+    <ProjectGuid>{69f5f276-ce3a-4be7-8028-60e8e316525d}</ProjectGuid>
+    <RootNamespace>Yoink</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -30,27 +48,27 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -98,83 +116,67 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;BINK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4024;4047;4101;4229;4244;4273;4313;4477;4996;6011;6031;6066;6328;6335;6385;6386;6528;28251;</DisableSpecificWarnings>
-      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>false</ExceptionHandling>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.;..\..\SDK\vorbis\include;..\..\SDK\ogg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderOutputFile />
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <ExceptionHandling>false</ExceptionHandling>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;NOOPTIMIZATION;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;BINK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4024;4047;4101;4229;4244;4273;4313;4477;4996;6011;6031;6066;6328;6335;6385;6386;6528;28251;</DisableSpecificWarnings>
-      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>false</ExceptionHandling>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.;..\..\SDK\vorbis\include;..\..\SDK\ogg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderOutputFile />
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <ExceptionHandling>false</ExceptionHandling>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;BINK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4024;4047;4101;4229;4244;4273;4313;4477;4996;6011;6031;6066;6328;6335;6385;6386;6528;28251;</DisableSpecificWarnings>
-      <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>false</ExceptionHandling>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.;..\..\SDK\vorbis\include;..\..\SDK\ogg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderOutputFile />
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <ExceptionHandling>false</ExceptionHandling>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -183,55 +185,25 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;NOOPTIMIZATION;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;BINK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4018;4024;4047;4101;4229;4244;4273;4313;4477;4996;6011;6031;6066;6328;6335;6385;6386;6528;28251;</DisableSpecificWarnings>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <ExceptionHandling>false</ExceptionHandling>
-      <PrecompiledHeaderOutputFile />
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>.;..\..\SDK\vorbis\include;..\..\SDK\ogg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderOutputFile />
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <ExceptionHandling>false</ExceptionHandling>
       <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Audio.cxx" />
-    <ClCompile Include="Main.cxx" />
-    <ClCompile Include="Module.cxx" />
-    <ClCompile Include="State.cxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Audio.hxx" />
-    <ClInclude Include="Basic.hxx" />
-    <ClInclude Include="Module.hxx" />
-    <ClInclude Include="Resources.hxx" />
-    <ClInclude Include="State.hxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Resources.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\libvorbisfile\libvorbisfile.vcxproj">
-      <Project>{e5bed09a-18d3-478a-af93-fe02b25a0537}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Module.def" />
-    <None Include="Module.Win10.x32.def" />
-    <None Include="Module.Win10.x64.def" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

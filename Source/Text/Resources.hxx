@@ -47,9 +47,9 @@
 #define IDS_MENU_RESOURCE               70
 #define IDS_BRIEFINGS                   71
 #define IDS_SAVES                       72
-#define IDS_STRING73                    73
-#define IDS_STRING74                    74
-#define IDS_STRING75                    75
+#define IDS_PING_LAN                    73
+#define IDS_PING_TCP_IP                 74
+#define IDS_PING_MODEM                  75
 #define IDS_SINGLE_MAP_DIR              76
 #define IDS_MULTI_SPEED                 77
 #define IDS_BASE_SAVES                  78
@@ -57,7 +57,7 @@
 #define IDS_RATINGS_PATH                80
 #define IDS_MOVIES_PATH                 81
 #define IDS_STRING82                    82
-#define IDS_STRING83                    83
+#define IDS_BACK_WAVE_PATH              83
 #define IDS_STRING84                    84
 #define IDS_STRING85                    85
 #define IDS_STRING86                    86

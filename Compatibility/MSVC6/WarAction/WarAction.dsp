@@ -94,11 +94,11 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\ActionHandler.cxx
+SOURCE=..\..\..\Source\WarAction\Action.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\AppState.cxx
+SOURCE=..\..\..\Source\WarAction\App.cxx
 # End Source File
 # Begin Source File
 
@@ -110,7 +110,11 @@ SOURCE=..\..\..\Source\WarAction\Message.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\RendererState.cxx
+SOURCE=..\..\..\Source\WarAction\Module.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WarAction\Renderer.cxx
 # End Source File
 # Begin Source File
 
@@ -118,7 +122,11 @@ SOURCE=..\..\..\Source\WarAction\Settings.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\SoundState.cxx
+SOURCE=..\..\..\Source\WarAction\Sound.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WarAction\State.cxx
 # End Source File
 # Begin Source File
 
@@ -126,7 +134,7 @@ SOURCE=..\..\..\Source\WarAction\Strings.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\WindowState.cxx
+SOURCE=..\..\..\Source\WarAction\Window.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -134,11 +142,11 @@ SOURCE=..\..\..\Source\WarAction\WindowState.cxx
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\ActionHandler.hxx
+SOURCE=..\..\..\Source\WarAction\Action.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\AppState.hxx
+SOURCE=..\..\..\Source\WarAction\App.hxx
 # End Source File
 # Begin Source File
 
@@ -150,7 +158,11 @@ SOURCE=..\..\..\Source\WarAction\Message.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\RendererState.hxx
+SOURCE=..\..\..\Source\WarAction\Module.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WarAction\Renderer.hxx
 # End Source File
 # Begin Source File
 
@@ -158,7 +170,7 @@ SOURCE=..\..\..\Source\WarAction\Settings.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\SoundState.hxx
+SOURCE=..\..\..\Source\WarAction\Sound.hxx
 # End Source File
 # Begin Source File
 
@@ -174,7 +186,7 @@ SOURCE=..\..\..\Source\WarAction\WarAction.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WarAction\WindowState.hxx
+SOURCE=..\..\..\Source\WarAction\Window.hxx
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -35,7 +35,7 @@ typedef struct ModuleEvent
     LPCSTR Name;
     LPCSTR Action;
     BOOL Result;
-} MODULEEVENT, * LPMODULEEVENT;
+} MODULEEVENT, * MODULEEVENTPTR;
 
 #define MIN(a, b) (a < b ? a : b)
 #define MAX(a, b) (a > b ? a : b)

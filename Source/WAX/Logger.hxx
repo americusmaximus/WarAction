@@ -25,7 +25,7 @@ SOFTWARE.
 
 typedef struct LoggerStateContainer
 {
-    HANDLE File;
-    HWND HWND;
-    HANDLE Mutex;
+    HANDLE  File;
+    HWND    HWND;
+    HANDLE  Mutex;
 } LOGGERSTATECONTAINER, * LOGGERSTATECONTAINERPTR;

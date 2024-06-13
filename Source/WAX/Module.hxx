@@ -30,10 +30,10 @@ SOFTWARE.
 // a.k.a. XCHG
 typedef struct ModuleStateContainer
 {
-    HMODULE Handle;
-    GAMESTATECONTAINER Game; // ToGame
-    SOUNDSTATECONTAINERPTR Sound;
+    HMODULE                         Handle;
+    GAMESTATECONTAINER              Game; // ToGame
+    SOUNDSTATECONTAINERPTR          Sound;
     RENDERERMODULESTATECONTAINERPTR Renderer;
-    HMODULE Text;
-    LPDIRECTPLAY3A Network;
+    HMODULE                         Text;
+    LPDIRECTPLAY3A                  Network;
 } MODULESTATECONTAINER, * MODULESTATECONTAINERPTR;

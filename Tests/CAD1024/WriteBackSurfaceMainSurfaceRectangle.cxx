@@ -23,7 +23,7 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
 
-static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     Initialize(state);
 
@@ -51,7 +51,7 @@ static VOID Execute(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
 
 #define EXECUTE(A, S, E) { E->Action = A; Execute(S, E); if (!E->Result) { return; } }
 
-VOID WriteBackSurfaceMainSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, LPMODULEEVENT event)
+VOID WriteBackSurfaceMainSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     Initialize(state);
@@ -74,7 +74,4 @@ VOID WriteBackSurfaceMainSurfaceRectangle(LPRENDERERMODULESTATECONTAINER state, 
     {
         state->Actions.OffsetSurfaces(-131, 97);
     }
-
-    // Finalize.
-    Initialize(state);
 }

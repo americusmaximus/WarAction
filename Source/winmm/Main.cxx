@@ -61,14 +61,14 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
 
     GetModuleFileNameA(instance, State.ModuleName, MAX_MODULE_NAME_LENGTH);
 
-    ZeroMemory(&State.Tracks.Tracks, sizeof(SoundTrack) * MAX_SOUND_TRACK_COUNT);
+    ZeroMemory(&State.Tracks.Tracks, MAX_AUDIO_TRACK_COUNT * sizeof(SoundTrack));
 
     InitializeCriticalSection(&State.Mutex);
 
     InitializeAudio();
 
     {
-        CHAR* last = strrchr(State.ModuleName, '\\');
+        LPSTR last = strrchr(State.ModuleName, '\\');
 
         if (last) { *last = NULL; }
 
@@ -78,7 +78,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
     {
         UINT position = 0;
 
-        for (INT x = 0; x < MAX_SOUND_TRACK_COUNT; x++)
+        for (INT x = 0; x < MAX_AUDIO_TRACK_COUNT; x++)
         {
             snprintf(State.Tracks.Tracks[x].Name, MAX_PATH, "%s\\Track%02d.ogg", State.ModuleName, x);
 

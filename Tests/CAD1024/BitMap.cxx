@@ -78,13 +78,9 @@ BOOL SavePixels(LPCSTR name, CONST PIXEL* pixels, CONST U32 width, CONST U32 hei
         {
             CONST PIXEL pixel = pixels[y * stride + x];
 
-#if ACTIVATE_COMPLETE_RGBA_MODE
-            DebugBreak(); // TODO
-#else
             line[x].R = (((U32)(pixel >> 11) & 0x1f) * 527 + 23) >> 6;
             line[x].G = (((U32)(pixel >> 5) & 0x3f) * 259 + 33) >> 6;
             line[x].B = (((U32)(pixel >> 0) & 0x1f) * 527 + 23) >> 6;
-#endif
         }
     }
 

@@ -23,15 +23,23 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
-#include "Native.Basic.hxx"
 
-typedef struct Sprite
-{
-    S16 X;
-    S16 Y;
-    U16 W;
-    U16 H;
-    //U8 Unk04; // TODO
-    LPVOID Unk05; // TODO
-    // TODO
-} SPRITE, * SPRITEPTR;
+#ifdef _WIN64
+#define ACTIVATE_MODERN_MODE                TRUE
+#endif
+
+#define ACTIVE_TRUE_COLOR_MODE              TRUE
+
+#define DEFAULT_SCREEN_COLOR_MASK           0xFFFF
+
+#define BLACK_PIXEL                         0x0000
+#define MAGENTA_PIXEL                       0xF81F
+#define WHITE_PIXEL                         0xFFFF
+
+#define RGB565_TO_RGB888(rgb565)            \
+  ((((rgb565 & 0xF800) << 8) & 0xFF0000)    \
+   | (((rgb565 & 0x07E0) << 5) & 0x00FF00)  \
+   | (((rgb565 & 0x001F) << 3) & 0x0000FF))
+
+typedef U16 PIXEL;
+typedef U32 DOUBLEPIXEL;

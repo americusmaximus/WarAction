@@ -22,7 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#define VISUAL_MODULE_INIT_NAME     "VModule_Init"
-#define VISUAL_MODULE_PLAY_NAME     "VModule_Play"
-#define VISUAL_MODULE_DONE_NAME     "VModule_Done"
-#define VISUAL_MODULE_HANDLE_NAME   "VModule_Handle"
+#include "Module.hxx"
+
+VOID DrawMainSurfaceSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

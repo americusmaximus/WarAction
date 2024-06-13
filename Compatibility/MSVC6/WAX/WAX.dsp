@@ -91,7 +91,7 @@ LIB32=link.exe -lib
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\AppState.hxx
+SOURCE=..\..\..\Source\WAX\App.hxx
 # End Source File
 # Begin Source File
 
@@ -99,7 +99,15 @@ SOURCE=..\..\..\Source\WAX\Basic.hxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Source\WAX\BinAsset.hxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Source\WAX\DirectDraw.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Source\WAX\DirectInput.hxx
 # End Source File
 # Begin Source File
 
@@ -111,7 +119,7 @@ SOURCE=..\..\..\Source\WAX\DirectSound.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\GameState.hxx
+SOURCE=..\..\..\Source\WAX\Game.hxx
 # End Source File
 # Begin Source File
 
@@ -119,7 +127,7 @@ SOURCE=..\..\..\Source\WAX\Graphics.Basic.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\LoggerState.hxx
+SOURCE=..\..\..\Source\WAX\Logger.hxx
 # End Source File
 # Begin Source File
 
@@ -127,7 +135,7 @@ SOURCE=..\..\..\Source\WAX\Mathematics.Basic.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\ModuleState.hxx
+SOURCE=..\..\..\Source\WAX\Module.hxx
 # End Source File
 # Begin Source File
 
@@ -151,7 +159,7 @@ SOURCE=..\..\..\Source\WAX\RendererModule.Import.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\SoundState.hxx
+SOURCE=..\..\..\Source\WAX\Sound.hxx
 # End Source File
 # Begin Source File
 
@@ -163,7 +171,7 @@ SOURCE=..\..\..\Source\WAX\VisualModule.Import.hxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Source\WAX\WindowState.hxx
+SOURCE=..\..\..\Source\WAX\Window.hxx
 # End Source File
 # End Group
 # End Target

@@ -23,10 +23,12 @@ SOFTWARE.
 #include "Module.hxx"
 #include "Renderer.hxx"
 
-#define PIXEL_COLOR_BIT_MASK 0x8000
-#define STENCIL_PIXEL_COLOR_SHIFT 5
-#define STENCIL_PIXEL_COLOR_VALUE 32
-#define STENCIL_PIXEL_MASK_VALUE 0xFFFB
+#include <Mathematics.Basic.hxx>
+
+#define PIXEL_COLOR_BIT_MASK            0x8000
+#define STENCIL_PIXEL_COLOR_SHIFT       5
+#define STENCIL_PIXEL_COLOR_VALUE       32
+#define STENCIL_PIXEL_MASK_VALUE        0xFFFB
 
 // NOTE: The original game copies values as if they were 32-bit long, while they are 16-bit long.
 // Because of this, it ignores the last odd pixel (if any), due to left shift operation (width >> 1) == (width / 2).
@@ -34,6 +36,8 @@ SOFTWARE.
 #define ACQUIREWIDTH(x) (2 * (x / 2))
 
 RENDERERSTATECONTAINER RendererState;
+
+using namespace Mathematics;
 
 VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset);
 
@@ -46,7 +50,7 @@ VOID Initialize()
     ModuleState.Surface.Width = MAX_RENDERER_WIDTH;
     ModuleState.Surface.Height = MAX_RENDERER_HEIGHT;
 
-    ModuleState.Surface.Stride = MAX_RENDERER_WIDTH * DEFAULT_SCREEN_DEPTH_BYTES;
+    ModuleState.Surface.Stride = MAX_RENDERER_WIDTH * sizeof(PIXEL);
 
     ModuleState.Window.X = 0;
     ModuleState.Window.Y = 0;
@@ -111,7 +115,6 @@ VOID ReleaseDirectX()
 }
 
 // 0x10001130
-// TODO: Implement 32-bit colors.
 VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
 {
     ModuleState.ActualRedMask = r;
@@ -121,16 +124,16 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
     ModuleState.ActualBlueMask = b;
     ModuleState.InitialBlueMask = b;
 
-    CONST U32 rm = r & DEFAULT_SCREEN_DEPTH_COLOR_MASK;
-    CONST U32 gm = g & DEFAULT_SCREEN_DEPTH_COLOR_MASK;
-    CONST U32 bm = b & DEFAULT_SCREEN_DEPTH_COLOR_MASK;
+    CONST U32 rm = r & DEFAULT_SCREEN_COLOR_MASK;
+    CONST U32 gm = g & DEFAULT_SCREEN_COLOR_MASK;
+    CONST U32 bm = b & DEFAULT_SCREEN_COLOR_MASK;
 
     // R
     {
         U32 x = 0;
         U32 mask = PIXEL_COLOR_BIT_MASK;
 
-        for (; x < DEFAULT_SCREEN_DEPTH_BITS; x++)
+        for (; x < GRAPHICS_BITS_PER_PIXEL_16; x++)
         {
             if (mask & rm) { ModuleState.ActualColorMask = ModuleState.ActualColorMask | mask; break; }
 
@@ -145,7 +148,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
         U32 x = 0;
         U32 mask = PIXEL_COLOR_BIT_MASK;
 
-        for (; x < DEFAULT_SCREEN_DEPTH_BITS; x++)
+        for (; x < GRAPHICS_BITS_PER_PIXEL_16; x++)
         {
             if (mask & gm) { ModuleState.ActualColorMask = ModuleState.ActualColorMask | mask; break; }
 
@@ -160,7 +163,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
         U32 x = 0;
         U32 mask = PIXEL_COLOR_BIT_MASK;
 
-        for (; x < DEFAULT_SCREEN_DEPTH_BITS; x++)
+        for (; x < GRAPHICS_BITS_PER_PIXEL_16; x++)
         {
             if (mask & bm) { ModuleState.ActualColorMask = ModuleState.ActualColorMask | mask; break; }
 
@@ -174,7 +177,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
     {
         U32 mask = 1;
 
-        for (U32 x = 0; x < DEFAULT_SCREEN_DEPTH_BITS; x++)
+        for (U32 x = 0; x < GRAPHICS_BITS_PER_PIXEL_16; x++)
         {
             if (mask & rm) { ModuleState.ActualColorBits = ModuleState.ActualColorBits | mask; break; }
 
@@ -186,7 +189,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
     {
         U32 mask = 1;
 
-        for (U32 x = 0; x < DEFAULT_SCREEN_DEPTH_BITS; x++)
+        for (U32 x = 0; x < GRAPHICS_BITS_PER_PIXEL_16; x++)
         {
             if (mask & gm) { ModuleState.ActualColorBits = ModuleState.ActualColorBits | mask; break; }
 
@@ -198,7 +201,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
     {
         U32 mask = 1;
 
-        for (U32 x = 0; x < DEFAULT_SCREEN_DEPTH_BITS; x++)
+        for (U32 x = 0; x < GRAPHICS_BITS_PER_PIXEL_16; x++)
         {
             if (mask & bm) { ModuleState.ActualColorBits = ModuleState.ActualColorBits | mask; break; }
 
@@ -215,7 +218,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
     ModuleState.Unk21 = ~ModuleState.ActualColorBits;
     ModuleState.Unk22 = ~ModuleState.ActualColorBits;
 
-    ModuleState.Unk29 = (5 << (11 - (ModuleState.BlueOffset & 0x1f))) + (2 << (11 - (ModuleState.GreenOffset & 0x1f)));
+    ModuleState.Unk29 = (5 << (11 - (ModuleState.BlueOffset & 0x1F))) + (2 << (11 - (ModuleState.GreenOffset & 0x1F)));
     ModuleState.Unk30 = ModuleState.Unk29;
 
     if (ModuleState.GreenOffset < ModuleState.RedOffset)
@@ -251,12 +254,42 @@ BOOL InitializeWindow(S32 width, S32 height)
 {
     ReleaseRendererSurface();
 
+#if ACTIVE_TRUE_COLOR_MODE
+        HDC hdc = GetDC(ModuleState.HWND);
+
+        RendererState.IsTrueColor = GetDeviceCaps(hdc, BITSPIXEL) == GRAPHICS_BITS_PER_PIXEL_32;
+
+        ReleaseDC(ModuleState.HWND, hdc);
+#endif
+
     if (ModuleState.IsFullScreen)
     {
-        if (FAILED(ModuleState.DirectX.Instance->SetDisplayMode(width, height, DEFAULT_SCREEN_DEPTH_BITS))) { return FALSE; }
-    }
+        CONST U32 bits = RendererState.IsTrueColor ? GRAPHICS_BITS_PER_PIXEL_32 : GRAPHICS_BITS_PER_PIXEL_16;
 
-    SetWindowPos(ModuleState.HWND, NULL, 0, 0, width, height, SWP_NOZORDER | SWP_NOMOVE);
+        if (FAILED(ModuleState.DirectX.Instance->SetDisplayMode(width, height, bits))) { return FALSE; }
+
+        SetWindowPos(ModuleState.HWND, NULL, 0, 0, width, height, SWP_NOZORDER | SWP_NOMOVE);
+    }
+    else
+    {
+        HDC hdc = GetDC(ModuleState.HWND);
+
+        CONST U32 sw = GetDeviceCaps(hdc, HORZRES);
+        CONST U32 sh = GetDeviceCaps(hdc, VERTRES);
+
+        ReleaseDC(ModuleState.HWND, hdc);
+
+        SetWindowLongA(ModuleState.HWND, GWL_STYLE, WS_CAPTION);
+
+        RECT rect;
+        ZeroMemory(&rect, sizeof(RECT));
+        AdjustWindowRect(&rect, WS_CAPTION, FALSE);
+
+        width = width + (rect.right - rect.left);
+        height = height + (rect.bottom - rect.top);
+
+        SetWindowPos(ModuleState.HWND, NULL, (sw - width) / 2, (sh - height) / 2, width, height, SWP_SHOWWINDOW);
+    }
 
     DDSURFACEDESC desc;
     ZeroMemory(&desc, sizeof(DDSURFACEDESC));
@@ -267,9 +300,29 @@ BOOL InitializeWindow(S32 width, S32 height)
 
     if (FAILED(ModuleState.DirectX.Instance->CreateSurface(&desc, &ModuleState.DirectX.Surface, NULL))) { return FALSE; }
 
-    if (FAILED(ModuleState.DirectX.Surface->GetSurfaceDesc(&desc))) { return FALSE; }
+    if (RendererState.IsTrueColor)
+    {
+        SetPixelColorMasks(0xF800, 0x07E0, 0x001F); // Report RGB565 in case the game runs on 32-bit pixel depth system.
+    }
+    else
+    {
+        if (FAILED(ModuleState.DirectX.Surface->GetSurfaceDesc(&desc))) { return FALSE; }
 
-    SetPixelColorMasks(desc.ddpfPixelFormat.dwRBitMask, desc.ddpfPixelFormat.dwGBitMask, desc.ddpfPixelFormat.dwBBitMask);
+        SetPixelColorMasks(desc.ddpfPixelFormat.dwRBitMask, desc.ddpfPixelFormat.dwGBitMask, desc.ddpfPixelFormat.dwBBitMask);
+    }
+
+    if (!ModuleState.IsFullScreen)
+    {
+        LPDIRECTDRAWCLIPPER clipper = NULL;
+
+        if (FAILED(ModuleState.DirectX.Instance->CreateClipper(0, &clipper, NULL))) { DIRECTDRAWRELEASE(ModuleState.DirectX.Surface); return FALSE; }
+
+        if (FAILED(clipper->SetHWnd(0, ModuleState.HWND))) { DIRECTDRAWRELEASE(clipper); DIRECTDRAWRELEASE(ModuleState.DirectX.Surface); return FALSE; }
+
+        if (FAILED(ModuleState.DirectX.Surface->SetClipper(clipper))) { DIRECTDRAWRELEASE(clipper); DIRECTDRAWRELEASE(ModuleState.DirectX.Surface); return FALSE; }
+
+        DIRECTDRAWRELEASE(clipper);
+    }
 
     ModuleState.Actions.Initialize();
 
@@ -293,12 +346,12 @@ VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
 
         if (x <= max)
         {
-            PIXEL* pixels = (PIXEL*)((addr)RendererState.Surfaces.Main
-                + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+            PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+                + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
             if (ModuleState.Surface.Y <= y)
             {
-                pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
             }
 
             for (U32 xx = 0; xx < max - x + 1; xx++) { pixels[xx] = pixel; }
@@ -307,9 +360,9 @@ VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
 }
 
 // 0x100014c0
-VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
+VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel)
 {
-    S32 max = length + y - 1;
+    S32 max = height + y - 1;
 
     if (x < ModuleState.Window.X) { return; }
     if (ModuleState.Window.Width < x) { return; }
@@ -321,8 +374,8 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
 
     if (max < 1) { return; }
 
-    PIXEL* pixels = (PIXEL*)((addr)RendererState.Surfaces.Main
-        + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     if (y < ModuleState.Surface.Y)
     {
@@ -334,7 +387,7 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
             {
                 pixels[0] = pixel;
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
         else
@@ -343,28 +396,28 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
             {
                 pixels[0] = pixel;
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 xx = 0; xx < delta; xx++)
             {
                 pixels[0] = pixel;
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
     }
     else
     {
-        pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 xx = 0; xx < max; xx++)
         {
             pixels[0] = pixel;
 
-            pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
         }
     }
 }
@@ -405,8 +458,8 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
 
     if (width < 1 || height < 1) { return; }
 
-    PIXEL* pixels = (PIXEL*)((addr)RendererState.Surfaces.Main
-        + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     if (y < ModuleState.Surface.Y)
     {
@@ -418,7 +471,7 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
         else
@@ -427,34 +480,34 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < delta; yy++)
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
     }
     else
     {
-        pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 yy = 0; yy < height; yy++)
         {
             for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
-            pixels = (PIXEL*)((addr)pixels + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
         }
     }
 }
 
 // 0x100016d0
-VOID DrawMainSurfaceRectangleColorOverlay(S32 x, S32 y, S32 width, S32 height, S32 param_5)
+VOID DrawMainSurfaceColorRectangleOverlay(S32 x, S32 y, S32 width, S32 height, S32 param_5)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -484,9 +537,9 @@ VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel)
 // 0x100018b0
 VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* surface)
 {
-    PIXEL* src = (PIXEL*)((addr)RendererState.Surfaces.Main
-        + (addr)((ModuleState.Surface.Offset + (sy * MAX_RENDERER_WIDTH + sx)) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((addr)surface + (addr)((stride * dy + dx) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((ModuleState.Surface.Offset + (sy * MAX_RENDERER_WIDTH + sx)) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((ADDR)surface + (ADDR)((stride * dy + dx) * sizeof(PIXEL)));
 
     if (sy < ModuleState.Surface.Y)
     {
@@ -498,8 +551,8 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((ADDR)dst + (ADDR)(stride * sizeof(PIXEL)));
             }
         }
         else
@@ -508,38 +561,37 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((ADDR)dst + (ADDR)(stride * sizeof(PIXEL)));
             }
 
-            src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < delta; yy++)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((ADDR)dst + (ADDR)(stride * sizeof(PIXEL)));
             }
         }
     }
     else
     {
-        src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 yy = 0; yy < height; yy++)
         {
             for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-            src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-            dst = (PIXEL*)((addr)dst + (addr)(stride * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            dst = (PIXEL*)((ADDR)dst + (ADDR)(stride * sizeof(PIXEL)));
         }
     }
 }
 
 // 0x10001bf0
 // TODO: Better name.
-// TODO: Implement 32-bit colors.
 VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count)
 {
     for (S32 x = 0; x < count; x++)
@@ -548,25 +600,24 @@ VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count)
 
         if (pixel == MAGENTA_PIXEL) { output[x] = MAGENTA_PIXEL; continue; }
 
-        CONST PIXEL r = (((pixel & 0xF800) << 0) >> (ModuleState.RedOffset & 0x1f)) & ModuleState.ActualRedMask;
-        CONST PIXEL g = (((pixel & 0x07E0) << 5) >> (ModuleState.GreenOffset & 0x1f)) & ModuleState.ActualGreenMask;
-        CONST PIXEL b = (((pixel & 0x001F) << 11) >> (ModuleState.BlueOffset & 0x1f)) & ModuleState.ActualBlueMask;
+        CONST PIXEL r = (((pixel & 0xF800) << 0) >> (ModuleState.RedOffset & 0x1F)) & ModuleState.ActualRedMask;
+        CONST PIXEL g = (((pixel & 0x07E0) << 5) >> (ModuleState.GreenOffset & 0x1F)) & ModuleState.ActualGreenMask;
+        CONST PIXEL b = (((pixel & 0x001F) << 11) >> (ModuleState.BlueOffset & 0x1F)) & ModuleState.ActualBlueMask;
 
         output[x] = (PIXEL)(r | g | b);
     }
 }
 
 // 0x10001c90
-// TODO: Implement 32-bit colors.
 VOID ConvertColors(PIXEL* input, PIXEL* output, S32 count)
 {
     for (S32 x = 0; x < count; x++)
     {
         CONST PIXEL pixel = input[x];
 
-        CONST PIXEL r = (((pixel & 0xF800) << 0) >> (ModuleState.RedOffset & 0x1f)) & ModuleState.ActualRedMask;
-        CONST PIXEL g = (((pixel & 0x07E0) << 5) >> (ModuleState.GreenOffset & 0x1f)) & ModuleState.ActualGreenMask;
-        CONST PIXEL b = (((pixel & 0x001F) << 11) >> (ModuleState.BlueOffset & 0x1f)) & ModuleState.ActualBlueMask;
+        CONST PIXEL r = (((pixel & 0xF800) << 0) >> (ModuleState.RedOffset & 0x1F)) & ModuleState.ActualRedMask;
+        CONST PIXEL g = (((pixel & 0x07E0) << 5) >> (ModuleState.GreenOffset & 0x1F)) & ModuleState.ActualGreenMask;
+        CONST PIXEL b = (((pixel & 0x001F) << 11) >> (ModuleState.BlueOffset & 0x1F)) & ModuleState.ActualBlueMask;
 
         output[x] = (PIXEL)(r | g | b);
     }
@@ -692,8 +743,8 @@ VOID FUN_10001f50(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 // 0x10001f90
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 {
-    PIXEL* src = (PIXEL*)((addr)RendererState.Surfaces.Back + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((addr)RendererState.Surfaces.Main + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Back + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((ADDR)RendererState.Surfaces.Main + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     if (y < ModuleState.Surface.Y)
     {
@@ -705,8 +756,8 @@ VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((ADDR)dst + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
         else
@@ -715,33 +766,33 @@ VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((ADDR)dst + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            dst = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < delta; yy++)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (PIXEL*)((ADDR)dst + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
     }
     else
     {
-        src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-        dst = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 yy = 0; yy < height; yy++)
         {
             for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-            src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-            dst = (PIXEL*)((addr)dst + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            dst = (PIXEL*)((ADDR)dst + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
         }
     }
 }
@@ -760,8 +811,8 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
     if (offset < 0) { offset = ((offset - 1) | (-MAX_RENDERER_WIDTH)) + 1; }
 
-    PIXEL* src = (PIXEL*)((addr)RendererState.Surfaces.Main
-        + (addr)((offset + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((offset + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT) * sizeof(PIXEL)));
 
     RendererState.Outline.Width = ModuleState.Window.Width - ModuleState.Window.X;
     RendererState.Outline.Height = ModuleState.Window.Height + 1 - ModuleState.Window.Y;
@@ -769,16 +820,16 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
     x = x - ModuleState.Window.X;
     y = y - ModuleState.Window.Y;
 
-    RendererState.Outline.Options = RENDERER_OUTLINE_OPTIONS_SKIP_NONE;
+    RendererState.Outline.Options = OUTLINESKIPOPTIONS_NONE;
 
     if (y < 0)
     {
         height = height + y;
 
-        if (height < 1) { RendererState.Outline.Options = RENDERER_OUTLINE_OPTIONS_SKIP_NONE; return; }
+        if (height < 1) { RendererState.Outline.Options = OUTLINESKIPOPTIONS_NONE; return; }
 
         y = 0;
-        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_TOP);
+        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_TOP);
     }
 
     if (RendererState.Outline.Height <= y)
@@ -789,7 +840,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
         if (-1 < height) { return; }
 
-        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_TOP);
+        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_TOP);
     }
 
     {
@@ -798,7 +849,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         if (y + 1 + height <= 0 != max < 0)
         {
             height = height - max - 1;
-            RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM);
+            RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_BOTTOM);
         }
     }
 
@@ -808,7 +859,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         if (RendererState.Outline.Height <= max)
         {
             height = height + RendererState.Outline.Height - max;
-            RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM);
+            RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_BOTTOM);
         }
     }
 
@@ -821,7 +872,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         x = 1;
         width = width - 1;
 
-        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_LEFT);
+        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_LEFT);
     }
 
     if (RendererState.Outline.Width + 2 <= x)
@@ -831,14 +882,14 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
         if (-1 < width) { return; }
 
-        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_LEFT);
+        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_LEFT);
     }
 
     if (x + width <= 0 != x + width < 0)
     {
         width = width - x - width;
 
-        RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT);
+        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_RIGHT);
     }
 
     {
@@ -848,7 +899,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         {
             width = width + RendererState.Outline.Width - max;
 
-            RendererState.Outline.Options = (RENDEREROUTLINESKIPOPTIONS)(RendererState.Outline.Options | RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT);
+            RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_RIGHT);
         }
     }
 
@@ -870,62 +921,62 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         RendererState.Outline.VerticalDirection = -RendererState.Outline.VerticalDirection;
     }
 
-    PIXEL* dst = (PIXEL*)((addr)RendererState.Surfaces.Main
-        + (addr)(ModuleState.Surface.Offset * sizeof(PIXEL) + y * ModuleState.Surface.Stride + x * sizeof(PIXEL))
-        + (addr)(ModuleState.Window.Y * ModuleState.Surface.Stride + ModuleState.Window.X * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)(ModuleState.Surface.Offset * sizeof(PIXEL) + y * ModuleState.Surface.Stride + x * sizeof(PIXEL))
+        + (ADDR)(ModuleState.Window.Y * ModuleState.Surface.Stride + ModuleState.Window.X * sizeof(PIXEL)));
 
-    if ((RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_TOP) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    if ((RendererState.Outline.Options & OUTLINESKIPOPTIONS_TOP) == OUTLINESKIPOPTIONS_NONE)
     {
         height = height - 1;
 
         PIXEL* pixels = dst;
 
-        if (src <= dst) { pixels = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+        if (src <= dst) { pixels = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
 
         for (S32 xx = 0; xx < width; xx++)
         {
             pixels[RendererState.Outline.HorizontalDirection * xx] = pixel;
         }
 
-        dst = (PIXEL*)((addr)dst + (addr)RendererState.Outline.Stride);
+        dst = (PIXEL*)((ADDR)dst + (ADDR)RendererState.Outline.Stride);
     }
 
-    if ((RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_RIGHT) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    if ((RendererState.Outline.Options & OUTLINESKIPOPTIONS_RIGHT) == OUTLINESKIPOPTIONS_NONE)
     {
         S32 off = (width - 1) * sizeof(PIXEL);
         if (RendererState.Outline.HorizontalDirection < 0) { off = -off; }
 
-        PIXEL* pixels = (PIXEL*)((addr)dst + (addr)off);
+        PIXEL* pixels = (PIXEL*)((ADDR)dst + (ADDR)off);
 
         for (S32 yy = 0; yy < height - 1; yy++)
         {
-            if (src <= pixels) { pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+            if (src <= pixels) { pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
 
             pixels[0] = pixel;
 
-            pixels = (PIXEL*)((addr)pixels + (addr)RendererState.Outline.Stride);
+            pixels = (PIXEL*)((ADDR)pixels + (ADDR)RendererState.Outline.Stride);
         }
     }
 
-    if ((RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_LEFT) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    if ((RendererState.Outline.Options & OUTLINESKIPOPTIONS_LEFT) == OUTLINESKIPOPTIONS_NONE)
     {
         for (S32 yy = 0; yy < height - 1; yy++)
         {
-            if (src <= dst) { dst = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+            if (src <= dst) { dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
 
             dst[0] = pixel;
 
-            dst = (PIXEL*)((addr)dst + (addr)RendererState.Outline.Stride);
+            dst = (PIXEL*)((ADDR)dst + (ADDR)RendererState.Outline.Stride);
         }
     }
     else
     {
-        dst = (PIXEL*)((addr)dst + (addr)(RendererState.Outline.Stride * (height - 1)));
+        dst = (PIXEL*)((ADDR)dst + (ADDR)(RendererState.Outline.Stride * (height - 1)));
     }
 
-    if (height != 0 && (RendererState.Outline.Options & RENDERER_OUTLINE_OPTIONS_SKIP_BOTTOM) == RENDERER_OUTLINE_OPTIONS_SKIP_NONE)
+    if (height != 0 && (RendererState.Outline.Options & OUTLINESKIPOPTIONS_BOTTOM) == OUTLINESKIPOPTIONS_NONE)
     {
-        if (src <= dst) { dst = (PIXEL*)((addr)dst - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+        if (src <= dst) { dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
 
         for (S32 xx = 0; xx < width; xx++)
         {
@@ -937,8 +988,8 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 // 0x100026f0
 VOID DrawStencilSurfaceWindowRectangle()
 {
-    PIXEL* pixels = (PIXEL*)((addr)RendererState.Surfaces.Stencil +
-        (addr)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * (addr)sizeof(PIXEL));
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Stencil +
+        (ADDR)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * (ADDR)sizeof(PIXEL));
 
     CONST S32 height = ModuleState.Window.Height - ModuleState.Window.Y + 1;
     CONST S32 width = ModuleState.Window.Width - ModuleState.Window.X + 1;
@@ -958,7 +1009,7 @@ VOID DrawStencilSurfaceWindowRectangle()
 
                 pixel = pixel + STENCIL_PIXEL_COLOR_VALUE;
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(width * sizeof(PIXEL) + stride));
             }
         }
         else
@@ -969,10 +1020,10 @@ VOID DrawStencilSurfaceWindowRectangle()
 
                 pixel = pixel + STENCIL_PIXEL_COLOR_VALUE;
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(width * sizeof(PIXEL) + stride));
             }
 
-            pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < delta; yy++)
             {
@@ -980,13 +1031,13 @@ VOID DrawStencilSurfaceWindowRectangle()
 
                 pixel = pixel + STENCIL_PIXEL_COLOR_VALUE;
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(width * sizeof(PIXEL) + stride));
             }
         }
     }
     else
     {
-        pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 yy = 0; yy < height; yy++)
         {
@@ -994,7 +1045,7 @@ VOID DrawStencilSurfaceWindowRectangle()
 
             pixel = pixel + STENCIL_PIXEL_COLOR_VALUE;
 
-            pixels = (PIXEL*)((addr)pixels + (addr)(width * sizeof(PIXEL) + stride));
+            pixels = (PIXEL*)((ADDR)pixels + (ADDR)(width * sizeof(PIXEL) + stride));
         }
     }
 }
@@ -1002,8 +1053,8 @@ VOID DrawStencilSurfaceWindowRectangle()
 // 0x10002790
 VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 {
-    PIXEL* pixels = (PIXEL*)((addr)RendererState.Surfaces.Stencil
-        + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Stencil
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     CONST S32 stride = (MAX_RENDERER_WIDTH - width) * sizeof(PIXEL);
 
@@ -1021,7 +1072,7 @@ VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
             {
                 for (S32 xx = 0; xx < length; xx++) { pixels[xx] = pixels[xx] & pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
             }
         }
         else
@@ -1030,28 +1081,28 @@ VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
             {
                 for (S32 xx = 0; xx < length; xx++) { pixels[xx] = pixels[xx] & pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
             }
 
-            pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < delta; yy++)
             {
                 for (S32 xx = 0; xx < length; xx++) { pixels[xx] = pixels[xx] & pixel; }
 
-                pixels = (PIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
             }
         }
     }
     else
     {
-        pixels = (PIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 yy = 0; yy < height; yy++)
         {
             for (S32 xx = 0; xx < length; xx++) { pixels[xx] = pixels[xx] & pixel; }
 
-            pixels = (PIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+            pixels = (PIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
         }
     }
 }
@@ -1061,15 +1112,15 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
 {
     CONST S32 stride = (MAX_RENDERER_WIDTH - width) * sizeof(PIXEL);
 
-    DOUBLEPIXEL* pixels = (DOUBLEPIXEL*)((addr)RendererState.Surfaces.Stencil
-        + (addr)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    DOUBLEPIXEL* pixels = (DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     CONST S32 length = ACQUIREWIDTH(width);
 
     if (-1 < offset)
     {
         CONST PIXEL pixel = (PIXEL)(offset << STENCIL_PIXEL_COLOR_SHIFT);
-        CONST DOUBLEPIXEL pix = ((DOUBLEPIXEL)(pixel) << DEFAULT_SCREEN_DEPTH_BITS) | (DOUBLEPIXEL)pixel;
+        CONST DOUBLEPIXEL pix = ((DOUBLEPIXEL)(pixel) << GRAPHICS_BITS_PER_PIXEL_16) | (DOUBLEPIXEL)pixel;
 
         if (y < ModuleState.Surface.Y)
         {
@@ -1081,7 +1132,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] + pix; }
 
-                    pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                    pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
             }
             else
@@ -1090,35 +1141,35 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] + pix; }
 
-                    pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                    pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
 
-                pixels = (DOUBLEPIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
                 for (S32 yy = 0; yy < delta; yy++)
                 {
                     for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] + pix; }
 
-                    pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                    pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
             }
         }
         else
         {
-            pixels = (DOUBLEPIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < height; yy++)
             {
                 for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] + pix; }
 
-                pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
             }
         }
     }
     else
     {
         CONST PIXEL pixel = (PIXEL)(-offset << STENCIL_PIXEL_COLOR_SHIFT);
-        CONST DOUBLEPIXEL pix = ((DOUBLEPIXEL)(pixel) << DEFAULT_SCREEN_DEPTH_BITS) | (DOUBLEPIXEL)pixel;
+        CONST DOUBLEPIXEL pix = ((DOUBLEPIXEL)(pixel) << GRAPHICS_BITS_PER_PIXEL_16) | (DOUBLEPIXEL)pixel;
 
         if (y < ModuleState.Surface.Y)
         {
@@ -1130,7 +1181,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] - pix; }
 
-                    pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                    pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
             }
             else
@@ -1139,28 +1190,28 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                 {
                     for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] - pix; }
 
-                    pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                    pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
 
-                pixels = (DOUBLEPIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
                 for (S32 yy = 0; yy < delta; yy++)
                 {
                     for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] - pix; }
 
-                    pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                    pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
             }
         }
         else
         {
-            pixels = (DOUBLEPIXEL*)((addr)pixels - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < height; yy++)
             {
                 for (S32 xx = 0; xx < length / 2; xx++) { pixels[xx] = pixels[xx] - pix; }
 
-                pixels = (DOUBLEPIXEL*)((addr)pixels + (addr)(length * sizeof(PIXEL) + stride));
+                pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
             }
         }
     }
@@ -1181,7 +1232,25 @@ BOOL LockRendererSurface()
         if (SUCCEEDED(result))
         {
             ModuleState.Pitch = desc.lPitch;
-            ModuleState.Surface.Renderer = (PIXEL*)desc.lpSurface;
+
+            U32 offset = 0;
+
+            if (!ModuleState.IsFullScreen)
+            {
+                RECT rect;
+                ZeroMemory(&rect, sizeof(RECT));
+                GetClientRect(ModuleState.HWND, &rect);
+
+                POINT point;
+                ZeroMemory(&point, sizeof(POINT));
+                ClientToScreen(ModuleState.HWND, &point);
+
+                OffsetRect(&rect, point.x, point.y);
+
+                offset = desc.lPitch * rect.top + rect.left * (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL));
+            }
+
+            ModuleState.Surface.Renderer = (LPVOID)((ADDR)desc.lpSurface + (ADDR)offset);
 
             return TRUE;
         }
@@ -1217,17 +1286,22 @@ BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height,
         locked = TRUE;
     }
 
-    PIXEL* src = (PIXEL*)((addr)pixels + (addr)((stride * sy + sx) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((addr)ModuleState.Surface.Renderer + (addr)(ModuleState.Pitch * dy + dx * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)pixels + (ADDR)((stride * sy + sx) * sizeof(PIXEL)));
+    LPVOID dst = (LPVOID)((ADDR)ModuleState.Surface.Renderer
+        + (ADDR)(ModuleState.Pitch * dy + dx * (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL))));
 
     CONST S32 length = ACQUIREWIDTH(width);
 
     for (S32 yy = 0; yy < height; yy++)
     {
-        for (S32 xx = 0; xx < length; xx++) { dst[xx] = src[xx]; }
+        for (S32 xx = 0; xx < length; xx++)
+        {
+            if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+            else { ((PIXEL*)dst)[xx] = src[xx]; }
+        }
 
-        src = (PIXEL*)((addr)src + (addr)(stride * sizeof(PIXEL)));
-        dst = (PIXEL*)((addr)dst + (addr)ModuleState.Pitch);
+        src = (PIXEL*)((ADDR)src + (ADDR)(stride * sizeof(PIXEL)));
+        dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
     }
 
     if (locked) { UnlockRendererSurface(); }
@@ -1238,15 +1312,15 @@ BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height,
 // 0x10002a40
 VOID WriteSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height)
 {
-    PIXEL* src = (PIXEL*)((addr)input + (addr)((sstr * sy + sx) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((addr)output + (addr)((dstr * dy + dx) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)input + (ADDR)((sstr * sy + sx) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((ADDR)output + (ADDR)((dstr * dy + dx) * sizeof(PIXEL)));
 
     for (s32 yy = 0; yy < height; yy++)
     {
         for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
-        src = (PIXEL*)((addr)src + (addr)(sstr * sizeof(PIXEL)));
-        dst = (PIXEL*)((addr)dst + (addr)(dstr * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src + (ADDR)(sstr * sizeof(PIXEL)));
+        dst = (PIXEL*)((ADDR)dst + (ADDR)(dstr * sizeof(PIXEL)));
     }
 }
 
@@ -1262,9 +1336,10 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
         locked = TRUE;
     }
 
-    PIXEL* src = (PIXEL*)((addr)RendererState.Surfaces.Main
-        + (addr)(ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL));
-    PIXEL* dst = (PIXEL*)((addr)ModuleState.Surface.Renderer + (addr)(ModuleState.Pitch * y + x * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)(ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL));
+    LPVOID dst = (LPVOID)((ADDR)ModuleState.Surface.Renderer
+        + (ADDR)(ModuleState.Pitch * y + x * (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL))));
 
     if (y < ModuleState.Surface.Y)
     {
@@ -1274,43 +1349,59 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
         {
             for (S32 yy = 0; yy < height; yy++)
             {
-                for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+                for (S32 xx = 0; xx < width; xx++)
+                {
+                    if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+                    else { ((PIXEL*)dst)[xx] = src[xx]; }
+                }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)ModuleState.Pitch);
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
             }
         }
         else
         {
             for (S32 yy = 0; yy < height - delta; yy++)
             {
-                for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+                for (S32 xx = 0; xx < width; xx++)
+                {
+                    if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+                    else { ((PIXEL*)dst)[xx] = src[xx]; }
+                }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)ModuleState.Pitch);
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
             }
 
-            src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
             for (S32 yy = 0; yy < delta; yy++)
             {
-                for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+                for (S32 xx = 0; xx < width; xx++)
+                {
+                    if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+                    else { ((PIXEL*)dst)[xx] = src[xx]; }
+                }
 
-                src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-                dst = (PIXEL*)((addr)dst + (addr)ModuleState.Pitch);
+                src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
             }
         }
     }
     else
     {
-        src = (PIXEL*)((addr)src - (addr)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
 
         for (S32 yy = 0; yy < height; yy++)
         {
-            for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
+            for (S32 xx = 0; xx < width; xx++)
+            {
+                if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+                else { ((PIXEL*)dst)[xx] = src[xx]; }
+            }
 
-            src = (PIXEL*)((addr)src + (addr)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
-            dst = (PIXEL*)((addr)dst + (addr)ModuleState.Pitch);
+            src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
         }
     }
 
@@ -1386,7 +1477,7 @@ VOID FUN_10004dc0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5)
 }
 
 // 0x100050ef
-VOID DrawMainSurfaceText(S32 x, S32 y, LPVOID param_3, LPVOID param_4)
+VOID DrawMainSurfaceText(S32 x, S32 y, PIXEL* pixels, IMAGESPRITEPTR sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -1428,10 +1519,160 @@ VOID FUN_1000619d(S32 x, S32 y, S32 param_3, LPVOID param_4)
 }
 
 // 0x100064c6
-VOID DrawMainSurfaceSprite(S32 x, S32 y, SPRITEPTR sprite)
+VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    RendererState.Sprite.Window.X = ModuleState.Window.X;
+    RendererState.Sprite.Window.Y = ModuleState.Window.Y;
+    RendererState.Sprite.Window.Width = ModuleState.Window.Width;
+    RendererState.Sprite.Window.Height = ModuleState.Window.Height;
+
+    RendererState.Sprite.Height = sprite->Height;
+    RendererState.Sprite.Width = sprite->Width + 1;
+
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
+
+    y = y + sprite->Y;
+
+    // Skip the necessary number of rows from the top of the image
+    // in case the sprite starts above the allowed drawing rectangle.
+    if (y < ModuleState.Window.Y)
+    {
+        RendererState.Sprite.Height = RendererState.Sprite.Height + y - ModuleState.Window.Y;
+
+        if (RendererState.Sprite.Height <= 0 || RendererState.Sprite.Height == ModuleState.Window.Y - y) { return; }
+
+        for (U32 x = 0; x < ModuleState.Window.Y - y; x++)
+        {
+            content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
+            next = (LPVOID)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
+        }
+
+        y = ModuleState.Window.Y;
+    }
+
+    CONST S32 overflow = RendererState.Sprite.Height + y - ModuleState.Window.Height - 1;
+
+    BOOL draw = overflow == 0 || (RendererState.Sprite.Height + y < ModuleState.Window.Height + 1);
+
+    if (!draw)
+    {
+        CONST S32 height = RendererState.Sprite.Height;
+
+        RendererState.Sprite.Height = RendererState.Sprite.Height - overflow;
+
+        draw = RendererState.Sprite.Height != 0 && overflow <= height;
+    }
+
+    if (draw)
+    {
+        RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+            + (ADDR)(ModuleState.Surface.Offset * sizeof(PIXEL)) + (ADDR)(ModuleState.Surface.Stride * y) + (ADDR)((x + sprite->X) * sizeof(PIXEL)));
+        RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+            + (ADDR)(ModuleState.Surface.Offset * sizeof(PIXEL)) + (ADDR)(ModuleState.Surface.Stride * y) + (ADDR)(ModuleState.Window.X * sizeof(PIXEL)));
+        RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+            + (ADDR)(ModuleState.Surface.Offset * sizeof(PIXEL)) + (ADDR)(ModuleState.Surface.Stride * y) + (ADDR)((ModuleState.Window.Width + 1) * sizeof(PIXEL)));
+
+        CONST S32 overage = RendererState.Sprite.Height + y < ModuleState.Surface.Y
+            ? 0 : (RendererState.Sprite.Height + y - ModuleState.Surface.Y);
+
+        RendererState.Sprite.Overage = overage;
+        RendererState.Sprite.Height = RendererState.Sprite.Height - overage;
+
+        if (RendererState.Sprite.Height == 0)
+        {
+            RendererState.Sprite.Height = RendererState.Sprite.Overage;
+            RendererState.Sprite.Overage = 0;
+
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        }
+
+        while (RendererState.Sprite.Height != 0)
+        {
+            while (RendererState.Sprite.Height != 0)
+            {
+                U32 skip = 0;
+                IMAGESPRITEPIXELPTR pixels = (IMAGESPRITEPIXELPTR)content;
+
+                // Skip the pixels to the left of the sprite drawing area
+                // in case the sprite starts to the left of allowed drawing rectangle.
+                PIXEL* sx = RendererState.Sprite.X;
+
+                while (sx < RendererState.Sprite.MinX)
+                {
+                    CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
+                    CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+
+                    if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                    {
+                        if (count <= need) { pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGESPRITEPIXEL)); }
+                    }
+                    else
+                    {
+                        if (count <= need) { pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + (count - 1) * sizeof(PIXEL) + sizeof(IMAGESPRITEPIXEL)); }
+                    }
+
+                    skip = count == need ? 0 : Min(count, need);
+                    sx = (PIXEL*)((ADDR)sx + (ADDR)(Min(count, need) * sizeof(PIXEL)));
+                }
+
+                while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
+                {
+                    CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+
+                    if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                    {
+                        CONST PIXEL pixel = pixels->Pixels[0];
+
+                        if (pixel != MAGENTA_PIXEL)
+                        {
+                            for (U32 x = 0; x < count - skip; x++)
+                            {
+                                if (((ADDR)sx + (ADDR)(x * sizeof(PIXEL))) < (ADDR)RendererState.Sprite.MaxX) { sx[x] = pixel; }
+                            }
+                        }
+
+                        pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + (ADDR)sizeof(IMAGESPRITEPIXEL));
+                    }
+                    else
+                    {
+                        for (U32 x = 0; x < count - skip; x++)
+                        {
+                            CONST PIXEL pixel = pixels->Pixels[skip + x];
+
+                            if (((ADDR)sx + (ADDR)(x * sizeof(PIXEL))) < (ADDR)RendererState.Sprite.MaxX) { if (pixel != MAGENTA_PIXEL) { sx[x] = pixel; } }
+                        }
+
+                        pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + (ADDR)((count - 1) * sizeof(PIXEL) + sizeof(IMAGESPRITEPIXEL)));
+                    }
+
+                    sx = (PIXEL*)((ADDR)sx + (ADDR)((count - skip) * sizeof(PIXEL)));
+
+                    skip = 0;
+                }
+
+                content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
+                next = (LPVOID)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
+
+                RendererState.Sprite.Height = RendererState.Sprite.Height - 1;
+
+                RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X + (ADDR)ModuleState.Surface.Stride);
+                RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX + (ADDR)ModuleState.Surface.Stride);
+                RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX + (ADDR)ModuleState.Surface.Stride);
+            }
+
+            // Wrap around vertically, and draw the overage
+            // in case the sprite has more content that can fit into the allowed drawing rectangle.
+            RendererState.Sprite.Height = RendererState.Sprite.Overage;
+            RendererState.Sprite.Overage = 0;
+
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        }
+    }
 }
 
 // 0x100067bd

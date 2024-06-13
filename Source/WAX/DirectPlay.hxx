@@ -23,8 +23,13 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
+#include "Native.Basic.hxx"
 
 #include <dplay.h>
 #include <dplobby.h>
+
+#define DPNAME_NONE     0
+#define DPSEND_NONE     0
+#define DPPLAYER_CLIENT 0
 
 #define DIRECTPLAYRELEASE(x) if (x != NULL) { x->Release(); x = NULL; }

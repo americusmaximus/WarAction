@@ -22,8 +22,12 @@ SOFTWARE.
 
 #pragma once
 
+#include "Native.Basic.hxx"
+
 #define DIRECTINPUT_VERSION 0x0300
 #include <dinput.h>
 
 #define DIDOI_NONE          0x00000000
 #define DIDFT_OPTIONAL	    0x80000000
+
+#define DIRECTINPUTRELEASE(x) if (x != NULL) { x->Release(); x = NULL; }

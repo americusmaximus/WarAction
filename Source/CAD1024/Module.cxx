@@ -81,7 +81,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceColorBox                     = DrawMainSurfaceColorBox;
     ModuleState.Actions.DrawMainSurfaceHorizontalColorLine          = DrawMainSurfaceHorizontalColorLine;
     ModuleState.Actions.DrawMainSurfaceVerticalColorLine            = DrawMainSurfaceVerticalColorLine;
-    ModuleState.Actions.DrawMainSurfaceRectangleColorOverlay        = DrawMainSurfaceColorRectangleOverlay;
+    ModuleState.Actions.DrawMainSurfaceColorRectangleOverlay        = DrawMainSurfaceColorRectangleOverlay;
     ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.FUN_10002020                                = FUN_10002020; // TODO
     ModuleState.Actions.FUN_10002b90                                = FUN_10002b90;
