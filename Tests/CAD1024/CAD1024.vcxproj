@@ -163,6 +163,7 @@
     <ClCompile Include="DrawMainSurfaceColorOutline.cxx" />
     <ClCompile Include="DrawMainSurfaceColorRectangle.cxx" />
     <ClCompile Include="DrawMainSurfaceHorizontalColorLine.cxx" />
+    <ClCompile Include="DrawMainSurfacePaletteSprite.cxx" />
     <ClCompile Include="DrawMainSurfaceSprite.cxx" />
     <ClCompile Include="DrawMainSurfaceVerticalColorLine.cxx" />
     <ClCompile Include="DrawStencilSurfaceWindowRectangle.cxx" />
@@ -188,6 +189,7 @@
     <ClInclude Include="DrawMainSurfaceColorOutline.hxx" />
     <ClInclude Include="DrawMainSurfaceColorRectangle.hxx" />
     <ClInclude Include="DrawMainSurfaceHorizontalColorLine.hxx" />
+    <ClInclude Include="DrawMainSurfacePaletteSprite.hxx" />
     <ClInclude Include="DrawMainSurfaceSprite.hxx" />
     <ClInclude Include="DrawMainSurfaceVerticalColorLine.hxx" />
     <ClInclude Include="DrawStencilSurfaceWindowRectangle.hxx" />

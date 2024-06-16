@@ -58,8 +58,29 @@ typedef struct ImageSprite
     S16                 Y;
     U16                 Width;
     U16                 Height;
-    U8                  Count; // ???
+    U8                  Unk04; // TODO
     U16                 Next;
     IMAGESPRITEPIXEL    Pixels[1];
 } IMAGESPRITE, * IMAGESPRITEPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct ImagePaletteSpritePixel
+{
+    U8      Count;
+    U8      Pixels[1];
+} IMAGEPALETTESPRITEPIXEL, * IMAGEPALETTESPRITEPIXELPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct ImagePaletteSprite
+{
+    S16                     X;
+    S16                     Y;
+    U16                     Width;
+    U16                     Height;
+    U8                      Unk04; // TODO
+    U16                     Next;
+    IMAGEPALETTESPRITEPIXEL Pixels[1];
+} IMAGEPALETTESPRITE, * IMAGEPALETTESPRITEPTR;
 #pragma pack(pop)

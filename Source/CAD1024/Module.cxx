@@ -64,7 +64,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
     ModuleState.Actions.FUN_10001ed0                                = FUN_10001ed0; // TODO
     ModuleState.Actions.FUN_10001f40                                = FUN_10001f40; // TODO
-    ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
+    ModuleState.Actions.DrawMainSurfacePaletteSprite                = DrawMainSurfacePaletteSprite;
     ModuleState.Actions.DrawMainSurfaceSprite                       = DrawMainSurfaceSprite;
     ModuleState.Actions.FUN_1000618d                                = FUN_1000618d; // TODO
     ModuleState.Actions.FUN_10004db0                                = FUN_10004db0; // TODO

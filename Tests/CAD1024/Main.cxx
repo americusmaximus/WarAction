@@ -29,6 +29,7 @@ SOFTWARE.
 #include "DrawMainSurfaceColorOutline.hxx"
 #include "DrawMainSurfaceColorRectangle.hxx"
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
+#include "DrawMainSurfacePaletteSprite.hxx"
 #include "DrawMainSurfaceSprite.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
 #include "DrawStencilSurfaceWindowRectangle.hxx"
@@ -57,6 +58,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
     ACTION(DrawMainSurfaceColorOutline, state, event);
     ACTION(DrawMainSurfaceColorRectangle, state, event);
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
+    ACTION(DrawMainSurfacePaletteSprite, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
     ACTION(DrawStencilSurfaceWindowRectangle, state, event);
