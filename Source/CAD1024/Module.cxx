@@ -76,7 +76,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.FUN_10007fbc                                = FUN_10007fbc; // TODO
     ModuleState.Actions.FUN_10007be8                                = FUN_10007be8; // TODO
     ModuleState.Actions.FUN_100053c3                                = FUN_100053c3; // TODO
-    ModuleState.Actions.FUN_100017e0                                = FUN_100017e0; // TODO
+    ModuleState.Actions.DrawMainSurfaceColorPoint                   = DrawMainSurfaceColorPoint;
     ModuleState.Actions.DrawMainSurfaceColorRectangle               = DrawMainSurfaceColorRectangle;
     ModuleState.Actions.DrawMainSurfaceColorBox                     = DrawMainSurfaceColorBox;
     ModuleState.Actions.DrawMainSurfaceHorizontalColorLine          = DrawMainSurfaceHorizontalColorLine;

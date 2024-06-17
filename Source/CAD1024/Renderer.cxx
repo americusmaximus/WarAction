@@ -588,10 +588,17 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
 }
 
 // 0x100017e0
-VOID FUN_100017e0(S32 x, S32 y, PIXEL pixel)
+VOID DrawMainSurfaceColorPoint(S32 x, S32 y, PIXEL pixel)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    if (ModuleState.Window.X <= x && ModuleState.Window.Y <= y
+        && x <= ModuleState.Window.Width && y <= ModuleState.Window.Height)
+    {
+        S32 indx = ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x;
+
+        if (ModuleState.Surface.Y <= y) { indx = indx - MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT; }
+
+        RendererState.Surfaces.Main[indx] = pixel;
+    }
 }
 
 // 0x10001840
