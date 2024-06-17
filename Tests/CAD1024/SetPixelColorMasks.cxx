@@ -41,7 +41,7 @@ VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state)
     state->BlueOffset = 0;
 
     state->Unk18 = 0;
-    state->Unk21 = 0;
+    state->ShadeColorMask = 0;
     state->Unk22 = 0;
     state->Unk23 = 0;
     state->Unk24 = 0;
@@ -51,7 +51,7 @@ VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state)
     state->Unk30 = 0;
 }
 
-BOOL Check(RENDERERMODULESTATECONTAINERPTR state, LPCOLORMASKRESULT result)
+BOOL Check(RENDERERMODULESTATECONTAINERPTR state, COLORMASKRESULTPTR result)
 {
     BOOL value = TRUE;
 
@@ -70,7 +70,7 @@ BOOL Check(RENDERERMODULESTATECONTAINERPTR state, LPCOLORMASKRESULT result)
     value &= state->BlueOffset == result->BlueOffset;
 
     value &= state->Unk18 == result->Unk18;
-    value &= state->Unk21 == result->Unk21;
+    value &= state->ShadeColorMask == result->ShadeColorMask;
     value &= state->Unk22 == result->Unk22;
     value &= state->Unk23 == result->Unk23;
     value &= state->Unk24 == result->Unk24;
@@ -82,7 +82,7 @@ BOOL Check(RENDERERMODULESTATECONTAINERPTR state, LPCOLORMASKRESULT result)
     return value;
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, U32 r, U32 g, U32 b, LPCOLORMASKRESULT result)
+static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, U32 r, U32 g, U32 b, COLORMASKRESULTPTR result)
 {
     InitializePixelMasks(state);
 

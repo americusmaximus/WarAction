@@ -20,14 +20,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "ConvertColorsExtra.hxx"
+#include "ConvertAllColors.hxx"
 #include "SetPixelColorMasks.hxx"
 
 static PIXEL Convert(PIXEL pixel, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm)
 {
-    CONST PIXEL r = (((pixel & 0xF800) <<  0) >> (ro & 0x1f)) & rm;
-    CONST PIXEL g = (((pixel & 0x07E0) <<  5) >> (go & 0x1f)) & gm;
-    CONST PIXEL b = (((pixel & 0x001F) << 11) >> (bo & 0x1f)) & bm;
+    CONST PIXEL r = (((pixel & 0xF800) <<  0) >> (ro & 0x1F)) & rm;
+    CONST PIXEL g = (((pixel & 0x07E0) <<  5) >> (go & 0x1F)) & gm;
+    CONST PIXEL b = (((pixel & 0x001F) << 11) >> (bo & 0x1F)) & bm;
 
     return (PIXEL)(r | g | b);
 }
@@ -41,9 +41,9 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
         PIXEL src = x;
         PIXEL dst = 0;
 
-        state->Actions.ConvertColorsExtra(&src, &dst, 1);
+        state->Actions.ConvertAllColors(&src, &dst, 1);
 
-        CONST PIXEL result = x == 0xF81F ? (PIXEL)0xF81F : Convert(src, ro, go, bo, rm, gm, bm);
+        CONST PIXEL result = Convert(src, ro, go, bo, rm, gm, bm);
 
         if (dst != result) { event->Result = FALSE; return; }
     }
@@ -53,7 +53,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, RO, GO, BO, RM, GM, BM) { E->Action = A; Execute(S, E, RO, GO, BO, RM, GM, BM); if (!E->Result) { return; } }
 
-VOID ConvertColorsExtra(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID ConvertAllColors(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     InitializePixelMasks(state);

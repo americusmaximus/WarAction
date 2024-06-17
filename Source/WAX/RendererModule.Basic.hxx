@@ -46,8 +46,8 @@ typedef VOID(*RELEASERENDERERSURFACEACTION)(VOID);
 typedef BOOL(*LOCKRENDERERSURFACEACTION)(VOID);
 typedef VOID(*UNLOCKRENDERERSURFACEACTION)(VOID);
 typedef VOID(*OFFSETSURFACESACTION)(S32 x, S32 y);
-typedef VOID(*CONVERTCOLORSEXTRAACTION)(PIXEL* input, PIXEL* output, S32 count);
-typedef VOID(*CONVERTCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
+typedef VOID(*CONVERTVISIBLECOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
+typedef VOID(*CONVERTALLCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef S32(*FUN_10003320ACTION)(U8* param_1, U8* param_2); // TODO
 typedef VOID(*FUN_100033C0ACTION)(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_10003360ACTION)(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
@@ -82,7 +82,7 @@ typedef VOID(*DRAWMAINSURFACECOLORRECTANGLEACTION)(S32 x, S32 y, S32 width, S32 
 typedef VOID(*DRAWMAINSURFACECOLORBOXACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACEHORIZONTALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
-typedef VOID(*DRAWMAINSURFACECOLORRECTANGLEOVERLAYACTION)(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
+typedef VOID(*DRAWMAINSURFACECOLORSHADERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACECOLOROUTLINEACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*FUN_10002020ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
@@ -108,8 +108,8 @@ typedef struct RendererStateActions
     LOCKRENDERERSURFACEACTION                       LockRendererSurface;
     UNLOCKRENDERERSURFACEACTION                     UnlockRendererSurface;
     OFFSETSURFACESACTION                            OffsetSurfaces;
-    CONVERTCOLORSEXTRAACTION                        ConvertColorsExtra;
-    CONVERTCOLORSACTION                             ConvertColors;
+    CONVERTVISIBLECOLORSACTION                      ConvertVisibleColors;
+    CONVERTALLCOLORSACTION                          ConvertAllColors;
     FUN_10003320ACTION FUN_10003320; // TODO
     FUN_100033C0ACTION FUN_100033c0; // TODO
     FUN_10003360ACTION FUN_10003360; // TODO
@@ -144,7 +144,7 @@ typedef struct RendererStateActions
     DRAWMAINSURFACECOLORBOXACTION                   DrawMainSurfaceColorBox;
     DRAWMAINSURFACEHORIZONTALCOLORLINEACTION        DrawMainSurfaceHorizontalColorLine;
     DRAWMAINSURFACEVERTICALCOLORLINEACTION          DrawMainSurfaceVerticalColorLine;
-    DRAWMAINSURFACECOLORRECTANGLEOVERLAYACTION      DrawMainSurfaceColorRectangleOverlay;
+    DRAWMAINSURFACECOLORSHADERECTANGLEACTION        DrawMainSurfaceColorShadeRectangle;
     DRAWMAINSURFACECOLOROUTLINEACTION               DrawMainSurfaceColorOutline;
     FUN_10002020ACTION FUN_10002020; // TODO
     READRENDERERSURFACERECTANGLEACTION              FUN_10002b90;
@@ -207,7 +207,7 @@ typedef struct RendererModuleStateContainer
     U16                         Unk18; // TODO
     U16                         ActualColorMask;
     U16                         InitialColorMask;
-    U16                         Unk21; // TODO
+    U16                         ShadeColorMask;
     U16                         Unk22; // TODO
     U16                         Unk23; // TODO
     U16                         Unk24; // TODO

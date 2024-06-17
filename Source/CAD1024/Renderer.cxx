@@ -215,7 +215,7 @@ VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
     ModuleState.Unk24 = ~ModuleState.ActualColorMask;
 
     ModuleState.Unk18 = ModuleState.ActualColorBits;
-    ModuleState.Unk21 = ~ModuleState.ActualColorBits;
+    ModuleState.ShadeColorMask = ~ModuleState.ActualColorBits;
     ModuleState.Unk22 = ~ModuleState.ActualColorBits;
 
     ModuleState.Unk29 = (5 << (11 - (ModuleState.BlueOffset & 0x1F))) + (2 << (11 - (ModuleState.GreenOffset & 0x1F)));
@@ -507,10 +507,84 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
 }
 
 // 0x100016c0
-VOID DrawMainSurfaceColorRectangleOverlay(S32 x, S32 y, S32 width, S32 height, S32 param_5)
+VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    if (x < ModuleState.Window.X)
+    {
+        width = width + x - ModuleState.Window.X;
+        x = ModuleState.Window.X;
+
+        if (width < 1) { return; }
+    }
+
+    if (y < ModuleState.Window.Y)
+    {
+        height = height + y - ModuleState.Window.Y;
+        y = ModuleState.Window.Y;
+
+        if (height < 1) { return; }
+    }
+
+    if (ModuleState.Window.Width < (x + width - 1))
+    {
+        width = ModuleState.Window.Width - x + 1;
+    }
+
+    if (ModuleState.Window.Height < (y + height - 1))
+    {
+        height = ModuleState.Window.Height - y + 1;
+    }
+
+    if (width < 1 || height < 1) { return; }
+
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+
+    CONST PIXEL color = SHADEPIXEL(pixel, ModuleState.ShadeColorMask);
+
+    if (y < ModuleState.Surface.Y)
+    {
+        CONST S32 delta = y + height - ModuleState.Surface.Y;
+
+        if ((y + height) < ModuleState.Surface.Y || delta == 0)
+        {
+            for (S32 yy = 0; yy < height; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            }
+        }
+        else
+        {
+            for (S32 yy = 0; yy < height - delta; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            }
+
+            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+
+            for (S32 yy = 0; yy < delta; yy++)
+            {
+                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+
+                pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            }
+        }
+    }
+    else
+    {
+        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+
+        for (S32 yy = 0; yy < height; yy++)
+        {
+            for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+
+            pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+        }
+    }
 }
 
 // 0x100017e0
@@ -591,8 +665,7 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
 }
 
 // 0x10001be0
-// TODO: Better name.
-VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count)
+VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count)
 {
     for (S32 x = 0; x < count; x++)
     {
@@ -609,7 +682,7 @@ VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count)
 }
 
 // 0x10001c80
-VOID ConvertColors(PIXEL* input, PIXEL* output, S32 count)
+VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count)
 {
     for (S32 x = 0; x < count; x++)
     {

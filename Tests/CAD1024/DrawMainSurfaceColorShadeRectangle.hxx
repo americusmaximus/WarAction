@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID ConvertColorsExtra(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

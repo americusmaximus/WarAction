@@ -46,8 +46,8 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.LockRendererSurface                         = LockRendererSurface;
     ModuleState.Actions.UnlockRendererSurface                       = UnlockRendererSurface;
     ModuleState.Actions.OffsetSurfaces                              = OffsetSurfaces;
-    ModuleState.Actions.ConvertColorsExtra                          = ConvertColorsExtra;
-    ModuleState.Actions.ConvertColors                               = ConvertColors;
+    ModuleState.Actions.ConvertVisibleColors                        = ConvertVisibleColors;
+    ModuleState.Actions.ConvertAllColors                            = ConvertAllColors;
     ModuleState.Actions.FUN_10003320                                = FUN_10003320; // TODO
     ModuleState.Actions.FUN_100033c0                                = FUN_100033c0; // TODO
     ModuleState.Actions.FUN_10003360                                = FUN_10003360; // TODO
@@ -81,7 +81,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceColorBox                     = DrawMainSurfaceColorBox;
     ModuleState.Actions.DrawMainSurfaceHorizontalColorLine          = DrawMainSurfaceHorizontalColorLine;
     ModuleState.Actions.DrawMainSurfaceVerticalColorLine            = DrawMainSurfaceVerticalColorLine;
-    ModuleState.Actions.DrawMainSurfaceColorRectangleOverlay        = DrawMainSurfaceColorRectangleOverlay;
+    ModuleState.Actions.DrawMainSurfaceColorShadeRectangle          = DrawMainSurfaceColorShadeRectangle;
     ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.FUN_10002020                                = FUN_10002020; // TODO
     ModuleState.Actions.FUN_10002b90                                = FUN_10002b90;

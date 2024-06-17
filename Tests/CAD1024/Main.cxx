@@ -22,12 +22,13 @@ SOFTWARE.
 
 #include "Initialize.hxx"
 
-#include "ConvertColors.hxx"
-#include "ConvertColorsExtra.hxx"
+#include "ConvertAllColors.hxx"
+#include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
 #include "DrawMainSurfaceColorBox.hxx"
 #include "DrawMainSurfaceColorOutline.hxx"
 #include "DrawMainSurfaceColorRectangle.hxx"
+#include "DrawMainSurfaceColorShadeRectangle.hxx"
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfacePaletteSprite.hxx"
 #include "DrawMainSurfaceSprite.hxx"
@@ -51,12 +52,13 @@ SOFTWARE.
     
 static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
-    ACTION(ConvertColors, state, event);
-    ACTION(ConvertColorsExtra, state, event);
+    ACTION(ConvertAllColors, state, event);
+    ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);
     ACTION(DrawMainSurfaceColorOutline, state, event);
     ACTION(DrawMainSurfaceColorRectangle, state, event);
+    ACTION(DrawMainSurfaceColorShadeRectangle, state, event);
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfacePaletteSprite, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);

@@ -93,15 +93,15 @@ BOOL LockRendererSurface(VOID);
 BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 S32 FUN_10003330(U8* param_1, U8* param_2); // TODO
-VOID ConvertColors(PIXEL* input, PIXEL* output, S32 count);
-VOID ConvertColorsExtra(PIXEL* input, PIXEL* output, S32 count); // TODO: Better name.
+VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
+VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count); // TODO: Better name.
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceCursor(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel);
-VOID DrawMainSurfaceColorRectangleOverlay(S32 x, S32 y, S32 width, S32 height, S32 param_5); // TODO
+VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);

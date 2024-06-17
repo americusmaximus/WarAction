@@ -1,5 +1,5 @@
 # War Action
-![War Action](./Extras/LogoMedium.jpg)
+![War Action](./Extras/LogoMedium.png)
 
 ## Project
 War Action is an open source implementation of Fireglow Games' [Sudden Strike](https://en.wikipedia.org/wiki/Sudden_Strike) Gold from 2000, with the 1.2.1 patch.
@@ -26,6 +26,7 @@ git clone --recurse-submodules https://github.com/americusmaximus/WarAction
 2. The game is structured in a way where the executable is just a glue for separate menu and game modules, which are in their turn can use different renderer modules.
 3. The GOG.com's version of the game uses Ogg Vorbis for the game's music. It looks like this was a recent change and a requirement for the game publishing, I believe original game shipped with mp3 files. In order to support Ogg Vorbis, the games has its own WinMM.dll library to support the file format, otherwise it is mostly a wrapper of the system library.
 4. The original game used zlib version 1.1.3, which I upgraded to 1.3.1 for proper 64-bit support.
+5. The original game uses RAD Game Tools' binkw32 library version 1.0q.
 
 ### Compatibility, Code Style & Standards
 In order to be able to run the code not only in the modern operating systems, but also in legacy environments, such as Windows XP, the code base has to abstain from usage of modern C++ language features.
@@ -44,4 +45,4 @@ Modern Visual Studio makes the binary dependent on modern runtime libraries that
 ## Legal
 1. This is not a complete game. Please purchase software you like!
 2. The source code in this repository is mostly produced by reverse engineering the original binaries. There are a couple of exceptions for reverse engineering under DMCA -- documentation, interoperability, fair use. See goals section for the interoperability and fair use cases. The documentation is needed to support those. Also please see an article about [software preservation](https://en.wikipedia.org/wiki/Digital_preservation).
-3. Sudden Strike, Fireglow Games, CDV, Ogg Vorbis, DirectX, OpenGL, Vulkan, and others are trademarks of their respective owners.
+3. Sudden Strike, Fireglow Games, CDV, RAD Game Tools, Bink, Ogg Vorbis, DirectX, OpenGL, Vulkan, and others are trademarks of their respective owners.

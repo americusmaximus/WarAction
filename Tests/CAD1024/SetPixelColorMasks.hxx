@@ -41,7 +41,7 @@ typedef struct ColorMaskResult
     U16 BlueOffset;
 
     U16 Unk18;
-    U16 Unk21;
+    U16 ShadeColorMask;
     U16 Unk22;
     U16 Unk23;
     U32 Unk24;
@@ -49,7 +49,7 @@ typedef struct ColorMaskResult
     U32 Unk27;
     U16 Unk29;
     U16 Unk30;
-} COLORMASKRESULT, * LPCOLORMASKRESULT;
+} COLORMASKRESULT, * COLORMASKRESULTPTR;
 
 VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state);
 VOID SetPixelColorMasks(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

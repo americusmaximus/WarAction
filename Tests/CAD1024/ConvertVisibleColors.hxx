@@ -22,26 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
+#include "Module.hxx"
 
-#ifdef _WIN64
-#define ACTIVATE_MODERN_MODE                TRUE
-#endif
-
-#define ACTIVE_TRUE_COLOR_MODE              TRUE
-
-#define DEFAULT_SCREEN_COLOR_MASK           0xFFFF
-
-#define BLACK_PIXEL                         0x0000
-#define MAGENTA_PIXEL                       0xF81F
-#define WHITE_PIXEL                         0xFFFF
-
-#define RGB565_TO_RGB888(rgb565)            \
-  ((((rgb565 & 0xF800) << 8) & 0xFF0000)    \
-   | (((rgb565 & 0x07E0) << 5) & 0x00FF00)  \
-   | (((rgb565 & 0x001F) << 3) & 0x0000FF))
-
-#define SHADEPIXEL(pixel, mask) ((pixel & mask) >> 1)
-
-typedef U16 PIXEL;
-typedef U32 DOUBLEPIXEL;
+VOID ConvertVisibleColors(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
