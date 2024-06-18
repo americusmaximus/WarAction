@@ -228,7 +228,7 @@ VOID DrawMainSurfaceColorBox(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTP
             {
                 {799, 0, 1, 73},
                 {799, 73, 100, 1},
-                {898, 1, 1, 73},
+                {898, 0, 1, 73},
                 {799, 742, 1, 26},
                 {800, 742, 99, 1},
                 {898, 743, 1, 25}

@@ -94,9 +94,10 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
 BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 S32 FUN_10003330(U8* param_1, U8* param_2); // TODO
 VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
-VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count); // TODO: Better name.
+VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
+VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
@@ -111,7 +112,6 @@ VOID FUN_10001ea0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 VOID FUN_10001ee0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_10001f20(S32 param_1, S32 param_2, S32 param_3); // TODO
 VOID FUN_10001f50(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
-VOID FUN_10002030(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5); // TODO
 VOID FUN_10002fc0(S32 x, S32 y, S32 width, S32 height); // TODO
 VOID FUN_10003370(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
 VOID FUN_100033d0(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO

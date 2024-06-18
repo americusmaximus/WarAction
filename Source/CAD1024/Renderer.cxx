@@ -878,10 +878,184 @@ VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x10002020
-VOID FUN_10002020(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5)
+VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    S32 yy = 0;
+    S32 current = 1 - size;
+    S32 distance = step;
+    S32 xx = size;
+    S32 end = 0;
+    S32 start = -size;
+    S32 offset = start;
+
+    size = size * 2;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+            start = offset;
+        }
+        if (-1 < current) {
+            size = size + -2;
+            xx = xx + -1;
+            start = start + 1;
+            distance = distance + 0x3989;
+            current = current - size;
+            offset = start;
+        }
+        end = end + -4;
+        yy = yy + 1;
+        distance = distance + 0x10000;
+        current = current + 1 + yy * 8;
+    } while (start <= end);
+
+    size = yy * 8;
+    current = -current;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+        }
+        if (-1 < current) {
+            size = size + 8;
+            yy = yy + 1;
+            distance = distance + 0x3989;
+            current = current - size;
+        }
+        xx = xx + -1;
+        distance = distance + 0x10000;
+        current = current + -1 + xx * 2;
+    } while (-1 < xx);
+
+    offset = xx * 2;
+    start = yy * -4;
+    size = yy * 8;
+    end = start;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+            start = end;
+        }
+        if (-1 < current) {
+            size = size + -8;
+            start = start + 4;
+            yy = yy + -1;
+            distance = distance + 0x3989;
+            current = current - size;
+            end = start;
+        }
+        offset = offset + -2;
+        xx = xx + -1;
+        distance = distance + 0x10000;
+        current = current + (1 - offset);
+    } while (start <= xx);
+
+    current = -current;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+        }
+        if (-1 < current) {
+            xx = xx + -1;
+            distance = distance + 0x3989;
+            current = current + xx * 2;
+        }
+        yy = yy + -1;
+        distance = distance + 0x10000;
+        current = current + 1 + yy * 8;
+    } while (-1 < yy);
+
+    size = yy * 4;
+    end = yy * 8;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+        }
+        if (-1 < current) {
+            xx = xx + 1;
+            distance = distance + 0x3989;
+            current = current + xx * 2;
+        }
+        size = size + -4;
+        end = end + -8;
+        yy = yy + -1;
+        distance = distance + 0x10000;
+        current = current + (-1 - end);
+    } while (xx <= size);
+
+    current = -current;
+    start = -xx;
+    size = xx * 2;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+        }
+        if (-1 < current) {
+            yy = yy + -1;
+            distance = distance + 0x3989;
+            current = current + yy * 8;
+        }
+        size = size + 2;
+        xx = xx + 1;
+        start = start + -1;
+        distance = distance + 0x10000;
+        current = current + (1 - size);
+    } while (-1 < start);
+
+    size = yy * 4;
+    start = -xx;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx + x, yy + y, pixel);
+        }
+        if (-1 < current) {
+            yy = yy + 1;
+            size = size + 4;
+            distance = distance + 0x3989;
+            current = current + yy * 8;
+        }
+        xx = xx + 1;
+        start = start + -1;
+        distance = distance + 0x10000;
+        current = current + -1 + xx * 2;
+    } while (size <= start);
+
+    end = yy * 8;
+    current = -current;
+    size = xx * 2;
+    xx = xx + x;
+    start = yy * -4;
+    yy = yy + y;
+
+    do {
+        if (step < distance) {
+            distance = distance - step;
+            DrawMainSurfaceColorPoint(xx, yy, pixel);
+        }
+        if (-1 < current) {
+            size = size + 2;
+            xx = xx + 1;
+            distance = distance + 0x3989;
+            current = current - size;
+        }
+        end = end + 8;
+        start = start + -4;
+        current = current + (-1 - end);
+        yy = yy + 1;
+        distance = distance + 0x10000;
+    } while (-1 < start);
 }
 
 // 0x100023e0

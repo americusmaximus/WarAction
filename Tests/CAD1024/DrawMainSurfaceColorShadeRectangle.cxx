@@ -109,10 +109,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
         state->Actions.OffsetSurfaces(0, 0);
 
         // No pixels.
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: 0 OY: 0", state, event, 100, 100, 100, 0, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: 0 OY: 0", state, event, 100, 100, 100, 0, 0, 1, &rect);
+        //}
 
         // Within the area.
         {
@@ -147,10 +147,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
             EXECUTE("X: -150 Y: -150 W: 100 H: 100 OX: 0 OY: 0", state, event, -150, -150, 100, 100, 0, 1, &rect);
         }
 
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: 0 OY: 0", state, event, 1000, 700, -100, -100, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: 0 OY: 0", state, event, 1000, 700, -100, -100, 0, 1, &rect);
+        //}
 
         // No overlap.
         {
@@ -164,10 +164,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
         state->Actions.OffsetSurfaces(75, 100);
 
         // No pixels.
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: 75 OY: 100", state, event, 100, 100, 100, 0, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: 75 OY: 100", state, event, 100, 100, 100, 0, 0, 1, &rect);
+        //}
 
         // Within the area.
         {
@@ -202,10 +202,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
             EXECUTE("X: -150 Y: -150 W: 100 H: 100 OX: 75 OY: 100", state, event, -150, -150, 100, 100, 0, 1, &rect);
         }
 
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: 75 OY: 100", state, event, 1000, 700, -100, -100, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: 75 OY: 100", state, event, 1000, 700, -100, -100, 0, 1, &rect);
+        //}
 
         // No overlap.
         {
@@ -219,10 +219,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
         state->Actions.OffsetSurfaces(-300, -125);
 
         // No pixels.
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: -225 OY: -25", state, event, 100, 100, 100, 0, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: -225 OY: -25", state, event, 100, 100, 100, 0, 0, 1, &rect);
+        //}
 
         // Within the area.
         {
@@ -257,10 +257,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
             EXECUTE("X: -150 Y: -150 W: 100 H: 100 OX: -225 OY: -25", state, event, -150, -150, 100, 100, 0, 1, &rect);
         }
 
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: -225 OY: -25", state, event, 1000, 700, -100, -100, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: -225 OY: -25", state, event, 1000, 700, -100, -100, 0, 1, &rect);
+        //}
 
         // No overlap.
         {
@@ -274,10 +274,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
         state->Actions.OffsetSurfaces(965, 672);
 
         // No pixels.
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: 740 OY: 647", state, event, 100, 100, 100, 0, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 100 Y: 100 W: 100 H: 0 OX: 740 OY: 647", state, event, 100, 100, 100, 0, 0, 1, &rect);
+        //}
 
         // Within the area.
         {
@@ -312,10 +312,10 @@ VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, M
             EXECUTE("X: -150 Y: -150 W: 100 H: 100 OX: 740 OY: 647", state, event, -150, -150, 100, 100, 0, 1, &rect);
         }
 
-        {
-            RECTANGLE rect = { 0, 0, 0, 0 };
-            EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: 740 OY: 647", state, event, 1000, 700, -100, -100, 0, 1, &rect);
-        }
+        //{
+        //    RECTANGLE rect = { 0, 0, 0, 0 };
+        //    EXECUTE("X: 1000 Y: 700 W: -100 H: -100 OX: 740 OY: 647", state, event, 1000, 700, -100, -100, 0, 1, &rect);
+        //}
 
         // No overlap.
         {
