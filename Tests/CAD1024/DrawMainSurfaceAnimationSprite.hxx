@@ -20,8 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Basic.hxx"
-#include "Native.Basic.hxx"
+#pragma once
 
-// 0x1000b647
-BOOL APIENTRY Main(HMODULE, DWORD, LPVOID) { return TRUE; }
+#include "Module.hxx"
+
+VOID DrawMainSurfaceAnimationSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

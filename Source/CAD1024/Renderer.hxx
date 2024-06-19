@@ -52,12 +52,12 @@ typedef struct RendererStateContainer
 
     struct
     {
-        OUTLINESKIPOPTIONS Options; // 0x1001d55c
-        S32 HorizontalDirection;    // 0x1001d560
-        S32 Stride;                 // 0x1001d564
-        S32 VerticalDirection;      // 0x1001d568
-        S32 Height;                 // 0x1001d56c
-        S32 Width;                  // 0x1001d570
+        OUTLINESKIPOPTIONS  Options;                // 0x1001d55c
+        S32                 HorizontalDirection;    // 0x1001d560
+        S32                 Stride;                 // 0x1001d564
+        S32                 VerticalDirection;      // 0x1001d568
+        S32                 Height;                 // 0x1001d56c
+        S32                 Width;                  // 0x1001d570
     } Outline;
 
     struct
@@ -75,12 +75,12 @@ typedef struct RendererStateContainer
         } Window;
 
         PIXEL*  X;                  // 0x1001007c
-        S32     Unknown;            // 0x10010080 // TODO
+
         U32     ColorMask;          // 0x10010084
         U32     AdjustedColorMask;  // 0x10010088
 
-        S32     Height;     // 0x1001009a
-        S32     Overage;    // 0x1001009e
+        S32     Height;             // 0x1001009a
+        S32     Overage;            // 0x1001009e
     } Sprite;
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
@@ -102,7 +102,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 VOID DrawMainSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
-VOID DrawMainSurfaceCursor(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
+VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel);
 VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);

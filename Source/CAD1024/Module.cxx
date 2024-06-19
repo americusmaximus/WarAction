@@ -70,7 +70,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.FUN_10004db0                                = FUN_10004db0; // TODO
     ModuleState.Actions.FUN_10006ef8                                = FUN_10006ef8; // TODO
     ModuleState.Actions.FUN_10007292                                = FUN_10007292; // TODO
-    ModuleState.Actions.DrawMainSurfaceCursor                       = DrawMainSurfaceCursor;
+    ModuleState.Actions.DrawMainSurfaceAnimationSprite              = DrawMainSurfaceAnimationSprite;
     ModuleState.Actions.FUN_100067ad                                = FUN_100067ad; // TODO
     ModuleState.Actions.FUN_10007662                                = FUN_10007662; // TODO
     ModuleState.Actions.FUN_10007fbc                                = FUN_10007fbc; // TODO

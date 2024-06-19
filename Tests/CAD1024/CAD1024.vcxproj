@@ -159,6 +159,7 @@
     <ClCompile Include="ConvertAllColors.cxx" />
     <ClCompile Include="ConvertVisibleColors.cxx" />
     <ClCompile Include="DrawBackSurfaceColorPoint.cxx" />
+    <ClCompile Include="DrawMainSurfaceAnimationSprite.cxx" />
     <ClCompile Include="DrawMainSurfaceColorBox.cxx" />
     <ClCompile Include="DrawMainSurfaceColorEllipse.cxx" />
     <ClCompile Include="DrawMainSurfaceColorOutline.cxx" />
@@ -187,6 +188,7 @@
     <ClInclude Include="ConvertAllColors.hxx" />
     <ClInclude Include="ConvertVisibleColors.hxx" />
     <ClInclude Include="DrawBackSurfaceColorPoint.hxx" />
+    <ClInclude Include="DrawMainSurfaceAnimationSprite.hxx" />
     <ClInclude Include="DrawMainSurfaceColorBox.hxx" />
     <ClInclude Include="DrawMainSurfaceColorEllipse.hxx" />
     <ClInclude Include="DrawMainSurfaceColorOutline.hxx" />

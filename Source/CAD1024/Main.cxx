@@ -23,4 +23,5 @@ SOFTWARE.
 #include "Basic.hxx"
 #include "Native.Basic.hxx"
 
+// 0x1000b637
 BOOL APIENTRY Main(HMODULE, DWORD, LPVOID) { return TRUE; }
