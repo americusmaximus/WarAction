@@ -25,6 +25,7 @@ SOFTWARE.
 #include "ConvertAllColors.hxx"
 #include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
+#include "DrawBackSurfacePaletteShadeSprite.hxx"
 #include "DrawMainSurfaceAnimationSprite.hxx"
 #include "DrawMainSurfaceColorBox.hxx"
 #include "DrawMainSurfaceColorEllipse.hxx"
@@ -57,6 +58,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
     ACTION(ConvertAllColors, state, event);
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
+    ACTION(DrawBackSurfacePaletteShadeSprite, state, event);
     ACTION(DrawMainSurfaceAnimationSprite, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);
     ACTION(DrawMainSurfaceColorEllipse, state, event);

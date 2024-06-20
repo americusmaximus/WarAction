@@ -56,7 +56,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.FUN_10004390                                = FUN_100043a0; // TODO
     ModuleState.Actions.FUN_100046b6                                = FUN_100046c6; // TODO
     ModuleState.Actions.FUN_100049e6                                = FUN_100049f6; // TODO
-    ModuleState.Actions.FUN_10005e31                                = FUN_10005e41; // TODO
+    ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
     ModuleState.Actions.FUN_10005ac6                                = FUN_10005ad6; // TODO
     ModuleState.Actions.FUN_1000579c                                = FUN_100057ac; // TODO
     ModuleState.Actions.FUN_10007928                                = FUN_10007938; // TODO

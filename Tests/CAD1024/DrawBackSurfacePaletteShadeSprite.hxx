@@ -24,31 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-typedef struct ColorMaskResult
-{
-    U16 ActualColorMask;
-    U16 ActualRedMask;
-    U16 ActualGreenMask;
-    U16 ActualBlueMask;
-
-    U16 InitialColorMask;
-    U16 InitialRedMask;
-    U16 InitialGreenMask;
-    U16 InitialBlueMask;
-
-    U16 RedOffset;
-    U16 GreenOffset;
-    U16 BlueOffset;
-
-    U16 Unk18;
-    U16 ShadeColorMask;
-    U16 Unk22;
-    U16 Unk23;
-    U32 Unk24;
-    U32 Unk25;
-    U32 Unk27;
-    DOUBLEPIXEL BackSurfaceShadePixel;
-} COLORMASKRESULT, * COLORMASKRESULTPTR;
-
-VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state);
-VOID SetPixelColorMasks(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawBackSurfacePaletteShadeSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);

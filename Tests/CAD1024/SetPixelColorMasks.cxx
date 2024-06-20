@@ -47,8 +47,7 @@ VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state)
     state->Unk24 = 0;
     state->Unk25 = 0;
     state->Unk27 = 0;
-    state->Unk29 = 0;
-    state->Unk30 = 0;
+    state->BackSurfaceShadePixel = 0;
 }
 
 BOOL Check(RENDERERMODULESTATECONTAINERPTR state, COLORMASKRESULTPTR result)
@@ -76,8 +75,7 @@ BOOL Check(RENDERERMODULESTATECONTAINERPTR state, COLORMASKRESULTPTR result)
     value &= state->Unk24 == result->Unk24;
     value &= state->Unk25 == result->Unk25;
     value &= state->Unk27 == result->Unk27;
-    value &= state->Unk29 == result->Unk29;
-    value &= state->Unk30 == result->Unk30;
+    value &= state->BackSurfaceShadePixel == result->BackSurfaceShadePixel;
 
     return value;
 }
@@ -100,15 +98,15 @@ VOID SetPixelColorMasks(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR ev
 
     //
     {
-        COLORMASKRESULT result = { 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 0x821, 0xF7DE, 0xF7DE, 0xFFFF, 0xFFFF, 0, 0, 0, 0 };
+        COLORMASKRESULT result = { 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 0x821, 0xF7DE, 0xF7DE, 0xFFFF, 0xFFFF, 0, 0, 0 };
         EXECUTE("R: 0x0 G: 0x0 B: 0x0", state, event, 0, 0, 0, &result);
     }
     {
-        COLORMASKRESULT result = { 0x8410, 0xF800, 0x7E0, 0x1F, 0x8410, 0xF800, 0x7E0, 0x1F, 0, 5, 11, 0x821, 0xF7DE, 0xF7DE, 0x7BEF, 0x7BEF, 0x7E0F81F, 0x4008010, 0x85, 0x85 };
+        COLORMASKRESULT result = { 0x8410, 0xF800, 0x7E0, 0x1F, 0x8410, 0xF800, 0x7E0, 0x1F, 0, 5, 11, 0x821, 0xF7DE, 0xF7DE, 0x7BEF, 0x7BEF, 0x7E0F81F, 0x4008010, 0x00850085 };
         EXECUTE("R: 0xF800 G: 0x7E0 B: 0x1F", state, event, 0xF800, 0x7E0, 0x1F, &result);
     }
     {
-        COLORMASKRESULT result = { 0x8410, 0x7E0, 0x1F, 0xF800, 0x8410, 0x7E0, 0x1F, 0xF800, 5, 11, 0, 0x821, 0xF7DE, 0xF7DE, 0x7BEF, 0x7BEF, 0x7E0F81F, 0x4008010, 0x2802, 0x2802 };
+        COLORMASKRESULT result = { 0x8410, 0x7E0, 0x1F, 0xF800, 0x8410, 0x7E0, 0x1F, 0xF800, 5, 11, 0, 0x821, 0xF7DE, 0xF7DE, 0x7BEF, 0x7BEF, 0x7E0F81F, 0x4008010, 0x28022802 };
         EXECUTE("R: 0x7E0 G: 0x1F B: 0xF800", state, event, 0x7E0, 0x1F, 0xF800, &result);
     }
 

@@ -21,10 +21,11 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
-#include "DrawMainSurfaceAnimationSprite.hxx"
+#include "DrawBackSurfacePaletteShadeSprite.hxx"
 #include "File.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
+#include "SetPixelColorMasks.hxx"
 
 #include <stdio.h>
 
@@ -85,16 +86,13 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
     {
         ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)animation;
+        IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[0]);
 
-        for (U32 xx = 0; xx < header->Count; xx++)
-        {
-            IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
-
-            state->Actions.DrawMainSurfaceAnimationSprite(x + xx * 25, y, 100, (ANIMATIONPIXEL*)palette, sprite);
-        }
+        state->Actions.DrawBackSurfacePaletteShadeSprite(x, y, 100, (PIXEL*)palette, sprite);
     }
 
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSprite", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawBackSurfacePaletteShadeSprite", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawBackSurfacePaletteShadeSprite", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);
@@ -105,12 +103,19 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceAnimationSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID DrawBackSurfacePaletteShadeSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 {
+    // Initialize.
+    InitializePixelMasks(state);
+    state->Actions.SetPixelColorMasks(0xF800, 0x7E0, 0x1F);
+
     // Offset to 0:0
     {
         state->Actions.OffsetSurfaces(0, 0);
 
-        EXECUTE("X: 100 Y: 100 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 100, 100, 0, 0, 0, 0, "cursor", 0);
+        EXECUTE("X: 0 Y: 0 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 0, 0, 0, 0, 0, 0, "brief", 0);
     }
+    
+    // Finalize.
+    InitializePixelMasks(state);
 }
