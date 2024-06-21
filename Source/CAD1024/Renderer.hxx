@@ -86,7 +86,7 @@ typedef struct RendererStateContainer
 
 EXTERN RENDERERSTATECONTAINER RendererState;
 
-BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height);
+BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height); // TODO
 BOOL InitializeDirectX(HWND hwnd, BOOL fullscreen);
 BOOL InitializeWindow(S32 width, S32 height);
 BOOL LockRendererSurface(VOID);

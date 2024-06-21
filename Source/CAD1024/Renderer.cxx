@@ -256,11 +256,11 @@ BOOL InitializeWindow(S32 width, S32 height)
     ReleaseRendererSurface();
 
 #if ACTIVE_TRUE_COLOR_MODE
-        HDC hdc = GetDC(ModuleState.HWND);
+    HDC hdc = GetDC(ModuleState.HWND);
 
-        RendererState.IsTrueColor = GetDeviceCaps(hdc, BITSPIXEL) == GRAPHICS_BITS_PER_PIXEL_32;
+    RendererState.IsTrueColor = GetDeviceCaps(hdc, BITSPIXEL) == GRAPHICS_BITS_PER_PIXEL_32;
 
-        ReleaseDC(ModuleState.HWND, hdc);
+    ReleaseDC(ModuleState.HWND, hdc);
 #endif
 
     if (ModuleState.IsFullScreen)

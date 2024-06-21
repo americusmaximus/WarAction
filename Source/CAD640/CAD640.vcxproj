@@ -211,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.hxx" />
+    <ClInclude Include="Renderer.hxx" />
     <ClInclude Include="Resources.hxx" />
   </ItemGroup>
   <ItemGroup>
