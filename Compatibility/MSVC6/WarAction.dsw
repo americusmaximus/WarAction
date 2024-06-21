@@ -3,6 +3,48 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "CAD1024"=.\CAD1024\CAD1024.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "CAD640"=.\CAD640\CAD640.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name WAX
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "CAD800"=.\CAD800\CAD800.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name WAX
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "Game"=.\Game\Game.dsp - Package Owner=<4>
 
 Package=<5>

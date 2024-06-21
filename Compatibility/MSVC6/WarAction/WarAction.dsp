@@ -134,6 +134,10 @@ SOURCE=..\..\..\Source\WarAction\Strings.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\WarAction.rc
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Source\WarAction\Window.cxx
 # End Source File
 # End Group

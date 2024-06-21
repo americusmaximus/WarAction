@@ -110,6 +110,10 @@ SOURCE=.\Resources.rc
 
 SOURCE=..\..\..\Source\Game\Basic.hxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\Resources.hxx
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
