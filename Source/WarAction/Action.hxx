@@ -52,5 +52,6 @@ VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR* 
 VOID InitializeActionHandler(CONST U32 priority, ACTIONHANDLERLAMBDA action);
 VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action);
 
-VOID ReleaseActionHandler(ACTIONHANDLERLAMBDA action);
+BOOL CLASSCALL ContainsActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR handler);
+VOID CLASSCALL ReleaseActionHandler(ACTIONHANDLERLAMBDA action);
 VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA action);

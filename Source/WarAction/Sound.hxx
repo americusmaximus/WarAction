@@ -30,8 +30,8 @@ SOFTWARE.
 
 EXTERN SOUNDSTATECONTAINER SoundState;
 
-VOID CLASSCALL ActivateDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self); // TODO
-VOID CLASSCALL ReleaseDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self); // TODO
+VOID CLASSCALL ActivateSoundTrack(SOUNDTRACKPTR self);
+VOID CLASSCALL ReleaseSoundTrack(SOUNDTRACKPTR self);
 
 VOID ActivateSoundStateContainer(VOID);
 VOID ActivateReleaseSoundState(VOID);

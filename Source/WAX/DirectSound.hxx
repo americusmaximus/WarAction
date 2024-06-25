@@ -30,4 +30,7 @@ SOFTWARE.
 #define DIRECTSOUND_VERSION 0x0700
 #include <dsound.h>
 
+#define DSBLOCK_NONE        0
+#define DSBPLAY_NONE        0
+
 #define DIRECTSOUNDRELEASE(x) if (x != NULL) { x->Release(); x = NULL; }

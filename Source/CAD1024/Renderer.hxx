@@ -36,7 +36,7 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_BOTTOM       = 2,
     OUTLINESKIPOPTIONS_LEFT         = 4,
     OUTLINESKIPOPTIONS_RIGHT        = 8,
-    OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7fffffff
+    OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
 } OUTLINESKIPOPTIONS;
 
 typedef struct RendererStateContainer

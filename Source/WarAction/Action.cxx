@@ -89,7 +89,7 @@ VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA
 }
 
 // 0x00402390
-BOOL ContainsWindowStateHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR handler)
+BOOL CLASSCALL ContainsActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR handler)
 {
     while (handler != NULL)
     {
@@ -108,11 +108,11 @@ VOID CLASSCALL ReleaseActionHandler(ACTIONHANDLERPTR self)
 
     ACTIONHANDLERPTR* destination = NULL;
 
-    if (ContainsWindowStateHandler(self, State.Actions.Activate)) { destination = &State.Actions.Activate; }
-    else if (ContainsWindowStateHandler(self, State.Actions.Initialize)) { destination = &State.Actions.Initialize; }
-    else if (ContainsWindowStateHandler(self, State.Actions.Action)) { destination = &State.Actions.Action; }
-    else if (ContainsWindowStateHandler(self, State.Actions.Release)) { destination = &State.Actions.Release; }
-    else if (ContainsWindowStateHandler(self, State.Actions.Message)) { destination = &State.Actions.Message; }
+    if (ContainsActionHandler(self, State.Actions.Activate)) { destination = &State.Actions.Activate; }
+    else if (ContainsActionHandler(self, State.Actions.Initialize)) { destination = &State.Actions.Initialize; }
+    else if (ContainsActionHandler(self, State.Actions.Action)) { destination = &State.Actions.Action; }
+    else if (ContainsActionHandler(self, State.Actions.Release)) { destination = &State.Actions.Release; }
+    else if (ContainsActionHandler(self, State.Actions.Message)) { destination = &State.Actions.Message; }
     else { return; }
 
     ACTIONHANDLERPTR current = *destination;

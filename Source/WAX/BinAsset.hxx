@@ -84,3 +84,12 @@ typedef struct ImagePaletteSprite
     IMAGEPALETTESPRITEPIXEL Pixels[1];
 } IMAGEPALETTESPRITE, * IMAGEPALETTESPRITEPTR;
 #pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct AnimationSpriteHeader
+{
+    U32 Magic;
+    U32 Count;
+    U32 Offsets[1];
+} ANIMATIONSPRITEHEADER, * ANIMATIONSPRITEHEADERPTR;
+#pragma pack(pop)

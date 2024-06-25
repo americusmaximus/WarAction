@@ -29,27 +29,29 @@ SOFTWARE.
 SOUNDSTATECONTAINER SoundState;
 
 // 0x00401fa0
-VOID CLASSCALL ActivateDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self)
+VOID CLASSCALL ActivateSoundTrack(SOUNDTRACKPTR self)
 {
-    self->Unk00 = 0; // TODO
-    self->Unk01 = -10000; // TODO
-    self->Unk02 = 0; // TODO
-    self->Unk03 = -10000; // TODO
-    self->Unk04 = NULL;
+    self->State = NULL;
+    self->Volume = DSBVOLUME_MIN;
+    self->MinVolume = DSBVOLUME_MIN;
+    self->Pan = DSBPAN_CENTER;
+    self->Buffer = NULL;
 }
 
 // 0x00401fc0
 // 0x00401fd0
-VOID CLASSCALL ReleaseDirectSoundState0x18(SOUNDSTATEUNK0X18PTR self)
+VOID CLASSCALL ReleaseSoundTrack(SOUNDTRACKPTR self)
 {
     if (State.Sound->Instance != NULL)
     {
-        if (self->Unk04 != NULL)
+        if (self->Buffer != NULL)
         {
-            // TODO NOT IMPLEMENTED
+            self->Buffer->Stop();
+            self->Buffer->Release();
+            self->Buffer = NULL;
         }
 
-        self->Unk00 = 0; // TODO
+        self->State = NULL;
     }
 }
 
@@ -78,7 +80,7 @@ SOUNDSTATECONTAINERPTR CLASSCALL ActivateSoundState(SOUNDSTATECONTAINERPTR self)
     self->Instance = NULL;
     self->Buffer = NULL;
 
-    self->Items = NULL;
+    self->Tracks = NULL;
     self->Count = 0;
 
     self->Result = DS_OK;
@@ -101,16 +103,16 @@ VOID ReleaseSoundStateContainer()
 // 0x00402200
 VOID CLASSCALL ReleaseSoundState(SOUNDSTATECONTAINERPTR self)
 {
-    if (self->Items != NULL)
+    if (self->Tracks != NULL)
     {
         for (U32 x = 0; x < self->Count; x++)
         {
-            ReleaseDirectSoundState0x18(&self->Items[x]);
+            ReleaseSoundTrack(&self->Tracks[x]);
         }
 
-        free(self->Items);
+        free(self->Tracks);
 
-        self->Items = NULL;
+        self->Tracks = NULL;
     }
 
     self->Count = 0;
@@ -126,7 +128,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
 
     self->Result = DirectSoundCreate(NULL, &self->Instance, NULL);
 
-    if (FAILED(self->Result)) { self->State = SOUNDSTATE_INIT_ERROR; return FALSE; }
+    if (FAILED(self->Result)) { self->State = SOUNDSTATE_INITIALIZE_ERROR; return FALSE; }
 
     self->Result = self->Instance->SetCooperativeLevel(window, DSSCL_PRIORITY);
 
@@ -134,7 +136,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
     {
         DIRECTSOUNDRELEASE(self->Instance);
 
-        self->State = SOUNDSTATE_SETUP_ERROR;
+        self->State = SOUNDSTATE_SET_COOPERATIVE_LEVEL_ERROR;
 
         return FALSE;
     }
@@ -151,7 +153,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
     {
         DIRECTSOUNDRELEASE(self->Instance);
 
-        self->State = SOUNDSTATE_BUFFER_ERROR;
+        self->State = SOUNDSTATE_CREATE_MAIN_SOUND_BUFFER_ERROR;
 
         return FALSE;
     }
@@ -180,13 +182,13 @@ BOOL CLASSCALL InitializeSoundState(SOUNDSTATECONTAINERPTR self, HWND window, CO
     self->Buffer->Play(0, 0, DSBPLAY_LOOPING);
 
     self->Count = count;
-    self->Items = (SOUNDSTATEUNK0X18PTR)malloc(count * sizeof(SOUNDSTATEUNK0X18));
+    self->Tracks = (SOUNDTRACKPTR)malloc(count * sizeof(SOUNDTRACK));
 
-    if (self->Items == NULL) { self->Count = 0; }
+    if (self->Tracks == NULL) { self->Count = 0; }
 
     for (U32 x = 0; x < self->Count; x++)
     {
-        ActivateDirectSoundState0x18(&self->Items[x]);
+        ActivateSoundTrack(&self->Tracks[x]);
     }
 
     return TRUE;

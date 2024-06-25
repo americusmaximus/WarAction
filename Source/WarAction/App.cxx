@@ -32,9 +32,9 @@ SOFTWARE.
 // 0x00401f20
 BOOL ApplicationStateWindowStateActionHandler(VOID)
 {
-    if (State.App->InitModule == INVALID_APP_STATE_MODULE_INDEX)
+    if (State.App->InitModule == LAUNCHER_MODULE_STATE_INDEX)
     {
-        if (State.App->ActiveModule == INVALID_APP_STATE_MODULE_INDEX) { return FALSE; }
+        if (State.App->ActiveModule == LAUNCHER_MODULE_STATE_INDEX) { return FALSE; }
 
         if (!State.App->Actions.Execute()) { return FALSE; }
     }
@@ -94,7 +94,7 @@ BOOL InitializeApplicationStateModules(LPCSTR file)
         GetPrivateProfileStringA("StartUp", name, NULL, State.App->Modules[x], MAX_APP_STATE_MODULE_NAME_LENGTH, file);
     }
 
-    State.App->InitModule = GetPrivateProfileIntA("StartUp", "StartModule", INVALID_APP_STATE_MODULE_INDEX, file);
+    State.App->InitModule = GetPrivateProfileIntA("StartUp", "StartModule", LAUNCHER_MODULE_STATE_INDEX, file);
 
     return TRUE;
 }
@@ -102,7 +102,7 @@ BOOL InitializeApplicationStateModules(LPCSTR file)
 // 0x00401bd0
 VOID ReleaseApplicationStateModules()
 {
-    if (State.App == NULL || State.App->ActiveModule == INVALID_APP_STATE_MODULE_INDEX) { return; }
+    if (State.App == NULL || State.App->ActiveModule == LAUNCHER_MODULE_STATE_INDEX) { return; }
 
     if (State.App->Actions.Done != NULL) { State.App->Actions.Done(); }
 
@@ -120,7 +120,7 @@ VOID ReleaseApplicationStateModules()
     State.App->Actions.Done = NULL;
     State.App->Actions.Handle = NULL;
 
-    State.App->ActiveModule = INVALID_APP_STATE_MODULE_INDEX;
+    State.App->ActiveModule = LAUNCHER_MODULE_STATE_INDEX;
 }
 
 // 0x00401ee0
@@ -141,11 +141,11 @@ BOOL ReleaseApplicationState()
 // 0x00401c70
 BOOL InitializeApplicationStateModule()
 {
-    if (State.App->InitModule < MENU_APP_STATE_MODULE_INDEX)
+    if (State.App->InitModule < MENU_MODULE_STATE_INDEX)
     {
         ReleaseApplicationStateModules();
 
-        State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
+        State.App->InitModule = LAUNCHER_MODULE_STATE_INDEX;
 
         return TRUE;
     }
@@ -165,7 +165,7 @@ BOOL InitializeApplicationStateModule()
     }
 
     State.App->ActiveModule = State.App->InitModule;
-    State.App->InitModule = INVALID_APP_STATE_MODULE_INDEX;
+    State.App->InitModule = LAUNCHER_MODULE_STATE_INDEX;
 
     State.App->Actions.Initialize = (VISUALMODULEINITACTIONLAMBDA)GetProcAddress(State.App->ModuleHandle, VISUAL_MODULE_INIT_NAME);
 

@@ -35,7 +35,7 @@ typedef enum GameCommand
     GAMECOMMAND_LOAD_GAME       = 4,
     GAMECOMMAND_QUIT            = 5, // RK_EXITTOOS
     GAMECOMMAND_RESTART         = 6, // RK_RESTART
-    GAMECOMMAND_FORCE_DWORD     = 0x7fffffff
+    GAMECOMMAND_FORCE_DWORD     = 0x7FFFFFFF
 } GAMECOMMAND;
 
 typedef enum GameDifficulty
@@ -44,7 +44,7 @@ typedef enum GameDifficulty
     GAMEDIFFICULTY_EASY         = 1,
     GAMEDIFFICULTY_MEDIUM       = 2,
     GAMEDIFFICULTY_HARD         = 3,
-    GAMEDIFFICULTY_FORCE_DWORD  = 0x7fffffff
+    GAMEDIFFICULTY_FORCE_DWORD  = 0x7FFFFFFF
 } GAMEDIFFICULTY;
 
 typedef struct GamePlayerStateContainer
