@@ -22,9 +22,15 @@ SOFTWARE.
 
 #pragma once
 
-#define MAX_GAME_STATE_PLAYER_COUNT 12
-#define MAX_GAME_STATE_PLAYER_NAME_LENGTH 32 /* TODO */
-#define MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH 256
+#define MAX_GAME_STATE_PLAYER_COUNT             12
+#define MAX_GAME_STATE_PLAYER_NAME_LENGTH       32 /* TODO */
+#define MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH    256
+
+#define INVALID_GAME_NATION                     (-1)
+#define GAME_NATION_RUSSIAN                     0
+#define GAME_NATION_GERMAN                      1
+#define GAME_NATION_BRITISH                     2
+#define GAME_NATION_AMERICAN                    3
 
 typedef enum GameCommand
 {

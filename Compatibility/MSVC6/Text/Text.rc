@@ -136,8 +136,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_REVERSE_STEREO      "ReverseStereo"
     IDS_STRING49            "Network"
-    IDS_STRING51            "Map%i"
-    IDS_STRING52            "Mis%i"
+    IDS_MAP_INDEX           "Map%i"
+    IDS_MISSION_INDEX       "Mis%i"
     IDS_VIDEO_MODE          "VideoMode"
     IDS_DRAW_MODE_INDEX     "SSDraw%i"
     IDS_FULL_SCREEN         "FullScreen"
@@ -173,7 +173,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_RATINGS_PATH        "RatingsPath"
     IDS_MOVIES_PATH         "MoviesPath"
-    IDS_STRING82            "<>:""""/\\|&*+,.;=?@[]^"
+    IDS_INVALID_NAME_CHARS  "<>:""""/\\|&*+,.;=?@[]^"
     IDS_BACK_WAVE_PATH      "BackWavPath"
     IDS_STRING84            "+3ywl|nepvk"
     IDS_STRING85            "+3trqwl"
@@ -184,8 +184,8 @@ BEGIN
     IDS_BRIEF_DELAY_3       "BriefDelay3"
     IDS_STRING92            "SuddenStrike22"
     IDS_STRING93            "0-9"
-    IDS_STRING94            "Map%iNew"
-    IDS_STRING95            "Mis%iNew"
+    IDS_NEW_MAP_INDEX       "Map%iNew"
+    IDS_NEW_MISSION_INDEX   "Mis%iNew"
 END
 
 STRINGTABLE DISCARDABLE 

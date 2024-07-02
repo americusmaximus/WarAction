@@ -24,6 +24,8 @@ SOFTWARE.
 
 #include "DirectSound.hxx"
 
+#define MAX_SOUND_NAME_LENGTH   64
+
 typedef enum SoundState
 {
     SOUNDSTATE_NONE                                 = 0,
@@ -56,6 +58,22 @@ typedef struct SoundTrack
     LPDIRECTSOUNDBUFFER     Buffer;
     U32                     Unk05; // TODO
 } SOUNDTRACK, * SOUNDTRACKPTR;
+
+typedef struct SoundDescriptor
+{
+    CHAR    Name[MAX_SOUND_NAME_LENGTH];
+    U32     Unk01; // TODO
+    U32     Unk02; // TODO
+    U32     Unk03; // TODO
+    U32     Unk04; // TODO
+    //U32     Unk05; // TODO
+} SOUNDDESCRIPTOR, * SOUNDDESCRIPTORPTR;
+
+typedef struct SoundHeader
+{
+    U32                     Count;
+    SOUNDDESCRIPTOR         Sounds[1];
+} SOUNDHEADER, * SOUNDHEADERPTR;
 
 typedef struct SoundStateContainer
 {
