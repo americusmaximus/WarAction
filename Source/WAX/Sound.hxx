@@ -56,7 +56,7 @@ typedef struct SoundTrack
     S32                     Pan;
     S32                     MinVolume;
     LPDIRECTSOUNDBUFFER     Buffer;
-    U32                     Unk05; // TODO
+    U32                     Ticks;
 } SOUNDTRACK, * SOUNDTRACKPTR;
 
 typedef struct SoundDescriptor

@@ -32,5 +32,6 @@ SOFTWARE.
 
 #define DSBLOCK_NONE        0
 #define DSBPLAY_NONE        0
+#define DSBSTATUS_NONE      0
 
 #define DIRECTSOUNDRELEASE(x) if (x != NULL) { x->Release(); x = NULL; }
