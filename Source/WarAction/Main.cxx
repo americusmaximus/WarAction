@@ -77,7 +77,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
 
     if (State.Window == NULL)
     {
-        MessageBoxA(NULL, "Problem with process description.", "Fatal Error", MB_ICONHAND);
+        MessageBoxA(NULL, "Problem with process description.", "Fatal Error", MB_ICONHAND | MB_OK);
 
         return EXIT_SUCCESS;
     }
@@ -97,7 +97,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, LPSTR args, INT command)
 
     if (!InitializeWindow(command))
     {
-        MessageBoxA(NULL, "Internal-init process failed", "Error", MB_ICONHAND);
+        MessageBoxA(NULL, "Internal-init process failed", "Error", MB_ICONHAND | MB_OK);
 
         return EXIT_SUCCESS;
     }

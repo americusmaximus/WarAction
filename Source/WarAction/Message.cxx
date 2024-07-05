@@ -37,5 +37,5 @@ VOID Message(LPCSTR format, ...)
     vsprintf(message, format, args);
     va_end(args);
 
-    MessageBoxA(State.Window->HWND, message, "VStart Error", MB_ICONHAND);
+    MessageBoxA(State.Window->HWND, message, "VStart Error", MB_ICONHAND | MB_OK);
 }
