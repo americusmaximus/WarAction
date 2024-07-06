@@ -44,7 +44,7 @@ BOOL InitializeRendererStateModule(LPCSTR file)
 }
 
 // 0x004013d0
-VOID ReleaseRenderStateModule()
+VOID ReleaseRenderStateModule(VOID)
 {
     if (State.Renderer.Module != NULL) { FreeLibrary(State.Renderer.Module); }
 }

@@ -34,9 +34,9 @@ typedef BOOL(*WINDOWACTIONHANDLERLAMBDA)(HWND hwnd, UINT msg, WPARAM wp, LPARAM 
 
 typedef struct ActionHandler
 {
-    LPVOID Action;
-    U32 Priority;
-    ActionHandler* Next;
+    LPVOID          Action;
+    U32             Priority;
+    ActionHandler*  Next;
 } ACTIONHANDLER, * ACTIONHANDLERPTR;
 
 #define INITIALIZEACTIONHANDLER(H, A)                                                               \

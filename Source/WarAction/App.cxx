@@ -100,7 +100,7 @@ BOOL InitializeApplicationStateModules(LPCSTR file)
 }
 
 // 0x00401bd0
-VOID ReleaseApplicationStateModules()
+VOID ReleaseApplicationStateModules(VOID)
 {
     if (State.App == NULL || State.App->ActiveModule == LAUNCHER_MODULE_STATE_INDEX) { return; }
 
@@ -124,7 +124,7 @@ VOID ReleaseApplicationStateModules()
 }
 
 // 0x00401ee0
-BOOL ReleaseApplicationState()
+BOOL ReleaseApplicationState(VOID)
 {
     ReleaseApplicationStateModules();
     
@@ -139,7 +139,7 @@ BOOL ReleaseApplicationState()
 }
 
 // 0x00401c70
-BOOL InitializeApplicationStateModule()
+BOOL InitializeApplicationStateModule(VOID)
 {
     if (State.App->InitModule < MENU_MODULE_STATE_INDEX)
     {

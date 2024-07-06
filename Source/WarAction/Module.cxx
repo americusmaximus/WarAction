@@ -28,7 +28,7 @@ SOFTWARE.
 using namespace Mathematics;
 
 // 0x00402850
-VOID AcquireStartArguments()
+VOID AcquireStartArguments(VOID)
 {
     U32 count = 0;
     U32 length = 0;
@@ -164,7 +164,7 @@ BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length)
 }
 
 // 0x00401130
-VOID AcquireIniFileState()
+VOID AcquireIniFileState(VOID)
 {
     State.IsIniActive = GetPrivateProfileIntA("debug", "useinifile", FALSE, State.App->Ini);
 }

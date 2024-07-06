@@ -97,7 +97,7 @@ typedef VOID(*UNLOCKRENDERERSURFACEACTION)(VOID);
 typedef VOID(*WRITEBACKSURFACEMAINSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
 
-typedef struct RendererStateActions
+typedef struct RendererModuleStateActions
 {
     INITIALIZEACTION                                Initialize; // CADraw_Reset
     INITIALIZEDIRECTXACTION                         InitializeDirectX;

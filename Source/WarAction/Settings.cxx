@@ -149,7 +149,7 @@ S32 AcquireSettingsValue(STRINGVALUE name, S32 value)
 
 // 0x004015f0
 // 0x00401450
-BOOL AcquireRendererSettingsValue()
+BOOL AcquireRendererSettingsValue(VOID)
 {
     STRINGVALUE setting;
     AcquireSettingsValue(&setting, IDS_VIDEO_MODE);

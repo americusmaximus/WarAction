@@ -45,7 +45,7 @@ SOFTWARE.
 WINDOWSTATECONTAINER WindowState;
 
 // 0x00401870
-BOOL ActivateWindowStateAction()
+BOOL ActivateWindowStateAction(VOID)
 {
     State.Window->Class.hIcon = LoadIconA(State.Window->Instance, MAKEINTRESOURCEA(IDI_WARACTION));
     State.Window->Class.hCursor = NULL;
@@ -56,7 +56,7 @@ BOOL ActivateWindowStateAction()
 }
 
 // 0x00401600
-BOOL InitializeWindowStateAction()
+BOOL InitializeWindowStateAction(VOID)
 {
     CoInitialize(NULL);
     AcquireStartArguments();
@@ -226,7 +226,7 @@ BOOL ReleaseWindowStateAction(VOID)
 }
 
  // 0x004018f0
- VOID ActivateWindowState()
+ VOID ActivateWindowState(VOID)
  {
      ActivateWindowStateContainer(&WindowState, ActivateWindowStateAction,
          InitializeWindowStateAction, NULL, ReleaseWindowStateAction, (ACTIONHANDLERLAMBDA)MessageWindowStateAction);

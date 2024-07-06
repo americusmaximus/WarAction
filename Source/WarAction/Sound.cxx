@@ -56,19 +56,19 @@ VOID CLASSCALL ReleaseSoundTrack(SOUNDTRACKPTR self)
 }
 
 // 0x00401400
-VOID ActivateSoundState()
+VOID ActivateSoundState(VOID)
 {
     ActivateSoundState(&SoundState);
 }
 
 // 0x00401410
-VOID ActivateReleaseSoundState()
+VOID ActivateReleaseSoundState(VOID)
 {
     atexit(ReleaseSoundStateContainer);
 }
 
 // 0x004013f0
-VOID ActivateSoundStateContainer()
+VOID ActivateSoundStateContainer(VOID)
 {
     ActivateSoundState();
     ActivateReleaseSoundState();
@@ -95,7 +95,7 @@ SOUNDSTATECONTAINERPTR CLASSCALL ActivateSoundState(SOUNDSTATECONTAINERPTR self)
 }
 
 // 0x00401420
-VOID ReleaseSoundStateContainer()
+VOID ReleaseSoundStateContainer(VOID)
 {
     ReleaseSoundState(&SoundState);
 }

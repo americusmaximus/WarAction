@@ -20,13 +20,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Basic.hxx"
 #include "Module.hxx"
 #include "State.hxx"
-#include "WarAction.hxx"
 
 #define WS_EX_NONE 0
 
+// 0x0040d000
 // NOTE: A substitute for dynamic initialization preceding Main in the original game.
 VOID InitializeState(VOID)
 {

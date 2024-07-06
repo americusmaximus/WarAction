@@ -28,7 +28,7 @@ SOFTWARE.
 
 typedef struct StateContainer
 {
-    BOOL IsIniActive; // 0x00410370
+    BOOL IsIniActive;               // 0x00410370
 
     struct
     {
@@ -43,31 +43,31 @@ typedef struct StateContainer
         HMODULE Handle; // 0x00410384
     } Text;
 
-    APPSTATECONTAINERPTR App; // 0x004104fc
+    APPSTATECONTAINERPTR    App;    // 0x004104fc
 
-    SOUNDSTATECONTAINERPTR Sound; // 0x00410504
+    SOUNDSTATECONTAINERPTR  Sound;  // 0x00410504
 
     struct
     {
-        ACTIONHANDLERPTR Activate; // 0x00410508
-        ACTIONHANDLERPTR Initialize; // 0x0041050c
-        ACTIONHANDLERPTR Action; // 0x00410510
-        ACTIONHANDLERPTR Release; // 0x00410514
-        ACTIONHANDLERPTR Message; // 0x00410518
+        ACTIONHANDLERPTR Activate;      // 0x00410508
+        ACTIONHANDLERPTR Initialize;    // 0x0041050c
+        ACTIONHANDLERPTR Action;        // 0x00410510
+        ACTIONHANDLERPTR Release;       // 0x00410514
+        ACTIONHANDLERPTR Message;       // 0x00410518
 
-        ACTIONHANDLERPTR Active; // 0x0041051c
+        ACTIONHANDLERPTR Active;        // 0x0041051c
     } Actions;
 
-    WINDOWSTATECONTAINERPTR Window; // 0x00410520
+    WINDOWSTATECONTAINERPTR Window;     // 0x00410520
 
     struct
     {
-        LPSTR All; // 0x00410524
-        LPSTR* Args; // 0x00410528
-        U32 Count; // 0x0041052c
+        LPSTR All;      // 0x00410524
+        LPSTR* Args;    // 0x00410528
+        U32 Count;      // 0x0041052c
     } Arguments;
 
-    LOGGERSTATECONTAINERPTR Logger; // 0x00410530
-} STATECONTAINER, * LPSTATECONTAINER;
+    LOGGERSTATECONTAINERPTR Logger;     // 0x00410530
+} STATECONTAINER, * STATECONTAINERPTR;
 
 EXTERN STATECONTAINER State;
