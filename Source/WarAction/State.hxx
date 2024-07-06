@@ -40,7 +40,7 @@ typedef struct StateContainer
 
     struct
     {
-        HMODULE Handle; // 0x00410384
+        HMODULE Handle;             // 0x00410384
     } Text;
 
     APPSTATECONTAINERPTR    App;    // 0x004104fc

@@ -86,7 +86,7 @@ typedef struct GameStateContainer
     S32                         Unknown0x20; // TODO
     U32                         TurnDelay;
     S32                         Unknown0x28; // TODO
-    DWORD                       Ticks;
+    U32                         Ticks;
     GAMECOMMAND                 Command;
     S32                         NextMap;
     S32                         NextMission;
