@@ -34,14 +34,14 @@ SOFTWARE.
 
 typedef enum GameCommand
 {
-    GAMECOMMAND_NONE            = 0,
-    GAMECOMMAND_VICTORY         = 1,
-    GAMECOMMAND_UNKNOWN_2       = 2,
-    GAMECOMMAND_UNKNOWN_3       = 3,
-    GAMECOMMAND_LOAD_GAME       = 4,
-    GAMECOMMAND_QUIT            = 5, // RK_EXITTOOS
-    GAMECOMMAND_RESTART         = 6, // RK_RESTART
-    GAMECOMMAND_FORCE_DWORD     = 0x7FFFFFFF
+    GAMECOMMAND_NONE        = 0,
+    GAMECOMMAND_VICTORY     = 1,
+    GAMECOMMAND_UNKNOWN_2   = 2,
+    GAMECOMMAND_UNKNOWN_3   = 3,
+    GAMECOMMAND_LOAD_GAME   = 4,
+    GAMECOMMAND_QUIT        = 5, // RK_EXITTOOS
+    GAMECOMMAND_RESTART     = 6, // RK_RESTART
+    GAMECOMMAND_FORCE_DWORD = 0x7FFFFFFF
 } GAMECOMMAND;
 
 typedef enum GameDifficulty
@@ -78,14 +78,14 @@ typedef struct GameStateContainer
 {
     BOOL                        IsNetwork;
     GAMEDIFFICULTY              Difficulty;
-    S32                         Unknown0x0c; // TODO
-    S32                         Unknown0x10; // TODO
-    S32                         Unknown0x14; // TODO
-    S32                         Unknown0x18; // TODO
-    S32                         Unknown0x1c; // TODO
-    S32                         Unknown0x20; // TODO
+    S32                         Unk02; // TODO
+    S32                         Unk03; // TODO
+    S32                         Unk04; // TODO
+    S32                         Unk05; // TODO
+    S32                         Unk06; // TODO
+    S32                         Unk07; // TODO
     U32                         TurnDelay;
-    S32                         Unknown0x28; // TODO
+    S32                         Unk09; // TODO
     U32                         Ticks;
     GAMECOMMAND                 Command;
     S32                         NextMap;

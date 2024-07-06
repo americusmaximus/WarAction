@@ -41,8 +41,6 @@ SOFTWARE.
 
 struct AppStateContainer;
 
-typedef VOID(*UNKNOWN0X1170)(AppStateContainer*); // TODO
-
 typedef struct AppStateContainer
 {
     S32                                 InitModule;
@@ -62,7 +60,7 @@ typedef struct AppStateContainer
         VISUALMODULEEXECUTEACTIONLAMBDA Execute;
         VISUALMODULEDONEACTIONLAMBDA    Done;
         VISUALMODULEHANDLEACTIONLAMBDA  Handle;
+        VISUALMODULERELEASELAMBDA       Release;
     } Actions;
-    UNKNOWN0X1170                       Unknown0x1170; // TODO
     ACQUIRERENDERERSETTINGSVALUELAMBDA  AcquireRendererSettingsValue;
 } APPSTATECONTAINER, * APPSTATECONTAINERPTR;

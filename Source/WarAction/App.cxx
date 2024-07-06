@@ -66,7 +66,7 @@ BOOL InitializeApplicationState(LPCSTR file)
     State.App->Window = State.Window;
     State.App->AcquireRendererSettingsValue = NULL;
 
-    State.App->Unknown0x1170 = NULL;
+    State.App->Actions.Release = NULL;
 
     if (!InitializeApplicationStateModules(file)) { Message("Can't load profile %s.\n", file); return FALSE; }
 
@@ -108,7 +108,7 @@ VOID ReleaseApplicationStateModules(VOID)
 
     if (State.App->ModuleHandle != NULL)
     {
-        if (State.App->Unknown0x1170 != NULL) { State.App->Unknown0x1170(State.App); }
+        if (State.App->Actions.Release != NULL) { State.App->Actions.Release(State.App); }
 
         FreeLibrary(State.App->ModuleHandle);
 
@@ -127,7 +127,7 @@ VOID ReleaseApplicationStateModules(VOID)
 BOOL ReleaseApplicationState(VOID)
 {
     ReleaseApplicationStateModules();
-    
+
     free(State.App);
 
     State.App = NULL;

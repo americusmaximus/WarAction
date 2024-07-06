@@ -29,11 +29,11 @@ SOFTWARE.
 typedef struct RendererModuleDirectXState
 {
 #ifdef ACTIVATE_MODERN_MODE
-        LPDIRECTDRAW7           Instance;
-        LPDIRECTDRAWSURFACE7    Surface;
+    LPDIRECTDRAW7           Instance;
+    LPDIRECTDRAWSURFACE7    Surface;
 #else
-        LPDIRECTDRAW            Instance;
-        LPDIRECTDRAWSURFACE     Surface;
+    LPDIRECTDRAW            Instance;
+    LPDIRECTDRAWSURFACE     Surface;
 #endif
 } RENDERERMODULEDIRECTXSTATE, * LPRENDERERMODULEDIRECTXSTATE;
 
