@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\SDK\zlib\adler32.c" />
     <ClCompile Include="..\..\SDK\zlib\compress.c" />
     <ClCompile Include="..\..\SDK\zlib\crc32.c" />
     <ClCompile Include="..\..\SDK\zlib\deflate.c" />
