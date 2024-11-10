@@ -39,18 +39,6 @@ SOFTWARE.
 
 #define MAX_GAME_MAP_COUNT          127 /* TODO NAME */
 
-typedef enum GameCommand
-{
-    GAMECOMMAND_NONE        = 0,
-    GAMECOMMAND_VICTORY     = 1,
-    GAMECOMMAND_UNKNOWN_2   = 2, // TODO
-    GAMECOMMAND_UNKNOWN_3   = 3, // TODO
-    GAMECOMMAND_LOAD_GAME   = 4,
-    GAMECOMMAND_QUIT        = 5, // RK_EXITTOOS
-    GAMECOMMAND_RESTART     = 6, // RK_RESTART
-    GAMECOMMAND_FORCE_DWORD = 0x7FFFFFFF
-} GAMECOMMAND, * GAMECOMMANDPTR;
-
 typedef enum GameDifficulty
 {
     GAMEDIFFICULTY_NONE         = 0,
@@ -74,7 +62,7 @@ typedef struct Game
     U32             TurnDelay;
     S32             Unk09; // TODO
     U32             Ticks;
-    GAMECOMMAND     Command;
+    STATUS          Status;
     S32             NextMap;
     S32             NextMission;
     PLAYER          Players[MAX_PLAYER_COUNT];

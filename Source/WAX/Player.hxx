@@ -26,14 +26,17 @@ SOFTWARE.
 
 #define MAX_PLAYER_NAME_LENGTH  32
 
-typedef enum PlayerStatus
+typedef enum Status
 {
-    PLAYERSTATUS_NONE           = 0,
-    PLAYERSTATUS_SUCCESS        = 1,
-    PLAYERSTATUS_FAIL           = 2,
-    PLAYERSTATUS_DRAW           = 3,
-    PLAYERSTATUS_FORCE_DWORD    = 0x7FFFFFFF
-} PLAYERSTATUS, * PLAYERSTATUSPTR;
+    STATUS_NONE         = 0,
+    STATUS_VICTORY      = 1,
+    STATUS_DEFEAT       = 2,
+    STATUS_DRAW         = 3,
+    STATUS_LOADING      = 4,
+    STATUS_QUIT         = 5, // RK_EXITTOOS
+    STATUS_RESTART      = 6, // RK_RESTART
+    STATUS_FORCE_DWORD  = 0x7FFFFFFF
+} STATUS, * STATUSPTR;
 
 #pragma pack(push, 1)
 typedef struct PlayerStatistics
@@ -52,7 +55,7 @@ typedef struct Player
     CHAR                Name[MAX_PLAYER_NAME_LENGTH];
     U32                 Unk01; // TODO
     U32                 Time;
-    PLAYERSTATUS        Status;
+    STATUS              Status;
     U32                 Index; // TODO Name
     PLAYERSTATISTICS    Wins;
     PLAYERSTATISTICS    Losses;

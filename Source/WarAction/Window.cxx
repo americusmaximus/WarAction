@@ -105,7 +105,7 @@ BOOL InitializeWindowStateAction(VOID)
 
     State.Module->Network = NULL;
     State.Module->Handle = GetModuleHandleA(NULL);
-    State.Module->Game.Command = GAMECOMMAND_NONE;
+    State.Module->Game.Status = STATUS_NONE;
 
     SetWindowTextA(State.Window->HWND, State.App->Title);
 
