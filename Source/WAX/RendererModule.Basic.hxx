@@ -171,19 +171,19 @@ typedef struct Rectangle
 
 typedef struct RendererModuleSurface // TODO Refactor the struct out.
 {
-    S32     Offset; // Offset within the surface data. Originally in bytes, presently in pixels.
-    S32     Y; // The surface offset along the "Y" axis in pixels.
+    S32     Offset;     // Offset within the surface data. Originally in bytes, presently in pixels.
+    S32     Y;          // The surface offset along the "Y" axis in pixels.
 
     S32     Width;
     S32     Height;
 
     S32     Stride;
 
-    PIXEL*  Main; // Holds the final frame image, excluding UI.
-    PIXEL*  Back; // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
-    PIXEL*  Stencil; // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
+    PIXEL*  Main;       // Holds the final frame image, excluding UI.
+    PIXEL*  Back;       // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
+    PIXEL*  Stencil;    // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
 
-    LPVOID  Renderer; // The DirectDraw surface.
+    LPVOID  Renderer;   // The DirectDraw surface.
 } RENDERERMODULESURFACE, * RENDERERMODULESURFACEPTR;
 
 typedef struct RendererModuleStateContainer

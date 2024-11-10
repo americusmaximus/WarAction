@@ -26,22 +26,22 @@ SOFTWARE.
 
 #define MAX_SOUND_NAME_LENGTH   64
 
-typedef enum SoundState
+typedef enum SoundResult
 {
-    SOUNDSTATE_NONE                                 = 0,
-    SOUNDSTATE_INITIALIZE_ERROR                     = 1,
-    SOUNDSTATE_SET_COOPERATIVE_LEVEL_ERROR          = 2,
-    SOUNDSTATE_CREATE_MAIN_SOUND_BUFFER_ERROR       = 3,
-    SOUNDSTATE_DUPLICATE_SOUND_BUFFER_ERROR         = 4,
-    SOUNDSTATE_BUFFER_PLAY_ERROR                    = 5,
-    SOUNDSTATE_NO_SOUND_BUFFER_ERROR                = 6,
-    SOUNDSTATE_NO_SOUND_INSTANCE_ERROR              = 7,
-    SOUNDSTATE_INVALID_SETTINGS_ERROR               = 8,
-    SOUNDSTATE_CREATE_SECONDARY_SOUND_BUFFER_ERROR  = 9,
-    SOUNDSTATE_LOCK_SOUND_BUFFER_ERROR              = 10,
-    SOUNDSTATE_NO_TRACKS_AVAILABLE                  = 11,
-    SOUNDSTATE_FORCE_DWORD                          = 0x7FFFFFFF
-} SOUNDSTATE;
+    SOUNDRESULT_NONE                                 = 0,
+    SOUNDRESULT_INITIALIZE_ERROR                     = 1,
+    SOUNDRESULT_SET_COOPERATIVE_LEVEL_ERROR          = 2,
+    SOUNDRESULT_CREATE_MAIN_SOUND_BUFFER_ERROR       = 3,
+    SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR         = 4,
+    SOUNDRESULT_BUFFER_PLAY_ERROR                    = 5,
+    SOUNDRESULT_NO_SOUND_BUFFER_ERROR                = 6,
+    SOUNDRESULT_NO_SOUND_INSTANCE_ERROR              = 7,
+    SOUNDRESULT_INVALID_SETTINGS_ERROR               = 8,
+    SOUNDRESULT_CREATE_SECONDARY_SOUND_BUFFER_ERROR  = 9,
+    SOUNDRESULT_LOCK_SOUND_BUFFER_ERROR              = 10,
+    SOUNDRESULT_NO_TRACKS_AVAILABLE                  = 11,
+    SOUNDRESULT_FORCE_DWORD                          = 0x7FFFFFFF
+} SOUNDRESULT, * SOUNDRESULTPTR;
 
 typedef struct SoundBuffer
 {
@@ -75,15 +75,15 @@ typedef struct SoundHeader
     SOUNDDESCRIPTOR         Sounds[1];
 } SOUNDHEADER, * SOUNDHEADERPTR;
 
-typedef struct SoundStateContainer
+typedef struct Sound
 {
     LPDIRECTSOUND           Instance;
     LPDIRECTSOUNDBUFFER     Buffer;
-    SOUNDSTATE              State;
+    SOUNDRESULT             State;
     HRESULT                 Result;
     U32                     Count;
     SOUNDTRACKPTR           Tracks;
     BOOL                    IsReverseStereo;
     S32                     Unk07; // TODO
     S32                     Unk08; // TODO
-} SOUNDSTATECONTAINER, * SOUNDSTATECONTAINERPTR;
+} SOUND, * SOUNDPTR;

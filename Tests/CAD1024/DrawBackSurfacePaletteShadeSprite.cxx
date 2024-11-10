@@ -29,13 +29,6 @@ SOFTWARE.
 
 #include <stdio.h>
 
-typedef struct AnimationSpriteHeader
-{
-    U32 Magic;
-    U32 Count;
-    U32 Offsets[1];
-} ANIMATIONSPRITEHEADER, * ANIMATIONSPRITEHEADERPTR;
-
 static BOOL AcquireFile(LPCSTR name, LPVOID* content)
 {
     HANDLE file = OpenFile(name);

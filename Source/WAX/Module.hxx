@@ -28,12 +28,12 @@ SOFTWARE.
 #include "Sound.hxx"
 
 // a.k.a. XCHG
-typedef struct ModuleStateContainer
+typedef struct Module
 {
     HMODULE                         Handle;
-    GAMESTATECONTAINER              Game; // ToGame
-    SOUNDSTATECONTAINERPTR          Sound;
+    GAME                            Game;   // ToGame
+    SOUNDPTR                        Sound;
     RENDERERMODULESTATECONTAINERPTR Renderer;
     HMODULE                         Text;
     LPDIRECTPLAY3A                  Network;
-} MODULESTATECONTAINER, * MODULESTATECONTAINERPTR;
+} MODULE, * MODULEPTR;

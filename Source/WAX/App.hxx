@@ -33,26 +33,22 @@ SOFTWARE.
 #define MENU_MODULE_STATE_INDEX             1
 #define GAME_MODULE_STATE_INDEX             2
 
-#define MAX_APP_STATE_FILE_NAME_LENGTH      256
 #define MAX_APP_STATE_WINDOW_TITLE_LENGTH   64
 
-#define MAX_APP_STATE_MODULE_COUNT          16
-#define MAX_APP_STATE_MODULE_NAME_LENGTH    256
+#define MAX_MODULE_COUNT                    16
 
-struct AppStateContainer;
-
-typedef struct AppStateContainer
+typedef struct App
 {
     S32                                 InitModule;
     LPCSTR                              ModuleName;
     HMODULE                             ModuleHandle;
-    CHAR                                Ini[MAX_APP_STATE_FILE_NAME_LENGTH];
+    CHAR                                Ini[MAX_FILE_NAME_LENGTH];
     CHAR                                Title[MAX_APP_STATE_WINDOW_TITLE_LENGTH];
-    CHAR                                Modules[MAX_APP_STATE_MODULE_COUNT][MAX_APP_STATE_MODULE_NAME_LENGTH];
-    WINDOWSTATECONTAINERPTR             Window;
-    MODULESTATECONTAINERPTR             Module;
+    CHAR                                Modules[MAX_MODULE_COUNT][MAX_FILE_NAME_LENGTH];
+    WINDOWPTR                           Window;
+    MODULEPTR                           Module;
     S32                                 Unknown0x1154; // TODO
-    LOGGERSTATECONTAINERPTR             Logger;
+    LOGGERPTR                           Logger;
     S32                                 ActiveModule;
     struct
     {
@@ -63,4 +59,4 @@ typedef struct AppStateContainer
         VISUALMODULERELEASEACTIONLAMBDA Release;
     } Actions;
     ACQUIRERENDERERSETTINGSVALUELAMBDA  AcquireRendererSettingsValue;
-} APPSTATECONTAINER, * APPSTATECONTAINERPTR;
+} APP, * APPPTR;

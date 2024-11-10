@@ -22,12 +22,41 @@ SOFTWARE.
 
 #pragma once
 
-#include "Action.hxx"
+#include "Basic.hxx"
 
-#include <Window.hxx>
+#define MAX_PLAYER_NAME_LENGTH  32
 
-EXTERN WINDOW WindowState;
+typedef enum PlayerStatus
+{
+    PLAYERSTATUS_NONE           = 0,
+    PLAYERSTATUS_SUCCESS        = 1,
+    PLAYERSTATUS_FAIL           = 2,
+    PLAYERSTATUS_DRAW           = 3,
+    PLAYERSTATUS_FORCE_DWORD    = 0x7FFFFFFF
+} PLAYERSTATUS, * PLAYERSTATUSPTR;
 
-VOID ActivateWindowState(VOID);
-VOID CLASSCALL ActivateWindowStateContainer(WINDOWPTR self);
-VOID CLASSCALL ActivateWindowStateContainer(WINDOWPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message);
+#pragma pack(push, 1)
+typedef struct PlayerStatistics
+{
+    U32     Tanks;
+    U32     Artillery;
+    U32     Infantry;
+    U32     Planes;
+    U32     Vehicles;
+} PLAYERSTATISTICS, * PLAYERSTATISTICSPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct Player
+{
+    CHAR                Name[MAX_PLAYER_NAME_LENGTH];
+    U32                 Unk01; // TODO
+    U32                 Time;
+    PLAYERSTATUS        Status;
+    U32                 Index; // TODO Name
+    PLAYERSTATISTICS    Wins;
+    PLAYERSTATISTICS    Losses;
+    U32                 Score;
+    U32                 Stars;
+} PLAYER, * PLAYERPTR;
+#pragma pack(pop)

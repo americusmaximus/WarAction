@@ -57,9 +57,9 @@ BOOL ApplicationStateWindowStateMessageHandler(HWND hwnd, UINT msg, WPARAM wp, L
 // 0x00401e30
 BOOL InitializeApplicationState(LPCSTR file)
 {
-    State.App = (APPSTATECONTAINERPTR)malloc(sizeof(APPSTATECONTAINER));
+    State.App = (APPPTR)malloc(sizeof(APP));
 
-    ZeroMemory(State.App, sizeof(APPSTATECONTAINER));
+    ZeroMemory(State.App, sizeof(APP));
 
     State.App->Logger = State.Logger;
 
@@ -85,13 +85,13 @@ BOOL InitializeApplicationStateModules(LPCSTR file)
 
     if (strncmp(State.App->Title, INVALID_SETTINGS_STRING_VALUE, MAX_INVALID_SETTINGS_STRING_VALUE_LENGTH) == 0) { return FALSE; }
 
-    for (U32 x = 0; x < MAX_APP_STATE_MODULE_COUNT; x++)
+    for (U32 x = 0; x < MAX_MODULE_COUNT; x++)
     {
         CHAR name[MAX_MODULE_TEMPLATE_LENGTH];
 
         wsprintfA(name, "Module%i", x + 1);
 
-        GetPrivateProfileStringA("StartUp", name, NULL, State.App->Modules[x], MAX_APP_STATE_MODULE_NAME_LENGTH, file);
+        GetPrivateProfileStringA("StartUp", name, NULL, State.App->Modules[x], MAX_FILE_NAME_LENGTH, file);
     }
 
     State.App->InitModule = GetPrivateProfileIntA("StartUp", "StartModule", LAUNCHER_MODULE_STATE_INDEX, file);

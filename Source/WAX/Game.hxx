@@ -22,27 +22,34 @@ SOFTWARE.
 
 #pragma once
 
-#define MAX_GAME_STATE_PLAYER_COUNT             12
-#define MAX_GAME_STATE_PLAYER_NAME_LENGTH       32 /* TODO */
-#define MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH    256
+#include "Player.hxx"
 
-#define INVALID_GAME_NATION                     (-1)
-#define GAME_NATION_RUSSIAN                     0
-#define GAME_NATION_GERMAN                      1
-#define GAME_NATION_BRITISH                     2
-#define GAME_NATION_AMERICAN                    3
+#define CAMPAIGN_FILE_EXTENSION     'c'
+#define SINGLE_FILE_EXTENSION       's'
+#define MULTIPLAYER_FILE_EXTENSION  'm'
+// TODO find the right place for ^^
+
+#define MAX_PLAYER_COUNT            12
+
+#define INVALID_GAME_NATION         (-1)
+#define GAME_NATION_RUSSIAN         0
+#define GAME_NATION_GERMAN          1
+#define GAME_NATION_BRITISH         2
+#define GAME_NATION_AMERICAN        3
+
+#define MAX_GAME_MAP_COUNT          127 /* TODO NAME */
 
 typedef enum GameCommand
 {
     GAMECOMMAND_NONE        = 0,
     GAMECOMMAND_VICTORY     = 1,
-    GAMECOMMAND_UNKNOWN_2   = 2,
-    GAMECOMMAND_UNKNOWN_3   = 3,
+    GAMECOMMAND_UNKNOWN_2   = 2, // TODO
+    GAMECOMMAND_UNKNOWN_3   = 3, // TODO
     GAMECOMMAND_LOAD_GAME   = 4,
     GAMECOMMAND_QUIT        = 5, // RK_EXITTOOS
     GAMECOMMAND_RESTART     = 6, // RK_RESTART
     GAMECOMMAND_FORCE_DWORD = 0x7FFFFFFF
-} GAMECOMMAND;
+} GAMECOMMAND, * GAMECOMMANDPTR;
 
 typedef enum GameDifficulty
 {
@@ -50,47 +57,28 @@ typedef enum GameDifficulty
     GAMEDIFFICULTY_EASY         = 1,
     GAMEDIFFICULTY_MEDIUM       = 2,
     GAMEDIFFICULTY_HARD         = 3,
-    GAMEDIFFICULTY_FORCE_DWORD  = 0x7FFFFFFF
-} GAMEDIFFICULTY;
+    GAMEDIFFICULTY_UNKNOWN      = 0xFFFFFFFF
+} GAMEDIFFICULTY, * GAMEDIFFICULTYPTR;
 
-typedef struct GamePlayerStateContainer
+#pragma pack(push, 1)
+typedef struct Game
 {
-    CHAR    Name[MAX_GAME_STATE_PLAYER_NAME_LENGTH];
-    U32     Unk01; // TODO
-    U32     Unk02; // TODO
-    U32     Unk03; // TODO
-    U32     Unk04; // TODO
-    U32     Unk05; // TODO
-    U32     Unk06; // TODO
-    U32     Unk07; // TODO
-    U32     Unk08; // TODO
-    U32     Unk09; // TODO
-    U32     Unk10; // TODO
-    U32     Unk11; // TODO
-    U32     Unk12; // TODO
-    U32     Unk13; // TODO
-    U32     Unk14; // TODO
-    U32     Unk15; // TODO
-    U32     Unk16; // TODO
-} GAMEPLAYERSTATECONTAINER, * GAMEPLAYERSTATECONTAINERPTR;
-
-typedef struct GameStateContainer
-{
-    BOOL                        IsNetwork;
-    GAMEDIFFICULTY              Difficulty;
-    S32                         Unk02; // TODO
-    S32                         Unk03; // TODO
-    S32                         Unk04; // TODO
-    S32                         Unk05; // TODO
-    S32                         Unk06; // TODO
-    S32                         Unk07; // TODO
-    U32                         TurnDelay;
-    S32                         Unk09; // TODO
-    U32                         Ticks;
-    GAMECOMMAND                 Command;
-    S32                         NextMap;
-    S32                         NextMission;
-    GAMEPLAYERSTATECONTAINER    Players[MAX_GAME_STATE_PLAYER_COUNT];
-    U32                         Time;
-    CHAR                        SaveFile[MAX_GAME_STATE_SAVE_FILE_NAME_LENGTH];
-} GAMESTATECONTAINER, * GAMESTATECONTAINERPTR;
+    BOOL            IsNetwork;
+    GAMEDIFFICULTY  Difficulty;
+    S32             Unk02; // TODO
+    S32             Unk03; // TODO
+    S32             Unk04; // TODO
+    S32             Unk05; // TODO
+    S32             Unk06; // TODO
+    S32             Unk07; // TODO
+    U32             TurnDelay;
+    S32             Unk09; // TODO
+    U32             Ticks;
+    GAMECOMMAND     Command;
+    S32             NextMap;
+    S32             NextMission;
+    PLAYER          Players[MAX_PLAYER_COUNT];
+    U32             Time;
+    CHAR            SaveFile[MAX_FILE_NAME_LENGTH]; // TODO name
+} GAME, * GAMEPTR;
+#pragma pack(pop)

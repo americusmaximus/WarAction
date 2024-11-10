@@ -23,9 +23,9 @@ SOFTWARE.
 #include "Basic.hxx"
 #include "Native.Basic.hxx"
 
-typedef struct LoggerStateContainer
+typedef struct Logger
 {
     HANDLE  File;
     HWND    HWND;
     HANDLE  Mutex;
-} LOGGERSTATECONTAINER, * LOGGERSTATECONTAINERPTR;
+} LOGGER, * LOGGERPTR;

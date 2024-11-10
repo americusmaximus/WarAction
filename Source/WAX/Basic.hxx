@@ -103,3 +103,6 @@ typedef struct u32x4 { u32 X, Y, Z, W; } U32X4, * LPU32X4;
 
 #define EXTERN extern
 #define INLINE inline
+#define STATIC static
+
+#define MAX_FILE_NAME_LENGTH        256

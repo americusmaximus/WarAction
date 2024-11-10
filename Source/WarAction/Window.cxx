@@ -42,7 +42,7 @@ SOFTWARE.
 #define DEFAULT_WINDOW_STATE_HEIGHT             200
 
 // 0x00410388
-WINDOWSTATECONTAINER WindowState;
+WINDOW WindowState;
 
 // 0x00401870
 BOOL ActivateWindowStateAction(VOID)
@@ -61,20 +61,20 @@ BOOL InitializeWindowStateAction(VOID)
     CoInitialize(NULL);
     AcquireStartArguments();
 
-    CHAR file[MAX_APP_STATE_FILE_NAME_LENGTH];
+    CHAR file[MAX_FILE_NAME_LENGTH];
 
-    if (!AcquireStartArguments("ini", file, MAX_APP_STATE_FILE_NAME_LENGTH)) { strcpy(file, SETTINGS_FILE_NAME); }
+    if (!AcquireStartArguments("ini", file, MAX_FILE_NAME_LENGTH)) { strcpy(file, SETTINGS_FILE_NAME); }
 
     if (!InitializeApplicationState(file)) { return FALSE; }
 
     State.App->AcquireRendererSettingsValue = AcquireRendererSettingsValue;
 
-    State.App->Module = (MODULESTATECONTAINERPTR)malloc(sizeof(MODULESTATECONTAINER));
-    ZeroMemory(State.App->Module, sizeof(MODULESTATECONTAINER));
+    State.App->Module = (MODULEPTR)malloc(sizeof(MODULE));
+    ZeroMemory(State.App->Module, sizeof(MODULE));
 
     State.Module = State.App->Module;
 
-    GetPrivateProfileStringA("StartUp", "TextResource", ".", file, MAX_APP_STATE_FILE_NAME_LENGTH, State.App->Ini);
+    GetPrivateProfileStringA("StartUp", "TextResource", ".", file, MAX_FILE_NAME_LENGTH, State.App->Ini);
 
     State.Text.Handle = LoadLibraryA(file);
 
@@ -113,7 +113,7 @@ BOOL InitializeWindowStateAction(VOID)
 }
 
 // 0x00401930
-VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message)
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWPTR self, ACTIONHANDLERLAMBDA activate, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA action, ACTIONHANDLERLAMBDA release, ACTIONHANDLERLAMBDA message)
 {
     INITIALIZEACTIONHANDLER(&State.Actions.Activate, activate);
     INITIALIZEACTIONHANDLER(&State.Actions.Initialize, initialize);
@@ -147,7 +147,7 @@ LRESULT WINAPI WindowStateMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM 
 }
 
 // 0x004023b0
-VOID CLASSCALL ActivateWindowStateContainer(WINDOWSTATECONTAINERPTR self)
+VOID CLASSCALL ActivateWindowStateContainer(WINDOWPTR self)
 {
     self->Instance = NULL;
     self->Args = NULL;
