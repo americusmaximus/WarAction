@@ -24,6 +24,9 @@ SOFTWARE.
 
 #include "Player.hxx"
 
+#define GAME_VERSION_MAJOR          1
+#define GAME_VERSION_MINOR          21
+
 #define CAMPAIGN_FILE_EXTENSION     'c'
 #define SINGLE_FILE_EXTENSION       's'
 #define MULTIPLAYER_FILE_EXTENSION  'm'
@@ -36,6 +39,7 @@ SOFTWARE.
 #define GAME_NATION_GERMAN          1
 #define GAME_NATION_BRITISH         2
 #define GAME_NATION_AMERICAN        3
+// TODO enum? ^^
 
 #define MAX_GAME_MAP_COUNT          127 /* TODO NAME */
 
@@ -47,6 +51,8 @@ typedef enum GameDifficulty
     GAMEDIFFICULTY_HARD         = 3,
     GAMEDIFFICULTY_UNKNOWN      = 0xFFFFFFFF
 } GAMEDIFFICULTY, * GAMEDIFFICULTYPTR;
+
+#define MAX_GAMEDIFFICULTY_VALUE    (U32)(GAMEDIFFICULTY_HARD)
 
 #pragma pack(push, 1)
 typedef struct Game
