@@ -81,11 +81,7 @@ BOOL InitializeDirectX(HWND hwnd, BOOL fullscreen)
 // 0x100010b0
 VOID ReleaseRendererSurface()
 {
-    if (ModuleState.DirectX.Surface != NULL)
-    {
-        ModuleState.DirectX.Surface->Release();
-        ModuleState.DirectX.Surface = NULL;
-    }
+    DIRECTDRAWRELEASE(ModuleState.DirectX.Surface);
 }
 
 // 0x100010d0
@@ -97,8 +93,7 @@ VOID RestoreDisplayMode()
     {
         if (ModuleState.IsFullScreen) { ModuleState.DirectX.Instance->RestoreDisplayMode(); }
 
-        ModuleState.DirectX.Instance->Release();
-        ModuleState.DirectX.Instance = NULL;
+        DIRECTDRAWRELEASE(ModuleState.DirectX.Instance);
     }
 }
 
@@ -107,11 +102,7 @@ VOID ReleaseDirectX()
 {
     ReleaseRendererSurface();
 
-    if (ModuleState.DirectX.Instance != NULL)
-    {
-        ModuleState.DirectX.Instance->Release();
-        ModuleState.DirectX.Instance = NULL;
-    }
+    DIRECTDRAWRELEASE(ModuleState.DirectX.Instance);
 }
 
 // 0x10001130
