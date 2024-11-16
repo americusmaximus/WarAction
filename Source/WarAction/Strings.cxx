@@ -40,16 +40,16 @@ STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR 
 // 0x00401000
 VOID AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...)
 {
-    CHAR buffer[DEFAULT_STRING_BUFFER_LENGTH];
+    CHAR value[DEFAULT_STRING_BUFFER_LENGTH];
 
     va_list args;
     va_start(args, format);
-    vsprintf(buffer, format, args);
+    vsprintf(value, format, args);
     va_end(args);
 
-    self->Value = (LPSTR)malloc(strlen(buffer) + 1);
+    self->Value = (LPSTR)malloc(strlen(value) + 1);
     
-    strcpy(self->Value, buffer);
+    strcpy(self->Value, value);
 }
 
 // 0x00401120

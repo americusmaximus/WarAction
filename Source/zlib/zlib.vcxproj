@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\SDK\zlib\inffast.c" />
     <ClCompile Include="..\..\SDK\zlib\inflate.c" />
     <ClCompile Include="..\..\SDK\zlib\inftrees.c" />
+    <ClCompile Include="..\..\SDK\zlib\trees.c" />
     <ClCompile Include="..\..\SDK\zlib\uncompr.c" />
     <ClCompile Include="..\..\SDK\zlib\zutil.c" />
   </ItemGroup>
@@ -42,6 +43,7 @@
     <ClInclude Include="..\..\SDK\zlib\inffixed.h" />
     <ClInclude Include="..\..\SDK\zlib\inflate.h" />
     <ClInclude Include="..\..\SDK\zlib\inftrees.h" />
+    <ClInclude Include="..\..\SDK\zlib\trees.h" />
     <ClInclude Include="..\..\SDK\zlib\zconf.h" />
     <ClInclude Include="..\..\SDK\zlib\zlib.h" />
     <ClInclude Include="..\..\SDK\zlib\zutil.h" />

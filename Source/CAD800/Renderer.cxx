@@ -2395,7 +2395,7 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* pal
                         // Skip pixels that are below required stencil value.
                         {
                             CONST ADDR offset = (ADDR)sx - (ADDR)RendererState.Surfaces.Main;
-                            while (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset + (ADDR)(x + skip) * sizeof(PIXEL)))
+                            while (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset + (ADDR)(x + skip) * (ADDR)sizeof(PIXEL)))
                             {
                                 count = count - 1;
                                 skip = skip + 1;
@@ -2431,7 +2431,7 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* pal
                         // Skip pixels that are below required stencil value.
                         {
                             CONST ADDR offset = (ADDR)sx - (ADDR)RendererState.Surfaces.Main;
-                            while (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset + (ADDR)(x + skip) * sizeof(PIXEL)))
+                            while (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset + (ADDR)(x + skip) * (ADDR)sizeof(PIXEL)))
                             {
                                 count = count - 1;
                                 skip = skip + 1;

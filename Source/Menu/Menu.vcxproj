@@ -73,25 +73,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x64\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x64\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,17 +106,19 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);..\..\SDK\DX70\Lib\dinput.lib;dxguid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,11 +133,12 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -144,6 +147,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);..\..\SDK\DX70\Lib\dinput.lib;dxguid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,17 +162,19 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);dinput.lib;dxguid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -182,34 +188,193 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ExceptionHandling>false</ExceptionHandling>
       <PrecompiledHeaderOutputFile />
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <ModuleDefinitionFile>Module.def</ModuleDefinitionFile>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);dinput.lib;dxguid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cxx" />
+    <ClCompile Include="ActionArea.cxx" />
+    <ClCompile Include="Activation.cxx" />
+    <ClCompile Include="AssetFile.cxx" />
+    <ClCompile Include="Assets.cxx" />
+    <ClCompile Include="Audio.cxx" />
+    <ClCompile Include="BinAsset.cxx" />
+    <ClCompile Include="BinFile.cxx" />
+    <ClCompile Include="Bink.cxx" />
+    <ClCompile Include="ButtonControl.cxx" />
+    <ClCompile Include="ChatControl.cxx" />
+    <ClCompile Include="Compression.cxx" />
+    <ClCompile Include="Control.cxx" />
+    <ClCompile Include="ControlCommand.cxx" />
+    <ClCompile Include="ControlNode.cxx" />
+    <ClCompile Include="Cursor.cxx" />
+    <ClCompile Include="FileFinder.cxx" />
+    <ClCompile Include="FontAsset.cxx" />
+    <ClCompile Include="Graphics.cxx" />
+    <ClCompile Include="GreetingsControl.cxx" />
+    <ClCompile Include="ImageControl.cxx" />
+    <ClCompile Include="Input.cxx" />
+    <ClCompile Include="InputControl.cxx" />
+    <ClCompile Include="LabelControl.cxx" />
+    <ClCompile Include="ListControl.cxx" />
+    <ClCompile Include="Lock.cxx" />
+    <ClCompile Include="Logger.cxx" />
     <ClCompile Include="Main.cxx" />
+    <ClCompile Include="MainControl.cxx" />
+    <ClCompile Include="Map.cxx" />
+    <ClCompile Include="MapControl.cxx" />
+    <ClCompile Include="MenuSave.cxx" />
+    <ClCompile Include="MessageControl.cxx" />
+    <ClCompile Include="Module.cxx" />
+    <ClCompile Include="MultiStartControl.cxx" />
+    <ClCompile Include="MultiJoinResultControl.cxx" />
+    <ClCompile Include="DialControl.cxx" />
+    <ClCompile Include="Network.cxx" />
+    <ClCompile Include="Computer.cxx" />
+    <ClCompile Include="TimeControl.cxx" />
+    <ClCompile Include="DescriptionControl.cxx" />
+    <ClCompile Include="MultiSelectControl.cxx" />
+    <ClCompile Include="MultiJoinControl.cxx" />
+    <ClCompile Include="ObjectType2x38.cxx" />
+    <ClCompile Include="ObjectType2x39.cxx" />
+    <ClCompile Include="ObjectType3x3d.cxx" />
+    <ClCompile Include="SceneControl.cxx" />
+    <ClCompile Include="ObjectType4x12.cxx" />
+    <ClCompile Include="MultiResultControl.cxx" />
+    <ClCompile Include="Unknown.cxx" />
+    <ClCompile Include="WelcomeControl.cxx" />
+    <ClCompile Include="LoadMapControl.cxx" />
+    <ClCompile Include="MultiMapControl.cxx" />
+    <ClCompile Include="ObjectType4x5d.cxx" />
+    <ClCompile Include="PanelControl.cxx" />
+    <ClCompile Include="RatingsControl.cxx" />
+    <ClCompile Include="ZipFile.cxx" />
+    <ClCompile Include="Saves.cxx" />
+    <ClCompile Include="ScrollControl.cxx" />
+    <ClCompile Include="Settings.cxx" />
+    <ClCompile Include="Shortcuts.cxx" />
+    <ClCompile Include="SingleControl.cxx" />
+    <ClCompile Include="LoadSaveControl.cxx" />
+    <ClCompile Include="SingleResultControl.cxx" />
+    <ClCompile Include="SingleNewControl.cxx" />
+    <ClCompile Include="Sound.cxx" />
+    <ClCompile Include="StarControl.cxx" />
+    <ClCompile Include="State.cxx" />
+    <ClCompile Include="Statistics.cxx" />
+    <ClCompile Include="StatisticsControl.cxx" />
+    <ClCompile Include="StringList.cxx" />
+    <ClCompile Include="Strings.cxx" />
+    <ClCompile Include="TextAsset.cxx" />
+    <ClCompile Include="Video.cxx" />
+    <ClCompile Include="VideoControl.cxx" />
+    <ClCompile Include="Window.cxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Module.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.hxx" />
+    <ClInclude Include="ActionArea.hxx" />
+    <ClInclude Include="Activation.hxx" />
+    <ClInclude Include="AssetFile.hxx" />
+    <ClInclude Include="Assets.hxx" />
+    <ClInclude Include="Audio.hxx" />
     <ClInclude Include="Basic.hxx" />
+    <ClInclude Include="BinAsset.hxx" />
+    <ClInclude Include="BinFile.hxx" />
+    <ClInclude Include="Bink.hxx" />
+    <ClInclude Include="ButtonControl.hxx" />
+    <ClInclude Include="ChatControl.hxx" />
+    <ClInclude Include="Compression.hxx" />
+    <ClInclude Include="Control.hxx" />
+    <ClInclude Include="ControlCommand.hxx" />
+    <ClInclude Include="ControlNode.hxx" />
+    <ClInclude Include="Cursor.hxx" />
+    <ClInclude Include="FileFinder.hxx" />
+    <ClInclude Include="FontAsset.hxx" />
+    <ClInclude Include="Graphics.hxx" />
+    <ClInclude Include="GreetingsControl.hxx" />
+    <ClInclude Include="ImageControl.hxx" />
+    <ClInclude Include="Input.hxx" />
+    <ClInclude Include="InputControl.hxx" />
+    <ClInclude Include="LabelControl.hxx" />
+    <ClInclude Include="ListControl.hxx" />
+    <ClInclude Include="Lock.hxx" />
+    <ClInclude Include="Logger.hxx" />
+    <ClInclude Include="MainControl.hxx" />
+    <ClInclude Include="Map.hxx" />
+    <ClInclude Include="MapControl.hxx" />
+    <ClInclude Include="MenuSave.hxx" />
+    <ClInclude Include="MessageControl.hxx" />
+    <ClInclude Include="Messages.hxx" />
+    <ClInclude Include="Module.hxx" />
+    <ClInclude Include="MultiStartControl.hxx" />
+    <ClInclude Include="MultiJoinResultControl.hxx" />
+    <ClInclude Include="DialControl.hxx" />
+    <ClInclude Include="Network.hxx" />
+    <ClInclude Include="Computer.hxx" />
+    <ClInclude Include="TimeControl.hxx" />
+    <ClInclude Include="DescriptionControl.hxx" />
+    <ClInclude Include="MultiSelectControl.hxx" />
+    <ClInclude Include="MultiJoinControl.hxx" />
+    <ClInclude Include="ObjectType2x38.hxx" />
+    <ClInclude Include="ObjectType2x39.hxx" />
+    <ClInclude Include="ObjectType3x3d.hxx" />
+    <ClInclude Include="SceneControl.hxx" />
+    <ClInclude Include="ObjectType4x12.hxx" />
+    <ClInclude Include="MultiResultControl.hxx" />
+    <ClInclude Include="Unknown.hxx" />
+    <ClInclude Include="WelcomeControl.hxx" />
+    <ClInclude Include="LoadMapControl.hxx" />
+    <ClInclude Include="MultiMapControl.hxx" />
+    <ClInclude Include="ObjectType4x5d.hxx" />
+    <ClInclude Include="Objects.hxx" />
+    <ClInclude Include="PanelControl.hxx" />
+    <ClInclude Include="RatingsControl.hxx" />
     <ClInclude Include="Resources.hxx" />
+    <ClInclude Include="ZipFile.hxx" />
+    <ClInclude Include="Saves.hxx" />
+    <ClInclude Include="ScrollControl.hxx" />
+    <ClInclude Include="Settings.hxx" />
+    <ClInclude Include="Shortcuts.hxx" />
+    <ClInclude Include="SingleControl.hxx" />
+    <ClInclude Include="LoadSaveControl.hxx" />
+    <ClInclude Include="SingleResultControl.hxx" />
+    <ClInclude Include="SingleNewControl.hxx" />
+    <ClInclude Include="Sound.hxx" />
+    <ClInclude Include="StarControl.hxx" />
+    <ClInclude Include="State.hxx" />
+    <ClInclude Include="Statistics.hxx" />
+    <ClInclude Include="StatisticsControl.hxx" />
+    <ClInclude Include="StringList.hxx" />
+    <ClInclude Include="Strings.hxx" />
+    <ClInclude Include="TextAsset.hxx" />
+    <ClInclude Include="Version.hxx" />
+    <ClInclude Include="Video.hxx" />
+    <ClInclude Include="VideoControl.hxx" />
+    <ClInclude Include="Window.hxx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\winmm\winmm.vcxproj">
       <Project>{aaa8b810-76ed-4500-a1a5-3fca33c316ad}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Yoink\Yoink.vcxproj">
+      <Project>{69f5f276-ce3a-4be7-8028-60e8e316525d}</Project>
     </ProjectReference>
     <ProjectReference Include="..\zlib\zlib.vcxproj">
       <Project>{e2ff48ba-a783-4302-9ecb-7e0be7334c9b}</Project>

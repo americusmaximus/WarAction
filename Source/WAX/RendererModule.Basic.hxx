@@ -186,6 +186,11 @@ typedef struct RendererModuleSurface // TODO Refactor the struct out.
     LPVOID  Renderer;   // The DirectDraw surface.
 } RENDERERMODULESURFACE, * RENDERERMODULESURFACEPTR;
 
+typedef struct Sprite0x50 // TODO Name
+{
+    U8    Unk[0x50]; // TODO
+} SPRITE0X50, * SPRITE0X50PTR; // TODO Name
+
 typedef struct RendererModuleStateContainer
 {
     RECTANGLE                   Window;
@@ -216,8 +221,9 @@ typedef struct RendererModuleStateContainer
     U32                         Unk27; // TODO
     U32                         Pitch;
     DOUBLEPIXEL                 BackSurfaceShadePixel;
+    SPRITE0X50                  Sprites[112]; // TODO
 
-    U8                          Unknown000[43264]; // TODO
+    U8                          Unknown000[34304]; // TODO
 
     HWND                        HWND;
     BOOL                        IsFullScreen;

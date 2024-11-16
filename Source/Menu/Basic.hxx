@@ -24,3 +24,5 @@ SOFTWARE.
 
 #include <Basic.hxx>
 #include <Native.Basic.hxx>
+
+#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))

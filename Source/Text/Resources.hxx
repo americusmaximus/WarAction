@@ -42,7 +42,7 @@
 #define IDS_STRING65                    65
 #define IDS_STRING66                    66
 #define IDS_REGISTRY_KEY                67
-#define IDS_STRING68                    68
+#define IDS_CAMPAIGN_DIR                68
 #define IDS_MULTI_MAP_DIR               69
 #define IDS_MENU_RESOURCE               70
 #define IDS_BRIEFINGS                   71

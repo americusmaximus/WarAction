@@ -1,0 +1,125 @@
+/*
+Copyright (c) 2024 Americus Maximus
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#include "ActionArea.hxx"
+#include "ControlCommand.hxx"
+
+#include <stdlib.h>
+
+CONTROLCOMMANDSTATEMODULECONTAINER CommandControlState;
+
+// 0x10022500
+BOOL DequeueControlCommand(CONST U32 command)
+{
+    ACTIONAREAPTR area = AcquireActionArea(command);
+
+    if (area != NULL)
+    {
+        DequeueActionArea(area);
+
+        if (((area->Options >> 8) & 0xFF) == 0x80) // TODO
+        {
+            ReleaseActionArea(area);
+
+            free(area);
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x100225b0
+VOID EnqueueControlCommand(CONST U32 command, CONST U32 action, CONST U32 param1, CONST U32 param2)
+{
+    CommandControlState.Items[CommandControlState.WriteIndex].Command = command;
+    CommandControlState.Items[CommandControlState.WriteIndex].Action = action;
+    CommandControlState.Items[CommandControlState.WriteIndex].Parameter1 = param1;
+    CommandControlState.Items[CommandControlState.WriteIndex].Parameter2 = param2;
+
+    CommandControlState.WriteIndex = CommandControlState.WriteIndex + 1 & 0x800000ff; // TODO
+
+    if (CommandControlState.WriteIndex < 0) // TODO
+    {
+        CommandControlState.WriteIndex = (CommandControlState.WriteIndex - 1 | 0xffffff00) + 1; // TODO
+    }
+}
+
+// 0x100226b0
+CONTROLCOMMANDPTR DequeueControlCommand(CONST BOOL remove)
+{
+    if (CommandControlState.WriteIndex != CommandControlState.ReadIndex)
+    {
+        CONTROLCOMMANDPTR item = &CommandControlState.Items[CommandControlState.ReadIndex];
+
+        if (remove)
+        {
+            CommandControlState.ReadIndex = CommandControlState.ReadIndex + 1 & 0x800000ff; // TODO
+
+            if (CommandControlState.ReadIndex < 0) // TODO
+            {
+                CommandControlState.ReadIndex = (CommandControlState.ReadIndex - 1 | 0xffffff00) + 1; // TODO
+            }
+        }
+
+        return item;
+    }
+
+    return NULL;
+}
+
+// 0x10022620
+BOOL DequeueControlCommand(CONTROLCOMMANDPTR command, CONST BOOL remove)
+{
+    while (CommandControlState.WriteIndex != CommandControlState.ReadIndex)
+    {
+        if (CommandControlState.Items[CommandControlState.ReadIndex].Command != -1) // TODO
+        {
+            command->Command = CommandControlState.Items[CommandControlState.ReadIndex].Command;
+            command->Action = CommandControlState.Items[CommandControlState.ReadIndex].Action;
+            command->Parameter1 = CommandControlState.Items[CommandControlState.ReadIndex].Parameter1;
+            command->Parameter2 = CommandControlState.Items[CommandControlState.ReadIndex].Parameter2;
+
+            if (remove)
+            {
+                CommandControlState.ReadIndex = CommandControlState.ReadIndex + 1 & 0x800000ff; // TODO
+
+                if (CommandControlState.ReadIndex < 0) // TODO
+                {
+                    CommandControlState.ReadIndex = (CommandControlState.ReadIndex - 1 | 0xffffff00) + 1; // TODO
+                }
+            }
+
+            return TRUE;
+        }
+
+        CommandControlState.ReadIndex = CommandControlState.ReadIndex + 1 & 0x800000ff;
+
+        if (CommandControlState.ReadIndex < 0) // TODO
+        {
+            CommandControlState.ReadIndex = (CommandControlState.ReadIndex - 1 | 0xffffff00) + 1; // TODO
+        }
+    }
+
+    return FALSE;
+}

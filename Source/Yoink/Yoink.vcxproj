@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Base.hxx" />
     <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Bink.h" />
+    <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Cursor.hxx" />
     <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Module.hxx" />
     <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Rad.h" />
     <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\Resource.hxx" />
     <ClInclude Include="..\..\SDK\Yoink\Source\1.0.Q\State.hxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\SDK\Yoink\Source\1.0.Q\Cursor.cxx" />
     <ClCompile Include="..\..\SDK\Yoink\Source\1.0.Q\Module.cxx" />
     <ClCompile Include="..\..\SDK\Yoink\Source\1.0.Q\State.cxx" />
   </ItemGroup>
@@ -126,6 +128,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <ExceptionHandling>false</ExceptionHandling>
       <OmitFramePointers>true</OmitFramePointers>
+      <DisableSpecificWarnings>4047;6031</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,6 +152,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <ExceptionHandling>false</ExceptionHandling>
       <OmitFramePointers>true</OmitFramePointers>
+      <DisableSpecificWarnings>4047;6031</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,6 +176,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <ExceptionHandling>false</ExceptionHandling>
       <OmitFramePointers>true</OmitFramePointers>
+      <DisableSpecificWarnings>4047;6031</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,6 +200,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <ExceptionHandling>false</ExceptionHandling>
       <OmitFramePointers>true</OmitFramePointers>
+      <DisableSpecificWarnings>4047;6031</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

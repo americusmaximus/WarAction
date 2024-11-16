@@ -20,12 +20,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Basic.hxx"
+#include "BinFile.hxx"
 #include "Native.Basic.hxx"
 
 typedef struct Logger
 {
-    HANDLE  File;
+    BINFILE File;
     HWND    HWND;
     HANDLE  Mutex;
 } LOGGER, * LOGGERPTR;

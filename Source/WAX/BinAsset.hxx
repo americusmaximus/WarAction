@@ -56,8 +56,8 @@ typedef struct ImageSprite
 {
     S16                 X;
     S16                 Y;
-    U16                 Width;
-    U16                 Height;
+    S16                 Width;
+    S16                 Height;
     U8                  Unk04; // TODO
     U16                 Next;
     IMAGESPRITEPIXEL    Pixels[1];
@@ -77,8 +77,8 @@ typedef struct ImagePaletteSprite
 {
     S16                     X;
     S16                     Y;
-    U16                     Width;
-    U16                     Height;
+    S16                     Width;
+    S16                     Height;
     U8                      Unk04; // TODO
     U16                     Next;
     IMAGEPALETTESPRITEPIXEL Pixels[1];

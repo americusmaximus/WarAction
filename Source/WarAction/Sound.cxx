@@ -47,8 +47,7 @@ VOID CLASSCALL ReleaseSoundTrack(SOUNDTRACKPTR self)
         if (self->Buffer != NULL)
         {
             self->Buffer->Stop();
-            self->Buffer->Release();
-            self->Buffer = NULL;
+            DIRECTSOUNDRELEASE(self->Buffer);
         }
 
         self->State = NULL;

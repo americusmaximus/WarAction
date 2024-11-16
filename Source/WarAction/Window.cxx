@@ -187,7 +187,7 @@ BOOL ReleaseWindowStateAction(VOID)
 
     if (State.App != NULL && State.App->Module != NULL)
     {
-        if (State.Module->Network != NULL) { State.Module->Network->Release(); }
+        DIRECTPLAYRELEASE(State.Module->Network);
 
         free(State.App->Module);
     }

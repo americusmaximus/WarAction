@@ -20,13 +20,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Basic.hxx"
+#include "Activation.hxx"
+#include "Logger.hxx"
+#include "State.hxx"
+#include "Version.hxx"
 
-#include <App.hxx>
+// 0x1000d0a0
+BOOL APIENTRY DllMain(HINSTANCE, DWORD reason, LPVOID)
+{
+    if (reason == DLL_PROCESS_ATTACH) { Activate(); }
 
-#define MODULE_VERSION_VALUE 271
-
-BOOL APIENTRY Main(HMODULE, DWORD, LPVOID) { return TRUE; }
+    return TRUE;
+}
 
 // 0x10020c30
 // a.k.a. GetGeckVersion
@@ -34,9 +39,31 @@ U32 AcquireModuleVersion() { return MODULE_VERSION_VALUE; }
 
 // 0x1000cf20
 // a.k.a. VModule_Init
-BOOL InitializeModule(APPSTATECONTAINERPTR state)
+BOOL InitializeModule(APPPTR state)
 {
-    // TODO NOT IMPLEMENTED
+    State.App = state;
+    State.Window = state->Window;
+    State.Logger = state->Logger;
+
+    state->ModuleName = "SueMenu: ";
+
+    for (ActionState.Active = ActionState.Activate;
+        ActionState.Active != NULL; ActionState.Active = ActionState.Active->Next)
+    {
+        if (!INVOKEACTIONHANDLERLAMBDA(ActionState.Active->Action)) { return FALSE; }
+
+        if (ActionState.Active->Next == NULL) { break; }
+    }
+
+    for (ActionState.Active = ActionState.Initialize;
+        ActionState.Active != NULL; ActionState.Active = ActionState.Active->Next)
+    {
+        if (!INVOKEACTIONHANDLERLAMBDA(ActionState.Active->Action)) { return FALSE; }
+
+        if (ActionState.Active->Next == NULL) { break; }
+    }
+
+    LogMessage("Started.\n");
 
     return TRUE;
 }
@@ -45,7 +72,13 @@ BOOL InitializeModule(APPSTATECONTAINERPTR state)
 // a.k.a. VModule_Handle
 BOOL MessageModule(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
 {
-    // TODO NOT IMPLEMENTED
+    for (ActionState.Active = ActionState.Message;
+        ActionState.Active != NULL; ActionState.Active = ActionState.Active->Next)
+    {
+        if (!INVOKEWINDOWACTIONHANDLERLAMBDA(ActionState.Active->Action, hwnd, msg, wp, lp, result)) { return *result; }
+
+        if (ActionState.Active->Next == NULL) { break; }
+    }
 
     return TRUE;
 }
@@ -54,7 +87,13 @@ BOOL MessageModule(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
 // a.k.a. VModule_Play
 BOOL ExecuteModule()
 {
-    // TODO NOT IMPLEMENTED
+    for (ActionState.Active = ActionState.Execute;
+        ActionState.Active != NULL; ActionState.Active = ActionState.Active->Next)
+    {
+        if (!INVOKEACTIONHANDLERLAMBDA(ActionState.Active->Action)) { return FALSE; }
+
+        if (ActionState.Active->Next == NULL) { break; }
+    }
 
     return TRUE;
 }
@@ -63,7 +102,15 @@ BOOL ExecuteModule()
 // a.k.a. VModule_Done
 BOOL ReleaseModule()
 {
-    // TODO NOT IMPLEMENTED
+    for (ActionState.Active = ActionState.Release;
+        ActionState.Active != NULL; ActionState.Active = ActionState.Active->Next)
+    {
+        if (!INVOKEACTIONHANDLERLAMBDA(ActionState.Active->Action)) { return FALSE; }
+
+        if (ActionState.Active->Next == NULL) { break; }
+    }
+
+    LogMessage("Finished.\n");
 
     return TRUE;
 }
