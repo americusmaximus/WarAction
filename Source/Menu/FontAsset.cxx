@@ -46,18 +46,20 @@ FONTASSETPTR CLASSCALL ActivateFontAsset(FONTASSETPTR self)
 // 0x10003800
 BOOL CLASSCALL InitializeFontAsset(FONTASSETPTR self, LPCSTR name, CONST FONTTYPE type)
 {
-    CHAR path[MAX_FILE_NAME_LENGTH];
+    self->Type = type;
 
     switch (type)
     {
     case FONTTYPE_BASIC:
     {
+        CHAR path[MAX_FILE_NAME_LENGTH];
         wsprintfA(path, "%s.pck", name);
 
         return InitializeBinAsset(&self->Asset, path, TRUE);
     }
     case FONTTYPE_COMPLEX:
     {
+        CHAR path[MAX_FILE_NAME_LENGTH];
         wsprintfA(path, "%s.fnt", name);
         AcquireAssetContent(path, &self->Font, 0);
 

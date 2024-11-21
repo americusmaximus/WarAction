@@ -37,7 +37,7 @@ BFH AcquireAssetFileIndex(LPCSTR name)
     {
         CONST BINFILECONTENTPTR file = &AssetsState.Files[indx];
 
-        if (file->Type == BINFILECONTENTTYPE_NONE || _strcmpi(file->Name, name) == 0) { return indx; }
+        if (file->Type != BINFILECONTENTTYPE_NONE && _strcmpi(file->Name, name) == 0) { return indx; }
 
         INCREMENT_BINFILE_INDEX(indx)
     }
@@ -269,8 +269,8 @@ U32 ReadMultiChunkAssetFile(LPVOID result, CONST BFH indx, CONST U32 offset, CON
 
     while (left != 0)
     {
-        CONST U32 length = left < AssetsState.Files[indx].Size - start
-            ? left : AssetsState.Files[indx].Size - start;
+        CONST U32 length = left < AssetsState.Files[indx].Chunk - start
+            ? left : AssetsState.Files[indx].Chunk - start;
 
         LPVOID content = ReadAssetFileChunk(indx, chunk);
 

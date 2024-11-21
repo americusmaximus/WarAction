@@ -28,7 +28,7 @@ SOFTWARE.
 
 typedef struct RendererModuleDirectXState
 {
-#ifdef ACTIVATE_MODERN_MODE
+#ifdef ACTIVATE_MODERN_GRAPHICS_MODE
     LPDIRECTDRAW7           Instance;
     LPDIRECTDRAWSURFACE7    Surface;
 #else

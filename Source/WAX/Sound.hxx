@@ -77,8 +77,8 @@ typedef struct SoundHeader
 
 typedef struct Sound
 {
-    LPDIRECTSOUND           Instance;
-    LPDIRECTSOUNDBUFFER     Buffer;
+    LPDIRECTSOUND           Instance; // TODO Modern sound mode?
+    LPDIRECTSOUNDBUFFER     Buffer; // TODO Modern sound mode?
     SOUNDRESULT             State;
     HRESULT                 Result;
     U32                     Count;

@@ -45,11 +45,11 @@ U32 AcquireAssetContent(LPCSTR name, LPVOID* content, CONST U32 size)
 
     if (size == 0)
     {
-        *content = (LPVOID)malloc(length);
+        *content = malloc(length);
         actual = length;
     }
 
-    ReadAssetFile(&file, content, actual);
+    ReadAssetFile(&file, *content, actual);
     CloseAssetFile(&file);
 
     return actual;
@@ -91,9 +91,11 @@ LPVOID InitializeBinFileChunk(CONST BFH indx, CONST U32 chunk, CONST U32 size)
 
     AssetsState.Chunks.Values[AssetsState.Chunks.Count].Content = malloc(size);
 
+    LPVOID result = AssetsState.Chunks.Values[AssetsState.Chunks.Count].Content;
+
     AssetsState.Chunks.Count = (AssetsState.Chunks.Count + 1) % MAX_BINARY_CHUNK_COUNT;
 
-    return AssetsState.Chunks.Values[AssetsState.Chunks.Count].Content;
+    return result;
 }
 
 // 0x10024710

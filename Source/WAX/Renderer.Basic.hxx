@@ -25,7 +25,7 @@ SOFTWARE.
 #include "Basic.hxx"
 
 #ifdef _WIN64
-#define ACTIVATE_MODERN_MODE                TRUE
+#define ACTIVATE_MODERN_GRAPHICS_MODE       TRUE
 #endif
 
 #define ACTIVE_TRUE_COLOR_MODE              TRUE
@@ -36,10 +36,10 @@ SOFTWARE.
 #define MAGENTA_PIXEL                       0xF81F
 #define WHITE_PIXEL                         0xFFFF
 
-#define RGB565_TO_RGB888(rgb565)            \
-  ((((rgb565 & 0xF800) << 8) & 0xFF0000)    \
-   | (((rgb565 & 0x07E0) << 5) & 0x00FF00)  \
-   | (((rgb565 & 0x001F) << 3) & 0x0000FF))
+#define RGB565_TO_RGB888(value)             \
+  ((((value & 0xF800) << 8) & 0xFF0000)     \
+   | (((value & 0x07E0) << 5) & 0x00FF00)   \
+   | (((value & 0x001F) << 3) & 0x0000FF))
 
 #define SHADEPIXEL(pixel, mask) ((pixel & mask) >> 1)
 

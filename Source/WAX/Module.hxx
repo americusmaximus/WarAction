@@ -35,5 +35,5 @@ typedef struct Module
     SOUNDPTR                        Sound;
     RENDERERMODULESTATECONTAINERPTR Renderer;
     HMODULE                         Text;
-    LPDIRECTPLAY3A                  Network;
+    LPDIRECTPLAY3A                  Network; // TODO Modern network mode?
 } MODULE, * MODULEPTR;

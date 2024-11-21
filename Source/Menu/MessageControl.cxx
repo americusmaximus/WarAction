@@ -65,20 +65,20 @@ MESSAGECONTROLPTR CLASSCALL ActivateMessageControl(MESSAGECONTROLPTR self)
 VOID CLASSCALL InitializeMessageControl(MESSAGECONTROLPTR self)
 {
     InitializeBinAsset(&self->Assets.Ok, 2);
-    SelectBinAssetItem(&self->Assets.Ok, 0, AcquireBinAssetContent(&AssetsState.Assets.Msg1BT0, 0));
-    SelectBinAssetItem(&self->Assets.Ok, 1, AcquireBinAssetContent(&AssetsState.Assets.Msg1BT1, 0));
+    SelectBinAssetItem(&self->Assets.Ok, 0, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg1BT0, 0)); // TODO
+    SelectBinAssetItem(&self->Assets.Ok, 1, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg1BT1, 0)); // TODO
 
     InitializeBinAsset(&self->Assets.Cancel, 2);
-    SelectBinAssetItem(&self->Assets.Cancel, 0, AcquireBinAssetContent(&AssetsState.Assets.Msg1CBT0, 0));
-    SelectBinAssetItem(&self->Assets.Cancel, 1, AcquireBinAssetContent(&AssetsState.Assets.Msg1CBT1, 0));
+    SelectBinAssetItem(&self->Assets.Cancel, 0, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg1CBT0, 0)); // TODO
+    SelectBinAssetItem(&self->Assets.Cancel, 1, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg1CBT1, 0)); // TODO
 
     InitializeBinAsset(&self->Assets.Combined.Ok, 2);
-    SelectBinAssetItem(&self->Assets.Combined.Ok, 0, AcquireBinAssetContent(&AssetsState.Assets.Msg2BT10, 0));
-    SelectBinAssetItem(&self->Assets.Combined.Ok, 1, AcquireBinAssetContent(&AssetsState.Assets.Msg2BT11, 0));
+    SelectBinAssetItem(&self->Assets.Combined.Ok, 0, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg2BT10, 0)); // TODO
+    SelectBinAssetItem(&self->Assets.Combined.Ok, 1, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg2BT11, 0)); // TODO
 
     InitializeBinAsset(&self->Assets.Combined.Cancel, 2);
-    SelectBinAssetItem(&self->Assets.Combined.Cancel, 0, AcquireBinAssetContent(&AssetsState.Assets.Msg2BT20, 0));
-    SelectBinAssetItem(&self->Assets.Combined.Cancel, 1, AcquireBinAssetContent(&AssetsState.Assets.Msg2BT21, 0));
+    SelectBinAssetItem(&self->Assets.Combined.Cancel, 0, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg2BT20, 0)); // TODO
+    SelectBinAssetItem(&self->Assets.Combined.Cancel, 1, *(U32*)AcquireBinAssetContent(&AssetsState.Assets.Msg2BT21, 0)); // TODO
 
     self->Buttons.Ok = ActivateButtonControl(ALLOCATE(BUTTONCONTROL), &self->Assets.Ok, 0, CONTROLACTION_MSGBOX_OK);
     self->Buttons.Cancel = ActivateButtonControl(ALLOCATE(BUTTONCONTROL), &self->Assets.Cancel, 0, CONTROLACTION_MSGBOX_CANCEL);
