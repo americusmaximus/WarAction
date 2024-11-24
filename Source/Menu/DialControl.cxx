@@ -53,6 +53,8 @@ DIALCONTROLPTR CLASSCALL ActivateDialControl(DIALCONTROLPTR self)
 
     self->Scroll = ActivateScrollControl(ALLOCATE(SCROLLCONTROL), &AssetsState.Assets.DialSC, CONTROLACTION_SCROLL);
 
+    self->Items = ActivateStringList(ALLOCATE(STRINGLIST));
+
     self->List = ActivateListControl(ALLOCATE(LISTCONTROL),
         CONTROLACTION_LIST_SELECT, 351, 96, 223, 296, self->Scroll, &AssetsState.Fonts.Main, self->Items);
 

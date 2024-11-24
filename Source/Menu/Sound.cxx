@@ -202,8 +202,8 @@ VOID CLASSCALL InitializeSoundState(SOUNDSTATEPTR self, SOUNDPTR state)
 
     {
         STRINGVALUE name, value;
-        AcquireStringValue(&name, StringsState.Scratch);
-        AcquireSettingsValue(value, IDS_SOUND_RESOURCE);
+        AcquireSettingsValue(&name, IDS_SOUND_RESOURCE);
+        AcquireStringValue(&value, StringsState.Scratch);
 
         STRINGVALUE setting;
         STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);

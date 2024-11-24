@@ -108,7 +108,7 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
             {
                 STRINGVALUE name, value;
                 AcquireSettingsValue(&name, IDS_SINGLE_MAP_DIR);
-                AcquireStringValue((&value), StringsState.Scratch);
+                AcquireStringValue(&value, StringsState.Scratch);
 
                 STRINGVALUE setting;
                 STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);

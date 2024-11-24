@@ -126,22 +126,20 @@ VOID CLASSCALL DisposePanelControl(PANELCONTROLPTR self)
 // 0x100021a0
 VOID CLASSCALL AppendPanelControlNode(PANELCONTROLPTR self, CONTROLPTR node)
 {
-    if (self->Nodes != NULL)
+    if (self->Nodes == NULL)
     {
-        AppendControlNode(self->Nodes, node);
-        return;
+        self->Nodes = ALLOCATE(CONTROLNODE);
+        InitControlNode(self->Nodes, node);
     }
-
-    self->Nodes = ALLOCATE(CONTROLNODE);
-    InitControlNode(self->Nodes, node);
+    else { AppendControlNode(self->Nodes, node); }
 }
 
 // 0x100021e0
-CONTROLPTR CLASSCALL AcquirePanelControlNode(PANELCONTROLPTR self, CONST U32 indx)
+CONTROLPTR CLASSCALL AcquirePanelControlNode(PANELCONTROLPTR self, CONST S32 indx)
 {
     CONTROLNODEPTR node = self->Nodes;
 
-    for (U32 x = 0; x < indx; x++) { node = node->Next; }
+    for (S32 x = 0; x < indx; x++) { node = node->Next; }
 
     return node->Value;
 }

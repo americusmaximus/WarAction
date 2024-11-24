@@ -335,8 +335,8 @@ BOOL InitializeModuleAction(VOID)
         State.Main = ActivateMainControl(ALLOCATE(MAINCONTROL));
 
         {
-            STRINGVALUE name, value; //TODO warning
-            AcquireSettingsValue(name, IDS_BACK_WAVE_PATH);
+            STRINGVALUE name, value;
+            AcquireSettingsValue(&name, IDS_BACK_WAVE_PATH);
             AcquireStringValue(&value, StringsState.Scratch);
 
             STRINGVALUE setting;
@@ -423,6 +423,8 @@ BOOL ExecuteModuleAction(VOID)
             }
         }
 
+        // TODO: There's a bug in the Main or Welcome control, so that the result
+        // makes action not CONTROLACTION_NONE, thus closing the game right away.
         if (action != CONTROLACTION_NONE) { State.App->InitModule = INVALID_MODULE_STATE_INDEX; }
     }
 

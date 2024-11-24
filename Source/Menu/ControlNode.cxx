@@ -34,7 +34,7 @@ VOID InitControlNode(CONTROLNODEPTR self, CONTROLPTR node)
 VOID CLASSCALL AppendControlNode(CONTROLNODEPTR self, CONTROLPTR node)
 {
     CONTROLNODEPTR current = self;
-    CONTROLNODEPTR next = current->Next;
+    CONTROLNODEPTR next = self->Next;
 
     while (next != NULL)
     {
@@ -49,7 +49,7 @@ VOID CLASSCALL AppendControlNode(CONTROLNODEPTR self, CONTROLPTR node)
     next->Value = node;
     next->Next = NULL;
 
-    self->Next = next;
+    current->Next = next;
 }
 
 // 0x10001a80

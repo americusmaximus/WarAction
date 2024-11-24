@@ -69,11 +69,11 @@ VOID CLASSCALL InitializeTextAsset(TEXTASSETPTR self, LPCSTR name)
         {
             LPSTR content = self->Content;
 
-            while (*content != NULL)
+            while (content[0] != NULL)
             {
                 LPCSTR pos = strchr(content, '\n');
 
-                if (pos == NULL) { content = (LPSTR)((ADDR)pos + strlen(content) +1); }
+                if (pos == NULL) { content = (LPSTR)((ADDR)content + strlen(content) + 1); }
                 else { content = (LPSTR)((ADDR)pos + 1); }
 
                 self->Count = self->Count + 1;
@@ -131,10 +131,10 @@ VOID CLASSCALL AcquireTextAssetStringValue(TEXTASSETPTR self, CONST U32 line, CO
     for (U32 x = 0; x < param; x++)
     {
         // Skip all non-spaces until the end of the string.
-        while (pointer[0] != NULL && pointer[0] != ' ') { pointer = (LPSTR)((ADDR)value + 1); }
+        while (pointer[0] != NULL && pointer[0] != ' ') { pointer = (LPSTR)((ADDR)pointer + 1); }
 
         // Skip all sequential spaces.
-        while (pointer[0] != NULL && pointer[0] == ' ') { pointer = (LPSTR)((ADDR)value + 1); }
+        while (pointer[0] != NULL && pointer[0] == ' ') { pointer = (LPSTR)((ADDR)pointer + 1); }
     }
 
     {

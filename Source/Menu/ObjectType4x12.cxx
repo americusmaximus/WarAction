@@ -53,7 +53,8 @@ CONTROLTYPE4X12PTR CLASSCALL ActivateObjectType4x12(CONTROLTYPE4X12PTR self, CON
 
     for (U32 x = 0; x < count; x++)
     {
-        CONTROLTYPE2X38PTR control = ActivateObjectType2x38(ALLOCATE(CONTROLTYPE2X38), asset, x * 2, action);
+        CONTROLTYPE2X38PTR control =
+            ActivateObjectType2x38(ALLOCATE(CONTROLTYPE2X38), asset, x * 2, action);
 
         if (self->Nodes == NULL)
         {
@@ -88,9 +89,10 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 {
     if (!self->IsSound)
     {
-        CONTROLTYPE2X38PTR control = (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, indx);
+        CONTROLTYPE2X38PTR control =
+            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, indx);
 
-        control->IsAction = ~control->IsAction; // XOR 0x1
+        control->IsAction = ~control->IsAction; // XOR 0x1 // TODO
 
         PlaySoundStateSound(&SoundState.State, control->Click);
 
@@ -98,11 +100,13 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
     }
 
     BOOL result = FALSE;
-    CONST U32 count = AcquireBinAssetImageCount(self->Asset);
 
-    for (U32 x = 0; x < count / 2; x++)
+    CONST U32 count = AcquireBinAssetImageCount(self->Asset) / 2;
+
+    for (U32 x = 0; x < count; x++)
     {
-        CONTROLTYPE2X38PTR control = (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, indx);
+        CONTROLTYPE2X38PTR control =
+            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, x);
 
         if (x == indx && !control->IsAction)
         {
@@ -120,9 +124,9 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 // 0x10002550
 VOID CLASSCALL SelectObjectType4x12XY(CONTROLTYPE4X12PTR self, CONST S32 x, CONST S32 y) // TODO
 {
-    CONST U32 count = AcquireBinAssetImageCount(self->Asset);
+    CONST U32 count = AcquireBinAssetImageCount(self->Asset) / 2;
 
-    for (U32 xx = 0; xx < count / 2; xx++)
+    for (U32 xx = 0; xx < count; xx++)
     {
         CONTROLTYPE2X38PTR control =
             (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, xx);
