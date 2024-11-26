@@ -208,14 +208,14 @@ VOID AcquireBinFile(BINFILEINFOPTR self, CONST U32 archive, LPSTR names, CONST B
 {
     CONST LPSTR name = (LPSTR)((ADDR)names + (ADDR)self->Name);
 
-    BFH indx = crc32(0, (LPBYTE)name, strlen(name)) & BINFILE_VALUE_MASK;
+    BFH indx = crc32(0, (LPBYTE)name, strlen(name)) & (MAX_BINARY_FILE_COUNT - 1);
 
     for (BFH x = 0; x < MAX_BINARY_FILE_COUNT; x++)
     {
         if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE
             || _strcmpi(AssetsState.Files[indx].Name, name) == 0) { break; }
 
-        INCREMENT_BINFILE_INDEX(indx);
+        indx = (indx + 1) % MAX_BINARY_FILE_COUNT;
     }
 
     if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE
@@ -314,14 +314,14 @@ BOOL AcquireBinArchive(CONST U32 indx, LPSTR name, LPSTR result, CONST BOOL over
 // 0x10024bd0
 VOID AcquireBinFile(LPSTR name, CONST U32 archive, CONST BOOL overwrite)
 {
-    BFH indx = crc32(0, (BYTE*)name, strlen(name)) & BINFILE_VALUE_MASK;
+    BFH indx = crc32(0, (BYTE*)name, strlen(name)) & (MAX_BINARY_FILE_COUNT - 1);
 
     for (BFH x = 0; x < MAX_BINARY_FILE_COUNT; x++)
     {
         if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE
             || _strcmpi(AssetsState.Files[indx].Name, name) == 0) { break; }
 
-        INCREMENT_BINFILE_INDEX(indx)
+        indx = (indx + 1) % MAX_BINARY_FILE_COUNT;
     }
 
     if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE

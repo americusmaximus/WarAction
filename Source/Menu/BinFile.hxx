@@ -31,28 +31,7 @@ SOFTWARE.
 
 #define BINARCHIVE_MAGIC            0x53465A46 /* FZFS */
 
-#ifdef _WIN64
-#define BINAFILE_INDEX_MASK         0x8000000000000FFF
-#define BINAFILE_NEGATIVE_MASK      0x8000000000000000
-#define BINAFILE_VALUE_MASK         0xFFF
-#else
-#define BINFILE_INDEX_MASK          0x80000FFF
-#define BINFILE_NEGATIVE_MASK       0x80000000
-#define BINFILE_VALUE_MASK          0xFFF
-#endif
-
 #define BINFILEHANDLE(x) ((HANDLE)x)
-
-#define INCREMENT_BINFILE_INDEX(x)                          \
-{                                                           \
-    BFH _indx_ = (BFH)x;                                    \
-    _indx_ = (_indx_ + 1) & BINFILE_INDEX_MASK;             \
-    if (_indx_ & BINFILE_NEGATIVE_MASK)                     \
-    {                                                       \
-        _indx_ = ((_indx_ - 1) | BINFILE_INDEX_MASK) + 1;   \
-    }                                                       \
-    x = _indx_;                                             \
-}
 
 typedef enum BinFileOpenType
 {

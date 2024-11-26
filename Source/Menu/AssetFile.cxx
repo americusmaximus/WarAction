@@ -31,7 +31,7 @@ SOFTWARE.
 // 0x10024f00
 BFH AcquireAssetFileIndex(LPCSTR name)
 {
-    BFH indx = crc32(0, (BYTE*)name, strlen(name)) & BINFILE_VALUE_MASK;
+    BFH indx = crc32(0, (BYTE*)name, strlen(name)) & (MAX_BINARY_FILE_COUNT - 1);
 
     for (BFH x = 0; x < MAX_BINARY_FILE_COUNT; x++)
     {
@@ -39,7 +39,7 @@ BFH AcquireAssetFileIndex(LPCSTR name)
 
         if (file->Type != BINFILECONTENTTYPE_NONE && _strcmpi(file->Name, name) == 0) { return indx; }
 
-        INCREMENT_BINFILE_INDEX(indx)
+        indx = (indx + 1) % MAX_BINARY_FILE_COUNT;
     }
 
     return INVALID_BINFILE_VALUE;
