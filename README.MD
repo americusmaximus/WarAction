@@ -26,7 +26,7 @@ git clone --recurse-submodules https://github.com/americusmaximus/WarAction
 2. The game is structured in a way where the executable is just a glue for separate menu and game modules, which are in their turn can use different renderer modules.
 3. The GOG.com's version of the game uses Ogg Vorbis for the game's music. It looks like this was a recent change and a requirement for the game publishing, I believe original game shipped with mp3 files. In order to support Ogg Vorbis, the games has its own WinMM.dll library to support the file format, otherwise it is mostly a wrapper of the system library.
 4. The original game used zlib version 1.1.3, which I upgraded to 1.3.1 for proper 64-bit support.
-5. The original game uses RAD Game Tools' binkw32 library version 1.0q.
+5. The original game uses RAD Game Tools' binkw32 library version 1.0Q.
 
 ### Compatibility, Code Style & Standards
 In order to be able to run the code not only in the modern operating systems, but also in legacy environments, such as Windows XP, the code base has to abstain from usage of modern C++ language features.
