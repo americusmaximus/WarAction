@@ -37,6 +37,6 @@ BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length);
 VOID ReleaseStartArguments(VOID);
 
 VOID AcquireIniFileState(VOID);
-STATUS AcquireGameCommand(VOID);
+STATUS AcquireGameStatus(VOID);
 
 BOOL ExecuteModuleCommands(VOID);

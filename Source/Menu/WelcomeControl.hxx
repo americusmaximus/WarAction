@@ -42,7 +42,7 @@ typedef VOID(CLASSCALL* WELCOMECONTROLTICKACTION)(WelcomeControl* self);
 typedef U32(CLASSCALL* WELCOMECONTROLACTIONACTION)(WelcomeControl* self);
 typedef WelcomeControl* (CLASSCALL* WELCOMECONTROLRELEASEACTION)(WelcomeControl* self, CONST OBJECTRELEASETYPE mode);
 
-// INHERITANCE: PanelControlSelf
+// INHERITANCE: SceneControlSelf
 typedef struct WelcomeControlSelf
 {
     WELCOMECONTROLTYPEACTION        Type;
@@ -56,14 +56,14 @@ typedef struct WelcomeControlSelf
 EXTERN WELCOMECONTROLSELF WelcomeControlSelfState;
 
 #pragma pack(push, 1)
-// INHERITANCE: PanelControl
+// INHERITANCE: SceneControl
 typedef struct WelcomeControl
 {
     WELCOMECONTROLSELFPTR   Self;
     U8                      IsActive;
     CONTROLNODEPTR          Nodes;
-    U32                     Unk03; // TODO
-    U32                     Unk04; // TODO
+    BINASSETPTR             Background;
+    BINASSETPTR             Buttons;
     CONTROLTYPE4X12PTR      Operations;
     CONTROLTYPE4X12PTR      Resolutions;
     BUTTONCONTROLPTR        Greetings;

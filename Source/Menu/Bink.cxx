@@ -59,19 +59,25 @@ BOOL InitializeBink(LPCSTR name, RENDERERMODULESTATECONTAINERPTR renderer, SOUND
     VideoState.Surface = BinkDDSurfaceType(VideoState.Renderer->DirectX.Surface);
 #endif
 
-    if (VideoState.Surface != BINKSURFACEINVALID && VideoState.Surface != BINKSURFACE8P) { return TRUE; }
+    if (VideoState.Surface == BINKSURFACEINVALID || VideoState.Surface == BINKSURFACE8P)
+    {
+        MessageBoxA(NULL, "Unsupported primary surface format.", "Error", MB_ICONHAND | MB_OK);
 
-    MessageBoxA(NULL, "Unsupported primary surface format.", "Error", MB_ICONHAND | MB_OK);
+        return FALSE;
+    }
 
-    return FALSE;
+    return TRUE;
 }
 
 // 0x10001660
-BOOL PlayBinkVideo(VOID)
+BINKVIDEORESULT PlayBinkVideo(VOID)
 {
-    if (!BinkWait(VideoState.Instance)) { return ShowBinkFrame(); }
+    if (!BinkWait(VideoState.Instance))
+    {
+        return ShowBinkFrame() ? BINKVIDEORESULT_COMPLETED : BINKVIDEORESULT_CONTINUE;
+    }
 
-    return FALSE;
+    return BINKVIDEORESULT_CONTINUE;
 }
 
 // 0x10001690
@@ -84,14 +90,24 @@ BOOL ShowBinkFrame(VOID)
 
     desc.dwSize = sizeof(DDSURFACEDESC);
 
-    // TODO Support window mode offset/rect
+    RECT rect = { 0, 0, GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480 };
 
-    if (VideoState.Renderer->DirectX.Surface->Lock(NULL, &desc, DDLOCK_WAIT, NULL) == DD_OK)
+    if (!VideoState.Renderer->IsFullScreen)
+    {
+        POINT point = { 0 };
+
+        GetClientRect(VideoState.Renderer->HWND, &rect);
+        ClientToScreen(VideoState.Renderer->HWND, &point);
+        OffsetRect(&rect, point.x, point.y);
+    }
+
+    if (VideoState.Renderer->DirectX.Surface->Lock(VideoState.Renderer->IsFullScreen
+        ? NULL : &rect, &desc, DDLOCK_WAIT, NULL) == DD_OK)
     {
         BinkCopyToBuffer(VideoState.Instance,
             desc.lpSurface, desc.lPitch, VideoState.Instance->Width,
-            GRAPHICS_RESOLUTION_640 - VideoState.Instance->Width / 2,
-            GRAPHICS_RESOLUTION_480 - VideoState.Instance->Height / 2, VideoState.Surface);
+            (GRAPHICS_RESOLUTION_640 - VideoState.Instance->Width) / 2,
+            (GRAPHICS_RESOLUTION_480 - VideoState.Instance->Height) / 2, VideoState.Surface);
 
         VideoState.Renderer->DirectX.Surface->Unlock(desc.lpSurface);
     }

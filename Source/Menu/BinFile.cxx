@@ -131,8 +131,6 @@ BOOL OpenBinArchiveFile(LPSTR name)
     return FALSE;
 }
 
-#include <stdlib.h>
-
 // 0x10022010
 BOOL CLASSCALL OpenBinFile(BINFILEPTR self, LPCSTR name, CONST BINFILEOPENTYPE type)
 {
@@ -142,7 +140,7 @@ BOOL CLASSCALL OpenBinFile(BINFILEPTR self, LPCSTR name, CONST BINFILEOPENTYPE t
     DWORD access = GENERIC_READ;
     DWORD mode = FILE_SHARE_READ;
 
-    if (mode & BINFILEOPENTYPE_WRITE)
+    if (type & BINFILEOPENTYPE_WRITE)
     {
         access = access | GENERIC_WRITE;
         mode = mode | FILE_SHARE_WRITE;

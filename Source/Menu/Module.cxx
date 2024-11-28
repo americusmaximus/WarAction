@@ -60,7 +60,7 @@ BOOL InitializeModuleAction(VOID)
     LogMessage("DPLAY_Done()\n");
     ReleaseNetworkStateContainer();
 
-    switch (AcquireGameCommand())
+    switch (AcquireGameStatus())
     {
     case STATUS_LOADING:
     {
@@ -522,7 +522,7 @@ BOOL RestartModule(VOID)
 }
 
 // 0x100188e0
-STATUS AcquireGameCommand(VOID)
+STATUS AcquireGameStatus(VOID)
 {
     return State.Module->Game.Status;
 }

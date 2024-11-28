@@ -57,12 +57,7 @@ VOID EnqueueControlCommand(CONST U32 command, CONST U32 action, CONST U32 param1
     CommandControlState.Items[CommandControlState.WriteIndex].Parameter1 = param1;
     CommandControlState.Items[CommandControlState.WriteIndex].Parameter2 = param2;
 
-    CommandControlState.WriteIndex = CommandControlState.WriteIndex + 1 & 0x800000ff; // TODO
-
-    if (CommandControlState.WriteIndex < 0) // TODO
-    {
-        CommandControlState.WriteIndex = (CommandControlState.WriteIndex - 1 | 0xffffff00) + 1; // TODO
-    }
+    CommandControlState.WriteIndex = (CommandControlState.WriteIndex + 1) % MAX_CONTROL_COMMAND_ITEMS_COUNT;
 }
 
 // 0x100226b0
@@ -74,12 +69,7 @@ CONTROLCOMMANDPTR DequeueControlCommand(CONST BOOL remove)
 
         if (remove)
         {
-            CommandControlState.ReadIndex = CommandControlState.ReadIndex + 1 & 0x800000ff; // TODO
-
-            if (CommandControlState.ReadIndex < 0) // TODO
-            {
-                CommandControlState.ReadIndex = (CommandControlState.ReadIndex - 1 | 0xffffff00) + 1; // TODO
-            }
+            CommandControlState.ReadIndex = (CommandControlState.ReadIndex + 1) % MAX_CONTROL_COMMAND_ITEMS_COUNT;
         }
 
         return item;
@@ -102,23 +92,13 @@ BOOL DequeueControlCommand(CONTROLCOMMANDPTR command, CONST BOOL remove)
 
             if (remove)
             {
-                CommandControlState.ReadIndex = CommandControlState.ReadIndex + 1 & 0x800000ff; // TODO
-
-                if (CommandControlState.ReadIndex < 0) // TODO
-                {
-                    CommandControlState.ReadIndex = (CommandControlState.ReadIndex - 1 | 0xffffff00) + 1; // TODO
-                }
+                CommandControlState.ReadIndex = (CommandControlState.ReadIndex + 1) % MAX_CONTROL_COMMAND_ITEMS_COUNT;
             }
 
             return TRUE;
         }
 
-        CommandControlState.ReadIndex = CommandControlState.ReadIndex + 1 & 0x800000ff;
-
-        if (CommandControlState.ReadIndex < 0) // TODO
-        {
-            CommandControlState.ReadIndex = (CommandControlState.ReadIndex - 1 | 0xffffff00) + 1; // TODO
-        }
+        CommandControlState.ReadIndex = (CommandControlState.ReadIndex + 1) % MAX_CONTROL_COMMAND_ITEMS_COUNT;
     }
 
     return FALSE;

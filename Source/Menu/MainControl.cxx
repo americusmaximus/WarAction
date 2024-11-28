@@ -94,7 +94,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
     Array0x10046cb4Count = 0;
     AssignUnknownValue1(0);
 
-    if (AcquireGameCommand() == STATUS_NONE)
+    if (AcquireGameStatus() == STATUS_NONE)
     {
         DeleteGameState();
 
@@ -163,7 +163,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
             return;
         }
 
-        if (AcquireGameCommand() == STATUS_LOADING) { return; }
+        if (AcquireGameStatus() == STATUS_LOADING) { return; }
 
         LogMessage("GECK: curMap=%d, curMis=%d, nextMap=%d, nextMis=%d\n",
             AcquireCurrentGameMap(), AcquireCurrentGameMission(),
@@ -173,7 +173,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
 
         if (!PlayVideoControl(self->Video,
             AcquireCurrentGameMap(), AcquireCurrentGameMission(),
-            AcquireGameCommand() == STATUS_VICTORY ? VICTORY_VIDEO_TEXT_ASSET_PARAM : DEFEAT_VIDEO_TEXT_ASSET_PARAM))
+            AcquireGameStatus() == STATUS_VICTORY ? VICTORY_VIDEO_TEXT_ASSET_PARAM : DEFEAT_VIDEO_TEXT_ASSET_PARAM))
         {
             return;
         }
@@ -324,6 +324,17 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
     switch (action)
     {
+    case CONTROLACTION_NONE:
+    {
+        if (State.App->InitModule != LAUNCHER_MODULE_STATE_INDEX)
+        {
+            if (self->Active != NULL) { self->Active->Self->Disable(self->Active); }
+
+            self->Active = NULL;
+        }
+
+        return self->Action == CONTROLACTION_NONE && !MessageControlState.IsVisible;
+    }
     case CONTROLACTION_MAIN_SINGLE: { action = CONTROLACTION_SINGLE0_NEW; break; }
     case CONTROLACTION_MAIN_MULTI: { action = CONTROLACTION_MULTI1_INTERNET; PlaySoundStateSound(&SoundState.State, "mult"); break; }
     case CONTROLACTION_MAIN_INTRO: { if (PlayVideoControl(self->Video, "@LongIntro")) { action = CONTROLACTION_PLAY_COMPLETED; } break; }

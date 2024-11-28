@@ -55,7 +55,8 @@ SCENECONTROLPTR CLASSCALL ActivateSceneControl(SCENECONTROLPTR self, BINASSETPTR
 
     for (U32 x = 0; x < count; x++)
     {
-        BUTTONCONTROLPTR button = ActivateButtonControl(ALLOCATE(BUTTONCONTROL), buttons, x * 2, action + x);
+        BUTTONCONTROLPTR button =
+            ActivateButtonControl(ALLOCATE(BUTTONCONTROL), buttons, x * 2, action + x);
 
         button->Click = "push";
         button->Unclick = "pull";

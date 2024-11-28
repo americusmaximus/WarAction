@@ -114,7 +114,12 @@ U32 CLASSCALL ActionVideoControl(VIDEOCONTROLPTR self)
         }
     }
 
-    return PlayBinkVideo() ? CONTROLACTION_PLAY_COMPLETED : CONTROLACTION_NONE;
+    CONST BINKVIDEORESULT result = PlayBinkVideo();
+
+    if (result == BINKVIDEORESULT_CONTINUE) { return CONTROLACTION_NONE; }
+    else if (result == BINKVIDEORESULT_COMPLETED) { return CONTROLACTION_PLAY_COMPLETED; }
+
+    return CONTROLACTION_1116;
 }
 
 // 0x100025c0
@@ -164,9 +169,9 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, CONST S32 map, CONST S32 m
 }
 
 // 0x10001020
-BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR name)
+BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR video)
 {
-    if (name[0] == '@')
+    if (video[0] == '@')
     {
         TEXTASSET text;
         ActivateTextAsset(&text);
@@ -178,7 +183,7 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR name)
         {
             AcquireTextAssetStringValue(&text, x, VIDEO_NAME_ALIAS_TEXT_ASSET_PARAM, buffer);
 
-            if (strcmp(name, buffer) == 0)
+            if (strcmp(video, buffer) == 0)
             {
                 AcquireTextAssetStringValue(&text, x, VIDEO_NAME_ACTUAL_TEXT_ASSET_PARAM, buffer);
 
@@ -203,7 +208,7 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR name)
         STRINGVALUE setting;
         STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);
 
-        wsprintfA(self->Name, "%s%s.bik", actual->Value, name.Value);
+        wsprintfA(self->Name, "%s%s.bik", actual->Value, video);
 
         ReleaseStringValue(actual);
     }
@@ -231,7 +236,7 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR name)
             {
                 AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_NAME_TEXT_ASSET_PARAM, buffer);
 
-                if (strcmp(name, buffer) == 0)
+                if (strcmp(video, buffer) == 0)
                 {
                     AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_UNKNOWN1_TEXT_ASSET_PARAM, buffer);
 
@@ -247,5 +252,5 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR name)
         DisposeTextAsset(&text);
     }
 
-    return FALSE;
+    return exists;
 }
