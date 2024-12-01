@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
+#include "BinAsset.hxx"
 
 #include <Renderer.Basic.hxx>
 
@@ -40,11 +40,11 @@ typedef enum CursorMessage
 
 typedef struct Cursor
 {
-    LPVOID  Animation; // TODO Type?
-    LPVOID  Palette; // TODO Type?
-    U32     Width;
-    U32     Height;
-    LPVOID  Pixels; // TODO Type?
+    ANIMATIONSPRITEHEADERPTR    Animation;
+    LPVOID                      Palette; // TODO Type?
+    U32                         Width;
+    U32                         Height;
+    LPVOID                      Pixels; // TODO Type?
 } CURSOR, * CURSORPTR;
 
 typedef struct CursorStateModuleContainer

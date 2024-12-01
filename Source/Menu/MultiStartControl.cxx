@@ -175,7 +175,7 @@ VOID CLASSCALL InitializeMultiStartControl(MULTISTARTCONTROLPTR self)
 
     if (NetworkState.Connection.IsHost) { ControlType3x3dState->Unk14 = MultiplayerSettingsState.MultiSpeed; }
 
-    CONST U32 count = AcquireBinAssetImageCount(&AssetsState.Assets.Rombik);
+    CONST U32 count = AcquireBinAssetItemCount(&AssetsState.Assets.Rombik);
 
     for (U32 x = 0; x < count; x++) { ((IMAGESPRITEPTR)AcquireBinAssetContent(&AssetsState.Assets.Rombik, x))->X = 0; }
 }

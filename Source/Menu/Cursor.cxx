@@ -69,7 +69,7 @@ VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name)
         if (length != 0)
         {
             CONST U32 count = ((length - 1) >> 2) + 1; // TODO
-            PIXEL* pixels = (PIXEL*)self->Palette;
+            PIXEL* pixels = (PIXEL*)self->Palette; // TODO
 
             for (U32 x = 0; x < count; x++) { pixels[x] = ADJUSTSPRITECOLOR(pixels[x]); }
         }
@@ -78,11 +78,10 @@ VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name)
     // Animation
     {
         wsprintfA(path, "%s.ani", name);
-        AcquireAssetContent(path, &self->Animation, 0);
+        AcquireAssetContent(path, (LPVOID*)&self->Animation, 0);
 
-        ANIMATIONSPRITEHEADERPTR animation = (ANIMATIONSPRITEHEADERPTR)self->Animation;
-
-        IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + animation->Offsets[0]);
+        IMAGEPALETTESPRITEPTR image =
+            (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[0]);
 
         self->Width = image->Width;
         self->Height = image->Height;
@@ -120,9 +119,8 @@ VOID CursorMessageHandler(CONST CURSORMESSAGE message)
 // 0x10003740
 VOID CLASSCALL CursorUnknown1(CURSORPTR self) // TODO name
 {
-    ANIMATIONSPRITEHEADERPTR animation = (ANIMATIONSPRITEHEADERPTR)self->Animation;
-
-    IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + animation->Offsets[0]);
+    IMAGEPALETTESPRITEPTR image =
+        (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[0]);
 
     FUN_10003610((PIXEL*)self->Pixels /* TODO */, self->Width, self->Height,
         State.Renderer->Surface.Main, State.Renderer->Surface.Width, State.Renderer->Surface.Height,
@@ -132,11 +130,10 @@ VOID CLASSCALL CursorUnknown1(CURSORPTR self) // TODO name
 // 0x10003540
 VOID CLASSCALL CursorUnknown2(CURSORPTR self) // TODO name
 {
-    ANIMATIONSPRITEHEADERPTR animation = (ANIMATIONSPRITEHEADERPTR)self->Animation;
+    CONST U32 indx = (GetTickCount() / 50) % self->Animation->Count;
 
-    CONST U32 indx = (GetTickCount() / 50) % (animation->Count + 1);
-
-    IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + animation->Offsets[indx]);
+    IMAGEPALETTESPRITEPTR image =
+        (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[indx]);
 
     State.Renderer->Actions.DrawMainSurfaceAnimationSprite(CursorState.X, CursorState.Y,
         100/* TODO */, (ANIMATIONPIXEL*)self->Palette /* TODO */, image);// TODO
@@ -145,9 +142,8 @@ VOID CLASSCALL CursorUnknown2(CURSORPTR self) // TODO name
 // 0x100037a0
 VOID CLASSCALL CursorUnknown3(CURSORPTR self) // TODO name
 {
-    ANIMATIONSPRITEHEADERPTR animation = (ANIMATIONSPRITEHEADERPTR)self->Animation;
-
-    IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + animation->Offsets[0]);
+    IMAGEPALETTESPRITEPTR image =
+        (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[0]);
 
     FUN_10003610(State.Renderer->Surface.Main, State.Renderer->Surface.Width, State.Renderer->Surface.Height,
         (PIXEL*)self->Pixels /* TODO */, self->Width, self->Height,

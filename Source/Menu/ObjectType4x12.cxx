@@ -49,7 +49,7 @@ CONTROLTYPE4X12PTR CLASSCALL ActivateObjectType4x12(CONTROLTYPE4X12PTR self, CON
     self->Asset = asset;
     self->Action = action;
 
-    CONST U32 count = AcquireBinAssetImageCount(asset) / 2;
+    CONST U32 count = AcquireBinAssetItemCount(asset) / 2;
 
     for (U32 x = 0; x < count; x++)
     {
@@ -101,7 +101,7 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 
     BOOL result = FALSE;
 
-    CONST U32 count = AcquireBinAssetImageCount(self->Asset) / 2;
+    CONST U32 count = AcquireBinAssetItemCount(self->Asset) / 2;
 
     for (U32 x = 0; x < count; x++)
     {
@@ -124,7 +124,7 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 // 0x10002550
 VOID CLASSCALL SelectObjectType4x12XY(CONTROLTYPE4X12PTR self, CONST S32 x, CONST S32 y) // TODO
 {
-    CONST U32 count = AcquireBinAssetImageCount(self->Asset) / 2;
+    CONST U32 count = AcquireBinAssetItemCount(self->Asset) / 2;
 
     for (U32 xx = 0; xx < count; xx++)
     {
@@ -141,7 +141,7 @@ S32 CLASSCALL FUN_10002440(CONTROLTYPE4X12PTR self)
 {
     S32 result = -1; // TODO
 
-    CONST U32 count = AcquireBinAssetImageCount(self->Asset) / 2;
+    CONST U32 count = AcquireBinAssetItemCount(self->Asset) / 2;
 
     for (U32 x = 0; x < count; x++)
     {

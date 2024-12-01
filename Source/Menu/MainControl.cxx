@@ -933,7 +933,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         CommandControlState.ReadIndex = 0;
         CommandControlState.WriteIndex = 0;
 
-        if (action  == CONTROLACTION_UNKNOWN) { self->Action = FUN_100136b0(); }
+        if (action == CONTROLACTION_UNKNOWN) { self->Action = FUN_100136b0(); }
         else if (check2)
         {
             while (self->Action != action && Array0x10046cb4Count != 0) { self->Action = FUN_100136b0(); }

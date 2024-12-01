@@ -41,6 +41,10 @@ SOFTWARE.
 
 #include <..\Text\Resources.hxx>
 
+#include <Mathematics.Basic.hxx>
+
+using namespace Mathematics;
+
 // 0x10059b7c
 CONTROLCOMMAND ModuleCommand;
 
@@ -693,19 +697,22 @@ BOOL ExecuteModuleCommands(VOID)
 }
 
 // 0x10024560
+// NOTE. Contains additional checks for better startup arguments parsing.
 BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length)
 {
     for (U32 x = 0; x < State.Arguments.Count; x++)
     {
-        LPCSTR equal = strrchr(State.Arguments.Args[x], '=');
+        LPSTR current = strrchr(State.Arguments.Args[x], '=');
 
-        if (equal != NULL)
+        if (current != NULL)
         {
-            CONST ADDR size = (ADDR)equal - (ADDR)State.Arguments.Args[x];
+            CONST ADDR size = (ADDR)current - (ADDR)State.Arguments.Args[x];
 
-            if (_strnicmp(State.Arguments.Args[x], name, size) == 0)
+            if (size != 0 && strnicmp(State.Arguments.Args[x], name, size) == 0)
             {
-                strcpy_s(value, length, (LPCSTR)((ADDR)equal + 1));
+                current++;
+
+                strncpy(value, current, Min<size_t>(length, strlen(current) + 1));
 
                 return TRUE;
             }

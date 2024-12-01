@@ -170,38 +170,42 @@ U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item)
     switch (self->Type)
     {
     case FONTTYPE_BASIC: { return ((IMAGESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Width; }
-    case FONTTYPE_COMPLEX: { return item == NULL ? DEFAULT_FONT_ASSET_SPACING : ((IMAGESPRITEPTR)AcquireFontAssetItem(self->Font, item))->Width; }
+    case FONTTYPE_COMPLEX:
+    {
+        return item == NULL
+            ? DEFAULT_FONT_ASSET_SPACING : ((IMAGESPRITEPTR)AcquireFontAssetItem(self->Font, item))->Width;
+    }
     }
 
     return DEFAULT_FONT_ASSET_WIDTH;
 }
 
 // 0x10023070
-LPVOID AcquireFontAssetItem(LPCVOID content, CONST U32 indx)
+LPVOID AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO return type
 {
     if (indx < 256) // TODO
     {
-        CONST U32 offset = ((U32*)content)[indx] * sizeof(U32);
+        CONST U32 offset = ((U32*)asset)[indx] * sizeof(U32);
 
-        return (LPVOID)((ADDR)content + offset);
+        return (LPVOID)((ADDR)asset + offset);
     }
 
     if (indx < 256 * 256) // TODO
     {
-        U32 offset = ((U32*)content)[(indx >> 8) + 255] * sizeof(U32); // TODO
+        U32 offset = ((U32*)asset)[(indx >> 8) + 255] * sizeof(U32); // TODO
 
-        offset = ((U32*)((ADDR)content + offset))[indx & 0xFF] * sizeof(U32);
+        offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF] * sizeof(U32);
 
-        return (LPVOID)((ADDR)content + offset);
+        return (LPVOID)((ADDR)asset + offset);
     }
 
-    U32 offset = ((U32*)content)[(indx >> 16) + 256 + 255] * sizeof(U32); // TODO
+    U32 offset = ((U32*)asset)[(indx >> 16) + 256 + 255] * sizeof(U32); // TODO
 
-    offset = ((U32*)((ADDR)content + offset))[(indx >> 8)] * sizeof(U32); // TODO
+    offset = ((U32*)((ADDR)asset + offset))[(indx >> 8)] * sizeof(U32); // TODO
 
-    offset = ((U32*)((ADDR)content + offset))[indx & 0xFF] * sizeof(U32); // TODO
+    offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF] * sizeof(U32); // TODO
 
-    return (LPVOID)((ADDR)content + offset);
+    return (LPVOID)((ADDR)asset + offset);
 }
 
 // 0x1001f6c0

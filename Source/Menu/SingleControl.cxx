@@ -96,8 +96,8 @@ VOID CLASSCALL InitializeSingleControl(SINGLECONTROLPTR self)
     strcpy(State.Name, AcquireComputerPlayer(&ComputerState, 0));
 
     {
-        STRINGVALUE value; // TODO warning...
-        AcquireSettingsValue(value, IDS_INVALID_NAME_CHARS);
+        STRINGVALUE value;
+        AcquireSettingsValue(&value, IDS_INVALID_NAME_CHARS);
         SelectInputControlInvalidValue(self->Name, value.Value);
         ReleaseStringValue(&value);
     }

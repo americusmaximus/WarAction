@@ -76,6 +76,7 @@ BOOL FUN_1001d7c0(VOID) // TODO
 // 0x100136b0
 U32 FUN_100136b0(VOID) // TODO
 {
-    // TODO NOT IMPLEMENTED
-    return 0;
+    Array0x10046cb4Count = Array0x10046cb4Count - 1;
+
+    return Array0x10046cb4[Array0x10046cb4Count];
 }

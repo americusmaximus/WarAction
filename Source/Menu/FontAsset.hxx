@@ -51,7 +51,7 @@ typedef struct FontAsset
     BINASSET    Asset;
     U32         Color;
     PIXEL*      Palette;
-    LPVOID      Font;
+    LPVOID      Font; // TODO Type
     PIXEL       Pixels[MAX_FONT_ASSET_CHARACTER_COUNT];
     U32         Height;
     U32         Offset;

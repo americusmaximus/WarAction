@@ -32,7 +32,7 @@ SOFTWARE.
 typedef struct BinAsset
 {
     LPVOID  Content;
-    BOOL    IsIndexed;
+    BOOL    IsCount;
     LPCSTR  Name;
     U8      IsImage;
 } BINASSET, * BINASSETPTR;

@@ -51,7 +51,7 @@ SCENECONTROLPTR CLASSCALL ActivateSceneControl(SCENECONTROLPTR self, BINASSETPTR
     AppendPanelControlNode((PANELCONTROLPTR)self,
         (CONTROLPTR)ActivateImageControl(ALLOCATE(IMAGECONTROL), background, 0));
 
-    CONST U32 count = AcquireBinAssetImageCount(buttons) / 2;
+    CONST U32 count = AcquireBinAssetItemCount(buttons) / 2;
 
     for (U32 x = 0; x < count; x++)
     {
@@ -70,7 +70,7 @@ SCENECONTROLPTR CLASSCALL ActivateSceneControl(SCENECONTROLPTR self, BINASSETPTR
 // 0x100022e0
 U32 CLASSCALL AcquireSceneButtonCount(SCENECONTROLPTR self)
 {
-    return AcquireBinAssetImageCount(self->Buttons) / 2;
+    return AcquireBinAssetItemCount(self->Buttons) / 2;
 }
 
 // 0x100022f0

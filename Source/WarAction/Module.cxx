@@ -140,20 +140,22 @@ VOID AcquireStartArguments(LPCSTR value, LPSTR* args, LPSTR values, U32* count, 
 }
 
 // 0x004029c0
+// NOTE. Contains additional checks for better startup arguments parsing.
 BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length)
 {
     for (U32 x = 0; x < State.Arguments.Count; x++)
     {
-        LPSTR value = State.Arguments.Args[x];
-        LPSTR current = strchr(value, '=');
+        LPSTR current = strchr(State.Arguments.Args[x], '=');
 
         if (current != NULL)
         {
-            if (strnicmp(value, name, (size_t)current - (size_t)value) == 0)
+            CONST ADDR size = (ADDR)current - (ADDR)State.Arguments.Args[x];
+
+            if (size != 0 && strnicmp(State.Arguments.Args[x], name, size) == 0)
             {
                 current++;
 
-                strncpy(value, current, Min<size_t>(length, strlen(current)));
+                strncpy(value, current, Min<size_t>(length, strlen(current) + 1));
 
                 return TRUE;
             }

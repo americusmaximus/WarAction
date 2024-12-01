@@ -31,7 +31,7 @@ SOFTWARE.
 BINASSETPTR CLASSCALL ActivateBinAsset(BINASSETPTR self)
 {
     self->Content = NULL;
-    self->IsIndexed = FALSE;
+    self->IsCount = FALSE;
     self->Name = NULL;
     self->IsImage = FALSE;
 
@@ -71,7 +71,7 @@ VOID CLASSCALL AdjustBinAssetImage(BINASSETPTR self)
 {
     if (self->Content == NULL) { return; }
 
-    CONST U32 count = AcquireBinAssetImageCount(self);
+    CONST U32 count = AcquireBinAssetItemCount(self);
 
     for (U32 x = 0; x < count; x++)
     {
@@ -110,20 +110,20 @@ LPVOID CLASSCALL AcquireBinAssetContent(BINASSETPTR self, CONST U32 indx)
 {
     if (self->Content == NULL) { InitializeBinAsset(self, NULL, FALSE); }
 
-    // Indexed:
+    // Counted:
     //      1. Count of elements at 0 offset
     //      2. An array of offsets into the file
     //      3. Actual data at those offsets
-    if (self->IsIndexed) { return (LPVOID)((ADDR)self->Content + ((U32*)self->Content)[indx + 1]); }
+    if (self->IsCount) { return (LPVOID)((ADDR)self->Content + ((U32*)self->Content)[indx + 1]); }
 
-    // Non-indexed:
+    // Non-Counted:
     //      1. An array of offsets into the file
     //      2. Actual data at those offsets
     return (LPVOID)((ADDR)self->Content + ((BINASSETHEADERPTR)self->Content)->Offset[indx]);
 }
 
 // 0x100060f0
-U32 CLASSCALL AcquireBinAssetImageCount(BINASSETPTR self) // TODO name Element count
+U32 CLASSCALL AcquireBinAssetItemCount(BINASSETPTR self)
 {
     if (self->Content == NULL) { AcquireAssetContent(self->Name, &self->Content, 0); }
 
@@ -135,12 +135,12 @@ VOID CLASSCALL InitializeBinAsset(BINASSETPTR self, CONST U32 count)
 {
     CONST U32 offsets = count * sizeof(U32);
 
-    BINASSETHEADERPTR header = (BINASSETHEADERPTR)malloc(sizeof(BINASSETHEADER) + offsets);
+    BINASSETHEADERPTR header = (BINASSETHEADERPTR)malloc(sizeof(BINASSETHEADER) + offsets); // TODO make pretty
 
     header->Offset[0] = offsets;
 
     self->Content = header;
-    self->IsIndexed = TRUE;
+    self->IsCount = TRUE;
 }
 
 // 0x100061a0
