@@ -429,7 +429,7 @@ FLOAT AcquireAudioLength(LPCSTR track)
 {
     OggVorbis_File vf;
 
-    if (ov_fopen(track, &vf) != 0) { return 0; }
+    if (ov_fopen(track, &vf) != 0) { return 0.0f; }
 
     CONST FLOAT result = (FLOAT)ov_time_total(&vf, -1);
 
