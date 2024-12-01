@@ -33,11 +33,10 @@ SOFTWARE.
 
 #include <Game.hxx>
 
-#define MAX_RESOLUTION_COUNT        3
-
-#define RESOLUTION_640_480          0
-#define RESOLUTION_800_600          1
-#define RESOLUTION_1024_768         2
+#define RENDERER_VIDEO_MODE_640x480         0
+#define RENDERER_VIDEO_MODE_800x600         1
+#define RENDERER_VIDEO_MODE_1024x768        2
+#define RENDERER_VIDEO_MODE_COUNT           3
 
 // 0x1003a674
 WELCOMECONTROLSELF WelcomeControlSelfState =
@@ -64,7 +63,7 @@ WELCOMECONTROLPTR CLASSCALL ActivateWelcomeControl(WELCOMECONTROLPTR self)
         STRINGVALUE value;
         AcquireSettingsValue(&value, IDS_VIDEO_MODE);
 
-        self->Settings.Value = AcquireSettingsValue(value, RESOLUTION_640_480);
+        self->Settings.Value = AcquireSettingsValue(value, RENDERER_VIDEO_MODE_640x480);
     }
 
     self->Operations = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
@@ -94,7 +93,7 @@ VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self)
     ClickObjectType4x12(self->Operations, INVALID_OBJECTTYPE4X12_INDEX);
     ClickObjectType4x12(self->Resolutions, self->Settings.Value - 1);
 
-    for (U32 x = 0; x < MAX_RESOLUTION_COUNT; x++)
+    for (U32 x = 0; x < RENDERER_VIDEO_MODE_COUNT; x++)
     {
         CONTROLTYPE2X38PTR resolution =
             (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Resolutions, x);
@@ -143,15 +142,15 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
 
     if (command == NULL || command->Command != CONTROLCOMMAND_TEXT_CONTROL) { return action; }
 
-    U32 resolution = RESOLUTION_640_480;
+    U32 resolution = RENDERER_VIDEO_MODE_640x480;
 
     // TODO make it pretty (below)
-    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS && command->Parameter1 == 4) { resolution = RESOLUTION_800_600; } // TODO
-    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS2 && command->Parameter1 == 4) { resolution = RESOLUTION_1024_768; } // TODO
+    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS && command->Parameter1 == 4) { resolution = RENDERER_VIDEO_MODE_800x600; } // TODO
+    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS2 && command->Parameter1 == 4) { resolution = RENDERER_VIDEO_MODE_1024x768; } // TODO
 
     if (command->Action != CONTROLACTION_MAIN_RESOLUTIONS || command->Parameter1 != 6) // TODO
     {
-        if (resolution == RESOLUTION_800_600 || resolution == RESOLUTION_1024_768)
+        if (resolution == RENDERER_VIDEO_MODE_800x600 || resolution == RENDERER_VIDEO_MODE_1024x768)
         {
             DequeueControlCommand(TRUE);
 
@@ -159,10 +158,10 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
             ClickObjectType4x12(self->Resolutions, command->Parameter2 / 2);
             // DAT_10046f80 = 1; // TODO Is this needed?
 
-            if (resolution == RESOLUTION_1024_768) goto LAB_10014abe; // TODO
+            if (resolution == RENDERER_VIDEO_MODE_1024x768) goto LAB_10014abe; // TODO
         }
 
-        if (resolution != RESOLUTION_1024_768) { return action; }
+        if (resolution != RENDERER_VIDEO_MODE_1024x768) { return action; }
     }
 
 LAB_10014abe:

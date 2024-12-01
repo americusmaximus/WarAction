@@ -25,12 +25,12 @@ SOFTWARE.
 
 #include <stdio.h>
 
-#define DEFAULT_MESSAGE_BUFFER_LENGTH 512
+#define DEFAULT_MESSAGE_LENGTH 512
 
 // 0x00401a90
 VOID Message(LPCSTR format, ...)
 {
-    CHAR message[DEFAULT_MESSAGE_BUFFER_LENGTH];
+    CHAR message[DEFAULT_MESSAGE_LENGTH];
 
     va_list args;
     va_start(args, format);

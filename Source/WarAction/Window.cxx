@@ -211,7 +211,7 @@ BOOL ReleaseWindowStateAction(VOID)
 }
 
 // 0x004018c0
- BOOL MessageWindowStateAction(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
+BOOL MessageWindowStateAction(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
 {
     if (msg != WM_CLOSE)
     {
@@ -225,9 +225,9 @@ BOOL ReleaseWindowStateAction(VOID)
     return FALSE;
 }
 
- // 0x004018f0
- VOID ActivateWindowState(VOID)
- {
-     ActivateWindowStateContainer(&WindowState, ActivateWindowStateAction,
-         InitializeWindowStateAction, NULL, ReleaseWindowStateAction, (ACTIONHANDLERLAMBDA)MessageWindowStateAction);
- }
+// 0x004018f0
+VOID ActivateWindowState(VOID)
+{
+    ActivateWindowStateContainer(&WindowState, ActivateWindowStateAction,
+        InitializeWindowStateAction, NULL, ReleaseWindowStateAction, (ACTIONHANDLERLAMBDA)MessageWindowStateAction);
+}

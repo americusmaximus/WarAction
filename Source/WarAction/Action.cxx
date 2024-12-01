@@ -24,7 +24,7 @@ SOFTWARE.
 #include "State.hxx"
 
 // 0x00402270
-VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR * destination, CONST U32 priority, ACTIONHANDLERLAMBDA action)
+VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action)
 {
     self->Action = action;
     self->Priority = priority;

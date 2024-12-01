@@ -145,7 +145,7 @@ BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length)
 {
     for (U32 x = 0; x < State.Arguments.Count; x++)
     {
-        LPSTR current = strchr(State.Arguments.Args[x], '=');
+        LPSTR current = strrchr(State.Arguments.Args[x], '=');
 
         if (current != NULL)
         {
