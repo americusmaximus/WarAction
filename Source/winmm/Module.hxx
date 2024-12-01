@@ -437,7 +437,7 @@ typedef VOID(WINAPI* LPWOWAPPEXIT)(HANDLE hTask);
 
 struct ModuleStateContainer
 {
-    HMODULE Module;
+    HMODULE Module; // 0x6ad52020
 
     LPAUX32MESSAGE Aux32Message;
     //LPAUXGETDEVCAPSA AuxGetDevCapsA;
