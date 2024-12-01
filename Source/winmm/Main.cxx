@@ -42,6 +42,7 @@ VOID Initialize()
     State.Tracks.Current = DEFAULT_TRACK_INDEX;
 }
 
+// 0x6ad41420
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
 {
     if (reason != DLL_PROCESS_ATTACH) { return TRUE; }
