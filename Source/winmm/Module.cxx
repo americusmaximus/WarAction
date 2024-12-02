@@ -104,7 +104,7 @@ extern "C" MMRESULT WINAPI AuxOutMessage(UINT uDeviceID, UINT uMsg, DWORD_PTR dw
 // 0x6ad42060
 extern "C" MMRESULT WINAPI AuxSetVolume(UINT uDeviceID, DWORD dwVolume)
 {
-    static DWORD volume = DEFAULT_VOLUME;
+    static DWORD volume = DEFAULT_VOLUME; // 0x6ad4c004
 
     if (dwVolume != volume)
     {
