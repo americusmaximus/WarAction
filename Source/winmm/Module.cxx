@@ -570,7 +570,7 @@ extern "C" MCIERROR WINAPI MciSendCommandA(MCIDEVICEID mciId, UINT uMsg, DWORD_P
 
             LeaveCriticalSection(&State.Mutex);
 
-            if (AudioState.Worker == NULL) { AudioState.Worker = CreateThread(NULL, 0, AudioWorker, &AudioState.Context.First, 0, NULL); }
+            if (AudioState.Worker == NULL) { AudioState.Worker = CreateThread(NULL, 0, AudioWorker, &AudioState.Context, 0, NULL); }
 
             State.IsActive = TRUE;
         }
