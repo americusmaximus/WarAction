@@ -41,7 +41,8 @@ struct AudioWorkerContext
 
 struct AudioStateContainer
 {
-    BOOL IsActive; // 0x6ad52034
+    BOOL IsActive;  // 0x6ad52034
+    BOOL State;     // 0x6ad52038
 
     OggVorbis_File Vorbis; // 0x6ad59d80
 

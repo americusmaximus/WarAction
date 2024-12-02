@@ -570,9 +570,12 @@ extern "C" MCIERROR WINAPI MciSendCommandA(MCIDEVICEID mciId, UINT uMsg, DWORD_P
 
             LeaveCriticalSection(&State.Mutex);
 
-            if (AudioState.Worker == NULL) { AudioState.Worker = CreateThread(NULL, 0, AudioWorker, &AudioState.Context, 0, NULL); }
+            if (AudioState.Worker == NULL)
+            {
+                AudioState.Worker = CreateThread(NULL, 0, AudioWorker, &AudioState.Context, 0, NULL);
+            }
 
-            State.IsActive = TRUE;
+            AudioState.State = TRUE;
         }
     }
     else if (uMsg == MCI_SEEK)
@@ -585,7 +588,7 @@ extern "C" MCIERROR WINAPI MciSendCommandA(MCIDEVICEID mciId, UINT uMsg, DWORD_P
             AudioState.Context.Last = parms->dwTo;
         }
     }
-    else if (uMsg == MCI_STOP) { State.IsActive = FALSE; }
+    else if (uMsg == MCI_STOP) { AudioState.State = FALSE; }
     else if (uMsg == MCI_GETDEVCAPS)
     {
         LPMCI_GETDEVCAPS_PARMS parms = (LPMCI_GETDEVCAPS_PARMS)dwParam2;
@@ -630,7 +633,8 @@ extern "C" MCIERROR WINAPI MciSendCommandA(MCIDEVICEID mciId, UINT uMsg, DWORD_P
 
                         if (AudioState.Worker != NULL)
                         {
-                            parms->dwReturn = State.Tracks.Tracks[AudioState.Track].Position + AcquireAudioPosition() * 1000.0;
+                            parms->dwReturn =
+                                State.Tracks.Tracks[AudioState.Track].Position + (UINT)(1000.0f * AcquireAudioPosition());
                         }
 
                         LeaveCriticalSection(&State.Mutex);
@@ -638,7 +642,7 @@ extern "C" MCIERROR WINAPI MciSendCommandA(MCIDEVICEID mciId, UINT uMsg, DWORD_P
                 }
             }
             else if (parms->dwItem == MCI_STATUS_NUMBER_OF_TRACKS) { parms->dwReturn = State.Tracks.Max + 1; }
-            else if (parms->dwItem == MCI_STATUS_MODE) { parms->dwReturn = State.IsActive ? MCI_MODE_PLAY : MCI_MODE_STOP; }
+            else if (parms->dwItem == MCI_STATUS_MODE) { parms->dwReturn = AudioState.State ? MCI_MODE_PLAY : MCI_MODE_STOP; }
             else if (parms->dwItem == MCI_STATUS_MEDIA_PRESENT) { parms->dwReturn = State.Tracks.Count > 0; }
             else if (parms->dwItem == MCI_STATUS_TIME_FORMAT) { parms->dwReturn = State.TimeFormat; }
             else if (parms->dwItem == MCI_STATUS_READY) { parms->dwReturn = MAKEMCIRESOURCE(TRUE, MCI_TRUE); }
@@ -671,7 +675,7 @@ extern "C" MCIERROR WINAPI MciSendStringA(LPCTSTR lpstrCommand, LPTSTR lpstrRetu
 {
     if (strstr(lpstrCommand, "status") != NULL && strstr(lpstrCommand, "mode") != NULL)
     {
-        if (lpstrReturnString != NULL && State.IsActive) { strcpy(lpstrReturnString, "playing"); }
+        if (lpstrReturnString != NULL && AudioState.State) { strcpy(lpstrReturnString, "playing"); }
         else { *lpstrReturnString = NULL; }
 
         return MMSYSERR_NOERROR;
@@ -686,7 +690,7 @@ extern "C" MCIERROR WINAPI MciSendStringA(LPCTSTR lpstrCommand, LPTSTR lpstrRetu
 
     if (strstr(lpstrCommand, "stop cd") != NULL || strstr(lpstrCommand, "stop cdaudio") != NULL)
     {
-        State.IsActive = FALSE;
+        AudioState.State = FALSE;
 
         return MMSYSERR_NOERROR;
     }

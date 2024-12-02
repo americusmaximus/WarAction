@@ -328,17 +328,17 @@ DWORD WINAPI AudioWorker(LPVOID params)
 
                 if (!AudioState.IsActive)
                 {
-                    State.IsActive = FALSE;
-
                     AudioState.Worker = NULL;
+                    AudioState.State = FALSE;
 
                     StopAudio();
-                    
+
                     if (AudioState.Alerts.IsActive)
                     {
                         AudioState.Alerts.IsActive = FALSE;
 
-                        SendMessageA((HWND)AudioState.Alerts.Callback, MM_MCINOTIFY, MCI_NOTIFY_SUCCESSFUL, AUDIO_DEVICE_ID);
+                        SendMessageA((HWND)AudioState.Alerts.Callback,
+                            MM_MCINOTIFY, MCI_NOTIFY_SUCCESSFUL, AUDIO_DEVICE_ID);
                     }
 
                     LeaveCriticalSection(&State.Mutex);
@@ -349,7 +349,7 @@ DWORD WINAPI AudioWorker(LPVOID params)
                 LeaveCriticalSection(&State.Mutex);
             }
 
-            while (!State.IsActive) { Sleep(200); }
+            while (!AudioState.State) { Sleep(200); }
 
             if (!AudioState.IsActive) { break; }
 
@@ -360,17 +360,17 @@ DWORD WINAPI AudioWorker(LPVOID params)
             AudioState.Track = AudioState.Context.First;
         }
 
-        State.IsActive = OpenAudio(&State.Tracks.Tracks[AudioState.Track], AudioState.Position);
+        AudioState.State = OpenAudio(&State.Tracks.Tracks[AudioState.Track], AudioState.Position);
 
-        while (!AudioState.IsActive)
+        do
         {
-            if (!State.IsActive || !PlayAudio())
+            if (!AudioState.IsActive || !PlayAudio())
             {
-                if (!AudioState.IsActive) { AudioState.Track = AudioState.Track + 2; } break;
+                if (!AudioState.State) { AudioState.Track = AudioState.Track + 2; } break;
             }
 
             Sleep(200);
-        }
+        } while (!AudioState.IsActive);
     }
 }
 

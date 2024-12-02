@@ -41,7 +41,6 @@ struct SoundTrack
 
 struct StateContainer
 {
-    BOOL IsActive; // 0x6ad52038
     INT Volume; // 0x6ad4c018
     DWORD TimeFormat; // 0x6ad4c010
 
