@@ -183,7 +183,8 @@ BOOL PlayAudio()
     {
         EnterCriticalSection(&AudioState.Mutex);
 
-        CONST LONG result = ov_read(&AudioState.Vorbis, (CHAR*)((size_t)buffer + (size_t)length), size - length, 0, sizeof(SHORT), 1, NULL);
+        CONST LONG result = ov_read(&AudioState.Vorbis,
+            (CHAR*)((size_t)buffer + (size_t)length), size - length, 0, sizeof(SHORT), 1, NULL);
 
         LeaveCriticalSection(&AudioState.Mutex);
 
