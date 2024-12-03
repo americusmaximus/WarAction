@@ -24,10 +24,6 @@ SOFTWARE.
 
 // TODO rename this file
 
-U32 Array0x10046cb4Count; // TODO
-
-U32 Array0x10046cb4[100]; // TODO
-
 U32 DAT_1003fba4 = 3; // TODO
 
 U32 DAT_10046f7c; // TODO
@@ -41,13 +37,6 @@ U32 DAT_10047fc4; // TODO
 U32 DAT_10058e18; // TODO
 
 U32 DAT_100470cc; // TODO
-
-// 0x100136d0
-VOID AssignUnknownValue1(CONST U32 value) // TODO
-{
-    Array0x10046cb4[Array0x10046cb4Count] = value;
-    Array0x10046cb4Count = Array0x10046cb4Count + 1;
-}
 
 // 0x10015bf0
 BOOL FUN_10015bf0(VOID) // TODO
@@ -71,12 +60,4 @@ BOOL FUN_1001d7c0(VOID) // TODO
     // TODO NOT IMPLEMENTED
 
     return TRUE;
-}
-
-// 0x100136b0
-U32 FUN_100136b0(VOID) // TODO
-{
-    Array0x10046cb4Count = Array0x10046cb4Count - 1;
-
-    return Array0x10046cb4[Array0x10046cb4Count];
 }

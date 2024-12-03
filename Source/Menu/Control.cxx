@@ -24,7 +24,8 @@ SOFTWARE.
 
 #include <stdlib.h>
 
-CONTROLSTATECONTAINER ControlState;
+CONTROLSTATE        ControlState;
+CONTROLACTIONQUEUE  ControlActionQueueState;
 
 // 0x1003a248
 CONTROLSELF ControlSelfState =
@@ -117,4 +118,19 @@ CONTROLPTR CLASSCALL ReleaseControl(CONTROLPTR self, CONST OBJECTRELEASETYPE mod
 VOID CLASSCALL DisposeControl(CONTROLPTR self)
 {
     self->Self = &ControlSelfState;
+}
+
+// 0x100136d0
+VOID EnqueueControlActionQueue(CONST U32 value)
+{
+    ControlActionQueueState.Items[ControlActionQueueState.Count] = value;
+    ControlActionQueueState.Count = ControlActionQueueState.Count + 1;
+}
+
+// 0x100136b0
+U32 DequeueControlActionQueue(VOID)
+{
+    ControlActionQueueState.Count = ControlActionQueueState.Count - 1;
+
+    return ControlActionQueueState.Items[ControlActionQueueState.Count];
 }

@@ -91,8 +91,8 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
 {
     InitializeControl((CONTROLPTR)self);
 
-    Array0x10046cb4Count = 0;
-    AssignUnknownValue1(0);
+    ControlActionQueueState.Count = 0;
+    EnqueueControlActionQueue(CONTROLACTION_NONE);
 
     if (AcquireGameStatus() == STATUS_NONE)
     {
@@ -141,7 +141,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
 
             SelectMultiJoinControlInputValue(self->MultiJoin, ip);
 
-            AssignUnknownValue1(CONTROLACTION_MAIN_SINGLE); // TODO
+            EnqueueControlActionQueue(CONTROLACTION_MAIN_SINGLE);
 
             self->Action = CONTROLACTION_MULTI2_CREATE;
 
@@ -150,13 +150,13 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
 
         if (!PlayVideoControl(self->Video, "@ShortIntro")) { return; }
 
-        AssignUnknownValue1(CONTROLACTION_PLAY_SHORT_INTRO2); // TODO
+        EnqueueControlActionQueue(CONTROLACTION_PLAY_SHORT_INTRO2);
     }
     else
     {
         if (State.Module->Game.IsNetwork)
         {
-            AssignUnknownValue1(CONTROLACTION_MAIN_SINGLE); // TODO
+            EnqueueControlActionQueue(CONTROLACTION_MAIN_SINGLE);
 
             self->Action = CONTROLACTION_MSTAT_DETAIL;
 
@@ -178,7 +178,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
             return;
         }
 
-        AssignUnknownValue1(self->Action); // TODO
+        EnqueueControlActionQueue(self->Action);
     }
 
     self->Action = CONTROLACTION_PLAY_COMPLETED;
@@ -523,7 +523,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_1116: { InitializeSoundStateBackBuffer(&SoundState.State, TRUE); action = CONTROLACTION_UNKNOWN; break; }
     case CONTROLACTION_BRIEF:
     {
-        AssignUnknownValue1(CONTROLACTION_BRIEF_OK);
+        EnqueueControlActionQueue(CONTROLACTION_BRIEF_OK);
 
         check1 = TRUE;
         action = CONTROLACTION_UNKNOWN;
@@ -886,7 +886,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         if (PlayVideoControl(self->Video, "@ShortIntro2"))
         {
-            AssignUnknownValue1(CONTROLACTION_PLAY_SHORT_INTRO3);
+            EnqueueControlActionQueue(CONTROLACTION_PLAY_SHORT_INTRO3);
 
             action = CONTROLACTION_PLAY_COMPLETED;
         }
@@ -900,7 +900,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         if (PlayVideoControl(self->Video, "@ShortIntro3"))
         {
-            AssignUnknownValue1(CONTROLACTION_MAIN_SINGLE);
+            EnqueueControlActionQueue(CONTROLACTION_MAIN_SINGLE);
 
             action = CONTROLACTION_PLAY_COMPLETED;
         }
@@ -933,14 +933,17 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         CommandControlState.ReadIndex = 0;
         CommandControlState.WriteIndex = 0;
 
-        if (action == CONTROLACTION_UNKNOWN) { self->Action = FUN_100136b0(); }
+        if (action == CONTROLACTION_UNKNOWN) { self->Action = DequeueControlActionQueue(); }
         else if (check2)
         {
-            while (self->Action != action && Array0x10046cb4Count != 0) { self->Action = FUN_100136b0(); }
+            while (self->Action != action && ControlActionQueueState.Count != 0)
+            {
+                self->Action = DequeueControlActionQueue();
+            }
         }
         else
         {
-            if (!check1) { AssignUnknownValue1(self->Action); }
+            if (!check1) { EnqueueControlActionQueue(self->Action); }
 
             self->Action = action;
         }

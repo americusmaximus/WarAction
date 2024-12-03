@@ -74,12 +74,12 @@ typedef struct Control
 } CONTROL, * CONTROLPTR;
 #pragma pack(pop)
 
-typedef struct ControlStateContainer
+typedef struct ControlState
 {
-    CONTROLPTR Active; // 0x10046130
-} CONTROLSTATECONTAINER, * CONTROLSTATECONTAINERPTR;
+    CONTROLPTR              Active; // 0x10046130
+} CONTROLSTATE, * CONTROLSTATEPTR;
 
-EXTERN CONTROLSTATECONTAINER ControlState;
+EXTERN CONTROLSTATE ControlState;
 
 VOID CLASSCALL InitializeControl(CONTROLPTR self);
 VOID CLASSCALL DisableControl(CONTROLPTR self);
@@ -232,3 +232,16 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 #define CONTROLACTION_PLAY_SHORT_INTRO2                     1117
 #define CONTROLACTION_PLAY_SHORT_INTRO3                     1118
 #define CONTROLACTION_1119                                  1119
+
+#define MAX_CONTROL_ACTION_QUEUE_ITEM_COUNT                 100
+
+typedef struct ControlActionQueue
+{
+    U32 Items[MAX_CONTROL_ACTION_QUEUE_ITEM_COUNT];     // 0x10046cb8
+    U32 Count;                                          // 0x10046f78
+} CONTROLACTIONQUEUE, * CONTROLACTIONQUEUEPTR;
+
+EXTERN CONTROLACTIONQUEUE ControlActionQueueState;
+
+VOID EnqueueControlActionQueue(CONST U32 value);
+U32 DequeueControlActionQueue(VOID);
