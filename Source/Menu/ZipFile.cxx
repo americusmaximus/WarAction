@@ -48,7 +48,7 @@ VOID CLASSCALL ReadZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size)
     {
         gzread(self->File, value, size);
 
-        self->Offset = (U32)gztell(self->File);
+        self->Offset = gztell(self->File);
 
         return;
     }
@@ -86,7 +86,7 @@ VOID CLASSCALL WriteZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size)
     {
         gzwrite(self->File, value, size);
 
-        self->Offset = (U32)gztell(self->File);
+        self->Offset = gztell(self->File);
 
         return;
     }
@@ -95,7 +95,7 @@ VOID CLASSCALL WriteZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size)
 }
 
 // 0x10025760
-U32 CLASSCALL TellZipFile(ZIPFILEPTR self)
+z_off_t CLASSCALL TellZipFile(ZIPFILEPTR self)
 {
-    return self->Unk02 == 0 ? (U32)gztell(self->File) : self->Offset; // TODO
+    return self->Unk02 == 0 ? gztell(self->File) : self->Offset; // TODO
 }

@@ -670,7 +670,7 @@ BOOL WriteSaveState(LPCSTR name)
     {
         OpenBinFile(&file, "XCHNG\\TOGAME\\mis_mapunits", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
 
-        U32 local_2cc = TellZipFile(&zip);  // TODO is this needed?
+        U32 local_2cc; // TODO
         ReadZipFile(&zip, &local_2cc, 4); // TODO
         WriteZipFile(&zip, &file, local_2cc); // TODO
 
@@ -1149,7 +1149,6 @@ BOOL FUN_10018c00(LPCSTR name)
         {
             OpenBinFile(&writer, "XCHNG\\TOGAME\\mis_groups", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
 
-            TellZipFile(&zip); // TODO is this needed?
             WriteZipFile(&zip, &writer, 0xa8c); // TODO
 
             CloseBinFile(&writer);
@@ -1157,8 +1156,6 @@ BOOL FUN_10018c00(LPCSTR name)
 
         {
             OpenBinFile(&writer, "XCHNG\\TOGAME\\mis_mapunits", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
-
-            TellZipFile(&zip); // TODO is this needed?
 
             U32 uStack_400; // TODO
             ReadZipFile(&zip, &uStack_400, 4); // TODO
@@ -1169,8 +1166,6 @@ BOOL FUN_10018c00(LPCSTR name)
 
         {
             OpenBinFile(&writer, "XCHNG\\TOGAME\\mis_players", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
-
-            TellZipFile(&zip); // TODO is this needed?
 
             U32 uStack_400; // TODO
             ReadZipFile(&zip, &uStack_400, 4); // TODO
@@ -1189,8 +1184,6 @@ BOOL FUN_10018c00(LPCSTR name)
 
         {
             OpenBinFile(&writer, "XCHNG\\TOGAME\\mis_woofers", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
-
-            TellZipFile(&zip); // TODO is this needed?
 
             U32 uStack_400; // TODO
             ReadZipFile(&zip, &uStack_400, 4); // TODO
@@ -1328,10 +1321,8 @@ BOOL FUN_100185f0(LPCSTR path) // TODO name
     }
 
     {
-        //U32 local_ac = TellZipFile(&zip); // TODO is this needed
-
         OpenBinFile(&file, "XCHNG\\game.sav", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
-        WriteZipFile(&zip, &file, 10000000); // tODO
+        WriteZipFile(&zip, &file, 10000000); // TODO
         CloseBinFile(&file);
     }
 

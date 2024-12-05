@@ -34,12 +34,15 @@ SOFTWARE.
 typedef struct ZipFile
 {
     gzFile  File;
-    U32     Offset;
+    z_off_t Offset;
     S32     Unk02; // TODO
 } ZIPFILE, * ZIPFILEPTR;
 
+// NOTE. The original hame uses zlib 1.1.3 where the type z_off_t is defined as long.
+// Since then, zlib updated the type z_off_t to long long, thus breaking excplicit backward compatibility.
+
 BOOL CLASSCALL OpenZipFile(ZIPFILEPTR self, LPCSTR name, CONST U32 mode);
-U32 CLASSCALL TellZipFile(ZIPFILEPTR self);
+z_off_t CLASSCALL TellZipFile(ZIPFILEPTR self);
 VOID CLASSCALL CloseZipFile(ZIPFILEPTR self);
 VOID CLASSCALL ReadZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size);
 VOID CLASSCALL WriteZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size);
