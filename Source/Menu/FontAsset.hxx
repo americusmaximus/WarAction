@@ -71,7 +71,7 @@ VOID CLASSCALL InitializeFontAsset(FONTASSETPTR self);
 VOID CLASSCALL SelectFontAssetColor(FONTASSETPTR self, CONST U32 color);
 VOID CLASSCALL SelectFontAssetColor(FONTASSETPTR self, CONST U32 r, CONST U32 g, CONST U32 b);
 
-LPVOID AcquireFontAssetItem(LPCVOID content, CONST U32 indx);
+IMAGEPALETTESPRITEPTR AcquireFontAssetItem(LPCVOID content, CONST U32 indx);
 U32 AcquireFontAssetHeight(LPCVOID content);
 U32 AcquireFontAssetTextWidth(LPCSTR text, LPCVOID content, CONST U32 spacing);
 VOID DrawFontAssetText(CONST U32 x, CONST U32 y, LPCSTR text, LPCVOID asset, PIXEL* pixels, CONST U32 alignment, CONST U32 spacing);

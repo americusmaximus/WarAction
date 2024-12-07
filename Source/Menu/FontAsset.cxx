@@ -123,8 +123,8 @@ U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR item)
 {
     switch (self->Type)
     {
-    case FONTTYPE_BASIC: { return ((IMAGESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Height; }
-    case FONTTYPE_COMPLEX: { return item == NULL ? self->Height : ((IMAGESPRITEPTR)AcquireFontAssetItem(self->Font, item))->Height; }
+    case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Height; }
+    case FONTTYPE_COMPLEX: { return item == NULL ? self->Height : AcquireFontAssetItem(self->Font, item)->Height; }
     }
 
     return DEFAULT_FONT_ASSET_HEIGHT;
@@ -169,11 +169,11 @@ U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item)
 {
     switch (self->Type)
     {
-    case FONTTYPE_BASIC: { return ((IMAGESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Width; }
+    case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Width; }
     case FONTTYPE_COMPLEX:
     {
         return item == NULL
-            ? DEFAULT_FONT_ASSET_SPACING : ((IMAGESPRITEPTR)AcquireFontAssetItem(self->Font, item))->Width;
+            ? DEFAULT_FONT_ASSET_SPACING : AcquireFontAssetItem(self->Font, item)->Width;
     }
     }
 
@@ -181,13 +181,13 @@ U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item)
 }
 
 // 0x10023070
-LPVOID AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO return type
+IMAGEPALETTESPRITEPTR AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO return type
 {
     if (indx < 256) // TODO
     {
         CONST U32 offset = ((U32*)asset)[indx];// *sizeof(U32); // TODO
 
-        return (LPVOID)((ADDR)asset + offset);
+        return (IMAGEPALETTESPRITEPTR)((ADDR)asset + offset);
     }
 
     if (indx < 256 * 256) // TODO
@@ -196,7 +196,7 @@ LPVOID AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO re
 
         offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];// * sizeof(U32);
 
-        return (LPVOID)((ADDR)asset + offset);
+        return (IMAGEPALETTESPRITEPTR)((ADDR)asset + offset);
     }
 
     U32 offset = ((U32*)asset)[(indx >> 16) + 256 + 255];// * sizeof(U32); // TODO
@@ -205,7 +205,7 @@ LPVOID AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO re
 
     offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];// * sizeof(U32); // TODO
 
-    return (LPVOID)((ADDR)asset + offset);
+    return (IMAGEPALETTESPRITEPTR)((ADDR)asset + offset);
 }
 
 // 0x1001f6c0
@@ -217,7 +217,7 @@ U32 AcquireFontAssetTextWidth(LPCSTR text, LPCVOID content, CONST U32 spacing)
     for (UNICHAR item = AcquireUnicode(value); item != NULL;
         value = AcquireNextString(value), item = AcquireUnicode(value))
     {
-        IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireFontAssetItem(content, item);
+        IMAGEPALETTESPRITEPTR image = AcquireFontAssetItem(content, item);
 
         result = result + image->Width + spacing;
     }
@@ -277,7 +277,7 @@ VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CO
     case FONTTYPE_COMPLEX:
     {
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y + self->Height - self->Offset,
-            self->Pixels, (IMAGEPALETTESPRITEPTR)AcquireFontAssetItem(self->Font, item)); break;
+            self->Pixels, AcquireFontAssetItem(self->Font, item)); break;
     }
     }
 }
@@ -291,7 +291,7 @@ VOID DrawFontAssetText(CONST U32 x, CONST U32 y, LPCSTR text, LPCVOID asset, PIX
     for (UNICHAR item = AcquireUnicode(value); item != NULL;
         value = AcquireNextString(value), item = AcquireUnicode(value))
     {
-        IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)AcquireFontAssetItem(asset, item);
+        IMAGEPALETTESPRITEPTR sprite = AcquireFontAssetItem(asset, item);
 
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(offset, y, pixels, sprite);
 

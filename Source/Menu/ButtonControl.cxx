@@ -74,7 +74,7 @@ VOID CLASSCALL InitializeButtonControl(BUTTONCONTROLPTR self)
     self->Unk11 = TRUE;
     self->IsAction = FALSE;
 
-    IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireBinAssetContent(self->Asset, self->Index);
+    CONST IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireBinAssetContent(self->Asset, self->Index);
 
     ActivateActionArea(self->X * image->Width / 100 + image->X,
         self->Y * image->Height / 100 + image->Y,
