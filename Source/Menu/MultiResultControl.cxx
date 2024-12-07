@@ -149,7 +149,7 @@ VOID CLASSCALL TickMultiResultControl(MULTIRESULTCONTROLPTR self)
 
     CONST U32 time = (State.Module->Game.Time + 59) / 60;
     wsprintfA(text, AcquireAssetMessage(ASSET_MESSAGE_SCORE_TIME_ELAPSED), time / 60, time % 60);
-    SelectFontAssetColor(&AssetsState.Fonts.Main, ADJUSTCOLORS(0x8000, 0x0, 0x0));
+    SelectFontAssetColor(&AssetsState.Fonts.Main, ADJUSTCOLORS(0x0000, 0x8000, 0x0000));
     DrawFontAssetText(&AssetsState.Fonts.Main, 576, 365, text, COMPLEXFONTALIGNMENT_CENTER);
 }
 

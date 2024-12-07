@@ -114,7 +114,8 @@ VOID CLASSCALL TickListControl(LISTCONTROLPTR self)
 
         if (current < self->Items->Count)
         {
-            SelectFontAssetColor(self->Font, self->Index ? ADJUSTCOLOR(0xFF00) : ADJUSTCOLOR(0x8000));
+            SelectFontAssetColor(self->Font,
+                current == self->Index ? ADJUSTCOLORS(0xFF00, 0xFF00, 0x0000) : ADJUSTCOLORS(0x8000, 0x8000, 0x0000));
 
             CHAR item[MAX_LIST_CONTROL_ITEM_LENGTH];
             self->Items->Self->AcquireValue(self->Items, current, item);

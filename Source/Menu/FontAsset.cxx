@@ -185,25 +185,25 @@ LPVOID AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO re
 {
     if (indx < 256) // TODO
     {
-        CONST U32 offset = ((U32*)asset)[indx] * sizeof(U32);
+        CONST U32 offset = ((U32*)asset)[indx];// *sizeof(U32); // TODO
 
         return (LPVOID)((ADDR)asset + offset);
     }
 
     if (indx < 256 * 256) // TODO
     {
-        U32 offset = ((U32*)asset)[(indx >> 8) + 255] * sizeof(U32); // TODO
+        U32 offset = ((U32*)asset)[(indx >> 8) + 255];// *sizeof(U32); // TODO
 
-        offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF] * sizeof(U32);
+        offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];// * sizeof(U32);
 
         return (LPVOID)((ADDR)asset + offset);
     }
 
-    U32 offset = ((U32*)asset)[(indx >> 16) + 256 + 255] * sizeof(U32); // TODO
+    U32 offset = ((U32*)asset)[(indx >> 16) + 256 + 255];// * sizeof(U32); // TODO
 
-    offset = ((U32*)((ADDR)asset + offset))[(indx >> 8)] * sizeof(U32); // TODO
+    offset = ((U32*)((ADDR)asset + offset))[(indx >> 8)];// * sizeof(U32); // TODO
 
-    offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF] * sizeof(U32); // TODO
+    offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];// * sizeof(U32); // TODO
 
     return (LPVOID)((ADDR)asset + offset);
 }
@@ -219,7 +219,7 @@ U32 AcquireFontAssetTextWidth(LPCSTR text, LPCVOID content, CONST U32 spacing)
     {
         IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireFontAssetItem(content, item);
 
-        result = result + spacing + image->Width;
+        result = result + image->Width + spacing;
     }
 
     return result;
@@ -255,6 +255,7 @@ VOID CLASSCALL DrawFontAssetText(FONTASSETPTR self, CONST U32 x, CONST U32 y, LP
     }
     case FONTTYPE_COMPLEX:
     {
+        // 0x1003a33c
         CONST U32 alignments[] = { COMPLEXFONTALIGNMENT_LEFT, COMPLEXFONTALIGNMENT_CENTER, COMPLEXFONTALIGNMENT_RIGHT };
 
         DrawFontAssetText(x, y + (self->Height - self->Offset), text,
@@ -294,14 +295,16 @@ VOID DrawFontAssetText(CONST U32 x, CONST U32 y, LPCSTR text, LPCVOID asset, PIX
 
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(offset, y, pixels, sprite);
 
-        offset = offset + sprite->Width;
+        offset = offset + sprite->Width + spacing;
     }
 }
 
 // 0x1001f6a0
 U32 AcquireFontAssetItemWidth(CONST U32 x, CONST U32 width, CONST U32 alignment)
 {
-    return alignment == FONTALIGNMENT_CENTER ? x : x - ((alignment == FONTALIGNMENT_RIGHT) ? width : (width / 2));
+    if (alignment == COMPLEXFONTALIGNMENT_LEFT) { return x; }
+
+    return (alignment == COMPLEXFONTALIGNMENT_RIGHT) ? (x - width) : (x - width / 2);
 }
 
 // 0x10003e40
@@ -328,7 +331,7 @@ VOID CLASSCALL SelectFontAssetColor(FONTASSETPTR self, CONST U32 color)
     {
         for (U32 x = 0; x < MAX_FONT_ASSET_CHARACTER_COUNT; x++)
         {
-            // TODO NOT IMPLEMENTED
+            self->Pixels[x] = ADJUSTCOLOR(color & self->Palette[x]);
         }
     }
     }

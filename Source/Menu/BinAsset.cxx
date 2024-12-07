@@ -31,7 +31,7 @@ SOFTWARE.
 BINASSETPTR CLASSCALL ActivateBinAsset(BINASSETPTR self)
 {
     self->Content = NULL;
-    self->IsCount = FALSE;
+    self->IsCollection = FALSE;
     self->Name = NULL;
     self->IsImage = FALSE;
 
@@ -52,7 +52,7 @@ BOOL CLASSCALL InitializeBinAsset(BINASSETPTR self, LPCSTR name, CONST BOOL load
 
     LogMessage("Loading %s\n", self->Name);
 
-    AcquireAssetContent(self->Name, &self->Content, 0);
+    AcquireAssetContent(self->Name, (LPVOID*)&self->Content, 0);
 
     if (self->IsImage)
     {
@@ -87,11 +87,11 @@ VOID CLASSCALL AdjustBinAssetImage(BINASSETPTR self)
 // 0x10006130
 VOID CLASSCALL AsStringBinAsset(BINASSETPTR self)
 {
-    CONST U32 count = ((U32*)self->Content)[0];
+    CONST U32 count = ((U32*)self->Content)[0]; // TODO
 
     CopyMemory(self->Content, (LPVOID)((ADDR)self->Content + sizeof(U32)), count * sizeof(U32));
 
-    ((U32*)self->Content)[count] = 0;
+    ((U32*)self->Content)[count] = 0; // TODO
 }
 
 // 0x10006060
@@ -114,39 +114,41 @@ LPVOID CLASSCALL AcquireBinAssetContent(BINASSETPTR self, CONST U32 indx)
     //      1. Count of elements at 0 offset
     //      2. An array of offsets into the file
     //      3. Actual data at those offsets
-    if (self->IsCount) { return (LPVOID)((ADDR)self->Content + ((U32*)self->Content)[indx + 1]); }
+    if (self->IsCollection) { return self->Collection->Items[indx]; }
 
     // Non-Counted:
     //      1. An array of offsets into the file
     //      2. Actual data at those offsets
-    return (LPVOID)((ADDR)self->Content + ((BINASSETHEADERPTR)self->Content)->Offset[indx]);
+    return (LPVOID)((ADDR)self->Content + self->Content->Offset[indx]); // TODO types
 }
 
 // 0x100060f0
 U32 CLASSCALL AcquireBinAssetItemCount(BINASSETPTR self)
 {
-    if (self->Content == NULL) { AcquireAssetContent(self->Name, &self->Content, 0); }
+    if (self->Content == NULL) { AcquireAssetContent(self->Name, (LPVOID*)&self->Content, 0); }
 
-    return ((BINASSETHEADERPTR)self->Content)->Offset[0] / sizeof(BINASSETHEADER);
+    return self->Content->Offset[0] / sizeof(BINASSETCONTENTDESCRIPTOR);
 }
 
 // 0x10006170
 VOID CLASSCALL InitializeBinAsset(BINASSETPTR self, CONST U32 count)
 {
-    CONST U32 offsets = count * sizeof(U32);
+    CONST U32 offset = count * sizeof(U32);
 
-    BINASSETHEADERPTR header = (BINASSETHEADERPTR)malloc(sizeof(BINASSETHEADER) + offsets); // TODO make pretty
+    // Initialize the desctiptor, a dynamic-size structure.
+    BINASSETCOLLECTIONDESCRIPTORPTR descriptor =
+        (BINASSETCOLLECTIONDESCRIPTORPTR)malloc(sizeof(U32) + offset);
 
-    header->Offset[0] = offsets;
+    descriptor->Offset = offset;
 
-    self->Content = header;
-    self->IsCount = TRUE;
+    self->Collection = descriptor;
+    self->IsCollection = TRUE;
 }
 
 // 0x100061a0
-VOID CLASSCALL SelectBinAssetItem(BINASSETPTR self, CONST U32 indx, CONST U32 value)
+VOID CLASSCALL SelectBinAssetItem(BINASSETPTR self, CONST U32 indx, LPVOID value)
 {
-    ((U32*)self->Content)[indx + 1] = value; // TODO
+    self->Collection->Items[indx] = value;
 }
 
 // 0x10001780

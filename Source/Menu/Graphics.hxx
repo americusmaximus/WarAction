@@ -28,11 +28,10 @@ SOFTWARE.
 #include <Renderer.Basic.hxx>
 
 #define ADJUSTCOLOR(x)                                                                              \
-        (x >> (State.Renderer->BlueOffset & 0x1F) & 0xFFFF & State.Renderer->ActualBlueMask)        \
+        (x >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)          \
         | (x >> (State.Renderer->GreenOffset & 0x1F) & 0xFFFF & State.Renderer->ActualGreenMask)    \
-        | (x >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)
+        | (x >> (State.Renderer->BlueOffset & 0x1F) & 0xFFFF & State.Renderer->ActualBlueMask)
 
-// TODO verify all uses (arg order)
 #define ADJUSTCOLORS(r, g, b)                                                                       \
         (r >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)          \
         | (g >> (State.Renderer->GreenOffset & 0x1F) & 0xFFFF & State.Renderer->ActualGreenMask)    \
@@ -40,10 +39,9 @@ SOFTWARE.
 
 #define ADJUSTSPRITECOLOR(x)                                                                                \
         ((x & 0xF800) >> (State.Renderer->RedOffset & 0x1F) & State.Renderer->ActualRedMask)                \
-        | (((x & 0x7E0) << 5) >> (State.Renderer->GreenOffset & 0x1F) & State.Renderer->ActualGreenMask)    \
-        | (((x & 0x1F) << 11) >> (State.Renderer->BlueOffset & 0x1F) & State.Renderer->ActualBlueMask)
+        | (((x & 0x07E0) << 5) >> (State.Renderer->GreenOffset & 0x1F) & State.Renderer->ActualGreenMask)   \
+        | (((x & 0x001F) << 11) >> (State.Renderer->BlueOffset & 0x1F) & State.Renderer->ActualBlueMask)
 
-// TODO verify all uses (arg order)
 #define ADJUSTSPRITECOLORS(r, g, b)                                                                     \
         ((r << 8) >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)       \
         | ((g << 8) >> (State.Renderer->GreenOffset & 0x1F) & 0xFFFF & State.Renderer->ActualGreenMask) \

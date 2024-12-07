@@ -189,7 +189,7 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
             if (loaded)
             {
                 self->Description->Self->Disable(self->Description);
-                self->Description->Color = ADJUSTCOLORS(0xFF00, 0x6400, 0x6400);
+                self->Description->Color = ADJUSTCOLORS(0x6400, 0xFF00, 0x6400);
 
                 SelectDescriptionControlText(self->Description,
                     self->Map.Description == NULL ? StringsState.Scratch : self->Map.Description);
