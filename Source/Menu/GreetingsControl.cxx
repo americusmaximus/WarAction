@@ -149,9 +149,8 @@ U32 CLASSCALL ActionGreetingsControl(GREETINGSCONTROLPTR self)
 {
     AcquireAudioPlayerMode(&AudioPlayerState);
 
-    if (!CursorState.IsLeft && !InputState.State[DIK_ESCAPE] && !InputState.State[DIK_SPACE]) { return CONTROLACTION_NONE; }
-
-    return CONTROLACTION_GREETINGS_EXIT;
+    return (CursorState.IsLeft || InputState.State[DIK_ESCAPE] || InputState.State[DIK_SPACE])
+        ? CONTROLACTION_GREETINGS_EXIT : CONTROLACTION_NONE;
 }
 
 // 0x1000db90

@@ -213,8 +213,24 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
             break;
         }
-        case WM_LBUTTONUP: { CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_UP); break; }
-        case WM_LBUTTONDBLCLK: { CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_DOUBLE_CLICK); break; }
+        case WM_LBUTTONUP:
+        {
+            CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_UP);
+
+            CursorState.IsLeft = wp & MK_LBUTTON;
+            CursorState.IsRight = wp & MK_RBUTTON;
+
+            break;
+        }
+        case WM_LBUTTONDBLCLK:
+        {
+            CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_DOUBLE_CLICK);
+
+            CursorState.IsLeft = wp & MK_LBUTTON;
+            CursorState.IsRight = wp & MK_RBUTTON;
+
+            break;
+        }
         case WM_RBUTTONDOWN:
         {
             CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_DOWN);
@@ -251,8 +267,24 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
             break;
         }
-        case WM_RBUTTONUP: { CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_UP); break; }
-        case WM_RBUTTONDBLCLK: { CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_DOUBLE_CLICK); break; }
+        case WM_RBUTTONUP:
+        {
+            CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_UP);
+
+            CursorState.IsLeft = wp & MK_LBUTTON;
+            CursorState.IsRight = wp & MK_RBUTTON;
+
+            break;
+        }
+        case WM_RBUTTONDBLCLK:
+        {
+            CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_DOUBLE_CLICK);
+
+            CursorState.IsLeft = wp & MK_LBUTTON;
+            CursorState.IsRight = wp & MK_RBUTTON;
+
+            break;
+        }
         }
     }
 

@@ -106,10 +106,10 @@ CONTROLTYPE CLASSCALL AcquireControlTypeScroll(LPVOID);
 CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 
 /* TODO Better Name */
-#define CONTROLACTION_UNKNOWN                               (-1)
+#define CONTROLACTION_UNKNOWN                               (-1) /* TODO  Back? */
 
-#define CONTROLACTION_NONE                                  0000
-#define CONTROLACTION_1                                     1 /* TODO */
+#define CONTROLACTION_NONE                                  0000 /* TODO OK? */
+#define CONTROLACTION_1                                     1 /* TODO Cancel? */
 
 #define CONTROLACTION_MAIN_SINGLE                           1000
 #define CONTROLACTION_MAIN_MULTI                            1001
@@ -127,8 +127,8 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 #define CONTROLACTION_SINGLE0_DELETE                        1013
 #define CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS               1014
 #define CONTROLACTION_SINGLE0_DIFFICULTY                    1015
-#define CONTROLACTION_1016                                  1016
-#define CONTROLACTION_SINGLE2_BRITISH                       1017
+#define CONTROLACTION_1016                                  1016 /* TODO Single1?*/
+#define CONTROLACTION_SINGLE2_BRITISH                       1017 /* TODO Single2?*/
 #define CONTROLACTION_SINGLE2_GERMAN                        1018
 #define CONTROLACTION_SINGLE2_RUSSIAN                       1019
 #define CONTROLACTION_SINGLE2_CANCEL                        1020
@@ -142,7 +142,7 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 #define CONTROLACTION_SINGLE5_EXIT                          1028
 #define CONTROLACTION_SINGLE5_VICTORY                       1029
 #define CONTROLACTION_SCROLL                                1030
-#define CONTROLACTION_1031                                  1031
+#define CONTROLACTION_1031                                  1031 /* TODO */
 #define CONTROLACTION_SCROLL_UP                             1032
 #define CONTROLACTION_SCROLL_DOWN                           1033
 #define CONTROLACTION_LIST_SELECT                           1034
@@ -169,16 +169,16 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 #define CONTROLACTION_MULTI3_OPTIONS                        1055
 #define CONTROLACTION_MULTI4_START                          1056
 #define CONTROLACTION_MULTI4_CANCEL                         1057
-#define CONTROLACTION_MULTI4_GREYSTART                      1058
+#define CONTROLACTION_MULTI4_GREYSTART                      1058 /* TODO */
 #define CONTROLACTION_MULTI4_READY                          1059
-#define CONTROLACTION_1060                                  1060
-#define CONTROLACTION_1061                                  1061
-#define CONTROLACTION_1062                                  1062
-#define CONTROLACTION_1063                                  1063
-#define CONTROLACTION_1064                                  1064
-#define CONTROLACTION_1065                                  1065
-#define CONTROLACTION_1066                                  1066
-#define CONTROLACTION_1067                                  1067
+#define CONTROLACTION_1060                                  1060 /* TODO */
+#define CONTROLACTION_1061                                  1061 /* TODO */
+#define CONTROLACTION_1062                                  1062 /* TODO */
+#define CONTROLACTION_1063                                  1063 /* TODO */
+#define CONTROLACTION_1064                                  1064 /* TODO */
+#define CONTROLACTION_1065                                  1065 /* TODO */
+#define CONTROLACTION_1066                                  1066 /* TODO */
+#define CONTROLACTION_1067                                  1067 /* TODO */
 #define CONTROLACTION_MULTI4_INACTIVITY_PERIOD              1068
 #define CONTROLACTION_MULTI4_INACTIVITY_PERIOD_MINUTES      1069
 #define CONTROLACTION_MULTI4_INACTIVITY_PERIOD_SECONDS      1070
@@ -198,13 +198,13 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 #define CONTROLACTION_BRIEF_MENU                            1084
 #define CONTROLACTION_BRIEF_THIRDBUTTON                     1085
 #define CONTROLACTION_INITIALIZE_NETWORK                    1086
-#define CONTROLACTION_1087                                  1087
-#define CONTROLACTION_1088                                  1088
-#define CONTROLACTION_1089                                  1089
-#define CONTROLACTION_1090                                  1090
-#define CONTROLACTION_1091                                  1091
-#define CONTROLACTION_1092                                  1092
-#define CONTROLACTION_1093                                  1093
+#define CONTROLACTION_1087                                  1087 /* TODO */
+#define CONTROLACTION_1088                                  1088 /* TODO */
+#define CONTROLACTION_1089                                  1089 /* TODO */
+#define CONTROLACTION_1090                                  1090 /* TODO */
+#define CONTROLACTION_1091                                  1091 /* TODO */
+#define CONTROLACTION_1092                                  1092 /* TODO */
+#define CONTROLACTION_1093                                  1093 /* TODO */
 #define CONTROLACTION_MSGBOX_OK                             1094
 #define CONTROLACTION_MSGBOX_CANCEL                         1095
 #define CONTROLACTION_MSTAT_DETAIL                          1096
@@ -228,10 +228,10 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
 #define CONTROLACTION_STATISTICS_13                         (CONTROLACTION_STATISTICS_BASE + 12)
 #define CONTROLACTION_MAP_HOVER                             1114
 #define CONTROLACTION_PLAY_COMPLETED                        1115
-#define CONTROLACTION_1116                                  1116
+#define CONTROLACTION_1116                                  1116 /* TODO */
 #define CONTROLACTION_PLAY_SHORT_INTRO2                     1117
 #define CONTROLACTION_PLAY_SHORT_INTRO3                     1118
-#define CONTROLACTION_1119                                  1119
+#define CONTROLACTION_1119                                  1119 /* TODO Exit ? */
 
 #define MAX_CONTROL_ACTION_QUEUE_ITEM_COUNT                 100
 

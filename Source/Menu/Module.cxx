@@ -427,8 +427,6 @@ BOOL ExecuteModuleAction(VOID)
             }
         }
 
-        // TODO: There's a bug in the Main or Welcome control, so that the result
-        // makes action not CONTROLACTION_NONE, thus closing the game right away.
         if (action != CONTROLACTION_NONE) { State.App->InitModule = INVALID_MODULE_STATE_INDEX; }
     }
 

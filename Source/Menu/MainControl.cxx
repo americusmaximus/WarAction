@@ -205,61 +205,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
     switch (action)
     {
-    case CONTROLACTION_JMULTI2_JOIN: { self->Active = (CONTROLPTR)self->MultiJoinResult; break; }
-    case CONTROLACTION_JMULTI2_CANCEL:
-    case CONTROLACTION_MULTI3_CANCEL:
-    case CONTROLACTION_MULTI3_OPTIONS:
-    case CONTROLACTION_MULTI4_CANCEL:
-    case CONTROLACTION_MULTI4_GREYSTART:
-    case CONTROLACTION_MULTI4_READY:
-    case CONTROLACTION_1060:
-    case CONTROLACTION_1061:
-    case CONTROLACTION_1062:
-    case CONTROLACTION_1063:
-    case CONTROLACTION_1064:
-    case CONTROLACTION_1065:
-    case CONTROLACTION_1066:
-    case CONTROLACTION_1067:
-    case CONTROLACTION_MULTI4_INACTIVITY_PERIOD:
-    case CONTROLACTION_MULTI4_INACTIVITY_PERIOD_MINUTES:
-    case CONTROLACTION_MULTI4_INACTIVITY_PERIOD_SECONDS:
-    case CONTROLACTION_MULTI4_CAPTURE_DELAY:
-    case CONTROLACTION_MULTI4_CAPTURE_DELAY_MINUTES:
-    case CONTROLACTION_MULTI4_CAPTURE_DELAY_SECONDS:
-    case CONTROLACTION_MULTI4_TIMEOUT_DELAY:
-    case CONTROLACTION_MULTI4_TIMEOUT_DELAY_MINUTES:
-    case CONTROLACTION_MULTI4_TIMEOUT_DELAY_SECONDS:
-    case CONTROLACTION_GREETINGS_EXIT:
-    case CONTROLACTION_RATING_SINGLE:
-    case CONTROLACTION_RATING_CANCEL:
-    case CONTROLACTION_BRIEF_MENU:
-    case CONTROLACTION_BRIEF_THIRDBUTTON:
-    case CONTROLACTION_1093:
-    case CONTROLACTION_MSGBOX_OK:
-    case CONTROLACTION_MSGBOX_CANCEL:
-    case CONTROLACTION_MSTAT_TOTAL:
-    case CONTROLACTION_MSTAT_EXIT:
-    case CONTROLACTION_MSTAT_DESTROYED:
-    case CONTROLACTION_MSTAT_LOST:
-    case CONTROLACTION_STATISTICS_1:
-    case CONTROLACTION_STATISTICS_2:
-    case CONTROLACTION_STATISTICS_3:
-    case CONTROLACTION_STATISTICS_4:
-    case CONTROLACTION_STATISTICS_5:
-    case CONTROLACTION_STATISTICS_6:
-    case CONTROLACTION_STATISTICS_7:
-    case CONTROLACTION_STATISTICS_8:
-    case CONTROLACTION_STATISTICS_9:
-    case CONTROLACTION_STATISTICS_10:
-    case CONTROLACTION_STATISTICS_11:
-    case CONTROLACTION_STATISTICS_12:
-    case CONTROLACTION_STATISTICS_13:
-    case CONTROLACTION_MAP_HOVER:
-    case CONTROLACTION_1116: { break; }
-    case CONTROLACTION_MULTI3_OK: { self->Active = (CONTROLPTR)self->MultiMap; break; }
-    case CONTROLACTION_MULTI4_START: { self->Active = (CONTROLPTR)self->MultiStart; break; }
-    case CONTROLACTION_GREETINGS: { self->Active = (CONTROLPTR)self->Greetings; break; }
-    case CONTROLACTION_RATING_CAMPAIGN: { self->Active = (CONTROLPTR)self->Ratings; break; }
+    case CONTROLACTION_NONE:
     case CONTROLACTION_BRIEF:
     case CONTROLACTION_INITIALIZE_NETWORK:
     case CONTROLACTION_1087:
@@ -271,52 +217,45 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_PLAY_SHORT_INTRO2:
     case CONTROLACTION_PLAY_SHORT_INTRO3:
     case CONTROLACTION_1119: { self->Active = NULL; action = self->Action; break; }
-    case CONTROLACTION_BRIEF_OK: { self->Active = (CONTROLPTR)self->ObjectType4x5d; break; }
-    case CONTROLACTION_MSTAT_DETAIL: { self->Active = (CONTROLPTR)self->MultiResult; break; }
-    case CONTROLACTION_PLAY_COMPLETED: { self->Active = (CONTROLPTR)self->Video; break; }
-    case CONTROLACTION_JMULTI1_OK: { self->Active = (CONTROLPTR)self->MultiJoin; break; }
-    case CONTROLACTION_SINGLE4_LOAD: { self->Active = (CONTROLPTR)self->LoadMap; break; }
-    case CONTROLACTION_SINGLE4_CANCEL:
-    case CONTROLACTION_SINGLE5_REPLAY:
-    case CONTROLACTION_SINGLE5_EXIT:
-    case CONTROLACTION_SINGLE5_VICTORY:
-    case CONTROLACTION_SCROLL:
-    case CONTROLACTION_1031:
-    case CONTROLACTION_SCROLL_UP:
-    case CONTROLACTION_SCROLL_DOWN:
-    case CONTROLACTION_LIST_SELECT:
-    case CONTROLACTION_DIAL_CANCEL:
-    case CONTROLACTION_DIAL_ADD:
-    case CONTROLACTION_DIAL_REMOVE:
-    case CONTROLACTION_JMULTI_INPUT1:
-    case CONTROLACTION_JMULTI_INPUT2:
-    case CONTROLACTION_MULTI1_LAN:
-    case CONTROLACTION_MULTI1_MODEM:
-    case CONTROLACTION_MULTI1_CANCEL: { break; }
-    case CONTROLACTION_SINGLE5_CONTINUE: { self->Active = (CONTROLPTR)self->SingleResult; break; }
-    case CONTROLACTION_DIAL_DIAL: { self->Active = (CONTROLPTR)self->Dial; break; }
-    case CONTROLACTION_MULTI1_INTERNET: { self->Active = (CONTROLPTR)self->Multi; break; }
-    case CONTROLACTION_MULTI2_CREATE: { self->Active = (CONTROLPTR)self->MultiSelect; break; }
-    case CONTROLACTION_SINGLE3_LOAD: { self->Active = (CONTROLPTR)self->LoadSave; break; }
-    case CONTROLACTION_SINGLE0_NEW: { self->Active = (CONTROLPTR)self->Single; break; }
-    case CONTROLACTION_NONE: { self->Active = NULL; action = self->Action; break; }
-    case CONTROLACTION_MAIN_SINGLE: { self->Active = (CONTROLPTR)self->Welcome; break; }
-    case CONTROLACTION_1016: { self->Active = (CONTROLPTR)self->SingleNewClassic; break; }
-    case CONTROLACTION_SINGLE2_BRITISH: { self->Active = (CONTROLPTR)self->SingleNewAddon; break; }
-    }
-
-    if (self->Active != NULL)
+    default:
     {
-        if (!self->Active->IsActive)
+        switch (action)
         {
-            ReleaseSoundStateTracks(&SoundState.State, FALSE);
-
-            self->Active->Self->Initialize(self->Active);
-
-            InitializeSoundStateBackBuffer(&SoundState.State, FALSE);
+        case CONTROLACTION_MAIN_SINGLE: { self->Active = (CONTROLPTR)self->Welcome; break; }
+        case CONTROLACTION_SINGLE0_NEW: { self->Active = (CONTROLPTR)self->Single; break; }
+        case CONTROLACTION_PLAY_COMPLETED: { self->Active = (CONTROLPTR)self->Video; break; }
+        case CONTROLACTION_1016: { self->Active = (CONTROLPTR)self->SingleNewClassic; break; }
+        case CONTROLACTION_SINGLE2_BRITISH: { self->Active = (CONTROLPTR)self->SingleNewAddon; break; }
+        case CONTROLACTION_SINGLE3_LOAD: { self->Active = (CONTROLPTR)self->LoadSave; break; }
+        case CONTROLACTION_SINGLE4_LOAD: { self->Active = (CONTROLPTR)self->LoadMap; break; }
+        case CONTROLACTION_SINGLE5_CONTINUE: { self->Active = (CONTROLPTR)self->SingleResult; break; }
+        case CONTROLACTION_DIAL_DIAL: { self->Active = (CONTROLPTR)self->Dial; break; }
+        case CONTROLACTION_MULTI1_INTERNET: { self->Active = (CONTROLPTR)self->Multi; break; }
+        case CONTROLACTION_MULTI2_CREATE: { self->Active = (CONTROLPTR)self->MultiSelect; break; }
+        case CONTROLACTION_JMULTI1_OK: { self->Active = (CONTROLPTR)self->MultiJoin; break; }
+        case CONTROLACTION_JMULTI2_JOIN: { self->Active = (CONTROLPTR)self->MultiJoinResult; break; }
+        case CONTROLACTION_MULTI3_OK: { self->Active = (CONTROLPTR)self->MultiMap; break; }
+        case CONTROLACTION_MULTI4_START: { self->Active = (CONTROLPTR)self->MultiStart; break; }
+        case CONTROLACTION_GREETINGS: { self->Active = (CONTROLPTR)self->Greetings; break; }
+        case CONTROLACTION_RATING_CAMPAIGN: { self->Active = (CONTROLPTR)self->Ratings; break; }
+        case CONTROLACTION_BRIEF_OK: { self->Active = (CONTROLPTR)self->ObjectType4x5d; break; }
+        case CONTROLACTION_MSTAT_DETAIL: { self->Active = (CONTROLPTR)self->MultiResult; break; }
         }
 
-        action = self->Active->Self->Action(self->Active);
+        if (self->Active != NULL)
+        {
+            if (!self->Active->IsActive)
+            {
+                ReleaseSoundStateTracks(&SoundState.State, FALSE);
+
+                self->Active->Self->Initialize(self->Active);
+
+                InitializeSoundStateBackBuffer(&SoundState.State, FALSE);
+            }
+
+            action = self->Active->Self->Action(self->Active);
+        }
+    }
     }
 
     BOOL check1 = FALSE; // TODO
@@ -344,7 +283,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         ShowMessageControl(&MessageControlState,
             AcquireAssetMessage(ASSET_MESSAGE_EXIT_GAME_QUESTION), MESSAGE_BUTTON_OKCANCEL);
 
-        action = CONTROLACTION_SINGLE2_RUSSIAN; break;
+        action = CONTROLACTION_1119; break;
     }
     case CONTROLACTION_MAIN_RATING: { action = CONTROLACTION_RATING_CAMPAIGN; break; }
     case CONTROLACTION_MAIN_GREETINGS:
@@ -353,68 +292,6 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         action = CONTROLACTION_GREETINGS; break;
     }
-    case CONTROLACTION_MAIN_RESOLUTIONS:
-    case CONTROLACTION_MAIN_RESOLUTIONS2:
-    case CONTROLACTION_SINGLE0_DELETE:
-    case CONTROLACTION_SINGLE0_DIFFICULTY:
-    case CONTROLACTION_1016:
-    case CONTROLACTION_SINGLE5_VICTORY:
-    case CONTROLACTION_SCROLL:
-    case CONTROLACTION_1031:
-    case CONTROLACTION_SCROLL_UP:
-    case CONTROLACTION_SCROLL_DOWN:
-    case CONTROLACTION_LIST_SELECT:
-    case CONTROLACTION_DIAL_ADD:
-    case CONTROLACTION_DIAL_REMOVE:
-    case CONTROLACTION_JMULTI_INPUT1:
-    case CONTROLACTION_JMULTI_INPUT2:
-    case CONTROLACTION_MULTI2_DELETE:
-    case CONTROLACTION_MULTI3_OPTIONS:
-    case CONTROLACTION_MULTI4_GREYSTART:
-    case CONTROLACTION_MULTI4_READY:
-    case CONTROLACTION_1060:
-    case CONTROLACTION_1061:
-    case CONTROLACTION_1062:
-    case CONTROLACTION_1063:
-    case CONTROLACTION_1064:
-    case CONTROLACTION_1065:
-    case CONTROLACTION_1066:
-    case CONTROLACTION_1067:
-    case CONTROLACTION_MULTI4_INACTIVITY_PERIOD:
-    case CONTROLACTION_MULTI4_INACTIVITY_PERIOD_MINUTES:
-    case CONTROLACTION_MULTI4_INACTIVITY_PERIOD_SECONDS:
-    case CONTROLACTION_MULTI4_CAPTURE_DELAY:
-    case CONTROLACTION_MULTI4_CAPTURE_DELAY_MINUTES:
-    case CONTROLACTION_MULTI4_CAPTURE_DELAY_SECONDS:
-    case CONTROLACTION_MULTI4_TIMEOUT_DELAY:
-    case CONTROLACTION_MULTI4_TIMEOUT_DELAY_MINUTES:
-    case CONTROLACTION_MULTI4_TIMEOUT_DELAY_SECONDS:
-    case CONTROLACTION_GREETINGS:
-    case CONTROLACTION_RATING_CAMPAIGN:
-    case CONTROLACTION_RATING_SINGLE:
-    case CONTROLACTION_BRIEF_THIRDBUTTON:
-    case CONTROLACTION_1090:
-    case CONTROLACTION_1093:
-    case CONTROLACTION_MSGBOX_OK:
-    case CONTROLACTION_MSGBOX_CANCEL:
-    case CONTROLACTION_MSTAT_DETAIL:
-    case CONTROLACTION_MSTAT_TOTAL:
-    case CONTROLACTION_MSTAT_DESTROYED:
-    case CONTROLACTION_MSTAT_LOST:
-    case CONTROLACTION_STATISTICS_1:
-    case CONTROLACTION_STATISTICS_2:
-    case CONTROLACTION_STATISTICS_3:
-    case CONTROLACTION_STATISTICS_4:
-    case CONTROLACTION_STATISTICS_5:
-    case CONTROLACTION_STATISTICS_6:
-    case CONTROLACTION_STATISTICS_7:
-    case CONTROLACTION_STATISTICS_8:
-    case CONTROLACTION_STATISTICS_9:
-    case CONTROLACTION_STATISTICS_10:
-    case CONTROLACTION_STATISTICS_11:
-    case CONTROLACTION_STATISTICS_12:
-    case CONTROLACTION_STATISTICS_13:
-    case CONTROLACTION_MAP_HOVER: { break; }
     case CONTROLACTION_SINGLE0_NEW: { action = CONTROLACTION_1016; break; }
     case CONTROLACTION_SINGLE0_SINGLEMISSIONS: { action = CONTROLACTION_SINGLE4_LOAD; break; }
     case CONTROLACTION_SINGLE0_LOAD: { action = CONTROLACTION_SINGLE3_LOAD; break; }
@@ -514,13 +391,21 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     {
         ReleaseNetworkStateContainer();
 
-        if (!MessageControlState.IsVisible || (MessageControlState.Mode & MESSAGE_MODE_WAIT)) { HideMessageControl(&MessageControlState); }
+        if (!MessageControlState.IsVisible || (MessageControlState.Mode & MESSAGE_MODE_WAIT))
+        {
+            HideMessageControl(&MessageControlState);
+        }
 
         action = CONTROLACTION_MULTI2_CREATE; check2 = TRUE; break;
     }
     case CONTROLACTION_GREETINGS_EXIT:
     case CONTROLACTION_PLAY_COMPLETED:
-    case CONTROLACTION_1116: { InitializeSoundStateBackBuffer(&SoundState.State, TRUE); action = CONTROLACTION_UNKNOWN; break; }
+    case CONTROLACTION_1116:
+    {
+        InitializeSoundStateBackBuffer(&SoundState.State, TRUE);
+
+        action = CONTROLACTION_UNKNOWN; break;
+    }
     case CONTROLACTION_BRIEF:
     {
         EnqueueControlActionQueue(CONTROLACTION_BRIEF_OK);

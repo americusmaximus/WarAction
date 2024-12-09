@@ -28,28 +28,28 @@ SOFTWARE.
 #define IMAGESPRITE_ITEM_COUNT_MASK     0x7F
 #define IMAGESPRITE_ITEM_COMPACT_MASK   0x80
 
-typedef struct BinAssetContentDescriptor
+typedef struct BinAssetContent
 {
     U32 Offset[1];
-} BINASSETCONTENTDESCRIPTOR, * BINASSETCONTENTDESCRIPTORPTR;
+} BINASSETCONTENT, * BINASSETCONTENTPTR;
 
-typedef struct BinAssetCollectionDescriptor
+typedef struct BinAssetCollectionContent
 {
     U32 Offset;
     LPVOID Items[1];
-} BINASSETCOLLECTIONDESCRIPTOR, * BINASSETCOLLECTIONDESCRIPTORPTR;
+} BINASSETCOLLECTIONCONTENT, * BINASSETCOLLECTIONCONTENTPTR;
 
 #pragma pack(push, 1)
 typedef struct BinAsset
 {
     union
     {
-        BINASSETCOLLECTIONDESCRIPTORPTR Collection;
-        BINASSETCONTENTDESCRIPTORPTR    Content;
+        BINASSETCOLLECTIONCONTENTPTR    Collection;
+        BINASSETCONTENTPTR              Content;
     };
-    BOOL    IsCollection;
-    LPCSTR  Name;
-    U8      IsImage;
+    BOOL                                IsCollection;
+    LPCSTR                              Name;
+    U8                                  IsImage;
 } BINASSET, * BINASSETPTR;
 #pragma pack(pop)
 

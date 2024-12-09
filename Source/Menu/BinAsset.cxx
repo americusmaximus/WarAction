@@ -127,7 +127,7 @@ U32 CLASSCALL AcquireBinAssetItemCount(BINASSETPTR self)
 {
     if (self->Content == NULL) { AcquireAssetContent(self->Name, (LPVOID*)&self->Content, 0); }
 
-    return self->Content->Offset[0] / sizeof(BINASSETCONTENTDESCRIPTOR);
+    return self->Content->Offset[0] / sizeof(BINASSETCONTENT);
 }
 
 // 0x10006170
@@ -135,13 +135,12 @@ VOID CLASSCALL InitializeBinAsset(BINASSETPTR self, CONST U32 count)
 {
     CONST U32 offset = count * sizeof(U32);
 
-    // Initialize the desctiptor, a dynamic-size structure.
-    BINASSETCOLLECTIONDESCRIPTORPTR descriptor =
-        (BINASSETCOLLECTIONDESCRIPTORPTR)malloc(sizeof(U32) + offset);
+    // Initialize a dynamic-size structure.
+    BINASSETCOLLECTIONCONTENTPTR content = (BINASSETCOLLECTIONCONTENTPTR)malloc(sizeof(U32) + offset);
 
-    descriptor->Offset = offset;
+    content->Offset = offset;
 
-    self->Collection = descriptor;
+    self->Collection = content;
     self->IsCollection = TRUE;
 }
 
