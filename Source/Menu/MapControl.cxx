@@ -77,7 +77,8 @@ VOID CLASSCALL InitializeMapControl(MAPCONTROLPTR self)
     if (self->X != 0)
     {
         ActivateActionArea(self->X - 65, self->Y, 130, 65,
-            6 /* TODO */, CONTROLACTION_MAP_HOVER, MAP_CONTROL_ACTION_PRIORITY);
+            CONTROLCOMMANDACTION_MOUSE_LEAVE | CONTROLCOMMANDACTION_MOUSE_ENTER,
+            CONTROLACTION_MAP_HOVER, MAP_CONTROL_ACTION_PRIORITY);
     }
 }
 

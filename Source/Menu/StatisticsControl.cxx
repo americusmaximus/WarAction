@@ -74,7 +74,7 @@ VOID CLASSCALL InitializeStatisticsControl(STATISTICSCONTROLPTR self)
         AcquireStatisticsControlActionRectangle(x, &rect);
 
         ActivateActionArea(rect.left, rect.top, rect.right - rect.left + 1, rect.bottom - rect.top + 1,
-            8 /* TODO */, x + CONTROLACTION_STATISTICS_BASE, STATISTICS_CONTROL_ACTION_PRIORITY);
+            CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN, x + CONTROLACTION_STATISTICS_BASE, STATISTICS_CONTROL_ACTION_PRIORITY);
     }
 
     ZeroMemory(StatisticsState.Areas, MAX_STATISTICS_PLAYERS_COUNT * sizeof(STATISTICSAREA));
@@ -246,7 +246,7 @@ U32 CLASSCALL ActionStatisticsControl(STATISTICSCONTROLPTR self)
     {
         CONST U32 indx = command.Command - CONTROLACTION_STATISTICS_BASE;
 
-        if (INVALID_STATISTICS_ITEM_INDEX < indx && indx < MAX_STATISTICS_PLAYERS_COUNT)
+        if (INVALID_STATISTICS_ITEM_INDEX != indx && indx < MAX_STATISTICS_PLAYERS_COUNT)
         {
             if (StatisticsState.State.Players[indx].Name[0] != NULL) { self->Index = indx; }
 

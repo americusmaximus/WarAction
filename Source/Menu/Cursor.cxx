@@ -91,28 +91,19 @@ VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name)
 }
 
 // 0x100226f0
-VOID CursorMessageHandler(CONST CURSORMESSAGE message)
+VOID CursorMessageHandler(CONST U32 action)
 {
-    ACTIONAREAPTR area = ActionAreaState.Items;
-
-    if (area != NULL)
+    for (ACTIONAREAPTR area = ActionAreaState.Items; area != NULL; area = area->Next)
     {
-        ACTIONAREAPTR next = NULL;
-        do
+        if (!(area->Options & 0x200 /* TODO */)
+            && area->X <= CursorState.X && area->Y <= CursorState.Y
+            && CursorState.X < area->Width + area->X && CursorState.Y < area->Height + area->Y
+            && (action & area->Options))
         {
-            if (!(area->Options & 0x200 /* TODO */)
-                && area->X <= CursorState.X && area->Y <= CursorState.Y
-                && CursorState.X < area->Width + area->X && CursorState.Y < area->Height + area->Y
-                && message & area->Options)
-            {
-                EnqueueControlCommand(area->Action, message, CursorState.X - area->X, CursorState.Y - area->Y);
+            EnqueueControlCommand(area->Action, action, CursorState.X - area->X, CursorState.Y - area->Y);
 
-                if (area->Options & 0x400) { return; } // TODO
-            }
-
-            next = area->Next;
-            area = next;
-        } while (next != NULL);
+            if (area->Options & CONTROLCOMMANDACTION_UNKNOWN_400) { return; }
+        }
     }
 }
 
@@ -186,8 +177,8 @@ VOID FUN_10003610(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 
 // 0x10003590
 VOID FUN_10003590(CONST S32 minX, CONST S32 minY, CONST S32 maxX, CONST S32 maxY, CONST S32 width, CONST S32 height, S32* outX, S32* outY, S32* outHeight, S32* outWidth) // TODO name
 {
-    S32 x = Mathematics::Max<S32>(0, minX);
-    S32 y = Mathematics::Max<S32>(0, minY);
+    CONST S32 x = Mathematics::Max<S32>(0, minX);
+    CONST S32 y = Mathematics::Max<S32>(0, minY);
 
     S32 w = maxX + minX;
 
@@ -213,5 +204,35 @@ VOID FUN_10003590(CONST S32 minX, CONST S32 minY, CONST S32 maxX, CONST S32 maxY
 // 0x10022780
 VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32 ny)
 {
-    // TODO NOT IMPLEMENTED
+    for (ACTIONAREAPTR area = ActionAreaState.Items; area != NULL; area = area->Next)
+    {
+        if (!(area->Options & CONTROLCOMMANDACTION_UNKNOWN_200)
+            && (nx < area->X || ny < area->Y || area->Width + area->X <= nx || area->Height + area->Y <= ny)
+            && area->X <= ox && area->Y <= oy && ox < area->Width + area->X && oy < area->Height + area->Y
+            && (area->Options & CONTROLCOMMANDACTION_MOUSE_LEAVE))
+        {
+            EnqueueControlCommand(area->Action, CONTROLCOMMANDACTION_MOUSE_LEAVE, nx - area->X, ny - area->Y);
+        }
+    }
+
+    BOOL todo = TRUE; // TODO
+    for (ACTIONAREAPTR area = ActionAreaState.Items; area != NULL; area = area->Next)
+    {
+        if (!(area->Options & CONTROLCOMMANDACTION_UNKNOWN_200)
+            && area->X <= nx && area->Y <= ny && nx < area->Width + area->X && ny < area->Height + area->Y)
+        {
+            if ((area->Options & CONTROLCOMMANDACTION_MOUSE_ENTER)
+                && (ox < area->X || oy < area->Y || area->Width + area->X <= ox || area->Height + area->Y <= oy))
+            {
+                EnqueueControlCommand(area->Action, CONTROLCOMMANDACTION_MOUSE_ENTER, nx - area->X, ny - area->Y);
+            }
+
+            if (todo && (area->Options & CONTROLCOMMANDACTION_MOUSE_SCROLL))
+            {
+                EnqueueControlCommand(area->Action, CONTROLCOMMANDACTION_MOUSE_SCROLL, nx - area->X, ny - area->Y);
+
+                if (area->Options & CONTROLCOMMANDACTION_UNKNOWN_400) { todo = FALSE; }
+            }
+        }
+    }
 }

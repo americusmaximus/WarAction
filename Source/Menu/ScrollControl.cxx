@@ -32,6 +32,17 @@ SOFTWARE.
 #define SCROLL_CONTROL_ACTION_PRIORITY_1  0x8001 /* TODO */
 #define SCROLL_CONTROL_ACTION_PRIORITY_2  0x8002 /* TODO */
 
+#define CONTROLCOMMANDACTION_SCROLL_UNKNONW1    (CONTROLCOMMANDACTION_UNKNOWN_400 | CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK        \
+                                                    | CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK | CONTROLCOMMANDACTION_MOUSE_RIGHT_UP \
+                                                    | CONTROLCOMMANDACTION_MOUSE_RIGHT_DOWN  | CONTROLCOMMANDACTION_MOUSE_LEFT_UP       \
+                                                    | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN  | CONTROLCOMMANDACTION_MOUSE_LEAVE | CONTROLCOMMANDACTION_MOUSE_ENTER) /* TODO */
+
+#define CONTROLCOMMANDACTION_SCROLL_UNKNONW2    (CONTROLCOMMANDACTION_UNKNOWN_400 | CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK        \
+                                                    | CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK | CONTROLCOMMANDACTION_MOUSE_RIGHT_UP \
+                                                    | CONTROLCOMMANDACTION_MOUSE_RIGHT_DOWN | CONTROLCOMMANDACTION_MOUSE_LEFT_UP        \
+                                                    | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN | CONTROLCOMMANDACTION_MOUSE_LEAVE           \
+                                                    | CONTROLCOMMANDACTION_MOUSE_ENTER | CONTROLCOMMANDACTION_MOUSE_SCROLL)  /* TODO */
+
 // 0x1003a3a8
 SCROLLCONTROLSELF ScrollControlSelfState =
 {
@@ -139,7 +150,7 @@ VOID CLASSCALL InitializeScrollerScrollControl(SCROLLCONTROLPTR self)
 {
     InitializeControl((CONTROLPTR)self);
 
-    ActivateActionArea(0, 0, 1, 1, 0x5fe /* TODO */, self->Action, SCROLL_CONTROL_ACTION_PRIORITY_2);
+    ActivateActionArea(0, 0, 1, 1, CONTROLCOMMANDACTION_SCROLL_UNKNONW1, self->Action, SCROLL_CONTROL_ACTION_PRIORITY_2);
 
     ScrollScrollControl(self);
 
@@ -149,7 +160,7 @@ VOID CLASSCALL InitializeScrollerScrollControl(SCROLLCONTROLPTR self)
     image->Y = 0;
 
     ActivateActionArea(self->X, self->Y, image->Width, self->Height - self->Y + 1,
-        0x5ff /* TODO */, self->Action + 1, SCROLL_CONTROL_ACTION_PRIORITY_1);
+        CONTROLCOMMANDACTION_SCROLL_UNKNONW2, self->Action + 1, SCROLL_CONTROL_ACTION_PRIORITY_1);
 }
 
 // 0x100062d0
@@ -255,7 +266,7 @@ BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self)
     {
         if (command->Command == self->Action + 1)
         {
-            if (command->Action & CONTROLCOMMANDACTION_8)
+            if (command->Action & CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN)
             {
                 self->Current = current;
 
@@ -267,7 +278,7 @@ BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self)
 
         if (command->Command == self->Action)
         {
-            if (command->Action & CONTROLCOMMANDACTION_8) { self->IsAction = TRUE; }
+            if (command->Action & CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN) { self->IsAction = TRUE; }
 
             DequeueControlCommand(TRUE);
         }

@@ -26,7 +26,7 @@ SOFTWARE.
 
 #include <DirectInput.hxx>
 
-#define INPUT_ACTION_HANDLER_PRIORITY   0x8000
+#define INPUT_ACTION_HANDLER_PRIORITY   0x8000 /* TODO */
 
 #define MAX_INPUT_STATE_COUNT           256
 

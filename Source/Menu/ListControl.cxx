@@ -85,7 +85,8 @@ VOID CLASSCALL InitializeListControl(LISTCONTROLPTR self)
     self->Scroll->Self->Initialize(self->Scroll);
 
     ActivateActionArea(self->X, self->Y, self->Width, self->Height,
-        0x88 /* TODO */, self->Action, LIST_CONTROL_ACTION_PRIORITY); // TODO
+        CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN,
+        self->Action, LIST_CONTROL_ACTION_PRIORITY);
 
     InitializeControl((CONTROLPTR)self);
 
@@ -150,7 +151,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
     {
         if (command->Command != self->Action) { return CONTROLACTION_NONE; }
 
-        if (command->Action & CONTROLCOMMANDACTION_8)
+        if (command->Action & CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN)
         {
             CONST U32 item = command->Parameter2 / AcquireFontAssetHeight(self->Font) + self->Scroll->Current;
 

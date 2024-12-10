@@ -21,6 +21,7 @@ SOFTWARE.
 */
 
 #include "ActionArea.hxx"
+#include "Control.hxx"
 #include "ControlCommand.hxx"
 
 #include <stdlib.h>
@@ -59,7 +60,7 @@ VOID ActivateActionArea(CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 hei
 {
     U32 id = action;
 
-    if (id == 0)
+    if (id == CONTROLACTION_NONE)
     {
         id = MIN_ACTION_VALUE;
 

@@ -179,7 +179,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
         case WM_LBUTTONDOWN:
         {
-            CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_DOWN);
+            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN);
 
             if (WindowState.IsActive)
             {
@@ -187,15 +187,15 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
                 if (ticks - WindowState.Ticks < click)
                 {
-                    CONST BOOL xs = (CursorState.X - WindowState.Cursor.Left.X) >> 0x1F;
+                    CONST BOOL xs = (CursorState.X - WindowState.Cursor.Left.X) >> 0x1F; // TODO
 
-                    if (((CursorState.X - WindowState.Cursor.Left.X ^ xs) - xs) < 4)
+                    if (((CursorState.X - WindowState.Cursor.Left.X ^ xs) - xs) < 4) // TODO
                     {
-                        CONST BOOL ys = (CursorState.Y - WindowState.Cursor.Left.Y) >> 0x1F;
+                        CONST BOOL ys = (CursorState.Y - WindowState.Cursor.Left.Y) >> 0x1F; // TODO
 
-                        if (((CursorState.Y - WindowState.Cursor.Left.Y ^ ys) - ys) < 4)
+                        if (((CursorState.Y - WindowState.Cursor.Left.Y ^ ys) - ys) < 4) // TODO
                         {
-                            CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_DOUBLE_CLICK);
+                            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK);
                         }
                     }
                 }
@@ -215,7 +215,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
         case WM_LBUTTONUP:
         {
-            CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_UP);
+            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_LEFT_UP);
 
             CursorState.IsLeft = wp & MK_LBUTTON;
             CursorState.IsRight = wp & MK_RBUTTON;
@@ -224,7 +224,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
         case WM_LBUTTONDBLCLK:
         {
-            CursorMessageHandler(CURSORMESSAGE_LEFT_BUTTON_DOUBLE_CLICK);
+            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK);
 
             CursorState.IsLeft = wp & MK_LBUTTON;
             CursorState.IsRight = wp & MK_RBUTTON;
@@ -233,7 +233,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
         case WM_RBUTTONDOWN:
         {
-            CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_DOWN);
+            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_DOWN);
 
             if (WindowState.IsActive)
             {
@@ -241,15 +241,15 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
                 if (ticks - WindowState.Ticks < click)
                 {
-                    CONST BOOL xs = (CursorState.X - WindowState.Cursor.Right.X) >> 0x1F;
+                    CONST BOOL xs = (CursorState.X - WindowState.Cursor.Right.X) >> 0x1F; // TODO
 
-                    if (((CursorState.X - WindowState.Cursor.Right.X ^ xs) - xs) < 4)
+                    if (((CursorState.X - WindowState.Cursor.Right.X ^ xs) - xs) < 4) // TODO
                     {
-                        CONST BOOL ys = (CursorState.Y - WindowState.Cursor.Right.Y) >> 0x1F;
+                        CONST BOOL ys = (CursorState.Y - WindowState.Cursor.Right.Y) >> 0x1F; // TODO
 
-                        if (((CursorState.Y - WindowState.Cursor.Right.Y ^ ys) - ys) < 4)
+                        if (((CursorState.Y - WindowState.Cursor.Right.Y ^ ys) - ys) < 4) // TODO
                         {
-                            CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_DOUBLE_CLICK);
+                            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK);
                         }
                     }
                 }
@@ -269,7 +269,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
         case WM_RBUTTONUP:
         {
-            CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_UP);
+            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_UP);
 
             CursorState.IsLeft = wp & MK_LBUTTON;
             CursorState.IsRight = wp & MK_RBUTTON;
@@ -278,7 +278,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
         case WM_RBUTTONDBLCLK:
         {
-            CursorMessageHandler(CURSORMESSAGE_RIGHT_BUTTON_DOUBLE_CLICK);
+            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK);
 
             CursorState.IsLeft = wp & MK_LBUTTON;
             CursorState.IsRight = wp & MK_RBUTTON;
@@ -315,27 +315,25 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
             if (!IsAnsiCharacter(wp))
             {
-                if (WindowState.Key == 0)
+                if (WindowState.Key == 0) // TODO
                 {
                     EnqueueControlCommand(CONTROLCOMMAND_UTF,
-                        AcquireUnicodeCharacter(wp & 0xFF), CursorState.X, CursorState.Y);
+                        AcquireUnicodeCharacter(wp & 0xFF), CursorState.X, CursorState.Y); // TODO
 
-                    WindowState.Key = 0;
+                    WindowState.Key = 0; // TODO
                 }
             }
-            else if (WindowState.Key == 0) { WindowState.Key = wp & 0xFF; }
+            else if (WindowState.Key == 0) { WindowState.Key = wp & 0xFF; } // TODO
             else
             {
                 EnqueueControlCommand(CONTROLCOMMAND_UTF,
-                    AcquireUnicodeCharacter((wp & 0xFF) << 8 | WindowState.Key), CursorState.X, CursorState.Y);
-                
-                WindowState.Key = 0;
+                    AcquireUnicodeCharacter((wp & 0xFF) << 8 | WindowState.Key), CursorState.X, CursorState.Y); // TODO
+
+                WindowState.Key = 0; // TODO
             }
 
             break;
         }
-
-        break;
         }
     }
 
@@ -360,5 +358,5 @@ U32 AcquireUnicodeCharacter(CONST U32 value)
 
     if (result != 2) { string[0] = '?'; string[1] = NULL; }
 
-    return (U32)(((U32)string[0]) << 16 | string[1]);
+    return (U32)(((U32)string[0]) << 16 | (U32)string[1]);
 }

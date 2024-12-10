@@ -26,18 +26,6 @@ SOFTWARE.
 
 #include <Renderer.Basic.hxx>
 
-typedef enum CursorMessage
-{
-    CURSORMESSAGE_NONE                      = 0x0,
-    CURSORMESSAGE_LEFT_BUTTON_DOWN          = 0x8,
-    CURSORMESSAGE_LEFT_BUTTON_UP            = 0x10,
-    CURSORMESSAGE_RIGHT_BUTTON_DOWN         = 0x20,
-    CURSORMESSAGE_RIGHT_BUTTON_UP           = 0x40,
-    CURSORMESSAGE_LEFT_BUTTON_DOUBLE_CLICK  = 0x80,
-    CURSORMESSAGE_RIGHT_BUTTON_DOUBLE_CLICK = 0x100,
-    CURSORMESSAGE_FORCE_DWORD               = 0x7FFFFFFF
-} CURSORMESSAGE, * CURSORMESSAGEPTR;
-
 typedef struct Cursor
 {
     ANIMATIONSPRITEHEADERPTR    Animation;
@@ -67,7 +55,7 @@ VOID CLASSCALL DisposeCursor(CURSORPTR self);
 VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name);
 
 VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32 ny);
-VOID CursorMessageHandler(CONST CURSORMESSAGE message);
+VOID CursorMessageHandler(CONST U32 action);
 
 VOID CLASSCALL CursorUnknown1(CURSORPTR self); // TODO name
 VOID CLASSCALL CursorUnknown2(CURSORPTR self); // TODO name

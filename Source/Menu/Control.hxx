@@ -103,7 +103,7 @@ CONTROLTYPE CLASSCALL AcquireControlTypeMultiSelect(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypeMultiStart(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypePanel(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypeScroll(LPVOID);
-CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID);
+CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID); // TODO
 
 /* TODO Better Name */
 #define CONTROLACTION_UNKNOWN                               (-1) /* TODO  Back? */

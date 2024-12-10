@@ -30,7 +30,10 @@ SOFTWARE.
 #include "State.hxx"
 #include "VideoControl.hxx"
 
-#define BUTTON_CONTROL_ACTION_PRIORITY  0x8000
+#define BUTTON_CONTROL_ACTION_PRIORITY  0x8000 /* TODO*/
+
+#define CONTROLCOMMANDACTION_BUTTON_ACTION  (CONTROLCOMMANDACTION_MOUSE_LEFT_UP | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN | CONTROLCOMMANDACTION_MOUSE_LEAVE | CONTROLCOMMANDACTION_MOUSE_ENTER)
+#define CONTROLCOMMANDACTION_BUTTON_CLICK   (CONTROLCOMMANDACTION_MOUSE_LEFT_UP | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN | CONTROLCOMMANDACTION_MOUSE_ENTER)
 
 // 0x1003a278
 BUTTONCONTROLSELF ButtonControlSelfState =
@@ -44,7 +47,7 @@ BUTTONCONTROLSELF ButtonControlSelfState =
 };
 
 // 0x10001b20
-BUTTONCONTROLPTR CLASSCALL ActivateButtonControl(BUTTONCONTROLPTR self, BINASSETPTR asset, CONST U32 index, CONST U32 action)
+BUTTONCONTROLPTR CLASSCALL ActivateButtonControl(BUTTONCONTROLPTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action)
 {
     self->Self = &ButtonControlSelfState;
 
@@ -56,7 +59,7 @@ BUTTONCONTROLPTR CLASSCALL ActivateButtonControl(BUTTONCONTROLPTR self, BINASSET
     self->Unclick = NULL;
 
     self->Asset = asset;
-    self->Index = index;
+    self->Index = indx;
     self->Action = action;
 
     self->X = 5;
@@ -79,7 +82,7 @@ VOID CLASSCALL InitializeButtonControl(BUTTONCONTROLPTR self)
     ActivateActionArea(self->X * image->Width / 100 + image->X,
         self->Y * image->Height / 100 + image->Y,
         ((50 - self->X) * image->Width * 2) / 100, ((50 - self->Y) * image->Height * 2) / 100,
-        0x1e /* TODO */, self->Action, BUTTON_CONTROL_ACTION_PRIORITY); // TODO
+        CONTROLCOMMANDACTION_BUTTON_ACTION, self->Action, BUTTON_CONTROL_ACTION_PRIORITY);
 
     self->Unk12 = 0; // TODO
     self->Shortcut = AcquireShortcut(&ShortcutsState.State, self->Action);
@@ -115,18 +118,19 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
     if (!self->Unk11) { return CONTROLACTION_NONE; }
 
     CONST U8 action = self->IsAction;
-    
+
     U32 result = CONTROLACTION_NONE;
-    
+
     CONTROLCOMMAND command;
     if (DequeueControlCommand(&command, FALSE))
     {
         if (command.Command == self->Action)
         {
-            if (command.Action & (CONTROLCOMMANDACTION_10 | CONTROLCOMMANDACTION_8 | CONTROLCOMMANDACTION_2)) { self->IsAction = CursorState.IsLeft; }
-            if (command.Action & CONTROLCOMMANDACTION_4) { self->IsAction = FALSE; }
+            if (command.Action & CONTROLCOMMANDACTION_BUTTON_CLICK) { self->IsAction = CursorState.IsLeft; }
+            else if (command.Action & CONTROLCOMMANDACTION_MOUSE_LEAVE) { self->IsAction = FALSE; }
 
-            result = (!action || !(command.Action & CONTROLCOMMANDACTION_10)) ? CONTROLACTION_NONE : CONTROLACTION_1; // TODO
+            result = (!action || !(command.Action & CONTROLCOMMANDACTION_MOUSE_LEFT_UP))
+                ? CONTROLACTION_NONE : CONTROLACTION_1;
 
             DequeueControlCommand(TRUE);
         }

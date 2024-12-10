@@ -73,10 +73,10 @@ U32 CLASSCALL ActionObjectType2x38(CONTROLTYPE2X38PTR self)
     {
         if (command.Command == self->Action)
         {
-            if (command.Action & CONTROLCOMMANDACTION_8) { cVar3 = 1; } // TODO
+            if (command.Action & CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN) { cVar3 = 1; } // TODO
 
-            if ((command.Action & CONTROLCOMMANDACTION_10)
-                || ((command.Action & CONTROLCOMMANDACTION_4) && CursorState.IsLeft))
+            if ((command.Action & CONTROLCOMMANDACTION_MOUSE_LEFT_UP)
+                || ((command.Action & CONTROLCOMMANDACTION_MOUSE_LEAVE) && CursorState.IsLeft))
             {
                 cVar3 = 2;// TODO
             }

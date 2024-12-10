@@ -100,7 +100,7 @@ VOID CLASSCALL InitializeInputControl(INPUTCONTROLPTR self)
     }
 
     ActivateActionArea(self->X, self->Y, self->Width, self->Height,
-        0x10 /* TODO */, self->Action, INPUT_CONTROL_ACTION_PRIORITY);
+        CONTROLCOMMANDACTION_MOUSE_LEFT_UP, self->Action, INPUT_CONTROL_ACTION_PRIORITY);
 }
 
 // 0x100041d0
@@ -178,7 +178,7 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
     {
         if (command->Command == self->Action)
         {
-            if ((command->Action & CONTROLCOMMANDACTION_10) && !self->IsFocus) { SelectInputControlFocus(self); }
+            if ((command->Action & CONTROLCOMMANDACTION_MOUSE_LEFT_UP) && !self->IsFocus) { SelectInputControlFocus(self); }
         }
         else
         {
