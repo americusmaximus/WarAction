@@ -30,8 +30,6 @@ SOFTWARE.
 #include "State.hxx"
 #include "VideoControl.hxx"
 
-#define BUTTON_CONTROL_ACTION_PRIORITY  0x8000 /* TODO*/
-
 #define CONTROLCOMMANDACTION_BUTTON_ACTION  (CONTROLCOMMANDACTION_MOUSE_LEFT_UP | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN | CONTROLCOMMANDACTION_MOUSE_LEAVE | CONTROLCOMMANDACTION_MOUSE_ENTER)
 #define CONTROLCOMMANDACTION_BUTTON_CLICK   (CONTROLCOMMANDACTION_MOUSE_LEFT_UP | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN | CONTROLCOMMANDACTION_MOUSE_ENTER)
 
@@ -82,7 +80,7 @@ VOID CLASSCALL InitializeButtonControl(BUTTONCONTROLPTR self)
     ActivateActionArea(self->X * image->Width / 100 + image->X,
         self->Y * image->Height / 100 + image->Y,
         ((50 - self->X) * image->Width * 2) / 100, ((50 - self->Y) * image->Height * 2) / 100,
-        CONTROLCOMMANDACTION_BUTTON_ACTION, self->Action, BUTTON_CONTROL_ACTION_PRIORITY);
+        CONTROLCOMMANDACTION_BUTTON_ACTION, self->Action, DEFAULT_ACTION_PRIORITY);
 
     self->Unk12 = 0; // TODO
     self->Shortcut = AcquireShortcut(&ShortcutsState.State, self->Action);

@@ -77,7 +77,7 @@ VOID ActivateActionArea(CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 hei
     area->Width = width;
     area->Height = height;
 
-    area->Options = options | 0x8000; // TODO
+    area->Options = options | CONTROLCOMMANDACTION_RELEASE;
     area->Priority = priority;
 
     area->Next = NULL;
@@ -163,19 +163,19 @@ VOID CLASSCALL ReleaseActionArea(ACTIONAREAPTR self)
 }
 
 // 0x10022580
-BOOL FUN_10022580(CONST U32 param_1, CONST U32 param_2) // TODO
+BOOL ReplaceActionAreaAction(CONST U32 current, CONST U32 action)
 {
-    ACTIONAREAPTR area = AcquireActionArea(param_1);
+    ACTIONAREAPTR area = AcquireActionArea(current);
 
     if (area == NULL) { return FALSE; }
 
-    FUN_10022450(area, param_2);
+    SelectActionAreaAction(area, action);
 
     return TRUE;
 }
 
 // 0x10022450
-VOID CLASSCALL FUN_10022450(ACTIONAREAPTR self, CONST U32 param_2) // TODO name
+VOID CLASSCALL SelectActionAreaAction(ACTIONAREAPTR self, CONST U32 action)
 {
-    self->Options = self->Options & 0xfffffe00 | param_2; // TODO
+    self->Options = (self->Options & ~CONTROLCOMMANDACTION_MOUSE_ALL_ACTIONS) | action;
 }

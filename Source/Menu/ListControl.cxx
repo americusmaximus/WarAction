@@ -30,7 +30,6 @@ SOFTWARE.
 #include <stdlib.h>
 
 #define MAX_LIST_CONTROL_ITEM_LENGTH    100
-#define LIST_CONTROL_ACTION_PRIORITY    0x8000
 
 // 0x1003a3c0
 LISTCONTROLSELF ListControlSelfState =
@@ -86,7 +85,7 @@ VOID CLASSCALL InitializeListControl(LISTCONTROLPTR self)
 
     ActivateActionArea(self->X, self->Y, self->Width, self->Height,
         CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN,
-        self->Action, LIST_CONTROL_ACTION_PRIORITY);
+        self->Action, DEFAULT_ACTION_PRIORITY);
 
     InitializeControl((CONTROLPTR)self);
 

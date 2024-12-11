@@ -36,7 +36,7 @@ BOOL DequeueControlCommand(CONST U32 command)
     {
         DequeueActionArea(area);
 
-        if (((area->Options >> 8) & 0xFF) == 0x80) // TODO
+        if (area->Options & CONTROLCOMMANDACTION_RELEASE)
         {
             ReleaseActionArea(area);
 

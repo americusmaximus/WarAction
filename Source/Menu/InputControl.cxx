@@ -33,8 +33,6 @@ SOFTWARE.
 #include <stdio.h>
 #include <stdlib.h>
 
-#define INPUT_CONTROL_ACTION_PRIORITY   0x8000
-
 // 0x1003a348
 INPUTCONTROLSELF InputControlSelfState =
 {
@@ -100,7 +98,7 @@ VOID CLASSCALL InitializeInputControl(INPUTCONTROLPTR self)
     }
 
     ActivateActionArea(self->X, self->Y, self->Width, self->Height,
-        CONTROLCOMMANDACTION_MOUSE_LEFT_UP, self->Action, INPUT_CONTROL_ACTION_PRIORITY);
+        CONTROLCOMMANDACTION_MOUSE_LEFT_UP, self->Action, DEFAULT_ACTION_PRIORITY);
 }
 
 // 0x100041d0

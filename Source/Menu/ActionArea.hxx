@@ -24,6 +24,8 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
+#define DEFAULT_ACTION_PRIORITY 0x8000
+
 struct ActionArea;
 typedef struct ActionArea ACTIONAREA, * ACTIONAREAPTR;
 
@@ -53,5 +55,5 @@ ACTIONAREAPTR AcquireActionArea(CONST U32 action);
 VOID ActivateActionArea(CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, CONST U32 options, CONST U32 action, CONST U32 priority);
 VOID DequeueActionArea(ACTIONAREAPTR self);
 VOID EnqueueActionArea(ACTIONAREAPTR area);
-VOID CLASSCALL FUN_10022450(ACTIONAREAPTR self, CONST U32 param_2); // TODO name
-BOOL FUN_10022580(CONST U32 param_1, CONST U32 param_2); // TODO
+VOID CLASSCALL SelectActionAreaAction(ACTIONAREAPTR self, CONST U32 action);
+BOOL ReplaceActionAreaAction(CONST U32 current, CONST U32 action);

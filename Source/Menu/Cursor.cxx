@@ -95,14 +95,14 @@ VOID CursorMessageHandler(CONST U32 action)
 {
     for (ACTIONAREAPTR area = ActionAreaState.Items; area != NULL; area = area->Next)
     {
-        if (!(area->Options & 0x200 /* TODO */)
+        if (!(area->Options & CONTROLCOMMANDACTION_IGNORE)
             && area->X <= CursorState.X && area->Y <= CursorState.Y
             && CursorState.X < area->Width + area->X && CursorState.Y < area->Height + area->Y
             && (action & area->Options))
         {
             EnqueueControlCommand(area->Action, action, CursorState.X - area->X, CursorState.Y - area->Y);
 
-            if (area->Options & CONTROLCOMMANDACTION_UNKNOWN_400) { return; }
+            if (area->Options & CONTROLCOMMANDACTION_SCROLL) { return; }
         }
     }
 }
@@ -206,7 +206,7 @@ VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32
 {
     for (ACTIONAREAPTR area = ActionAreaState.Items; area != NULL; area = area->Next)
     {
-        if (!(area->Options & CONTROLCOMMANDACTION_UNKNOWN_200)
+        if (!(area->Options & CONTROLCOMMANDACTION_IGNORE)
             && (nx < area->X || ny < area->Y || area->Width + area->X <= nx || area->Height + area->Y <= ny)
             && area->X <= ox && area->Y <= oy && ox < area->Width + area->X && oy < area->Height + area->Y
             && (area->Options & CONTROLCOMMANDACTION_MOUSE_LEAVE))
@@ -215,10 +215,10 @@ VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32
         }
     }
 
-    BOOL todo = TRUE; // TODO
+    BOOL accept = TRUE;
     for (ACTIONAREAPTR area = ActionAreaState.Items; area != NULL; area = area->Next)
     {
-        if (!(area->Options & CONTROLCOMMANDACTION_UNKNOWN_200)
+        if (!(area->Options & CONTROLCOMMANDACTION_IGNORE)
             && area->X <= nx && area->Y <= ny && nx < area->Width + area->X && ny < area->Height + area->Y)
         {
             if ((area->Options & CONTROLCOMMANDACTION_MOUSE_ENTER)
@@ -227,11 +227,11 @@ VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32
                 EnqueueControlCommand(area->Action, CONTROLCOMMANDACTION_MOUSE_ENTER, nx - area->X, ny - area->Y);
             }
 
-            if (todo && (area->Options & CONTROLCOMMANDACTION_MOUSE_SCROLL))
+            if (accept && (area->Options & CONTROLCOMMANDACTION_MOUSE_HOVER))
             {
-                EnqueueControlCommand(area->Action, CONTROLCOMMANDACTION_MOUSE_SCROLL, nx - area->X, ny - area->Y);
+                EnqueueControlCommand(area->Action, CONTROLCOMMANDACTION_MOUSE_HOVER, nx - area->X, ny - area->Y);
 
-                if (area->Options & CONTROLCOMMANDACTION_UNKNOWN_400) { todo = FALSE; }
+                if (area->Options & CONTROLCOMMANDACTION_SCROLL) { accept = FALSE; }
             }
         }
     }

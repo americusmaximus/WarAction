@@ -31,8 +31,6 @@ SOFTWARE.
 #include "Strings.hxx"
 #include "VideoControl.hxx"
 
-#define STATISTICS_CONTROL_ACTION_PRIORITY              0x8000 /* TODO consolidate priorities */
-
 #define MAX_STATISTICS_CONTROL_FONT_SIZE                14
 #define MAX_STATISTICS_CONTROL_STATISTICS_CLASS_COUNT   2
 #define MAX_STATISTICS_CONTROL_STATISTICS_TYPE_COUNT    5
@@ -74,7 +72,7 @@ VOID CLASSCALL InitializeStatisticsControl(STATISTICSCONTROLPTR self)
         AcquireStatisticsControlActionRectangle(x, &rect);
 
         ActivateActionArea(rect.left, rect.top, rect.right - rect.left + 1, rect.bottom - rect.top + 1,
-            CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN, x + CONTROLACTION_STATISTICS_BASE, STATISTICS_CONTROL_ACTION_PRIORITY);
+            CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN, x + CONTROLACTION_STATISTICS_BASE, DEFAULT_ACTION_PRIORITY);
     }
 
     ZeroMemory(StatisticsState.Areas, MAX_STATISTICS_PLAYERS_COUNT * sizeof(STATISTICSAREA));

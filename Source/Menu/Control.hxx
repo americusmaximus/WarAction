@@ -142,7 +142,7 @@ CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID); // TODO
 #define CONTROLACTION_SINGLE5_EXIT                          1028
 #define CONTROLACTION_SINGLE5_VICTORY                       1029
 #define CONTROLACTION_SCROLL                                1030
-#define CONTROLACTION_1031                                  1031 /* TODO */
+#define CONTROLACTION_SCROLL_CHANGE                         1031
 #define CONTROLACTION_SCROLL_UP                             1032
 #define CONTROLACTION_SCROLL_DOWN                           1033
 #define CONTROLACTION_LIST_SELECT                           1034
