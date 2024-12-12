@@ -156,7 +156,7 @@ BOOL CLASSCALL AudioPlayerWorker(AUDIOPLAYERPTR self)
             case AUDIOCOMMAND_PLAY_TRACK:
             {
                 self->IsSuccess = SendAudioPlayerMessage(self, "play cdx from %u to %u",
-                    self->Tracks + AUDIO_TRACK_OFFSET, self->Tracks + AUDIO_TRACK_OFFSET + 1); break;
+                    self->Tracks + AUDIO_TRACK_OFFSET, self->Tracks + (AUDIO_TRACK_OFFSET + 1)); break;
             }
             case AUDIOCOMMAND_STOP: { self->IsSuccess = SendAudioPlayerMessage(self, "stop cdx"); break; }
             case AUDIOCOMMAND_PAUSE:
