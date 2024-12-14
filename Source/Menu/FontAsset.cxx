@@ -310,7 +310,7 @@ U32 AcquireFontAssetItemWidth(CONST U32 x, CONST U32 width, CONST U32 alignment)
 // 0x10003e40
 VOID CLASSCALL DrawFontAssetText(FONTASSETPTR self, CONST U32 x, CONST U32 y, LPCSTR text)
 {
-    DrawFontAssetText(self, x, y, text, COMPLEXFONTALIGNMENT_CENTER);
+    DrawFontAssetText(self, x, y, text, COMPLEXFONTALIGNMENT_LEFT);
 }
 
 // 0x100039f0

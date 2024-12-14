@@ -35,11 +35,32 @@ SOFTWARE.
 
 #define DEFAULT_DURATION        2000
 
+#define MAX_GREETINGS_COUNT     29
+
+typedef struct Greetings
+{
+    U32     Item1;
+    U32     Item2;
+} GREETINGS, * GREETINGSPTR;
+
 // 0x1000dcf0
 STATIC F64 sqr(CONST F64 value) { return value * value; }
 
 // 0x1000dd00
 STATIC F64 sqr5(CONST F64 value) { return sqr(sqr(sqr(sqr(sqr(value))))); }
+
+// 0x1003f8d0
+STATIC GREETINGS Greetings[MAX_GREETINGS_COUNT] =
+{
+    { 0xB, 0x0 },       { 0x124, 0x0 },     { 0x3E23, 0x40 },   { 0x7B18, 0x80 },
+    { 0x9984, 0xA0 },   { 0xB370, 0xBB },   { 0xF377, 0xFE },   { 0x12CD3, 0x13A },
+    { 0x1ACFB, 0x1C0 }, { 0x1BC6E, 0x1D0 }, { 0x1DA9F, 0x1F0 }, { 0x1F925, 0x210 },
+    { 0x23602, 0x250 }, { 0x2BD81, 0x2E0 }, { 0x30A15, 0x330 }, { 0x31988, 0x340 },
+    { 0x32505, 0x34C }, { 0x33C2A, 0x364 }, { 0x3759A, 0x3A0 }, { 0x3EFED, 0x420 },
+    { 0x41D52, 0x450 }, { 0x43006, 0x463 }, { 0x469D7, 0x4A2 }, { 0x4A36A, 0x4E0 },
+    { 0x4E036, 0x522 }, { 0x5196A, 0x560 }, { 0x553A6, 0x5A0 }, { 0x570C4, 0x5C0 },
+    { 0x0, 0x0 }
+};
 
 // 0x1003a4fc
 GREETINGSCONTROLSELF GreetingsControlSelfState =
@@ -106,7 +127,7 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         (IMAGESPRITEPTR)AcquireBinAssetContent(&AssetsState.Assets.GreetingsBK, 0));
 
     CHAR greeting[MAX_GREETING_LENGTH];
-    CONST U32 height = AcquireFontAssetHeight(&AssetsState.Fonts.Comic);
+    CONST S32 height = AcquireFontAssetHeight(&AssetsState.Fonts.Comic);
 
     switch (self->Type)
     {
@@ -125,107 +146,129 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         }
         else { ticks = AudioPlayerState.Ticks + GetTickCount(); }
 
-        // TODO not implemented
+        U32 indx = 0;
+        for (U32 result = Greetings[1].Item1; result < ticks; result = Greetings[indx + 2].Item1, indx++) { }
 
-        AcquireTextAssetString(&self->Text, self->Item, greeting);
-
-        // TODO not implemented
-        STATIC U32 iStack_11c = 3500; // TODO Fake
-        //if (iStack_11c == 0) { iStack_11c = 3500; }// TODO Fake
-        iStack_11c = iStack_11c + 10; // TODO Fake
-        // TODO ^^
-
-        if (memcmp(greeting, "#starwarz", 10) == 0)
+        if (indx != 0 && Greetings[indx + 1].Item1 != 0)
         {
-            self->Type = GREETINGSTYPE_STARWARZ;
+            // TODO: Very rough wiggle of the text, not smooth like in the original.
 
-            self->Ticks = GetTickCount();
-            self->Item = self->Item + 1;
 
-            return;
-        }
+            // Display/wait durations.
 
-        U32 duration = DEFAULT_DURATION;
-        LPSTR item = greeting;
+            CONST F64 value1 = (ticks - Greetings[indx].Item1) * (Greetings[indx + 1].Item2 - Greetings[indx].Item2);
+            CONST f64 value2 = Greetings[indx + 1].Item1 - Greetings[indx].Item1;
 
-        // !Hello~\FF0000World!
+            CONST F64 value3 = (value1 / value2 + (F64)Greetings[indx].Item2) * 250.0;
+            CONST F64 value4 = cos(0.012566370614 * value3);
 
-        while (item[0] == '!') { duration = duration * 2; item = item + 1; }
+            CONST F64 value5 = sqr5(value4);
+            CONST F64 value6 = value5 * 255.0;
 
-        while (item[0] == '?') { duration = duration / 2; item = item + 1; }
+            CONST S32 todo1 = (S32)value6; // TODO seconds
 
-        CONST U32 left = iStack_11c - self->Ticks; // TODO name
+            CONST F64 value7 = cos(value5 * 255.0 * M_PI / 1000.0);
+            CONST F64 value8 = sqr5(value7);
+            CONST F64 value9 = value8 * 255.0;
 
-        if (duration <= left)
-        {
-            self->Ticks = self->Ticks + duration;
-            self->Item = self->Item + 1;
+            CONST S32 todo2 = (S32)value9; // TODO frames
 
-            return;
-        }
+            AcquireTextAssetString(&self->Text, self->Item, greeting);
 
-        // TODO
-        /*
-        fVar17 = sin((left / duration) * M_PI);
-        minutes = seconds / 1900 + frames / 32;
-        uStack_10c = sqrt(sqrt(fVar17));
-        
-        fVar17 = cos(((left % 1000) * 2) * 0.001 * 2 * M_PI);
-        lVar18 = __ftol(fVar17 * minutes);
-        iStack_100 = (int)lVar18;
-        fVar17 = (float10)sin(extraout_ST1);
-
-        lVar18 = __ftol(fVar17 * extraout_ST0_00);
-        iStack_110 = (int)lVar18;*/
-
-        U32 lines = 1;
-
-        for (LPSTR tilde = strchr(item, '~'); tilde != NULL; tilde = strchr(tilde + 1, '~')) { lines = lines + 1; }
-
-        for (U32 x = 0; x < lines; x++) // TODO  incorrect text positions
-        {
-            LPSTR tilde = strchr(item, '~');
-            if (tilde != NULL) { tilde[0] = NULL; }
-
-            U32 r = 0xFF, g = 0xFF, b = 0xFF;
-
-            if (item[0] == '\\')
+            if (memcmp(greeting, "#starwarz", 10) == 0)
             {
-                // Example: FFFF00
+                self->Type = GREETINGSTYPE_STARWARZ;
 
-                U32 color = 0;
+                self->Ticks = GetTickCount();
+                self->Item = self->Item + 1;
 
-                for (U32 xx = 0; xx < MAX_COLOR_VALUE_LENGTH; xx++)
-                {
-                    BYTE value = 0;
-                    CONST CHAR i = item[xx + 1];
-
-                    if (i < '0' || '9' < i) { value = i - 55; } else { value = i - 48; }
-
-                    color = color * 16 + value;
-                }
-
-                r = (color >> 16) & 0xFF;
-                g = (color >> 8) & 0xFF;
-                b = (color >> 0) & 0xFF;
-
-                item = item + (MAX_COLOR_VALUE_LENGTH + 1);
+                return;
             }
 
-            U32 uStack_10c = 1; // TODO PROPER CALCULATION ABOVE
+            S32 duration = DEFAULT_DURATION;
+            LPSTR item = greeting;
 
-            SelectFontAssetColor(&AssetsState.Fonts.Comic, r * uStack_10c, g * uStack_10c, b * uStack_10c);
+            // Example: !Hello~\FF0000World!
 
-            CONST BOOL even = ((self->Item + x) % 2);
+            while (item[0] == '!') { duration = duration * 2; item = item + 1; }
 
-            U32 iStack_100 = 1; // TODO PROPER CALCULATION ABOVE
-            U32 iStack_110 = 1; // TODO PROPER CALCULATION ABOVE
+            while (item[0] == '?') { duration = duration / 2; item = item + 1; }
 
-            DrawFontAssetText(&AssetsState.Fonts.Comic,
-                (GRAPHICS_RESOLUTION_640 / 2) + (even ? 1 : -1) + iStack_100,
-                ((GRAPHICS_RESOLUTION_480 / 2) - height * (lines - x)) + (even ? -1 : 1) * iStack_110, item);
+            CONST S32 left = (S32)value3 - self->Ticks;
 
-            if (tilde != NULL) { item = tilde + 1; }
+            if (duration <= left)
+            {
+                self->Ticks = self->Ticks + duration;
+                self->Item = self->Item + 1;
+
+                return;
+            }
+
+            // Visual effects and position offsets.
+
+            CONST F64 fVar17 = sin(((F64)left / (F64)duration) * M_PI);
+            CONST F64 value11 = todo1 / 512 + todo2 / 32;
+            CONST F64 value13 = cos((F64)((left % 1000) * 2) * 0.001 * 2.0 * M_PI);
+            CONST F64 value14 = value13 * value11;
+            CONST S32 iStack_100 = (S32)value14;
+            
+            CONST F64 value16 = sin(value14);
+            CONST F64 value17 = value14 * value16;
+            CONST S32 iStack_110 = (S32)value17;
+
+            S32 lines = 1;
+
+            for (LPSTR tilde = strchr(item, '~'); tilde != NULL; tilde = strchr(tilde + 1, '~')) { lines = lines + 1; }
+
+            for (S32 xx = 0; xx < lines; xx++)
+            {
+                LPSTR tilde = strchr(item, '~');
+                if (tilde != NULL) { tilde[0] = NULL; }
+
+                U32 r = 0xFF, g = 0xFF, b = 0xFF;
+
+                if (item[0] == '\\')
+                {
+                    // Example: FFFF00
+
+                    U32 color = 0;
+
+                    for (U32 xx = 0; xx < MAX_COLOR_VALUE_LENGTH; xx++)
+                    {
+                        BYTE value = 0;
+                        CONST CHAR i = item[xx + 1];
+
+                        if (i < '0' || '9' < i) { value = i - 55; } else { value = i - 48; }
+
+                        color = color * 16 + value;
+                    }
+
+                    r = (color >> 16) & 0xFF;
+                    g = (color >> 8) & 0xFF;
+                    b = (color >> 0) & 0xFF;
+
+                    item = item + (MAX_COLOR_VALUE_LENGTH + 1);
+                }
+
+                {
+                    CONST F64 modifier = sqrt(sqrt(fVar17));
+
+                    SelectFontAssetColor(&AssetsState.Fonts.Comic,
+                        (U32)(r * modifier), (U32)(g * modifier), (U32)(b * modifier));
+                }
+
+                {
+                    CONST BOOL even = ((self->Item + xx) % 2);
+
+                    CONST S32 x = (even ? 1 : -1) * iStack_100;
+                    CONST S32 y = (height * (lines - 2 * xx)) / 2 - (even ? 1 : -1) * iStack_110;
+
+                    DrawFontAssetText(&AssetsState.Fonts.Comic,
+                        GRAPHICS_RESOLUTION_640 / 2 + x, GRAPHICS_RESOLUTION_480 / 2 - y, item);
+                }
+
+                if (tilde != NULL) { item = tilde + 1; }
+            }
         }
 
         break;
@@ -241,20 +284,20 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         {
             for (U32 x = 0; x < self->Text.Count - self->Item; x++)
             {
-                U32 iVar11 = height * x + ticks; // TODO
-                U32 uVar1 = height / 2 - (GRAPHICS_RESOLUTION_480 / 2) + iVar11;// TODO
+                U32 indx = height * x + ticks; // TODO
+                U32 uVar1 = height / 2 - (GRAPHICS_RESOLUTION_480 / 2) + indx;// TODO
                 U32 uVar9 = (int)uVar1 >> 0x1f; // TODO
 
                 if ((int)((uVar1 ^ uVar9) - uVar9) < 100 - height / 2) // TODO
                 {
-                    U32 uVar13 = (int)(iVar11 - (GRAPHICS_RESOLUTION_480 / 2)) >> 0x1f; // TODO
-                    U32 minutes = (iVar11 - (GRAPHICS_RESOLUTION_480 / 2) ^ uVar13) - uVar13; // TODO
+                    U32 uVar13 = (int)(indx - (GRAPHICS_RESOLUTION_480 / 2)) >> 0x1f; // TODO
+                    U32 minutes = (indx - (GRAPHICS_RESOLUTION_480 / 2) ^ uVar13) - uVar13; // TODO
 
                     CONST U32 color = (U32)(cos((minutes * M_PI * 0.01) + 1.0) * 127.5);
 
                     AcquireTextAssetString(&self->Text, self->Item + x, greeting);
                     SelectFontAssetColor(&AssetsState.Fonts.Comic, color, color, color);
-                    DrawFontAssetText(&AssetsState.Fonts.Comic, 320, iVar11, greeting);
+                    DrawFontAssetText(&AssetsState.Fonts.Comic, 320, indx, greeting);
                 }
             }
         }
