@@ -128,7 +128,7 @@ LPDIRECTSOUNDBUFFER CLASSCALL ActivateSoundStateSoundBuffer(SOUNDPTR self, CONST
 
     if (FAILED(self->Result))
     {
-        self->State = SOUNDRESULT_CREATE_SECONDARY_SOUND_BUFFER_ERROR;
+        self->State = SOUNDRESULT_CREATE_SOUND_BUFFER_ERROR;
 
         return NULL;
     }
@@ -337,41 +337,57 @@ BOOL CLASSCALL InitializeSoundStateSample(SOUNDSTATEPTR self, LPCSTR name)
 {
     if (name == NULL) { return FALSE; }
 
-    CONST U32 hash = AcquireSoundNameHash(name);
-
-    self->Tracks[self->Count].Hash = hash;
+    self->Tracks[self->Count].Hash = AcquireSoundNameHash(name);
     self->Tracks[self->Count].Buffer = NULL;
 
     LogMessage("SOUND : Loading sample %s\n", name);
 
+    SOUNDDESCRIPTORPTR sound = &self->Header->Sounds[0];
+
     for (U32 x = 0; x < self->Header->Count; x++)
     {
-        SOUNDDESCRIPTORPTR sound = &self->Header->Sounds[x];
-
         if (strcmp(sound->Name, name) == 0)
         {
             self->Tracks[self->Count].Hash = AcquireSoundNameHash(name);
 
-            PointBinFile(&self->File, sound->Unk02 * 4 + 4, FILE_BEGIN); // TODO, is this correct?
+            CONST SOUNDDESCRIPTOREXPTR ex = (SOUNDDESCRIPTOREXPTR)sound;
+
+            {
+                // Reading SOUNDS.RUS:
+                // 1. 4 bytes - number of chunks in the file.
+                // 2. Skip to the required sound chunk descriptor.
+
+                CONST U32 offset = sizeof(U32) + ex->Chunks[0] * sizeof(U32);
+                PointBinFile(&self->File, offset, FILE_BEGIN);
+            }
 
             U32 start, end;
-            ReadBinFile(&self->File, &start, sizeof(U32)); // TODO, is this correct?
-            ReadBinFile(&self->File, &end, sizeof(U32)); // TODO, is this correct?
+            ReadBinFile(&self->File, &start, sizeof(U32));
+            ReadBinFile(&self->File, &end, sizeof(U32));
 
-            PointBinFile(&self->File, start, FILE_BEGIN); // TODO, is this correct?
+            PointBinFile(&self->File, start, FILE_BEGIN);
 
+            // Sound chunk details are right in front of the actual sound data.
             U32 samples, bits, channels;
-            ReadBinFile(&self->File, &samples, sizeof(U32)); // TODO, is this correct?
-            ReadBinFile(&self->File, &bits, sizeof(U32)); // TODO, is this correct?
-            ReadBinFile(&self->File, &channels, sizeof(U32)); // TODO, is this correct?
+            ReadBinFile(&self->File, &samples, sizeof(U32));
+            ReadBinFile(&self->File, &bits, sizeof(U32));
+            ReadBinFile(&self->File, &channels, sizeof(U32));
 
-            self->Tracks[self->Count].Buffer = InitializeSoundState(self->State, &self->File,
-                end - start - 0xc /* TODO */, 1, bits, samples, FALSE);
+            {
+                CONST U32 length = end - start - (3 * sizeof(U32));
+
+                // Given the sound chunk details just in fron of the actual data,
+                // its size, 3 4-byte values, must be subtracted from the total chunk length.
+                self->Tracks[self->Count].Buffer = InitializeSoundState(self->State,
+                    &self->File, length, 1, bits, samples, FALSE);
+            }
 
             break;
         }
 
-        // TODO ?
+        // SOUNDS.HDR contains a number of variable-size structures,
+        // therefore, memory offset has to be calculated to accommodate for the size variation.
+        sound = (SOUNDDESCRIPTORPTR)((ADDR)sound + (ADDR)(sound->Count * sizeof(U32) + sizeof(SOUNDDESCRIPTOR)));
     }
 
     if (self->Tracks[self->Count].Buffer == NULL) { LogMessage("SOUND : Cannot load %s\n", name); }

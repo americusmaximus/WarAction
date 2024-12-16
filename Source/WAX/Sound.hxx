@@ -28,19 +28,19 @@ SOFTWARE.
 
 typedef enum SoundResult
 {
-    SOUNDRESULT_NONE                                 = 0,
-    SOUNDRESULT_INITIALIZE_ERROR                     = 1,
-    SOUNDRESULT_SET_COOPERATIVE_LEVEL_ERROR          = 2,
-    SOUNDRESULT_CREATE_MAIN_SOUND_BUFFER_ERROR       = 3,
-    SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR         = 4,
-    SOUNDRESULT_BUFFER_PLAY_ERROR                    = 5,
-    SOUNDRESULT_NO_SOUND_BUFFER_ERROR                = 6,
-    SOUNDRESULT_NO_SOUND_INSTANCE_ERROR              = 7,
-    SOUNDRESULT_INVALID_SETTINGS_ERROR               = 8,
-    SOUNDRESULT_CREATE_SECONDARY_SOUND_BUFFER_ERROR  = 9,
-    SOUNDRESULT_LOCK_SOUND_BUFFER_ERROR              = 10,
-    SOUNDRESULT_NO_TRACKS_AVAILABLE                  = 11,
-    SOUNDRESULT_FORCE_DWORD                          = 0x7FFFFFFF
+    SOUNDRESULT_NONE                                = 0,
+    SOUNDRESULT_INITIALIZE_ERROR                    = 1,
+    SOUNDRESULT_SET_COOPERATIVE_LEVEL_ERROR         = 2,
+    SOUNDRESULT_CREATE_MAIN_SOUND_BUFFER_ERROR      = 3,
+    SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR        = 4,
+    SOUNDRESULT_BUFFER_PLAY_ERROR                   = 5,
+    SOUNDRESULT_NO_SOUND_BUFFER_ERROR               = 6,
+    SOUNDRESULT_NO_SOUND_INSTANCE_ERROR             = 7,
+    SOUNDRESULT_INVALID_SETTINGS_ERROR              = 8,
+    SOUNDRESULT_CREATE_SOUND_BUFFER_ERROR           = 9,
+    SOUNDRESULT_LOCK_SOUND_BUFFER_ERROR             = 10,
+    SOUNDRESULT_NO_TRACKS_AVAILABLE                 = 11,
+    SOUNDRESULT_FORCE_DWORD                         = 0x7FFFFFFF
 } SOUNDRESULT, * SOUNDRESULTPTR;
 
 typedef struct SoundBuffer
@@ -59,15 +59,35 @@ typedef struct SoundTrack
     U32                     Ticks;
 } SOUNDTRACK, * SOUNDTRACKPTR;
 
+/*
+SoundDescriptor and SoundDescriptorEx Format:
+    The structures are variable-sized structures.
+    
+    Offset 0x00 - Name.
+    Offset 0x40 - Count. Number of sound chunks in the sound.
+    Offset 0x44 - Chunks. An index to a chunk header in the sound file.
+*/
+
 typedef struct SoundDescriptor
 {
     CHAR    Name[MAX_SOUND_NAME_LENGTH];
-    U32     Unk01; // TODO
-    U32     Unk02; // TODO
-    U32     Unk03; // TODO
-    U32     Unk04; // TODO
-    //U32     Unk05; // TODO
+    U32     Count;
 } SOUNDDESCRIPTOR, * SOUNDDESCRIPTORPTR;
+
+typedef struct SoundDescriptorEx
+{
+    CHAR    Name[MAX_SOUND_NAME_LENGTH];
+    U32     Count;
+    U32     Chunks[1];
+} SOUNDDESCRIPTOREX, * SOUNDDESCRIPTOREXPTR;
+
+/*
+SOUNDS.HDR File Format:
+    Offset 0x0 - U32 - Count.
+                    Number of elements in the file.
+    Offset 0x4 - Array of SOUNDDESCRIPTOR - Sounds.
+                    A contiguous array of variable-size structures SoundDescriptor.
+*/
 
 typedef struct SoundHeader
 {
@@ -87,3 +107,15 @@ typedef struct Sound
     S32                     Unk07; // TODO
     S32                     Unk08; // TODO
 } SOUND, * SOUNDPTR;
+
+/*
+SOUNDS.RUS File Format:
+    Offset 0x0 - U32 - Count.
+                    Number of sound chunks in the file.
+    Offset 0x4  - Array of offsets to actual audio chunks.
+
+    ------------------------
+
+    Audio chunks start with 3 integers: # of smaples/second, # bits/second, # of channels (can be 0).
+    Then the actual sound data...
+*/
