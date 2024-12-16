@@ -81,8 +81,12 @@ VOID CLASSCALL ReleaseSoundStateTracks(SOUNDSTATEPTR self, CONST BOOL release);
 BOOL CLASSCALL InitializeSoundStateSoundTrack(SOUNDPTR self, SOUNDBUFFERPTR buffer, CONST F32 volume, CONST F32 pan);
 LPDIRECTSOUNDBUFFER CLASSCALL ActivateSoundStateSoundBuffer(SOUNDPTR self, CONST U32 size, CONST U32 channels, CONST U32 bits, CONST U32 samples);
 S32 CLASSCALL AcquireSoundStateTrackIndex(SOUNDPTR self);
-SOUNDBUFFERPTR CLASSCALL InitializeSoundState(SOUNDPTR self, BINFILEPTR file, CONST U32 size, CONST U32 channels, CONST U32 bits, CONST U32 samples, CONST BOOL mode);
+SOUNDBUFFERPTR CLASSCALL InitializeSoundState(SOUNDPTR self, BINFILEPTR file, CONST U32 size, CONST U32 channels, CONST U32 bits, CONST U32 samples, CONST BOOL active);
 VOID CLASSCALL ReleaseSoundStateInactiveSoundTracks(SOUNDPTR self);
 VOID CLASSCALL ReleaseSoundStateSoundTracks(SOUNDPTR self);
 
 U32 AcquireSoundNameHash(LPCSTR name);
+
+VOID FUN_1000c5a0(); // TODO name
+U32 FUN_1000c600(CONST U32 value); // TODO name
+VOID FUN_1000c5c0(CONST U32 indx); // TODO name

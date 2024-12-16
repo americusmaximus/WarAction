@@ -37,6 +37,11 @@ using namespace Mathematics;
 
 SOUNDSTATEMODULECONTAINER SoundState;
 
+// TODO
+S32 DAT_100462c4; // 0x100462c4
+U32 DAT_10046474; // 0x10046474
+U32 DAT_100462c0; // 0x100462c0
+
 // 0x10023dc0
 SOUNDBUFFERPTR CLASSCALL ActivateSoundBuffer(SOUNDBUFFERPTR self, LPDIRECTSOUNDBUFFER buffer, CONST BOOL active)
 {
@@ -53,7 +58,7 @@ VOID CLASSCALL ReleaseSoundBuffer(SOUNDBUFFERPTR self)
 }
 
 // 0x100240c0
-SOUNDBUFFERPTR CLASSCALL InitializeSoundState(SOUNDPTR self, BINFILEPTR file, CONST U32 size, CONST U32 channels, CONST U32 bits, CONST U32 samples, CONST BOOL mode)
+SOUNDBUFFERPTR CLASSCALL InitializeSoundState(SOUNDPTR self, BINFILEPTR file, CONST U32 size, CONST U32 channels, CONST U32 bits, CONST U32 samples, CONST BOOL active)
 {
     if (self->Instance == NULL)
     {
@@ -66,10 +71,8 @@ SOUNDBUFFERPTR CLASSCALL InitializeSoundState(SOUNDPTR self, BINFILEPTR file, CO
 
     if (buffer != NULL)
     {
-        LPVOID audio1 = NULL;
-        DWORD audio1size = 0;
-        LPVOID audio2 = NULL;
-        DWORD audio2size = 0;
+        LPVOID audio1 = NULL, audio2 = NULL;
+        DWORD audio1size = 0, audio2size = 0;
 
         self->Result = buffer->Lock(0, size, &audio1, &audio1size, &audio2, &audio2size, DSBLOCK_NONE);
 
@@ -87,7 +90,7 @@ SOUNDBUFFERPTR CLASSCALL InitializeSoundState(SOUNDPTR self, BINFILEPTR file, CO
 
         SOUNDBUFFERPTR result = ALLOCATE(SOUNDBUFFER);
 
-        if (result != NULL) { return ActivateSoundBuffer(result, buffer, mode); }
+        if (result != NULL) { return ActivateSoundBuffer(result, buffer, active); }
     }
 
     return NULL;
@@ -106,7 +109,7 @@ LPDIRECTSOUNDBUFFER CLASSCALL ActivateSoundStateSoundBuffer(SOUNDPTR self, CONST
     WAVEFORMATEX format;
     ZeroMemory(&format, sizeof(WAVEFORMATEX));
 
-    CONST U32 alignement = channels * bits >> 3;
+    CONST U32 alignement = channels * (bits >> 3);
 
     format.wFormatTag = WAVE_FORMAT_PCM;
     format.nChannels = channels;
@@ -408,30 +411,29 @@ VOID CLASSCALL InitializeSoundStateActionBuffer(SOUNDSTATEPTR self, LPCSTR name)
 
     if (OpenAssetFile(&file, name))
     {
-        U16 magic = 0, count = 0;
+        U16 magic = 0;
+        U32 size = 0;
         ReadAssetFile(&file, &magic, sizeof(U16));
-        ReadAssetFile(&file, &count, sizeof(U32));
+        ReadAssetFile(&file, &size, sizeof(U32));
 
-        LPVOID value = malloc(count);
+        U8* source = (U8*)malloc(size);
 
-        ReadAssetFile(&file, value, count);
+        ReadAssetFile(&file, source, size);
         CloseAssetFile(&file);
 
-        LPVOID content = malloc(count * 4); // TODO
+        U32* content = (U32*)malloc(size * 4); // TODO
 
-        // TODO NOT IMPLEMENTED
-        // FUN_1000c5a0();
+        FUN_1000c5a0();
 
-        for (U32 x = 0; x < count; x++)
+        for (U32 x = 0; x < size; x++)
         {
-            // TODO NOT IMPLEMENTED 
-            //content[x].Unk00 = FUN_1000c600((uint)(*(byte*)(x + (int)value) >> 4)); // TODO
-            //content[x].Unk01 = FUN_1000c600(*(byte*)(x + (int)value) & 0xf); // TODO
+            content[x] = (FUN_1000c600(source[x] >> 4) << 16) | FUN_1000c600(source[x] & 0xF);
         }
 
-        free(value);
+        free(source);
 
-        self->Buffers.Action = ActivateSoundStateSoundBuffer(self->State, content, count * 4 /* TODO */, 1, 16, 22050, FALSE);
+        self->Buffers.Action = ActivateSoundStateSoundBuffer(self->State, content,
+            size * 4 /* TODO */, 1, 16, 22050, FALSE);
 
         InitializeSoundStateSoundTrack(self->State, self->Buffers.Action, 1.0f, 0.0f);
 
@@ -577,7 +579,8 @@ BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, C
     self->Buffer->SetVolume(self->Volume);
     self->Buffer->SetPan(self->Pan);
 
-    SoundState.SoundState->Result = self->Buffer->Play(0, 0, buffer->IsActive ? DSBPLAY_LOOPING : DSBPLAY_NONE);
+    SoundState.SoundState->Result = self->Buffer->Play(DSBPLAY_NONE, 0,
+        buffer->IsActive ? DSBPLAY_LOOPING : DSBPLAY_NONE);
 
     if (FAILED(SoundState.SoundState->Result))
     {
@@ -623,4 +626,117 @@ U32 AcquireSoundNameHash(LPCSTR name)
     }
 
     return result;
+}
+
+// 0x1000c5a0
+VOID FUN_1000c5a0() // TODO name
+{
+    DAT_100462c4 = 0;
+    DAT_10046474 = 0;
+    DAT_100462c0 = 0;
+}
+
+// 0x1003a420
+STATIC S32 UnkSoundArray1[49 /* TODO */] = // TODO name
+{
+    0x00000010,
+    0x00000011,
+    0x00000013,
+    0x00000015,
+    0x00000017,
+    0x00000019,
+    0x0000001C,
+    0x0000001F,
+    0x00000022,
+    0x00000025,
+    0x00000029,
+    0x0000002D,
+    0x00000032,
+    0x00000037,
+    0x0000003C,
+    0x00000042,
+    0x00000049,
+    0x00000050,
+    0x00000058,
+    0x00000061,
+    0x0000006B,
+    0x00000076,
+    0x00000082,
+    0x0000008F,
+    0x0000009D,
+    0x000000AD,
+    0x000000BE,
+    0x000000D1,
+    0x000000E6,
+    0x000000FD,
+    0x00000117,
+    0x00000133,
+    0x00000151,
+    0x00000173,
+    0x00000198,
+    0x000001C1,
+    0x000001EE,
+    0x00000220,
+    0x00000256,
+    0x00000292,
+    0x000002D4,
+    0x0000031C,
+    0x0000036C,
+    0x000003C3,
+    0x00000424,
+    0x0000048E,
+    0x00000502,
+    0x00000583,
+    0x00000610
+};
+
+// 0x1000c600
+U32 FUN_1000c600(CONST U32 value) // TODO name
+{
+    // TODO Not implemented
+
+    int iVar1;
+    int iVar2;
+
+    iVar1 = UnkSoundArray1[DAT_100462c4];
+
+    iVar2 = 0;
+
+    if (value & 4) { iVar2 = iVar1; }
+    if (value & 2) { iVar2 = iVar2 + (iVar1 >> 1); }
+    if (value & 1) { iVar2 = iVar2 + (iVar1 >> 2); }
+    if (value & 8) { iVar2 = -iVar2; }
+
+    iVar2 = DAT_10046474 + iVar2;
+
+    DAT_10046474 = iVar2;
+
+    FUN_1000c5c0(value);
+
+    return iVar2;
+}
+
+// 0x1003a3e0
+STATIC S32 UnkSoundArray2[16 /* TODO */] = // TODO name
+{
+    -1, -1, -1, -1,
+    2,  4,  6,  8,
+    -1, -1, -1, -1,
+    2,  4,  6,  8
+};
+
+// 0x1000c5c0
+VOID FUN_1000c5c0(CONST U32 indx) // TODO name
+{
+    // TODO Not implemented
+
+    int iVar1 = UnkSoundArray2[indx];
+
+    if (iVar1 < 0) { if (0 < DAT_100462c4) { DAT_100462c4 = DAT_100462c4 + iVar1; } }
+    else
+    {
+        DAT_100462c4 = DAT_100462c4 + iVar1;
+
+        if (0x30 < DAT_100462c4) { DAT_100462c4 = 0x30; }
+    }
 }
