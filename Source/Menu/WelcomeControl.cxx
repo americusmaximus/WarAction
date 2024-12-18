@@ -99,10 +99,10 @@ VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self)
             (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Resolutions, x);
         resolution->Unk11 = 0; // TODO
 
-        CONTROLTYPE2X38PTR operation =
+        CONST CONTROLTYPE2X38PTR operation =
             (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Operations, x);
 
-        ACTIONAREAPTR area = AcquireActionArea(operation->Action);
+        CONST ACTIONAREAPTR area = AcquireActionArea(operation->Action);
 
         // Extend clickable area by 70 pixels to the left,
         // so that clicking on resolution value, i.e. 640x480 equals clicking on the selector button.

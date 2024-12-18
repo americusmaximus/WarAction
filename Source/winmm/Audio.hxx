@@ -41,40 +41,40 @@ struct AudioWorkerContext
 
 struct AudioStateContainer
 {
-    BOOL IsActive;  // 0x6ad52034
-    BOOL State;     // 0x6ad52038
+    BOOL IsExit;                                        // 0x6ad52034
+    BOOL State;                                         // 0x6ad52038
 
-    OggVorbis_File Vorbis; // 0x6ad59d80
+    OggVorbis_File Vorbis;                              // 0x6ad59d80
 
     struct
     {
-        BOOL IsActive; // 0x6ad52024
-        DWORD_PTR Callback; // 0x6ad59518
+        BOOL IsActive;                                  // 0x6ad52024
+        DWORD_PTR Callback;                             // 0x6ad59518
     } Alerts;
 
-    CRITICAL_SECTION Mutex; // 0x6ad59d54
+    CRITICAL_SECTION Mutex;                             // 0x6ad59d54
 
-    INT Track; // 0x6ad52030
+    INT Track;                                          // 0x6ad52030
 
-    AudioWorkerContext Context; // 0x6ad4c008
+    AudioWorkerContext Context;                         // 0x6ad4c008
 
-    DOUBLE Position; // 0x6ad52028
+    DOUBLE Position;                                    // 0x6ad52028
 
-    INT Volume; // 0x6ad4c020
+    INT Volume;                                         // 0x6ad4c020
 
-    HANDLE Worker; // 0x6ad5203c
+    HANDLE Worker;                                      // 0x6ad5203c
 
     struct
     {
-        HANDLE Callback; // 0x6ad58af0
+        HANDLE Callback;                                // 0x6ad58af0
 
-        WAVEFORMATEX Format; // 0x6ad59d40
+        WAVEFORMATEX Format;                            // 0x6ad59d40
 
-        UINT Count; // 0x6ad58aec
+        UINT Count;                                     // 0x6ad58aec
 
         LPWAVEHDR Headers[MAX_AUDIO_WAVE_HEADER_COUNT]; // 0x6ad58ae0
 
-        HWAVEOUT Out; // 0x6ad58af4
+        HWAVEOUT Out;                                   // 0x6ad58af4
     } Wave;
 };
 

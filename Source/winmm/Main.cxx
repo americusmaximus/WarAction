@@ -98,7 +98,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
             {
                 if (State.Tracks.Current == DEFAULT_TRACK_INDEX) { State.Tracks.Current = x; }
 
-                State.Tracks.Count = x;
+                State.Tracks.Count = x + 1;
 
                 State.Tracks.Max = State.Tracks.Max + 1;
 

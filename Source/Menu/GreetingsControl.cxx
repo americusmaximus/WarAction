@@ -30,18 +30,19 @@ SOFTWARE.
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#define MAX_GREETING_LENGTH     256
-#define MAX_COLOR_VALUE_LENGTH  6
+#define MAX_GREETING_LENGTH         256
+#define MAX_COLOR_VALUE_LENGTH      6
 
-#define DEFAULT_DURATION        2000
+#define DEFAULT_DURATION            2000
+#define MAX_DURATION_COUNT          29
 
-#define MAX_GREETINGS_COUNT     29
+#define GREETING_AUDIO_TRACK_INDEX  11
 
-typedef struct Greetings
+typedef struct Duration
 {
     U32     Item1;
     U32     Item2;
-} GREETINGS, * GREETINGSPTR;
+} DURATION, * DURATIONPTR;
 
 // 0x1000dcf0
 STATIC F64 sqr(CONST F64 value) { return value * value; }
@@ -50,7 +51,7 @@ STATIC F64 sqr(CONST F64 value) { return value * value; }
 STATIC F64 sqr5(CONST F64 value) { return sqr(sqr(sqr(sqr(sqr(value))))); }
 
 // 0x1003f8d0
-STATIC GREETINGS Greetings[MAX_GREETINGS_COUNT] =
+STATIC DURATION Durations[MAX_DURATION_COUNT] =
 {
     { 0xB, 0x0 },       { 0x124, 0x0 },     { 0x3E23, 0x40 },   { 0x7B18, 0x80 },
     { 0x9984, 0xA0 },   { 0xB370, 0xBB },   { 0xF377, 0xFE },   { 0x12CD3, 0x13A },
@@ -105,7 +106,7 @@ VOID CLASSCALL InitializeGreetingsControl(GREETINGSCONTROLPTR self)
 
     while (AcquireAudioPlayerMode(&AudioPlayerState) != AUDIOPLAYERMODE_STOPPED) { Sleep(100); }
 
-    InitializeAudioPlayerEvent(&AudioPlayerState, MAX_AUDIO_TRACK_COUNT);
+    InitializeAudioPlayerEvent(&AudioPlayerState, GREETING_AUDIO_TRACK_INDEX);
 
     AudioPlayerState.Ticks = 0;
 }
@@ -147,19 +148,19 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         else { ticks = AudioPlayerState.Ticks + GetTickCount(); }
 
         U32 indx = 0;
-        for (U32 result = Greetings[1].Item1; result < ticks; result = Greetings[indx + 2].Item1, indx++) { }
+        for (U32 result = Durations[1].Item1; result < ticks; result = Durations[indx + 2].Item1, indx++) { }
 
-        if (indx != 0 && Greetings[indx + 1].Item1 != 0)
+        if (indx != 0 && Durations[indx + 1].Item1 != 0)
         {
             // TODO: Very rough wiggle of the text, not smooth like in the original.
 
 
             // Display/wait durations.
 
-            CONST F64 value1 = (ticks - Greetings[indx].Item1) * (Greetings[indx + 1].Item2 - Greetings[indx].Item2);
-            CONST f64 value2 = Greetings[indx + 1].Item1 - Greetings[indx].Item1;
+            CONST F64 value1 = (ticks - Durations[indx].Item1) * (Durations[indx + 1].Item2 - Durations[indx].Item2);
+            CONST f64 value2 = Durations[indx + 1].Item1 - Durations[indx].Item1;
 
-            CONST F64 value3 = (value1 / value2 + (F64)Greetings[indx].Item2) * 250.0;
+            CONST F64 value3 = (value1 / value2 + (F64)Durations[indx].Item2) * 250.0;
             CONST F64 value4 = cos(0.012566370614 * value3);
 
             CONST F64 value5 = sqr5(value4);

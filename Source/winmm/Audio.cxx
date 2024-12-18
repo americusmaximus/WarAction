@@ -121,9 +121,9 @@ BOOL OpenAudio(SoundTrack* track, DOUBLE position)
         AudioState.Wave.Format.wFormatTag = WAVE_FORMAT_PCM;
         AudioState.Wave.Format.nChannels = (WORD)vi->channels;
         AudioState.Wave.Format.nSamplesPerSec = vi->rate;
+        AudioState.Wave.Format.nBlockAlign = AudioState.Wave.Format.nChannels * 2;
         AudioState.Wave.Format.nAvgBytesPerSec =
             AudioState.Wave.Format.nBlockAlign * AudioState.Wave.Format.nSamplesPerSec;
-        AudioState.Wave.Format.nBlockAlign = AudioState.Wave.Format.nChannels * 2;
         AudioState.Wave.Format.wBitsPerSample = 16;
         AudioState.Wave.Format.cbSize = 0;
 
@@ -327,7 +327,7 @@ DWORD WINAPI AudioWorker(LPVOID params)
             {
                 EnterCriticalSection(&State.Mutex);
 
-                if (!AudioState.IsActive)
+                if (!AudioState.IsExit)
                 {
                     AudioState.Worker = NULL;
                     AudioState.State = FALSE;
@@ -352,9 +352,9 @@ DWORD WINAPI AudioWorker(LPVOID params)
 
             while (!AudioState.State) { Sleep(200); }
 
-            if (!AudioState.IsActive) { break; }
+            if (!AudioState.IsExit) { break; }
 
-            AudioState.IsActive = FALSE;
+            AudioState.IsExit = FALSE;
 
             last = AudioState.Context.Last;
 
@@ -365,13 +365,13 @@ DWORD WINAPI AudioWorker(LPVOID params)
 
         do
         {
-            if (!AudioState.IsActive || !PlayAudio())
+            if (!AudioState.State || !PlayAudio())
             {
-                if (!AudioState.State) { AudioState.Track = AudioState.Track + 2; } break;
+                if (!AudioState.IsExit) { AudioState.Track = AudioState.Track + 2; } break;
             }
 
             Sleep(200);
-        } while (!AudioState.IsActive);
+        } while (!AudioState.IsExit);
     }
 }
 

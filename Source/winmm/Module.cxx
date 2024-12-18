@@ -563,7 +563,7 @@ extern "C" MCIERROR WINAPI MciSendCommandA(MCIDEVICEID mciId, UINT uMsg, DWORD_P
         {
             EnterCriticalSection(&State.Mutex);
 
-            if (AudioState.Worker != NULL) { AudioState.IsActive = TRUE; }
+            if (AudioState.Worker != NULL) { AudioState.IsExit = TRUE; }
 
             AudioState.Alerts.IsActive = (dwParam1 & MCI_NOTIFY);
             AudioState.Alerts.Callback = AudioState.Alerts.IsActive ? NULL : parms->dwCallback;

@@ -30,7 +30,6 @@ SOFTWARE.
 #define MAX_AUDIOPLAYER_MESSAGE_LENGTH      256
 
 #define AUDIO_TRACK_OFFSET                  2
-#define MAX_AUDIO_TRACK_COUNT               11
 
 // Returns the current mode of the device.
 // All devices can return the "not ready", "paused", "playing", and "stopped" values.
