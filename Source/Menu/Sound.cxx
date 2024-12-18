@@ -316,16 +316,15 @@ VOID CLASSCALL PlaySoundStateSound(SOUNDSTATEPTR self, LPCSTR name)
 {
     if (name == NULL) { return; }
 
-    U32 indx = 0;
-    BOOL found = FALSE;
     CONST U32 hash = AcquireSoundNameHash(name);
 
-    for (U32 x = 0; x < self->Count; x++)
+    U32 indx = 0;
+    for (; indx < self->Count; indx++)
     {
-        if (self->Tracks[x].Hash == hash) { indx = x; found = TRUE; break; }
+        if (self->Tracks[indx].Hash == hash) { break; }
     }
 
-    if (!found && !InitializeSoundStateSample(self, name)) { return; }
+    if (indx == self->Count && !InitializeSoundStateSample(self, name)) { return; }
 
     LogMessage("SOUND : Playing %s\n", name);
 
@@ -395,13 +394,11 @@ BOOL CLASSCALL InitializeSoundStateSample(SOUNDSTATEPTR self, LPCSTR name)
 
     if (self->Tracks[self->Count].Buffer == NULL) { LogMessage("SOUND : Cannot load %s\n", name); }
 
-    SOUNDBUFFERPTR buffer = self->Tracks[self->Count].Buffer;
+    CONST SOUNDBUFFERPTR buffer = self->Tracks[self->Count].Buffer;
 
     self->Count = self->Count + 1;
 
-    if (buffer != NULL) { return TRUE; }
-
-    return FALSE;
+    return buffer != NULL;
 }
 
 // 0x1000c650

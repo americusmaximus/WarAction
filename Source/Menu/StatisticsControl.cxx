@@ -42,11 +42,6 @@ SOFTWARE.
 #define STATISTICS_VEHICLES_INDEX                       3
 #define STATISTICS_PLANES_INDEX                         4
 
-// TODO:
-// Open the game, skip intro
-// Click Ratings as the first ever button 
-// TODO: Incorrect sound effect is played
-
 // 0x1003a6d4
 STATISTICSCONTROLSELF StatisticsControlSelfState =
 {
