@@ -63,7 +63,7 @@ U32 CLASSCALL ActionMultiJoinControl(MULTIJOINCONTROLPTR self)
 {
     ActionPanelControl((PANELCONTROLPTR)self);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL)
     {

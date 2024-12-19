@@ -73,14 +73,15 @@ SINGLECONTROLPTR CLASSCALL ActivateSingleControl(SINGLECONTROLPTR self)
     self->Names = ActivateListControl(ALLOCATE(LISTCONTROL),
         CONTROLACTION_LIST_SELECT, 354, 99, 212, 281, self->Scroll, &AssetsState.Fonts.Main, self->Items);
 
-    self->ObjectType2x39 = ActivateObjectType2x39(ALLOCATE(CONTROLTYPE2X39), &AssetsState.Assets.Single0Dif, 0, CONTROLACTION_SINGLE0_DIFFICULTY);
+    self->Difficulty = ActivateObjectType2x39(ALLOCATE(CONTROLTYPE2X39),
+        &AssetsState.Assets.Single0Dif, 0, CONTROLACTION_SINGLE0_DIFFICULTY);
 
     self->Nodes = ALLOCATE(CONTROLNODE);
 
     InitControlNode(self->Nodes, (CONTROLPTR)self->Scene);
     AppendControlNode(self->Nodes, (CONTROLPTR)self->Name);
     AppendControlNode(self->Nodes, (CONTROLPTR)self->Names);
-    AppendControlNode(self->Nodes, (CONTROLPTR)self->ObjectType2x39);
+    AppendControlNode(self->Nodes, (CONTROLPTR)self->Difficulty);
 
     return self;
 }
@@ -107,8 +108,12 @@ VOID CLASSCALL InitializeSingleControl(SINGLECONTROLPTR self)
     InitializeComputerPlayerList(&ComputerState, self->Items);
     ListControlCommandUnknown1(self->Names);
 
-    self->Names->Index = INVALID_LIST_CONTROL_INDEX;
     self->IsMessage = FALSE;
+    self->Names->Index = INVALID_LIST_CONTROL_INDEX;
+
+    // TODO:
+    // 1. palyer name cannot be typed in, and not displayed at all.
+    // 2. difficulty cannot be changed...
 }
 
 // 0x10016a10
@@ -141,7 +146,6 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
         {
             RemoveComputerPlayer(&ComputerState, self->Names->Index, TRUE);
             InitializeComputerPlayerList(&ComputerState, self->Items);
-
             ListControlCommandUnknown1(self->Names);
 
             self->Names->Index = INVALID_LIST_CONTROL_INDEX;
@@ -150,21 +154,23 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
         self->IsMessage = FALSE;
     }
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    // TODO: Delete player button gets stuck when it should silently unclick
+    // when any of the message box option is clicked
+
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL) { return CONTROLACTION_NONE; }
     if (command->Command != CONTROLCOMMAND_TEXT_CONTROL) { return CONTROLACTION_NONE; }
 
-    U32 result = CONTROLACTION_NONE;
-
     strcpy(State.Name, AcquireInputControlValue(self->Name));
 
-    // TODO make it pretty (below)
     if ((command->Action == CONTROLACTION_SINGLE0_NEW && command->Parameter1 == 4) // TODO
         || (command->Action == CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS && command->Parameter1 == 4) // TODO
         || (command->Action == CONTROLACTION_SINGLE0_SINGLEMISSIONS && command->Parameter1 == 4) // TODO
         || (command->Action == CONTROLACTION_SINGLE0_LOAD && command->Parameter1 == 4)) // TODO
     {
+        U32 action = CONTROLACTION_NONE;
+
         if (AcquireInputControlValue(self->Name)[0] == NULL)
         {
             ShowMessageControl(&MessageControlState,
@@ -172,59 +178,48 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
         }
         else
         {
-            result = command->Action;
+            action = command->Action;
 
             strcpy(State.Name, AcquireInputControlValue(self->Name));
 
             SaveComputerPlayer(&ComputerState, AcquireInputControlValue(self->Name));
         }
-    }
-    else if (command->Command == CONTROLACTION_SINGLE0_CANCEL && command->Parameter1 == 4 /* TODO */) { result = CONTROLACTION_SINGLE0_CANCEL; }
-    else
-    {
-        if (command->Command != CONTROLACTION_SINGLE0_DELETE || command->Parameter1 != 4 /* TODO */) { goto LAB_10016b83; }
 
+        DequeueControlCommand(TRUE);
+
+        return action;
+    }
+    else if (command->Action == CONTROLACTION_SINGLE0_CANCEL && command->Parameter1 == 4 /* TODO */)
+    {
+        DequeueControlCommand(TRUE);
+
+        return CONTROLACTION_SINGLE0_CANCEL;
+    }
+    else if (command->Action == CONTROLACTION_SINGLE0_DELETE && command->Parameter1 != 4 /* TODO */)
+    {
+        if (self->Names->Index != INVALID_LIST_CONTROL_INDEX)
+        {
+            self->IsMessage = TRUE;
+
+            ShowMessageControl(&MessageControlState,
+                AcquireAssetMessage(ASSET_MESSAGE_DELETE_PLAYER_AND_ALL_SAVES_QUESTION), MESSAGE_BUTTON_OKCANCEL);
+        }
+    }
+    else if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2 /* TODO*/)
+    {
         if (self->Names->Index != INVALID_LIST_CONTROL_INDEX)
         {
             if (ControlState.Active != NULL) { RemoveInputControlFocus((INPUTCONTROLPTR)ControlState.Active); }
 
             SelectInputControlValue(self->Name, AcquireStringListItem(self->Items, self->Names->Index));
-
-            DequeueControlCommand(TRUE);
-
-            return result;
         }
-
-        if (self->Names->Index != INVALID_LIST_CONTROL_INDEX)
-        {
-            self->IsMessage = TRUE;
-            ShowMessageControl(&MessageControlState,
-                AcquireAssetMessage(ASSET_MESSAGE_DELETE_PLAYER_AND_ALL_SAVES_QUESTION), MESSAGE_BUTTON_OKCANCEL);
-        }
+    }
+    else if (command->Action == CONTROLACTION_SINGLE0_DIFFICULTY && command->Parameter1 == 2 /* TODO */)
+    {
+        SaveSettingsValue(&self->Settings, (self->Settings.Value + 1) % MAX_GAMEDIFFICULTY_VALUE);
     }
 
     DequeueControlCommand(TRUE);
 
-LAB_10016b83:
-
-    if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2 /* TODO*/
-        && self->Names->Index != INVALID_LIST_CONTROL_INDEX)
-    {
-        if (ControlState.Active != NULL) { RemoveInputControlFocus((INPUTCONTROLPTR)ControlState.Active); }
-
-        SelectInputControlValue(self->Name, AcquireStringListItem(self->Items, self->Names->Index));
-
-        DequeueControlCommand(TRUE);
-
-        return result;
-    }
-
-    if (command->Action == CONTROLACTION_SINGLE0_DIFFICULTY && command->Parameter1 == 2 /* TODO */)
-    {
-        SaveSettingsValue(&self->Settings, (self->Settings.Value + 1) % MAX_GAMEDIFFICULTY_VALUE);
-
-        DequeueControlCommand(TRUE);
-    }
-
-    return result;
+    return CONTROLACTION_NONE;
 }

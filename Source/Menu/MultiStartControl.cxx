@@ -111,7 +111,8 @@ MULTISTARTCONTROLPTR CLASSCALL ActivateMultiStartControl(MULTISTARTCONTROLPTR se
     self->MapActors->Font = &AssetsState.Fonts.Main;
     self->MapActors->Color = ADJUSTCOLOR(0xC800);
 
-    self->ObjectType2x39 = ActivateObjectType2x39(ALLOCATE(CONTROLTYPE2X39), &AssetsState.Assets.Multi4ParmOP, 0, CONTROLACTION_1067);
+    self->ObjectType2x39 = ActivateObjectType2x39(ALLOCATE(CONTROLTYPE2X39),
+        &AssetsState.Assets.Multi4ParmOP, 0, CONTROLACTION_1067);
 
     ControlType3x3dState = ActivateObjectType3x3d(ALLOCATE(CONTROLTYPE3X3D),
         &AssetsState.Assets.Multi4SP, 0, CONTROLACTION_1066, 0, 10, 5, 359, 45, 10, 45, 46);

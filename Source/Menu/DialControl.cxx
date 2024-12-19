@@ -96,7 +96,7 @@ U32 CLASSCALL ActionDialControl(DIALCONTROLPTR self)
 {
     CONST U32 action = ActionPanelControl((PANELCONTROLPTR)self);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (action == CONTROLACTION_DIAL_DIAL)
     {

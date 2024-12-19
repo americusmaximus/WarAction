@@ -94,7 +94,7 @@ VOID CLASSCALL DisableVideoControl(VIDEOCONTROLPTR self)
 // 0x10001520
 U32 CLASSCALL ActionVideoControl(VIDEOCONTROLPTR self)
 {
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL)
     {

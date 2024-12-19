@@ -149,7 +149,7 @@ U32 CLASSCALL ActionLoadSaveControl(LOADSAVECONTROLPTR self)
 {
     CONST U32 action = ActionPanelControl((PANELCONTROLPTR)self);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL || command->Action != CONTROLACTION_LIST_SELECT || command->Parameter1 != 7) // TODO
     {

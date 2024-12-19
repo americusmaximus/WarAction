@@ -120,7 +120,7 @@ U32 CLASSCALL ActionMultiSelectControl(MULTISELECTCONTROLPTR self)
 
     U32 result = CONTROLACTION_NONE;
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL) { return CONTROLACTION_NONE; }
     if (command->Command != CONTROLCOMMAND_TEXT_CONTROL) { return CONTROLACTION_NONE; }

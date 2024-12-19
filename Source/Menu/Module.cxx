@@ -661,7 +661,7 @@ BOOL ExecuteModuleCommands(VOID)
     BOOL result = FALSE;
 
     {
-        CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+        CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
         if (command != NULL)
         {
@@ -676,7 +676,7 @@ BOOL ExecuteModuleCommands(VOID)
     }
 
     {
-        CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+        CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
         if (command != NULL)
         {

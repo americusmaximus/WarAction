@@ -138,7 +138,7 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
 
     CONST U32 action = ActionPanelControl((PANELCONTROLPTR)self);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL || command->Command != CONTROLCOMMAND_TEXT_CONTROL) { return action; }
 

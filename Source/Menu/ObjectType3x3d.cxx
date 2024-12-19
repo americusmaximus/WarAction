@@ -92,7 +92,7 @@ U32 CLASSCALL ActionObjectType3x3d(CONTROLTYPE3X3DPTR self)
 {
     if (self->Unk15 == 0) { return CONTROLACTION_NONE; } // TODO
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == self->Action)
     {

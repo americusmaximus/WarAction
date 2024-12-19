@@ -73,7 +73,7 @@ typedef struct SingleControl
     SCROLLCONTROLPTR        Scroll;
     LISTCONTROLPTR          Names;
     STRINGLISTPTR           Items;
-    CONTROLTYPE2X39PTR      ObjectType2x39; // TODO
+    CONTROLTYPE2X39PTR      Difficulty;
     SETTINGS                Settings;
     BOOL                    IsMessage;
 } SINGLECONTROL, * SINGLECONTROLPTR;

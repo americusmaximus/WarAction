@@ -181,7 +181,7 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
         else if (self->Type == RATINGSTYPE_CAMPAIGN) { self->CampaignPanel->Self->Action(self->CampaignPanel); }
     }
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL
         && command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2 /* TODO*/)

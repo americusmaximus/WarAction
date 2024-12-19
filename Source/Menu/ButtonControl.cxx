@@ -161,7 +161,9 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
         }
         else
         {
-            if (GetTickCount() - self->Ticks < (self->Unk0x2c == 0 ? 500 : 100))
+            CONST U32 ticks = GetTickCount();
+
+            if (ticks - self->Ticks < (self->Unk0x2c == 0 ? 500 : 100))
             {
                 if (action != self->IsAction)
                 {
@@ -173,7 +175,7 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
                 return CONTROLACTION_NONE;
             }
 
-            self->Ticks = GetTickCount();
+            self->Ticks = ticks;
             self->Unk0x2c = self->Unk0x2c + 1;
         }
     }

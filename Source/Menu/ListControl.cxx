@@ -142,7 +142,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
 
     CONST S32 indx = self->Index;
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL) { return CONTROLACTION_NONE; }
 

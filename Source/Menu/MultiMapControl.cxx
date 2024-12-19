@@ -102,7 +102,7 @@ U32 CLASSCALL ActionMultiMapControl(MULTIMAPCONTROLPTR self)
 
     U32 action = ActionPanelControl((PANELCONTROLPTR)self);
     
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL)
     {

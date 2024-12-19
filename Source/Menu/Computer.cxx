@@ -57,11 +57,11 @@ VOID CLASSCALL ActivateComputer(COMPUTERPTR self, LPCSTR type)
     {
         CHAR player[MAX_COMPUTER_BUFFER_LENGTH];
 
-        if (x == self->Capacity)
+        if (self->Count == self->Capacity)
         {
             STRINGVALUE name, value;
-            AcquireStringValue(&name, StringsState.Scratch);
-            AcquireStringValue(&value, "%s%d", self->Type, x);
+            AcquireStringValue(&name, "%s%d", self->Type, x);
+            AcquireStringValue(&value, StringsState.Scratch);
 
             STRINGVALUE setting;
             STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);
@@ -70,8 +70,8 @@ VOID CLASSCALL ActivateComputer(COMPUTERPTR self, LPCSTR type)
         }
         else
         {
-            U32 length = 0;
-            GetComputerNameA(player, (LPDWORD)&length);
+            DWORD length = MAX_COMPUTER_BUFFER_LENGTH;
+            GetComputerNameA(player, &length);
         }
 
         player[MAX_PLAYER_NAME_LENGTH - 1] = NULL;
@@ -102,8 +102,8 @@ VOID CLASSCALL ReleaseComputer(COMPUTERPTR self)
 {
     {
         STRINGVALUE name, value;
-        AcquireStringValue(&name, "%d", self->Count);
-        AcquireStringValue(&value, "%ssUpb", self->Type);
+        AcquireStringValue(&name, "%ssUpb", self->Type);
+        AcquireStringValue(&value, "%d", self->Count);
 
         SaveSettingsValue(name, value);
     }
@@ -215,6 +215,7 @@ STATIC BOOL CreateFolder(LPCSTR path)
     CHAR dir[MAX_FILE_NAME_LENGTH];
 
     AcquireAnsiString(dir, MAX_FILE_NAME_LENGTH, path, -1);
+
     return CreateDirectoryA(dir, NULL);
 }
 

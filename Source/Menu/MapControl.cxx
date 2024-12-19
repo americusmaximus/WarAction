@@ -135,9 +135,9 @@ U32 CLASSCALL ActionMapControl(MAPCONTROLPTR self)
 {
     self->Description->Self->Action(self->Description);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLACTION_MAP_HOVER)
+    if (command != NULL && command->Command == CONTROLACTION_MAP_HOVER) // TODO is this correct?
     {
         if (command->Action == 2) { self->IsHover = TRUE; } // TODO
         else if (command->Action == 4) { self->IsHover = FALSE; } // TODO

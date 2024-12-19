@@ -253,7 +253,7 @@ BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self)
         ScrollScrollControl(self);
     }
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL)
     {
@@ -268,8 +268,7 @@ BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self)
 
             DequeueControlCommand(TRUE);
         }
-
-        if (command->Command == self->Action)
+        else if (command->Command == self->Action)
         {
             if (command->Action & CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN) { self->IsAction = TRUE; }
 

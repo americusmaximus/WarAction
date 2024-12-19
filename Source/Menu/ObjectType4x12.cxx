@@ -72,7 +72,7 @@ U32 CLASSCALL ActionObjectType4x12(CONTROLTYPE4X12PTR self)
 {
     ActionPanelControl((PANELCONTROLPTR)self);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL
         && command->Action == self->Action && command->Parameter1 == 4 /* TODO */)

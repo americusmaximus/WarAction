@@ -65,14 +65,14 @@ CONTROLCOMMANDPTR DequeueControlCommand(CONST BOOL remove)
 {
     if (CommandControlState.WriteIndex != CommandControlState.ReadIndex)
     {
-        CONTROLCOMMANDPTR item = &CommandControlState.Items[CommandControlState.ReadIndex];
+        CONST CONTROLCOMMANDPTR command = &CommandControlState.Items[CommandControlState.ReadIndex];
 
         if (remove)
         {
             CommandControlState.ReadIndex = (CommandControlState.ReadIndex + 1) % MAX_CONTROL_COMMAND_ITEMS_COUNT;
         }
 
-        return item;
+        return command;
     }
 
     return NULL;

@@ -106,7 +106,7 @@ U32 CLASSCALL ActionTimeControl(TIMECONTROLPTR self)
     self->Minutes->Self->Action(self->Minutes);
     self->Seconds->Self->Action(self->Seconds);
 
-    CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
+    CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL)
     {
