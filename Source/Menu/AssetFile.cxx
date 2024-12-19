@@ -22,7 +22,6 @@ SOFTWARE.
 
 #include "AssetFile.hxx"
 #include "Assets.hxx"
-#include "Compression.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -310,7 +309,7 @@ LPVOID ReadAssetFileChunk(CONST BFH indx, CONST U32 chunk)
         CONST U32 length =
             AssetsState.Archives[archive].Offsets[index + 1] - AssetsState.Archives[archive].Offsets[index];
 
-        LPVOID content = malloc(length);
+        Bytef* content = (Bytef*)malloc(length);
 
         U32 read = AcquireBinFileChunkSize(indx, chunk * AssetsState.Files[indx].Chunk);
 
@@ -318,7 +317,7 @@ LPVOID ReadAssetFileChunk(CONST BFH indx, CONST U32 chunk)
 
         if (ReadBinFile(file, content, length) != length) { return NULL; }
 
-        UnZip(result, &read, content, length);
+        uncompress((Bytef*)result, (uLongf*)&read, content, length);
 
         free(content);
     }

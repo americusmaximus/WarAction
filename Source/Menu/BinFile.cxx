@@ -21,7 +21,6 @@ SOFTWARE.
 */
 
 #include "Assets.hxx"
-#include "Compression.hxx"
 #include "State.hxx"
 #include "Strings.hxx"
 
@@ -185,14 +184,14 @@ LPVOID ReadBinArchive(BINFILEPTR self, U32* count)
 
     ReadBinFile(self, &desc, sizeof(BINARCHIVEDESCRIPTOR));
 
-    LPVOID src = malloc(desc.Size);
+    Bytef* src = (Bytef*)malloc(desc.Size);
 
     U32 length = desc.Length * desc.Count;
     LPVOID dst = malloc(length);
 
     ReadBinFile(self, src, desc.Size);
 
-    UnZip(dst, &length, src, desc.Size);
+    uncompress((Bytef*)dst, (uLongf*)&length, src, desc.Size);
 
     if (count != NULL) { *count = desc.Count; }
 

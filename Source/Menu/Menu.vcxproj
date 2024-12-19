@@ -218,7 +218,6 @@
     <ClCompile Include="Bink.cxx" />
     <ClCompile Include="ButtonControl.cxx" />
     <ClCompile Include="ChatControl.cxx" />
-    <ClCompile Include="Compression.cxx" />
     <ClCompile Include="Control.cxx" />
     <ClCompile Include="ControlCommand.cxx" />
     <ClCompile Include="ControlNode.cxx" />
@@ -300,7 +299,6 @@
     <ClInclude Include="Bink.hxx" />
     <ClInclude Include="ButtonControl.hxx" />
     <ClInclude Include="ChatControl.hxx" />
-    <ClInclude Include="Compression.hxx" />
     <ClInclude Include="Control.hxx" />
     <ClInclude Include="ControlCommand.hxx" />
     <ClInclude Include="ControlNode.hxx" />
