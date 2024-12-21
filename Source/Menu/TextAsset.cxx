@@ -152,3 +152,18 @@ VOID CLASSCALL AcquireTextAssetStringValue(TEXTASSETPTR self, CONST U32 line, CO
         *result = NULL;
     }
 }
+
+// 0x10002900
+U32 CLASSCALL AcquireTextAssetHash(TEXTASSETPTR self)
+{
+    S32 result = 0x31415926;
+
+    CONST U32 count = self->Length / 4;
+
+    for (U32 x = 0; x < count; x++)
+    {
+        result = ((U32*)self->Content)[x] + (result >> 29) + result * 8;
+    }
+
+    return result;
+}

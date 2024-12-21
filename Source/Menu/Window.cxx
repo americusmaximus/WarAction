@@ -129,9 +129,9 @@ VOID SelectWindowInputState(CONST WINDOWINPUTSTATE state)
         InitializeWindowActionHandler(WINDOW_ACTION_HANDLER_PRIORITY, WindowMessageHandler);
     }
 
-    WindowState.Ticks = 0;
     WindowState.State = state;
 
+    WindowState.Cursor.Ticks = 0;
     WindowState.Cursor.Left.X = WindowState.Cursor.Left.Y = DEFAULT_INITIAL_CURSOR_POSITION;
     WindowState.Cursor.Right.X = WindowState.Cursor.Right.Y = DEFAULT_INITIAL_CURSOR_POSITION;
 }
@@ -183,9 +183,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
             if (WindowState.IsActive)
             {
-                CONST U32 click = GetDoubleClickTime();
-
-                if (ticks - WindowState.Ticks < click)
+                if (ticks - WindowState.Cursor.Ticks < GetDoubleClickTime())
                 {
                     CONST BOOL xs = (CursorState.X - WindowState.Cursor.Left.X) >> 0x1F; // TODO
 
@@ -237,9 +235,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
             if (WindowState.IsActive)
             {
-                CONST U32 click = GetDoubleClickTime();
-
-                if (ticks - WindowState.Ticks < click)
+                if (ticks - WindowState.Cursor.Ticks < GetDoubleClickTime())
                 {
                     CONST BOOL xs = (CursorState.X - WindowState.Cursor.Right.X) >> 0x1F; // TODO
 
@@ -254,7 +250,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
                     }
                 }
 
-                WindowState.Ticks = ticks;
+                WindowState.Cursor.Ticks = ticks;
 
                 WindowState.Cursor.Left.Y = CursorState.Y;
                 WindowState.Cursor.Left.X = CursorState.X;

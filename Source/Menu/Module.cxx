@@ -219,7 +219,22 @@ BOOL InitializeModuleAction(VOID)
     InitializeFontAsset(&AssetsState.Fonts.Comic, "font_comic30", FONTTYPE_BASIC);
     InitializeFontAsset(&AssetsState.Fonts.Main, "font_phermes", FONTTYPE_COMPLEX);
 
-    WindowState.Ticks = GetTickCount();
+    // NOTE.
+    // The hash matches for the original greetings text asset.
+    // In case the greetings asset is modified, the assignment of a value triggers
+    // the display of the broken roken message every few seconds on every screen of the menu.
+    {
+        TEXTASSET greetings;
+        ActivateTextAsset(&greetings);
+
+        InitializeTextAsset(&greetings, "greetings");
+
+        WindowState.Ticks = 0;
+        if (AcquireTextAssetHash(&greetings) != 0x91BBE2BE) { WindowState.Ticks = GetTickCount(); }
+
+        InitializeTextAsset(&greetings, NULL);
+        DisposeTextAsset(&greetings);
+    }
 
     LogMessage("load \"mn2_texts\"\n");
 
@@ -417,10 +432,9 @@ BOOL ExecuteModuleAction(VOID)
 
         if (WindowState.Ticks != 0)
         {
-            U32 ticks = GetTickCount();
+            CONST U32 ticks = GetTickCount();
             if (10000 < ticks - WindowState.Ticks)
             {
-                ticks = GetTickCount();
                 WindowState.Ticks = ticks - 6000;
 
                 ShowMessageControl(&MessageControlState, "Broken roken?", MESSAGE_BUTTON_OKCANCEL);

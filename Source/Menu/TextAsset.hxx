@@ -45,6 +45,7 @@ typedef struct TextAsset
 } TEXTASSET, * TEXTASSETPTR;
 
 TEXTASSETPTR CLASSCALL ActivateTextAsset(TEXTASSETPTR self);
+U32 CLASSCALL AcquireTextAssetHash(TEXTASSETPTR self);
 VOID CLASSCALL AcquireTextAssetString(TEXTASSETPTR self, CONST U32 line, LPSTR result);
 VOID CLASSCALL AcquireTextAssetStringValue(TEXTASSETPTR self, CONST U32 line, CONST U32 param, LPSTR result);
 VOID CLASSCALL InitializeTextAsset(TEXTASSETPTR self, LPCSTR name);

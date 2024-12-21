@@ -148,7 +148,7 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         else { ticks = AudioPlayerState.Ticks + GetTickCount(); }
 
         U32 indx = 0;
-        for (U32 result = Durations[1].Item1; result < ticks; result = Durations[indx + 2].Item1, indx++) { }
+        for (U32 result = Durations[1].Item1; result < ticks; result = Durations[indx + 2].Item1, indx++) {}
 
         if (indx != 0 && Durations[indx + 1].Item1 != 0)
         {
@@ -212,7 +212,7 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
             CONST F64 value13 = cos((F64)((left % 1000) * 2) * 0.001 * 2.0 * M_PI);
             CONST F64 value14 = value13 * value11;
             CONST S32 iStack_100 = (S32)value14;
-            
+
             CONST F64 value16 = sin(value14);
             CONST F64 value17 = value14 * value16;
             CONST S32 iStack_110 = (S32)value17;
@@ -239,7 +239,7 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
                         BYTE value = 0;
                         CONST CHAR i = item[xx + 1];
 
-                        if (i < '0' || '9' < i) { value = i - 55; } else { value = i - 48; }
+                        value = (i < '0' || '9' < i) ? i - 55 : i - 48;
 
                         color = color * 16 + value;
                     }
@@ -276,31 +276,34 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
     }
     case GREETINGSTYPE_STARWARZ:
     {
-        //CONST U32 ticks = GRAPHICS_RESOLUTION_480 - (GetTickCount() - self->Ticks) / 7;
-        CONST U32 ticks = (GetTickCount() - self->Ticks) % GRAPHICS_RESOLUTION_480; // TODDO ^^
+        CONST U32 ticks = GRAPHICS_RESOLUTION_480 - (GetTickCount() - self->Ticks) / 7;
 
         SelectFontAssetColor(&AssetsState.Fonts.Comic, 0xFF, 0xFF, 0xFF);
 
-        if (self->Text.Count != self->Item)
+        if (self->Item < self->Text.Count)
         {
+            // TODO central line text is inverted color!
+
             for (U32 x = 0; x < self->Text.Count - self->Item; x++)
             {
-                U32 indx = height * x + ticks; // TODO
-                U32 uVar1 = height / 2 - (GRAPHICS_RESOLUTION_480 / 2) + indx;// TODO
-                U32 uVar9 = (int)uVar1 >> 0x1f; // TODO
+                S32 indx = height * x + ticks; // TODO
+                S32 uVar1 = height / 2 - (GRAPHICS_RESOLUTION_480 / 2) + indx;// TODO
+                S32 uVar9 = (int)uVar1 >> 0x1f; // TODO
 
                 if ((int)((uVar1 ^ uVar9) - uVar9) < 100 - height / 2) // TODO
                 {
-                    U32 uVar13 = (int)(indx - (GRAPHICS_RESOLUTION_480 / 2)) >> 0x1f; // TODO
-                    U32 minutes = (indx - (GRAPHICS_RESOLUTION_480 / 2) ^ uVar13) - uVar13; // TODO
+                    S32 uVar13 = (int)(indx - (GRAPHICS_RESOLUTION_480 / 2)) >> 0x1f; // TODO
+                    S32 minutes = (indx - (GRAPHICS_RESOLUTION_480 / 2) ^ uVar13) - uVar13; // TODO
 
-                    CONST U32 color = (U32)(cos((minutes * M_PI * 0.01) + 1.0) * 127.5);
+                    CONST S32 color = (S32)(cos((minutes * M_PI * 0.01) + 1.0) * 127.5);
 
                     AcquireTextAssetString(&self->Text, self->Item + x, greeting);
                     SelectFontAssetColor(&AssetsState.Fonts.Comic, color, color, color);
-                    DrawFontAssetText(&AssetsState.Fonts.Comic, 320, indx, greeting);
+                    DrawFontAssetText(&AssetsState.Fonts.Comic, GRAPHICS_RESOLUTION_640 / 2, indx, greeting);
                 }
             }
+
+            break;
         }
 
         break;
