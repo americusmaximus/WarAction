@@ -274,6 +274,7 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
 
         break;
     }
+    // NOTE. Never used in the game itself.
     case GREETINGSTYPE_STARWARZ:
     {
         CONST U32 ticks = GRAPHICS_RESOLUTION_480 - (GetTickCount() - self->Ticks) / 7;

@@ -505,7 +505,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         action = CONTROLACTION_UNKNOWN; break;
     }
-    case CONTROLACTION_1087:
+    case CONTROLACTION_1087: // TODO
     {
         ShowMessageControl(&MessageControlState,
             AcquireAssetMessage(ASSET_MESSAGE_RECEIVING_GAME_INFORMATION), MESSAGE_MODE_WAIT);

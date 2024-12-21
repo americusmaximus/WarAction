@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "Control.hxx"
 #include "Unknown.hxx"
 
 // TODO rename this file
@@ -39,11 +40,11 @@ U32 DAT_10058e18; // TODO
 U32 DAT_100470cc; // TODO
 
 // 0x10015bf0
-BOOL FUN_10015bf0(VOID) // TODO
+U32 FUN_10015bf0(VOID) // TODO
 {
     // TODO NOT IMPLEMENTED
 
-    return FALSE;
+    return CONTROLACTION_NONE;
 }
 
 // 0x10019d10
@@ -55,7 +56,7 @@ BOOL FUN_10019d10(VOID) // TODO
 }
 
 // 0x1001d7c0
-BOOL FUN_1001d7c0(VOID) // TODO
+BOOL FUN_1001d7c0(VOID) // TODO the network game can start: true/false
 {
     // TODO NOT IMPLEMENTED
 
