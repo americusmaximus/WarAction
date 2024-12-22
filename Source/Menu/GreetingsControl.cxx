@@ -38,6 +38,8 @@ SOFTWARE.
 
 #define GREETING_AUDIO_TRACK_INDEX  11
 
+#define MAX_STARWARZ_HEIGHT         100
+
 typedef struct Duration
 {
     U32     Item1;
@@ -283,24 +285,18 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
 
         if (self->Item < self->Text.Count)
         {
-            // TODO central line text is inverted color!
-
             for (U32 x = 0; x < self->Text.Count - self->Item; x++)
             {
-                S32 indx = height * x + ticks; // TODO
-                S32 uVar1 = height / 2 - (GRAPHICS_RESOLUTION_480 / 2) + indx;// TODO
-                S32 uVar9 = (int)uVar1 >> 0x1f; // TODO
+                CONST S32 offset = height * x + ticks;
+                CONST U32 delta = abs(offset + (height - GRAPHICS_RESOLUTION_480) / 2);
 
-                if ((int)((uVar1 ^ uVar9) - uVar9) < 100 - height / 2) // TODO
+                if (delta < MAX_STARWARZ_HEIGHT - height / 2)
                 {
-                    S32 uVar13 = (int)(indx - (GRAPHICS_RESOLUTION_480 / 2)) >> 0x1f; // TODO
-                    S32 minutes = (indx - (GRAPHICS_RESOLUTION_480 / 2) ^ uVar13) - uVar13; // TODO
-
-                    CONST S32 color = (S32)(cos((minutes * M_PI * 0.01) + 1.0) * 127.5);
+                    CONST U32 color = (U32)((cos(abs(offset - (GRAPHICS_RESOLUTION_480 / 2)) * M_PI * 0.01) + 1.0) * 127.5);
 
                     AcquireTextAssetString(&self->Text, self->Item + x, greeting);
                     SelectFontAssetColor(&AssetsState.Fonts.Comic, color, color, color);
-                    DrawFontAssetText(&AssetsState.Fonts.Comic, GRAPHICS_RESOLUTION_640 / 2, indx, greeting);
+                    DrawFontAssetText(&AssetsState.Fonts.Comic, GRAPHICS_RESOLUTION_640 / 2, offset, greeting);
                 }
             }
 
