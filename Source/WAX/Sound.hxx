@@ -28,19 +28,19 @@ SOFTWARE.
 
 typedef enum SoundResult
 {
-    SOUNDRESULT_NONE                                = 0,
-    SOUNDRESULT_INITIALIZE_ERROR                    = 1,
-    SOUNDRESULT_SET_COOPERATIVE_LEVEL_ERROR         = 2,
-    SOUNDRESULT_CREATE_MAIN_SOUND_BUFFER_ERROR      = 3,
-    SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR        = 4,
-    SOUNDRESULT_BUFFER_PLAY_ERROR                   = 5,
-    SOUNDRESULT_NO_SOUND_BUFFER_ERROR               = 6,
-    SOUNDRESULT_NO_SOUND_INSTANCE_ERROR             = 7,
-    SOUNDRESULT_INVALID_SETTINGS_ERROR              = 8,
-    SOUNDRESULT_CREATE_SOUND_BUFFER_ERROR           = 9,
-    SOUNDRESULT_LOCK_SOUND_BUFFER_ERROR             = 10,
-    SOUNDRESULT_NO_TRACKS_AVAILABLE                 = 11,
-    SOUNDRESULT_FORCE_DWORD                         = 0x7FFFFFFF
+    SOUNDRESULT_NONE                            = 0,
+    SOUNDRESULT_INITIALIZE_ERROR                = 1,
+    SOUNDRESULT_SET_COOPERATIVE_LEVEL_ERROR     = 2,
+    SOUNDRESULT_CREATE_MAIN_SOUND_BUFFER_ERROR  = 3,
+    SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR    = 4,
+    SOUNDRESULT_BUFFER_PLAY_ERROR               = 5,
+    SOUNDRESULT_NO_SOUND_BUFFER_ERROR           = 6,
+    SOUNDRESULT_NO_SOUND_INSTANCE_ERROR         = 7,
+    SOUNDRESULT_INVALID_SETTINGS_ERROR          = 8,
+    SOUNDRESULT_CREATE_SOUND_BUFFER_ERROR       = 9,
+    SOUNDRESULT_LOCK_SOUND_BUFFER_ERROR         = 10,
+    SOUNDRESULT_NO_TRACKS_AVAILABLE             = 11,
+    SOUNDRESULT_FORCE_DWORD                     = 0x7FFFFFFF
 } SOUNDRESULT, * SOUNDRESULTPTR;
 
 typedef struct SoundBuffer
@@ -62,7 +62,7 @@ typedef struct SoundTrack
 /*
 SoundDescriptor and SoundDescriptorEx Format:
     The structures are variable-sized structures.
-    
+
     Offset 0x00 - Name.
     Offset 0x40 - Count. Number of sound chunks in the sound.
     Offset 0x44 - Chunks. An index to a chunk header in the sound file.
