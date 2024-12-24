@@ -169,7 +169,7 @@ BOOL CLASSCALL InitializeSoundState(SOUNDPTR self, HWND window, CONST U32 count)
 
     if (FAILED(self->Buffer->SetFormat(&format)))
     {
-        format.nChannels = WAVE_FORMAT_PCM;
+        format.nChannels = 1;
         format.nBlockAlign = 2;
         format.wBitsPerSample = 16;
         format.nSamplesPerSec = 22050;
