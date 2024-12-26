@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include <Mathematics.Basic.hxx>
 
+#define DEFAULT_FONT_ASSET_SPACING      2
+
 #define PIXEL_COLOR_BIT_MASK            0x8000
 #define STENCIL_PIXEL_COLOR_SHIFT       5
 #define STENCIL_PIXEL_COLOR_VALUE       32
@@ -1672,26 +1674,48 @@ VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x10003320
-S32 FUN_10003320(U8* param_1, U8* param_2)
+S32 AcquireTextLength(LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    S32 result = 0;
 
-    return 0;
+    for (U32 xx = 0; text[xx] != NULL; xx++)
+    {
+        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Items[text[xx]]);
+
+        result = result + DEFAULT_FONT_ASSET_SPACING + image->Width;
+    }
+
+    return result;
 }
 
 // 0x10003360
-VOID FUN_10003360(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5)
+VOID FUN_10003360(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette) // TODO name
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    U32 offset = 0;
+
+    for (U32 xx = 0; text[xx] != NULL; xx++)
+    {
+        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Items[text[xx]]);
+
+        DrawMainSurfacePaletteSprite(x + offset, y, palette, image);
+
+        offset = offset + DEFAULT_FONT_ASSET_SPACING + image->Width;
+    }
 }
 
 // 0x100033c0
-VOID FUN_100033c0(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5)
+VOID FUN_100033c0(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette) // TODO name
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    U32 offset = 0;
+
+    for (U32 xx = 0; text[xx] != NULL; xx++)
+    {
+        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Items[text[xx]]);
+
+        DrawBackSurfacePaletteShadeSprite(x + offset, y, y, palette, image);
+
+        offset = offset + DEFAULT_FONT_ASSET_SPACING + image->Width;
+    }
 }
 
 // 0x10004390

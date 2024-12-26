@@ -48,18 +48,18 @@ BOOL CLASSCALL InitializeFontAsset(FONTASSETPTR self, LPCSTR name, CONST FONTTYP
 {
     self->Type = type;
 
+    CHAR path[MAX_FILE_NAME_LENGTH];
+
     switch (type)
     {
     case FONTTYPE_BASIC:
     {
-        CHAR path[MAX_FILE_NAME_LENGTH];
         wsprintfA(path, "%s.pck", name);
 
         return InitializeBinAsset(&self->Asset, path, TRUE);
     }
     case FONTTYPE_COMPLEX:
     {
-        CHAR path[MAX_FILE_NAME_LENGTH];
         wsprintfA(path, "%s.fnt", name);
         AcquireAssetContent(path, &self->Font, 0);
 
@@ -217,7 +217,7 @@ U32 AcquireFontAssetTextWidth(LPCSTR text, LPCVOID content, CONST U32 spacing)
     for (UNICHAR item = AcquireUnicode(value); item != NULL;
         value = AcquireNextString(value), item = AcquireUnicode(value))
     {
-        IMAGEPALETTESPRITEPTR image = AcquireFontAssetItem(content, item);
+        CONST IMAGEPALETTESPRITEPTR image = AcquireFontAssetItem(content, item);
 
         result = result + image->Width + spacing;
     }
@@ -256,7 +256,7 @@ VOID CLASSCALL DrawFontAssetText(FONTASSETPTR self, CONST U32 x, CONST U32 y, LP
     case FONTTYPE_COMPLEX:
     {
         // 0x1003a33c
-        CONST U32 alignments[] = { COMPLEXFONTALIGNMENT_LEFT, COMPLEXFONTALIGNMENT_CENTER, COMPLEXFONTALIGNMENT_RIGHT };
+        CONST STATIC U32 alignments[] = { COMPLEXFONTALIGNMENT_LEFT, COMPLEXFONTALIGNMENT_CENTER, COMPLEXFONTALIGNMENT_RIGHT };
 
         DrawFontAssetText(x, y + (self->Height - self->Offset), text,
             self->Font, self->Pixels, alignments[alignment + 1], DEFAULT_FONT_ASSET_SPACING); break;
@@ -291,7 +291,7 @@ VOID DrawFontAssetText(CONST U32 x, CONST U32 y, LPCSTR text, LPCVOID asset, PIX
     for (UNICHAR item = AcquireUnicode(value); item != NULL;
         value = AcquireNextString(value), item = AcquireUnicode(value))
     {
-        IMAGEPALETTESPRITEPTR sprite = AcquireFontAssetItem(asset, item);
+        CONST IMAGEPALETTESPRITEPTR sprite = AcquireFontAssetItem(asset, item);
 
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(offset, y, pixels, sprite);
 

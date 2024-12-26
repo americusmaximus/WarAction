@@ -92,7 +92,7 @@ BOOL InitializeWindow(S32 width, S32 height);
 BOOL LockRendererSurface(VOID);
 BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
-S32 FUN_10003320(U8* param_1, U8* param_2); // TODO
+S32 AcquireTextLength(LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset);
 VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
 VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
@@ -114,8 +114,8 @@ VOID FUN_10001ed0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 VOID FUN_10001f10(S32 param_1, S32 param_2, S32 param_3); // TODO
 VOID FUN_10001f40(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height); // TODO
-VOID FUN_10003360(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
-VOID FUN_100033c0(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
+VOID FUN_10003360(S32 s, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette); // TODO
+VOID FUN_100033c0(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette); // TODO
 VOID FUN_10004390(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100046b6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100049e6(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO

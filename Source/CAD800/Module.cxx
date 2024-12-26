@@ -48,7 +48,7 @@ RENDERERMODULESTATECONTAINERPTR InitializeModule()
     ModuleState.Actions.OffsetSurfaces                              = OffsetSurfaces;
     ModuleState.Actions.ConvertVisibleColors                        = ConvertVisibleColors;
     ModuleState.Actions.ConvertAllColors                            = ConvertAllColors;
-    ModuleState.Actions.FUN_10003320                                = FUN_10003330; // TODO
+    ModuleState.Actions.AcquireTextLength                           = AcquireTextLength;
     ModuleState.Actions.FUN_100033c0                                = FUN_100033d0; // TODO
     ModuleState.Actions.FUN_10003360                                = FUN_10003370; // TODO
     ModuleState.Actions.FUN_10001e90                                = FUN_10001ea0; // TODO

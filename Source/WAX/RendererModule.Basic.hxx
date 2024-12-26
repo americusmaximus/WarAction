@@ -43,7 +43,7 @@ typedef BOOL(*LOCKRENDERERSURFACEACTION)(VOID);
 typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
-typedef S32(*FUN_10003320ACTION)(U8* param_1, U8* param_2); // TODO
+typedef S32(*ACQUIRETEXTLENGTHACTION)(LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset);
 typedef VOID(*CONVERTALLCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*CONVERTVISIBLECOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*DRAWBACKSURFACEPALETTESHADESPRITEACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
@@ -65,8 +65,8 @@ typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 par
 typedef VOID(*FUN_10001F10ACTION)(S32 param_1, S32 param_2, S32 param_3); // TODO
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
-typedef VOID(*FUN_10003360ACTION)(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
-typedef VOID(*FUN_100033C0ACTION)(S32 param_1, S32 param_2, U8* param_3, U8* param_4, LPVOID param_5); // TODO
+typedef VOID(*FUN_10003360ACTION)(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette); // TODO
+typedef VOID(*FUN_100033C0ACTION)(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette); // TODO
 typedef VOID(*FUN_10004390ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 typedef VOID(*FUN_100046B6ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 typedef VOID(*FUN_100049E6ACTION)(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
@@ -110,7 +110,7 @@ typedef struct RendererModuleStateActions
     OFFSETSURFACESACTION                            OffsetSurfaces;
     CONVERTVISIBLECOLORSACTION                      ConvertVisibleColors;
     CONVERTALLCOLORSACTION                          ConvertAllColors;
-    FUN_10003320ACTION FUN_10003320; // TODO
+    ACQUIRETEXTLENGTHACTION                         AcquireTextLength;
     FUN_100033C0ACTION FUN_100033c0; // TODO
     FUN_10003360ACTION FUN_10003360; // TODO
     FUN_10001E90ACTION FUN_10001e90; // TODO
