@@ -72,7 +72,6 @@ BOOL OpenBinArchives(LPSTR names)
     return TRUE;
 }
 
-
 // 0x10024740
 BOOL OpenBinArchiveFile(LPSTR name)
 {
@@ -126,8 +125,6 @@ BOOL OpenBinArchiveFile(LPSTR name)
 
     return FALSE;
 }
-
-
 
 // 0x10024ca0
 BOOL OpenBinArchiveDirectory(LPSTR name)

@@ -22,12 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
-
-typedef struct StringValue
-{
-    LPSTR Value;
-} STRINGVALUE, * STRINGVALUEPTR;
+#include <Strings.hxx>
 
 STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value);
 VOID AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...);

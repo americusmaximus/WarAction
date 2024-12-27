@@ -20,18 +20,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Strings.hxx"
+#include "ZipFile.hxx"
 
-#include "Basic.hxx"
+#define MAX_ZIPFILE_MODE_COUNT      4
 
-#include <BinArchive.hxx>
+// 0x10091920
+BOOL CLASSCALL OpenZipFile(ZIPFILEPTR self, LPCSTR name, CONST U32 mode)
+{
+    CHAR path[MAX_FILE_NAME_LENGTH];
+    AcquireAnsiString(path, MAX_FILE_NAME_LENGTH, name, -1);
 
-BOOL AcquireBinArchive(CONST U32 indx, LPSTR name, LPSTR result, CONST BOOL overwrite);
+    CONST CHAR* modes[MAX_ZIPFILE_MODE_COUNT] = { "rb", "r+b", "wb", "w+b" };
 
-BOOL InitializeBinArchives(LPSTR names);
+    self->File = gzopen(path, modes[mode]);
 
-BOOL OpenBinArchiveDirectory(LPSTR name);
-BOOL OpenBinArchiveFile(LPSTR name);
-BOOL OpenBinArchives(LPSTR names);
+    return self->File != NULL;
+}
 
-LPVOID ReadBinArchive(BINFILEPTR self, U32* count);
+// 0x100919c0
+VOID CLASSCALL CloseZipFile(ZIPFILEPTR self)
+{
+    gzclose(self->File);
+}
+
+// 0x100919d0
+VOID CLASSCALL WriteZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size)
+{
+    if (self->Unk02 == 0) // TODO
+    {
+        gzwrite(self->File, value, size);
+
+        self->Offset = gztell(self->File);
+
+        return;
+    }
+
+    self->Offset = self->Offset + size;
+}

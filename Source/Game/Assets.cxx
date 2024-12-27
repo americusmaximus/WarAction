@@ -20,18 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Assets.hxx"
 
-#include "Basic.hxx"
-
-#include <BinArchive.hxx>
-
-BOOL AcquireBinArchive(CONST U32 indx, LPSTR name, LPSTR result, CONST BOOL overwrite);
-
-BOOL InitializeBinArchives(LPSTR names);
-
-BOOL OpenBinArchiveDirectory(LPSTR name);
-BOOL OpenBinArchiveFile(LPSTR name);
-BOOL OpenBinArchives(LPSTR names);
-
-LPVOID ReadBinArchive(BINFILEPTR self, U32* count);
+ASSETSTATEMODULECONTAINER AssetsState;

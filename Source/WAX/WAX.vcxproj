@@ -44,6 +44,7 @@
     <ClInclude Include="RendererModule.Export.hxx" />
     <ClInclude Include="RendererModule.Import.hxx" />
     <ClInclude Include="Sound.hxx" />
+    <ClInclude Include="Strings.hxx" />
     <ClInclude Include="VisualModule.Export.hxx" />
     <ClInclude Include="VisualModule.Import.hxx" />
     <ClInclude Include="Window.hxx" />

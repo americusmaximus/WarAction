@@ -73,25 +73,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x64\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x64\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,7 +106,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6255;6335;6385;6386;28159;</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -132,7 +132,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6255;6335;6385;6386;28159;</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -160,7 +160,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6255;6335;6385;6386;28159;</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -185,7 +185,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6255;6335;6385;6386;28159;</DisableSpecificWarnings>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ExceptionHandling>false</ExceptionHandling>
@@ -206,6 +206,8 @@
     <ClCompile Include="Action.cxx" />
     <ClCompile Include="ActionArea.cxx" />
     <ClCompile Include="Activation.cxx" />
+    <ClCompile Include="Assets.cxx" />
+    <ClCompile Include="BinArchive.cxx" />
     <ClCompile Include="BinFile.cxx" />
     <ClCompile Include="ControlCommand.cxx" />
     <ClCompile Include="Cursor.cxx" />
@@ -214,7 +216,9 @@
     <ClCompile Include="Module.cxx" />
     <ClCompile Include="Sound.cxx" />
     <ClCompile Include="State.cxx" />
+    <ClCompile Include="Strings.cxx" />
     <ClCompile Include="Window.cxx" />
+    <ClCompile Include="ZipFile.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Action.hxx" />
@@ -232,7 +236,9 @@
     <ClInclude Include="Resources.hxx" />
     <ClInclude Include="Sound.hxx" />
     <ClInclude Include="State.hxx" />
+    <ClInclude Include="Strings.hxx" />
     <ClInclude Include="Window.hxx" />
+    <ClInclude Include="ZipFile.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Module.def" />

@@ -23,15 +23,13 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
+#include "Native.Basic.hxx"
 
-#include <BinArchive.hxx>
+typedef U32             UNICHAR;
 
-BOOL AcquireBinArchive(CONST U32 indx, LPSTR name, LPSTR result, CONST BOOL overwrite);
+#define UNICHAR_SIZE    sizeof(UNICHAR)
 
-BOOL InitializeBinArchives(LPSTR names);
-
-BOOL OpenBinArchiveDirectory(LPSTR name);
-BOOL OpenBinArchiveFile(LPSTR name);
-BOOL OpenBinArchives(LPSTR names);
-
-LPVOID ReadBinArchive(BINFILEPTR self, U32* count);
+typedef struct StringValue
+{
+    LPSTR Value;
+} STRINGVALUE, * STRINGVALUEPTR;

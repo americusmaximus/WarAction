@@ -36,7 +36,6 @@ typedef struct StateModuleContainer
     
     WINDOWPTR                       Window;                         // 0x103854d4
     LOGGERPTR                       Logger;                         // 0x103854d8
-
 } STATEMODULECONTAINER, * STATEMODULECONTAINERPTR;
 
 EXTERN STATEMODULECONTAINER State;

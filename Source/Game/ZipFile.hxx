@@ -22,16 +22,25 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
+#include "BinFile.hxx"
 
-#include <BinArchive.hxx>
+#include <zlib.h>
 
-BOOL AcquireBinArchive(CONST U32 indx, LPSTR name, LPSTR result, CONST BOOL overwrite);
+#define ZIPFILE_OPEN_READ               0 /* rb */
+#define ZIPFILE_OPEN_READ_MODIFY        1 /* r+b */
+#define ZIPFILE_OPEN_WRITE              2 /* wb */
+#define ZIPFILE_OPEN_WRITE_MODIFY       3 /* w+b */
 
-BOOL InitializeBinArchives(LPSTR names);
+typedef struct ZipFile
+{
+    gzFile  File;
+    z_off_t Offset;
+    S32     Unk02; // TODO
+} ZIPFILE, * ZIPFILEPTR;
 
-BOOL OpenBinArchiveDirectory(LPSTR name);
-BOOL OpenBinArchiveFile(LPSTR name);
-BOOL OpenBinArchives(LPSTR names);
+// NOTE. The original hame uses zlib 1.1.3 where the type z_off_t is defined as long.
+// Since then, zlib updated the type z_off_t to long long, thus breaking excplicit backward compatibility.
 
-LPVOID ReadBinArchive(BINFILEPTR self, U32* count);
+BOOL CLASSCALL OpenZipFile(ZIPFILEPTR self, LPCSTR name, CONST U32 mode);
+VOID CLASSCALL CloseZipFile(ZIPFILEPTR self);
+VOID CLASSCALL WriteZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size);
