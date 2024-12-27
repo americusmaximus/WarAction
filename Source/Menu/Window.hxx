@@ -63,8 +63,8 @@ WINDOWPTR CLASSCALL ActivateWindowState(WINDOWPTR self, ACTIONHANDLERLAMBDA init
 VOID CLASSCALL InitializeWindowState(WINDOWPTR self);
 
 BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result);
-VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action);
 VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action);
+VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA lambda);
 VOID SelectWindowInputState(CONST WINDOWINPUTSTATE state);
 
 BOOL IsAnsiCharacter(U8 value);

@@ -26,6 +26,7 @@
     <ClInclude Include="BinArchive.hxx" />
     <ClInclude Include="BinAsset.hxx" />
     <ClInclude Include="BinFile.hxx" />
+    <ClInclude Include="Control.hxx" />
     <ClInclude Include="ControlCommand.hxx" />
     <ClInclude Include="DirectDraw.hxx" />
     <ClInclude Include="DirectInput.hxx" />

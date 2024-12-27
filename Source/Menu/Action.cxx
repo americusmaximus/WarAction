@@ -119,6 +119,17 @@ BOOL CLASSCALL ContainsActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR han
     return FALSE;
 }
 
+// 0x10022ed0
+VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action)
+{
+    if (action != NULL)
+    {
+        ACTIONHANDLERPTR handler = ALLOCATE(ACTIONHANDLER);
+
+        if (handler != NULL) { InitializeActionHandler(handler, destination, priority, action); }
+    }
+}
+
 // 0x10022f00
 VOID ReleaseActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERLAMBDA action)
 {
@@ -135,10 +146,4 @@ VOID ReleaseActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERLAMBDA action)
 
         free(self);
     }
-}
-
-// 0x10022f50
-VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA lambda)
-{
-    ReleaseActionHandler(ActionState.Message, (ACTIONHANDLERLAMBDA)lambda);
 }

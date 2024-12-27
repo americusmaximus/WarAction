@@ -24,6 +24,8 @@ SOFTWARE.
 
 #include "Objects.hxx"
 
+#include <Control.hxx>
+
 typedef enum ControlType
 {
     CONTROLTYPE_CONTROL             = 0,
@@ -104,12 +106,6 @@ CONTROLTYPE CLASSCALL AcquireControlTypeMultiStart(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypePanel(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypeScroll(LPVOID);
 CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID); // TODO
-
-/* TODO Better Name */
-#define CONTROLACTION_UNKNOWN                               (-1) /* TODO  Back? */
-
-#define CONTROLACTION_NONE                                  0000 /* TODO OK? */
-#define CONTROLACTION_1                                     1 /* TODO Cancel? */
 
 #define CONTROLACTION_MAIN_SINGLE                           1000
 #define CONTROLACTION_MAIN_MULTI                            1001

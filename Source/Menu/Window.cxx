@@ -137,23 +137,6 @@ VOID SelectWindowInputState(CONST WINDOWINPUTSTATE state)
     WindowState.Cursor.Right.X = WindowState.Cursor.Right.Y = DEFAULT_INITIAL_CURSOR_POSITION;
 }
 
-// 0x10022f30
-VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action)
-{
-    InitializeActionHandler(&ActionState.Message, priority, (ACTIONHANDLERLAMBDA)action);
-}
-
-// 0x10022ed0
-VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action)
-{
-    if (action != NULL)
-    {
-        ACTIONHANDLERPTR handler = ALLOCATE(ACTIONHANDLER);
-
-        if (handler != NULL) { InitializeActionHandler(handler, destination, priority, action); }
-    }
-}
-
 // 0x100228f0
 BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
 {
@@ -323,6 +306,18 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
     }
 
     return TRUE;
+}
+
+// 0x10022f30
+VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action)
+{
+    InitializeActionHandler(&ActionState.Message, priority, (ACTIONHANDLERLAMBDA)action);
+}
+
+// 0x10022f50
+VOID ReleaseWindowActionHandler(WINDOWACTIONHANDLERLAMBDA lambda)
+{
+    ReleaseActionHandler(ActionState.Message, (ACTIONHANDLERLAMBDA)lambda);
 }
 
 // 0x10023320
