@@ -22,7 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Basic.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+#include <BinArchive.hxx>

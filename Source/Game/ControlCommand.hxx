@@ -22,7 +22,22 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Basic.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+#include <ControlCommand.hxx>
+
+#define MAX_CONTROL_COMMAND_ITEMS_COUNT 256
+
+typedef struct ControlCommandStateModuleContainer
+{
+    CONTROLCOMMAND  Items[MAX_CONTROL_COMMAND_ITEMS_COUNT]; // 0x10384494
+    S32             WriteIndex;                             // 0x10385494
+    S32             ReadIndex;                              // 0x10385498
+} CONTROLCOMMANDSTATEMODULECONTAINER, * CONTROLCOMMANDSTATEMODULECONTAINERPTR;
+
+EXTERN CONTROLCOMMANDSTATEMODULECONTAINER CommandControlState;
+
+BOOL DequeueControlCommand(CONST U32 command);
+BOOL DequeueControlCommand(CONTROLCOMMANDPTR command, CONST BOOL remove);
+CONTROLCOMMANDPTR DequeueControlCommand(CONST BOOL remove);
+VOID EnqueueControlCommand(CONST U32 command, CONST U32 action, CONST U32 param1, CONST U32 param2);

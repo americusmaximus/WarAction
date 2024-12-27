@@ -106,7 +106,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -132,7 +132,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -160,7 +160,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -185,7 +185,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4996;6031;6335;6385;6386;28159;</DisableSpecificWarnings>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ExceptionHandling>false</ExceptionHandling>
@@ -203,11 +203,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cxx" />
+    <ClCompile Include="ActionArea.cxx" />
+    <ClCompile Include="Activation.cxx" />
+    <ClCompile Include="BinFile.cxx" />
+    <ClCompile Include="ControlCommand.cxx" />
+    <ClCompile Include="Cursor.cxx" />
+    <ClCompile Include="Logger.cxx" />
     <ClCompile Include="Main.cxx" />
+    <ClCompile Include="Module.cxx" />
+    <ClCompile Include="Sound.cxx" />
+    <ClCompile Include="State.cxx" />
+    <ClCompile Include="Window.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.hxx" />
+    <ClInclude Include="ActionArea.hxx" />
+    <ClInclude Include="Activation.hxx" />
+    <ClInclude Include="Assets.hxx" />
     <ClInclude Include="Basic.hxx" />
+    <ClInclude Include="BinArchive.hxx" />
+    <ClInclude Include="BinFile.hxx" />
+    <ClInclude Include="Control.hxx" />
+    <ClInclude Include="ControlCommand.hxx" />
+    <ClInclude Include="Cursor.hxx" />
+    <ClInclude Include="Logger.hxx" />
+    <ClInclude Include="Module.hxx" />
     <ClInclude Include="Resources.hxx" />
+    <ClInclude Include="Sound.hxx" />
+    <ClInclude Include="State.hxx" />
+    <ClInclude Include="Window.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Module.def" />

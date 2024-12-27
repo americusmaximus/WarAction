@@ -22,7 +22,13 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Basic.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+#include <ActionArea.hxx>
+
+typedef struct ActionAreaStateModuleContainer
+{
+    ACTIONAREAPTR   Items;  // 0x1038549c
+} ACTIONAREASTATEMODULECONTAINER, * ACTIONAREASTATEMODULECONTAINERPTR;
+
+EXTERN ACTIONAREASTATEMODULECONTAINER ActionAreaState;

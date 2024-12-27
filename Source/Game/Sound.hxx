@@ -22,7 +22,11 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include <Sound.hxx>
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+typedef struct SoundStateModuleContainer
+{
+    SOUNDPTR        Sound;      // 0x103854dc
+} SOUNDSTATEMODULECONTAINER, * SOUNDSTATEMODULECONTAINERPTR;
+
+EXTERN SOUNDSTATEMODULECONTAINER SoundState;

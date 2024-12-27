@@ -20,9 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Sound.hxx"
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
-
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+SOUNDSTATEMODULECONTAINER SoundState;

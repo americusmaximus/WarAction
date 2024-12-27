@@ -20,9 +20,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "ActionArea.hxx"
+#include "Control.hxx"
+#include "ControlCommand.hxx"
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include <stdlib.h>
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+#define MIN_ACTION_VALUE 0x4FFFFFFF
+#define MAX_ACTION_VALUE 0x7FFFFFFF
+
+ACTIONAREASTATEMODULECONTAINER ActionAreaState;

@@ -20,9 +20,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Assets.hxx"
+#include "State.hxx"
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include <stdio.h>
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+// 0x1008f6c0
+U32 CLASSCALL WriteBinFile(BINFILEPTR self, LPCVOID content, CONST U32 size)
+{
+    U32 length = size;
+
+    WriteFile(BINFILEHANDLE(self->Value), content, length, (LPDWORD)&length, NULL);
+
+    return length;
+}

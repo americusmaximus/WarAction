@@ -22,7 +22,17 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Basic.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+typedef struct CursorStateModuleContainer
+{
+    S32     X;      // 0x10384484
+    S32     Y;      // 0x10384488
+    BOOL    IsLeft; // TODO
+    BOOL    IsRight;// TODO
+} CURSORSTATEMODULECONTAINER, * CURSORSTATEMODULECONTAINERPTR;
+
+EXTERN CURSORSTATEMODULECONTAINER CursorState;
+
+VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32 ny);
+VOID CursorMessageHandler(CONST U32 action);

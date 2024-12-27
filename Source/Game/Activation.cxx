@@ -20,9 +20,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#pragma once
+#include "Activation.hxx"
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
-
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+// 0x100ac000
+// NOTE: This is a workaround for static initialization of objects, variables, states, etc.
+VOID Activate(VOID)
+{
+    // TODO NOT IMPLEMENTED
+}

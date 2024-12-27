@@ -22,7 +22,18 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Basic.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+#include <BinFile.hxx>
+
+BOOL CLASSCALL OpenBinFile(BINFILEPTR self, LPCSTR name, CONST U32 type);
+U32 CLASSCALL AcquireBinFileSize(BINFILEPTR self);
+U32 CLASSCALL PointBinFile(BINFILEPTR self, CONST LONG distance, CONST DWORD method);
+U32 CLASSCALL ReadBinFile(BINFILEPTR self, LPVOID content, CONST U32 size);
+U32 CLASSCALL WriteBinFile(BINFILEPTR self, LPCVOID content, CONST U32 size);
+VOID CLASSCALL CloseBinFile(BINFILEPTR self);
+
+VOID AcquireBinFile(BINFILEINFOPTR self, CONST U32 archive, LPSTR names, CONST BOOL overwrite);
+VOID AcquireBinFile(LPSTR name, CONST U32 archive, CONST BOOL overwrite);
+
+VOID CopyBinFile(BINFILEPTR src, BINFILEPTR dst, CONST U32 size);

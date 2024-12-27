@@ -22,7 +22,24 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Basic.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+#include <Action.hxx>
+
+typedef struct ActionStateModuleContainer
+{
+    ACTIONHANDLERPTR Activate;      // 0x103854bc
+    ACTIONHANDLERPTR Initialize;    // 0x103854c0
+    ACTIONHANDLERPTR Execute;       // 0x103854c4
+    ACTIONHANDLERPTR Release;       // 0x103854c8
+    ACTIONHANDLERPTR Message;       // 0x103854cc
+    ACTIONHANDLERPTR Active;        // 0x103854d0
+} ACTIONSTATEMODULECONTAINER, * ACTIONSTATEMODULECONTAINERPTR;
+
+EXTERN ACTIONSTATEMODULECONTAINER ActionState;
+
+VOID CLASSCALL ReleaseActionHandler(ACTIONHANDLERPTR self);
+BOOL CLASSCALL ContainsActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR handler);
+
+VOID InitializeActionHandler(ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action);
+VOID ReleaseActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERLAMBDA action);

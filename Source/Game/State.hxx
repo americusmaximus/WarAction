@@ -22,7 +22,21 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include <App.hxx>
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+typedef struct StateModuleContainer
+{
+    APPPTR                          App;                            // 0x10294d34
+
+    BOOL IsIniActive;                                               // 0x10349724
+
+    SOUNDPTR                        Sound;                          // 0x1038446c
+    RENDERERPTR                     Renderer;                       // 0x10384474
+    MODULEPTR                       Module;                         // 0x10384478
+    
+    WINDOWPTR                       Window;                         // 0x103854d4
+    LOGGERPTR                       Logger;                         // 0x103854d8
+
+} STATEMODULECONTAINER, * STATEMODULECONTAINERPTR;
+
+EXTERN STATEMODULECONTAINER State;

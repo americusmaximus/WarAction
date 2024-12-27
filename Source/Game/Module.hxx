@@ -22,7 +22,16 @@ SOFTWARE.
 
 #pragma once
 
-#include <Basic.hxx>
-#include <Native.Basic.hxx>
+#include "Action.hxx"
 
-#define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+BOOL InitializeModuleAction(VOID);
+VOID InitializeExecuteActionHandler(CONST U32 priority, ACTIONHANDLERLAMBDA action);
+VOID ReleaseExecuteActionHandler(ACTIONHANDLERLAMBDA action);
+
+VOID AcquireIniFileState(VOID);
+
+BOOL FUN_10083eb0(VOID); // TODO
+BOOL FUN_10084390(VOID); // TODO
+BOOL FUN_1008e120(VOID); // TODO
+BOOL FUN_1008e320(VOID); // TODO
+BOOL FUN_1008e4c0(VOID); // TODO
