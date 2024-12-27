@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID OffsetSurfaces(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID OffsetSurfaces(RENDERERPTR state, MODULEEVENTPTR event);

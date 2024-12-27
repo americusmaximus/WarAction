@@ -108,7 +108,7 @@ VOID ReleaseDirectX()
 }
 
 // 0x10001130
-VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b)
+VOID SetPixelColorMasks(U32 r, U32 g, U32 b)
 {
     ModuleState.ActualRedMask = r;
     ModuleState.InitialRedMask = r;

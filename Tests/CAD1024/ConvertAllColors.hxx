@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID ConvertAllColors(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID ConvertAllColors(RENDERERPTR state, MODULEEVENTPTR event);

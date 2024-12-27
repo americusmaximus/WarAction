@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawStencilSurfaceWindowRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawStencilSurfaceWindowRectangle(RENDERERPTR state, MODULEEVENTPTR event);

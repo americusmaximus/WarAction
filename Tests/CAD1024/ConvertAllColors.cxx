@@ -32,7 +32,7 @@ static PIXEL Convert(PIXEL pixel, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm
     return (PIXEL)(r | g | b);
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, U32 ro, U32 go, U32 bo, U32 rm, U32 gm, U32 bm)
 {
     CONST U32 count = 1 << (sizeof(PIXEL) << 3);
 
@@ -53,7 +53,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, RO, GO, BO, RM, GM, BM) { E->Action = A; Execute(S, E, RO, GO, BO, RM, GM, BM); if (!E->Result) { return; } }
 
-VOID ConvertAllColors(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID ConvertAllColors(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     InitializePixelMasks(state);

@@ -71,7 +71,7 @@ static BOOL IsInsideArea(PIXEL* pixels, U32 count, RECTANGLEPTR rects, PIXEL pix
     return match == sum && !mismatch;
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 length, S32 result, U32 count, RECTANGLEPTR rects)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 length, S32 result, U32 count, RECTANGLEPTR rects)
 {
     Initialize(state);
 
@@ -95,7 +95,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, L, R, RC, RCT) { E->Action = A; Execute(S, E, X, Y, L, R, RC, RCT); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceHorizontalColorLine(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceHorizontalColorLine(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

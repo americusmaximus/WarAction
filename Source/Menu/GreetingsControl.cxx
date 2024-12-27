@@ -150,7 +150,10 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         else { ticks = AudioPlayerState.Ticks + GetTickCount(); }
 
         U32 indx = 0;
-        for (U32 result = Durations[1].Item1; result < ticks; result = Durations[indx + 2].Item1, indx++) {}
+        for (U32 result = Durations[1].Item1; result < ticks; indx++)
+        {
+            result = Durations[indx + 2].Item1;
+        }
 
         if (indx != 0 && Durations[indx + 1].Item1 != 0)
         {

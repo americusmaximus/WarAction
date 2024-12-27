@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID MaskStencilSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID MaskStencilSurfaceRectangle(RENDERERPTR state, MODULEEVENTPTR event);

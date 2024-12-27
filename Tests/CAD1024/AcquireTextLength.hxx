@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceColorOutline(RENDERERPTR state, MODULEEVENTPTR event);
+VOID AcquireTextLength(RENDERERPTR state, MODULEEVENTPTR event);

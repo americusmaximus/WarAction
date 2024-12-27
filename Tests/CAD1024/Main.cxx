@@ -22,6 +22,7 @@ SOFTWARE.
 
 #include "Initialize.hxx"
 
+#include "AcquireTextLength.hxx"
 #include "ConvertAllColors.hxx"
 #include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
@@ -53,8 +54,9 @@ SOFTWARE.
         A(S, E); if (E->Result) { printf(#A "... [OK]\r\n");} else { printf(#A "... [ERROR] @ %s\r\n", E->Action); }    \
     }
     
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
 {
+    ACTION(AcquireTextLength, state, event);
     ACTION(ConvertAllColors, state, event);
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
@@ -103,7 +105,7 @@ S32 main(S32 argc, CHAR** argv)
 
     if (modules == NULL) { return EXIT_FAILURE; }
 
-    RENDERERMODULESTATECONTAINERPTR* states = (RENDERERMODULESTATECONTAINERPTR*)malloc(argc * sizeof(RENDERERMODULESTATECONTAINERPTR*));
+    RENDERERPTR* states = (RENDERERPTR*)malloc(argc * sizeof(RENDERERPTR*));
 
     if (states == NULL) { return EXIT_FAILURE; }
 
@@ -120,7 +122,7 @@ S32 main(S32 argc, CHAR** argv)
 
         if (module == NULL) { printf("[ERROR]\r\n"); FreeLibrary(module); continue; }
 
-        RENDERERMODULESTATECONTAINERPTR state = lambda();
+        RENDERERPTR state = lambda();
 
         {
             names[count] = argv[x];

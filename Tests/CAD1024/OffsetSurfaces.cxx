@@ -25,7 +25,7 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "OffsetSurfaces.hxx"
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
 {
      //SavePixels(MakeFileName("OffsetSurfacesMain", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
      //SavePixels(MakeFileName("OffsetSurfacesBack", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
@@ -37,7 +37,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 #define EXECUTE(A, S, E) { E->Action = A; Execute(S, E); if (!E->Result) { return; } }
 
 
-VOID OffsetSurfaces(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID OffsetSurfaces(RENDERERPTR state, MODULEEVENTPTR event)
 {
     Initialize(state);
 

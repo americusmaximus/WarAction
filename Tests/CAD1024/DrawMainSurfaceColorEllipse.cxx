@@ -25,7 +25,7 @@ SOFTWARE.
 #include "FilePath.hxx"
 #include "Initialize.hxx"
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 size, S32 step, S32 result)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 size, S32 step, S32 result)
 {
     Initialize(state);
 
@@ -49,7 +49,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, SZ, ST, R) { E->Action = A; Execute(S, E, X, Y, SZ, ST, R); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceColorEllipse(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceColorEllipse(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

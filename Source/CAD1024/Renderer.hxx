@@ -141,7 +141,7 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
 VOID ReleaseDirectX(VOID);
 VOID ReleaseRendererSurface(VOID);
 VOID RestoreDisplayMode(VOID);
-VOID SetPixelColorMasks(CONST U32 r, CONST U32 g, CONST U32 b);
+VOID SetPixelColorMasks(U32 r, U32 g, U32 b);
 VOID UnlockRendererSurface(VOID);
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID WriteSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);

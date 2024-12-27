@@ -25,7 +25,7 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "WriteRendererSurfaceSurfaceRectangle.hxx"
 
-static VOID Init(RENDERERMODULESTATECONTAINERPTR state)
+static VOID Init(RENDERERPTR state)
 {
     Initialize(state);
 
@@ -104,7 +104,7 @@ static BOOL IsInsideArea(PIXEL* pixels, U32 stride, U32 count, RECTANGLEPTR rect
     return match == sum && !mismatch;
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, S32 result, S32 count, RECTANGLEPTR rects)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 dx, S32 dy, S32 stride, S32 result, S32 count, RECTANGLEPTR rects)
 {
 #if ACTIVE_TRUE_COLOR_MODE
     event->Result = TRUE;
@@ -140,7 +140,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, W, H, DX, DY, STRIDE, R, RC, RCT) { E->Action = A; Execute(S, E, X, Y, W, H, DX, DY, STRIDE, R, RC, RCT); if (!E->Result) { return; } }
 
-VOID WriteRendererSurfaceSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID WriteRendererSurfaceSurfaceRectangle(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     HWND hwnd = InitializeWindow();

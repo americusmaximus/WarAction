@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceColorEllipse(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawMainSurfaceColorEllipse(RENDERERPTR state, MODULEEVENTPTR event);

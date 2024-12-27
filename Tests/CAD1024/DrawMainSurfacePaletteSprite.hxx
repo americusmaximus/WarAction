@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfacePaletteSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawMainSurfacePaletteSprite(RENDERERPTR state, MODULEEVENTPTR event);

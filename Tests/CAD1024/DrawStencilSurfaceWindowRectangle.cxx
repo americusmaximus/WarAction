@@ -25,7 +25,7 @@ SOFTWARE.
 #include "FilePath.hxx"
 #include "Initialize.hxx"
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 ox, S32 oy)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 ox, S32 oy)
 {
     Initialize(state);
 
@@ -38,7 +38,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, OX, OY) { E->Action = A; Execute(S, E, X, Y, OX, OY); if (!E->Result) { return; } }
 
-VOID DrawStencilSurfaceWindowRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID DrawStencilSurfaceWindowRectangle(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

@@ -20,7 +20,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "Basic.hxx"
 #include "File.hxx"
+
+#include <stdlib.h>
 
 HANDLE OpenFile(LPCSTR name)
 {
@@ -31,4 +34,23 @@ BOOL ReadFile(HANDLE file, LPVOID content, CONST DWORD size)
 {
     DWORD read = 0;
     return ReadFile(file, content, size, &read, NULL) && read == size;
+}
+
+BOOL AcquireFile(LPCSTR name, LPVOID* content)
+{
+    HANDLE file = OpenFile(name);
+
+    if (file == INVALID_HANDLE_VALUE) { return FALSE; }
+
+    CONST U32 size = GetFileSize(file, NULL);
+
+    *content = malloc(size);
+
+    if (*content == NULL) { return FALSE; }
+
+    if (!ReadFile(file, *content, size)) { return FALSE; }
+
+    CloseHandle(file);
+
+    return TRUE;
 }

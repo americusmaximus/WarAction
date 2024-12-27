@@ -72,7 +72,7 @@ static BOOL IsInsideArea(PIXEL* pixels, U32 count, RECTANGLEPTR rects, PIXEL pix
     return match == sum && !mismatch;
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 result, U32 count, RECTANGLEPTR rects)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 result, U32 count, RECTANGLEPTR rects)
 {
     Initialize(state);
 
@@ -98,7 +98,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, W, H, R, RC, RCT) { E->Action = A; Execute(S, E, X, Y, W, H, R, RC, RCT); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceColorShadeRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceColorShadeRectangle(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     InitializePixelMasks(state);

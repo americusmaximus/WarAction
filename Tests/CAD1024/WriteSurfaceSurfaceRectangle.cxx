@@ -98,7 +98,7 @@ static BOOL IsInsideArea(PIXEL* pixels, S32 width, S32 height, S32 stride, U32 c
     return match == sum && !mismatch;
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 sx, S32 sy, S32 sstr, S32 dx, S32 dy, S32 dstr, S32 width, S32 height, S32 result, S32 count, RECTANGLEPTR rects)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 sx, S32 sy, S32 sstr, S32 dx, S32 dy, S32 dstr, S32 width, S32 height, S32 result, S32 count, RECTANGLEPTR rects)
 {
     BOOL success = FALSE;
 
@@ -137,7 +137,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, SX, SY, SSTR, DX, DY, DSTR, W, H, R, RC, RCT) { E->Action = A; Execute(S, E, SX, SY, SSTR, DX, DY, DSTR, W, H, R, RC, RCT); if (!E->Result) { return; } }
 
-VOID WriteSurfaceSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID WriteSurfaceSurfaceRectangle(RENDERERPTR state, MODULEEVENTPTR event)
 {
     Initialize(state);
 

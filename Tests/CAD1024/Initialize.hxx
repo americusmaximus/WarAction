@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID Initialize(RENDERERMODULESTATECONTAINERPTR state);
+VOID Initialize(RENDERERPTR state);
 
 BOOL RegisterWindowClass(VOID);
 BOOL ReleaseWindowClass(VOID);

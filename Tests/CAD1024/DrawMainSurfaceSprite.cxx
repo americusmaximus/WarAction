@@ -28,31 +28,12 @@ SOFTWARE.
 
 #include <stdio.h>
 
-static BOOL AcquireFile(LPCSTR name, LPVOID* content)
-{
-    HANDLE file = OpenFile(name);
-
-    if (file == INVALID_HANDLE_VALUE) { return FALSE; }
-
-    CONST U32 size = GetFileSize(file, NULL);
-
-    *content = malloc(size);
-
-    if (*content == NULL) { return FALSE; }
-
-    if (!ReadFile(file, *content, size)) { return FALSE; }
-
-    CloseHandle(file);
-
-    return TRUE;
-}
-
 static IMAGESPRITEPTR AcquireSprite(LPVOID content, CONST U32 indx)
 {
     return (IMAGESPRITEPTR)((ADDR)content + (ADDR)(((U32*)content)[indx]));
 }
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 ox, S32 oy, S32 wx, S32 wy, LPCSTR name, U32 indx)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 ox, S32 oy, S32 wx, S32 wy, LPCSTR name, U32 indx)
 {
     Initialize(state);
 
@@ -77,7 +58,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event,
 
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceSprite(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

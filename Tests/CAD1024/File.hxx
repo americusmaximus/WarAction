@@ -26,3 +26,4 @@ SOFTWARE.
 
 HANDLE OpenFile(LPCSTR name);
 BOOL ReadFile(HANDLE file, LPVOID content, CONST DWORD size);
+BOOL AcquireFile(LPCSTR name, LPVOID* content);

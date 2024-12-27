@@ -23,7 +23,7 @@ SOFTWARE.
 #include "Initialize.hxx"
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
 
-static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
 {
     Initialize(state);
 
@@ -51,7 +51,7 @@ static VOID Execute(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
 
 #define EXECUTE(A, S, E) { E->Action = A; Execute(S, E); if (!E->Result) { return; } }
 
-VOID WriteBackSurfaceMainSurfaceRectangle(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event)
+VOID WriteBackSurfaceMainSurfaceRectangle(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
     Initialize(state);

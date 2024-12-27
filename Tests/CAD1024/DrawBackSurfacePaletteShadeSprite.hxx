@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawBackSurfacePaletteShadeSprite(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawBackSurfacePaletteShadeSprite(RENDERERPTR state, MODULEEVENTPTR event);

@@ -50,5 +50,5 @@ typedef struct ColorMaskResult
     DOUBLEPIXEL BackSurfaceShadePixel;
 } COLORMASKRESULT, * COLORMASKRESULTPTR;
 
-VOID InitializePixelMasks(RENDERERMODULESTATECONTAINERPTR state);
-VOID SetPixelColorMasks(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID InitializePixelMasks(RENDERERPTR state);
+VOID SetPixelColorMasks(RENDERERPTR state, MODULEEVENTPTR event);

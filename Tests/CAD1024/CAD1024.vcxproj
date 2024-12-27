@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AcquireTextLength.cxx" />
     <ClCompile Include="BitMap.cxx" />
     <ClCompile Include="ConvertAllColors.cxx" />
     <ClCompile Include="ConvertVisibleColors.cxx" />
@@ -185,6 +186,7 @@
     <ClCompile Include="WriteSurfaceSurfaceRectangle.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AcquireTextLength.hxx" />
     <ClInclude Include="BitMap.hxx" />
     <ClInclude Include="ConvertAllColors.hxx" />
     <ClInclude Include="ConvertVisibleColors.hxx" />

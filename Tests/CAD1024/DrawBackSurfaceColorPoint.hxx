@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawBackSurfaceColorPoint(RENDERERMODULESTATECONTAINERPTR state, MODULEEVENTPTR event);
+VOID DrawBackSurfaceColorPoint(RENDERERPTR state, MODULEEVENTPTR event);
