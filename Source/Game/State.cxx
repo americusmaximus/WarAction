@@ -22,4 +22,16 @@ SOFTWARE.
 
 #include "State.hxx"
 
+#include <stdlib.h>
+
 STATEMODULECONTAINER State;
+
+// 0x10056710
+LPVOID AllocateZero(CONST SIZE_T size)
+{
+    LPVOID result = malloc(size);
+
+    ZeroMemory(result, size);
+
+    return result;
+}

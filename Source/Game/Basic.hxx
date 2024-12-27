@@ -26,3 +26,5 @@ SOFTWARE.
 #include <Native.Basic.hxx>
 
 #define ALLOCATE(T) ((T ## PTR)malloc(sizeof(T)))
+
+LPVOID AllocateZero(CONST SIZE_T size);
