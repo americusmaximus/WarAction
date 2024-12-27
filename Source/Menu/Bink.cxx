@@ -29,7 +29,7 @@ SOFTWARE.
 #define BINK_MAX_FRAMES 10000000
 
 // 0x100015c0
-BOOL InitializeBink(LPCSTR name, RENDERERMODULESTATECONTAINERPTR renderer, SOUNDPTR sound, CONST U32 max, CONST U32 frames)
+BOOL InitializeBink(LPCSTR name, RENDERERPTR renderer, SOUNDPTR sound, CONST U32 max, CONST U32 frames)
 {
     VideoState.Renderer = renderer;
 

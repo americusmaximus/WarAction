@@ -33,7 +33,7 @@ typedef struct StateContainer
     struct
     {
         HMODULE                         Module;         // 0x00410374
-        RENDERERMODULESTATECONTAINERPTR State;          // 0x00410378
+        RENDERERPTR                     State;          // 0x00410378
     } Renderer;
 
     MODULEPTR                           Module;         // 0x00410380
@@ -49,25 +49,25 @@ typedef struct StateContainer
 
     struct
     {
-        ACTIONHANDLERPTR                Activate;      // 0x00410508
-        ACTIONHANDLERPTR                Initialize;    // 0x0041050c
-        ACTIONHANDLERPTR                Action;        // 0x00410510
-        ACTIONHANDLERPTR                Release;       // 0x00410514
-        ACTIONHANDLERPTR                Message;       // 0x00410518
+        ACTIONHANDLERPTR                Activate;       // 0x00410508
+        ACTIONHANDLERPTR                Initialize;     // 0x0041050c
+        ACTIONHANDLERPTR                Action;         // 0x00410510
+        ACTIONHANDLERPTR                Release;        // 0x00410514
+        ACTIONHANDLERPTR                Message;        // 0x00410518
 
-        ACTIONHANDLERPTR                Active;        // 0x0041051c
+        ACTIONHANDLERPTR                Active;         // 0x0041051c
     } Actions;
 
     WINDOWPTR                           Window;         // 0x00410520
 
     struct
     {
-        LPSTR                           All;        // 0x00410524
-        LPSTR*                          Args;       // 0x00410528
-        U32                             Count;      // 0x0041052c
+        LPSTR                           All;            // 0x00410524
+        LPSTR*                          Args;           // 0x00410528
+        U32                             Count;          // 0x0041052c
     } Arguments;
 
-    LOGGERPTR                           Logger;     // 0x00410530
+    LOGGERPTR                           Logger;         // 0x00410530
 } STATECONTAINER, * STATECONTAINERPTR;
 
 EXTERN STATECONTAINER State;

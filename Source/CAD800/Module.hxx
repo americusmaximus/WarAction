@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include <RendererModule.Export.hxx>
 
-extern RENDERERMODULESTATECONTAINER ModuleState;
+extern RENDERER ModuleState;

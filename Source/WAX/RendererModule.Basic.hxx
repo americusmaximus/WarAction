@@ -26,7 +26,7 @@ SOFTWARE.
 #include "DirectDraw.hxx"
 #include "Renderer.Basic.hxx"
 
-typedef struct RendererModuleDirectXState
+typedef struct DirectX
 {
 #ifdef ACTIVATE_MODERN_GRAPHICS_MODE
     LPDIRECTDRAW7           Instance;
@@ -35,7 +35,7 @@ typedef struct RendererModuleDirectXState
     LPDIRECTDRAW            Instance;
     LPDIRECTDRAWSURFACE     Surface;
 #endif
-} RENDERERMODULEDIRECTXSTATE, * LPRENDERERMODULEDIRECTXSTATE;
+} DIRECTX, * DIRECTXPTR;
 
 typedef BOOL(*INITIALIZEDIRECTXACTION)(HWND hwnd, BOOL fullscreen);
 typedef BOOL(*INITIALIZEWINDOWACTION)(S32 width, S32 height);
@@ -97,7 +97,7 @@ typedef VOID(*UNLOCKRENDERERSURFACEACTION)(VOID);
 typedef VOID(*WRITEBACKSURFACEMAINSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
 
-typedef struct RendererModuleStateActions
+typedef struct RendererActions
 {
     INITIALIZEACTION                                Initialize; // CADraw_Reset
     INITIALIZEDIRECTXACTION                         InitializeDirectX;
@@ -159,7 +159,7 @@ typedef struct RendererModuleStateActions
     FUN_1000A4F3ACTION FUN_1000a4f3; // TODO
     FUN_10009EB3ACTION FUN_10009eb3; // TODO
     RELEASEDIRECTXACTION                            ReleaseDirectX;
-} RENDERERMODULESTATEACTIONS, * RENDERERMODULESTATEACTIONSPTR;
+} RENDERERACTIONS, * RENDERERACTIONSPTR;
 
 typedef struct Rectangle
 {
@@ -169,7 +169,7 @@ typedef struct Rectangle
     S32 Height;
 } RECTANGLE, * RECTANGLEPTR;
 
-typedef struct RendererModuleSurface // TODO Refactor the struct out.
+typedef struct RendererSurface // TODO Refactor the struct out.
 {
     S32     Offset;     // Offset within the surface data. Originally in bytes, presently in pixels.
     S32     Y;          // The surface offset along the "Y" axis in pixels.
@@ -184,17 +184,17 @@ typedef struct RendererModuleSurface // TODO Refactor the struct out.
     PIXEL*  Stencil;    // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
 
     LPVOID  Renderer;   // The DirectDraw surface.
-} RENDERERMODULESURFACE, * RENDERERMODULESURFACEPTR;
+} RENDERERSURFACE, * RENDERERSURFACEPTR;
 
 typedef struct Sprite0x50 // TODO Name
 {
     U8    Unk[0x50]; // TODO
 } SPRITE0X50, * SPRITE0X50PTR; // TODO Name
 
-typedef struct RendererModuleStateContainer
+typedef struct Renderer
 {
     RECTANGLE                   Window;
-    RENDERERMODULESURFACE       Surface;
+    RENDERERSURFACE             Surface;
 
     U16                         ActualRedMask;
     U16                         InitialRedMask;
@@ -227,6 +227,6 @@ typedef struct RendererModuleStateContainer
 
     HWND                        HWND;
     BOOL                        IsFullScreen;
-    RENDERERMODULEDIRECTXSTATE  DirectX;
-    RENDERERMODULESTATEACTIONS  Actions;
-} RENDERERMODULESTATECONTAINER, * RENDERERMODULESTATECONTAINERPTR;
+    DIRECTX  DirectX;
+    RENDERERACTIONS             Actions;
+} RENDERER, * RENDERERPTR;

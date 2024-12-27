@@ -24,10 +24,10 @@ SOFTWARE.
 #include "Renderer.hxx"
 
 // 0x10012af0
-RENDERERMODULESTATECONTAINER ModuleState;
+RENDERER ModuleState;
 
 // 0x10001970
-RENDERERMODULESTATECONTAINERPTR InitializeModule()
+RENDERERPTR InitializeModule()
 {
     ModuleState.Surface.Main    = RendererState.Surfaces.Main;
     ModuleState.Surface.Back    = RendererState.Surfaces.Back;

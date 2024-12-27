@@ -34,7 +34,7 @@ typedef struct VideStateModuleContainer
     HBINK                           Instance;   // 0x10046088
     S32                             Surface;    // 0x1004608c
 
-    RENDERERMODULESTATECONTAINERPTR Renderer;   // 0x1004606c
+    RENDERERPTR                     Renderer;   // 0x1004606c
     U32                             MaxFrames;  // 0x10046074
 } VIDESTATEMODULECONTAINER, * VIDESTATEMODULECONTAINERPTR;
 

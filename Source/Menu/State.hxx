@@ -41,7 +41,7 @@ typedef struct StateModuleContainer
     BOOL IsIniActive;                                               // 0x100470bc
 
     MODULEPTR                       Module;                         // 0x10059500
-    RENDERERMODULESTATECONTAINERPTR Renderer;                       // 0x100596d8
+    RENDERERPTR                     Renderer;                       // 0x100596d8
     WINDOWPTR                       Window;                         // 0x1005ac0c
     LOGGERPTR                       Logger;                         // 0x1005ac10
 
