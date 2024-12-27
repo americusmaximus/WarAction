@@ -39,6 +39,8 @@ BOOL InitializeBink(LPCSTR name, RENDERERPTR renderer, SOUNDPTR sound, CONST U32
 
     VideoState.Instance = BinkOpen(name, BINKIOSIZE);
 
+    if (VideoState.Instance == NULL) { return FALSE; }
+
     if (max == 0)
     {
         VideoState.MaxFrames = max;
@@ -72,6 +74,8 @@ BOOL InitializeBink(LPCSTR name, RENDERERPTR renderer, SOUNDPTR sound, CONST U32
 // 0x10001660
 BINKVIDEORESULT PlayBinkVideo(VOID)
 {
+    if (VideoState.Instance == NULL) { return BINKVIDEORESULT_COMPLETED; }
+
     if (!BinkWait(VideoState.Instance))
     {
         return ShowBinkFrame() ? BINKVIDEORESULT_COMPLETED : BINKVIDEORESULT_CONTINUE;
@@ -83,6 +87,8 @@ BINKVIDEORESULT PlayBinkVideo(VOID)
 // 0x10001690
 BOOL ShowBinkFrame(VOID)
 {
+    if (VideoState.Instance == NULL) { return TRUE; }
+
     BinkDoFrame(VideoState.Instance);
 
     DDSURFACEDESC desc; // 0x10046000
@@ -126,7 +132,7 @@ BOOL ShowBinkFrame(VOID)
 // 0x10001760
 BOOL ReleaseBink(VOID)
 {
-    BinkClose(VideoState.Instance);
+    if (VideoState.Instance != NULL) { BinkClose(VideoState.Instance); }
 
     return TRUE;
 }
