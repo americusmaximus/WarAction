@@ -22,6 +22,7 @@ SOFTWARE.
 
 #include "Assets.hxx"
 #include "AssetFile.hxx"
+#include "BinFile.hxx"
 #include "Logger.hxx"
 
 #include <stdlib.h>

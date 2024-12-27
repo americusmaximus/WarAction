@@ -28,7 +28,7 @@ SOFTWARE.
 #include <stdlib.h>
 #include <zlib.h>
 
-// 0x10024f00
+// 0x100911a0
 BFH AcquireAssetFileIndex(LPCSTR name)
 {
     BFH indx = crc32(0, (BYTE*)name, strlen(name)) & (MAX_BINARY_FILE_COUNT - 1);
@@ -45,7 +45,7 @@ BFH AcquireAssetFileIndex(LPCSTR name)
     return INVALID_BINFILE_VALUE;
 }
 
-// 0x10024e40
+// 0x100910e0
 BOOL OpenAssetFile(CONST BFH indx)
 {
     if (indx == INVALID_BINFILE_VALUE) { return FALSE; }
@@ -74,7 +74,7 @@ BOOL OpenAssetFile(CONST BFH indx)
     return FALSE;
 }
 
-// 0x10024e10
+// 0x100910b0
 BOOL CLASSCALL OpenAssetFile(ASSETFILEPTR self, LPCSTR name)
 {
     self->Value = AcquireAssetFileIndex(name);
@@ -84,7 +84,7 @@ BOOL CLASSCALL OpenAssetFile(ASSETFILEPTR self, LPCSTR name)
     return OpenAssetFile(self->Value);
 }
 
-// 0x10024f90
+// 0x10091230
 BOOL IsAssetFileActive(CONST BFH indx)
 {
     if (indx == INVALID_BINFILE_VALUE) { return FALSE; }
@@ -99,7 +99,7 @@ BOOL IsAssetFileActive(CONST BFH indx)
     return FALSE;
 }
 
-// 0x10025010
+// 0x100912b0
 VOID CloseAssetFile(CONST BFH indx)
 {
     switch (AssetsState.Files[indx].Type)
@@ -110,19 +110,19 @@ VOID CloseAssetFile(CONST BFH indx)
     }
 }
 
-// 0x10024ff0
+// 0x10091290
 VOID CLASSCALL CloseAssetFile(ASSETFILEPTR self)
 {
     if (IsAssetFileActive(self)) { CloseAssetFile(self->Value); }
 }
 
-// 0x10024f80
+// 0x10091220
 BOOL CLASSCALL IsAssetFileActive(ASSETFILEPTR self)
 {
     return IsAssetFileActive(self->Value);
 }
 
-// 0x100253e0
+// 0x10091680
 U32 AcquireAssetFileSize(CONST BFH indx)
 {
     switch (AssetsState.Files[indx].Type)
@@ -135,7 +135,7 @@ U32 AcquireAssetFileSize(CONST BFH indx)
     return 0;
 }
 
-// 0x100253c0
+// 0x10091660
 U32 CLASSCALL AcquireAssetFileSize(ASSETFILEPTR self)
 {
     if (!IsAssetFileActive(self)) { return 0; }
@@ -143,7 +143,7 @@ U32 CLASSCALL AcquireAssetFileSize(ASSETFILEPTR self)
     return AcquireAssetFileSize(self->Value);
 }
 
-// 0x10025040
+// 0x100912e0
 U32 CLASSCALL ReadAssetFile(ASSETFILEPTR self, LPVOID content, U32 size)
 {
     if (!IsAssetFileActive(self)) { return 0; }
@@ -151,7 +151,7 @@ U32 CLASSCALL ReadAssetFile(ASSETFILEPTR self, LPVOID content, U32 size)
     return ReadAssetFile(self->Value, content, size);
 }
 
-// 0x10025410
+// 0x100916b0
 S32 CLASSCALL SelectAssetFileOffset(ASSETFILEPTR self, LONG distance, DWORD method)
 {
     if (!IsAssetFileActive(self)) { return INVALID_ASSET_FILE_OFFSET; }
@@ -159,7 +159,15 @@ S32 CLASSCALL SelectAssetFileOffset(ASSETFILEPTR self, LONG distance, DWORD meth
     return SelectAssetFileOffset(self->Value, distance, method);
 }
 
-// 0x100254c0
+// 0x10091760
+S32 CLASSCALL AcquireAssetFileOffset(ASSETFILEPTR self)
+{
+    if (!IsAssetFileActive(self)) { return INVALID_ASSET_FILE_OFFSET; }
+
+    return AcquireAssetFileOffset(self->Value);
+}
+
+// 0x100917b0
 S32 CLASSCALL AcquireAssetFileString(ASSETFILEPTR self, LPSTR content, CONST U32 length)
 {
     if (!IsAssetFileActive(self)) { return 0; }
@@ -186,7 +194,7 @@ S32 CLASSCALL AcquireAssetFileString(ASSETFILEPTR self, LPSTR content, CONST U32
     return count;
 }
 
-// 0x10025070
+// 0x10091310
 U32 ReadAssetFile(CONST BFH indx, LPVOID content, U32 size)
 {
     switch (AssetsState.Files[indx].Type)
@@ -218,7 +226,7 @@ U32 ReadAssetFile(CONST BFH indx, LPVOID content, U32 size)
     return 0;
 }
 
-// 0x10025340
+// 0x100915e0
 U32 ReadSingleChunkAssetFile(LPVOID result, CONST BFH indx, CONST U32 offset, CONST U32 size)
 {
     BINFILEPTR file = &AssetsState.Archives[AssetsState.Files[indx].Archive].File;
@@ -247,7 +255,7 @@ U32 ReadSingleChunkAssetFile(LPVOID result, CONST BFH indx, CONST U32 offset, CO
     return actual;
 }
 
-// 0x10025110
+// 0x100913b0
 U32 ReadMultiChunkAssetFile(LPVOID result, CONST BFH indx, CONST U32 offset, CONST U32 size)
 {
     if (AssetsState.Files[indx].Size <= offset) { return 0; }
@@ -288,7 +296,7 @@ U32 ReadMultiChunkAssetFile(LPVOID result, CONST BFH indx, CONST U32 offset, CON
     return actual;
 }
 
-// 0x100251e0
+// 0x10091480
 LPVOID ReadAssetFileChunk(CONST BFH indx, CONST U32 chunk)
 {
     LPVOID result = AcquireBinFileChunk(indx, chunk);
@@ -326,7 +334,7 @@ LPVOID ReadAssetFileChunk(CONST BFH indx, CONST U32 chunk)
     return result;
 }
 
-// 0x10025440
+// 0x100916e0
 U32 SelectAssetFileOffset(CONST U32 indx, LONG distance, DWORD method)
 {
     CONST BINFILECONTENTTYPE type = AssetsState.Files[indx].Type;
@@ -343,4 +351,14 @@ U32 SelectAssetFileOffset(CONST U32 indx, LONG distance, DWORD method)
     }
 
     return AssetsState.Files[indx].Offset;
+}
+
+// 0x10091780
+U32 SelectAssetFileOffset(CONST U32 indx)
+{
+    CONST BINFILECONTENTTYPE type = AssetsState.Files[indx].Type;
+
+    if (type == BINFILECONTENTTYPE_FILE) { return AcquireBinFilePosition(&AssetsState.Files[indx].File); }
+
+    return type == BINFILECONTENTTYPE_COMBINED || type != BINFILECONTENTTYPE_COMPRESSED ? AssetsState.Files[indx].Offset : 0;
 }

@@ -21,9 +21,11 @@ SOFTWARE.
 */
 
 #include "Assets.hxx"
-#include "State.hxx"
+#include "Strings.hxx"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <zlib.h>
 
 // 0x1008f5f0
 BOOL CLASSCALL OpenBinFile(BINFILEPTR self, LPCSTR name, CONST U32 type)
@@ -65,10 +67,32 @@ U32 CLASSCALL ReadBinFile(BINFILEPTR self, LPVOID content, CONST U32 size)
     return actual;
 }
 
+// 0x1008f6c0
+U32 CLASSCALL WriteBinFile(BINFILEPTR self, LPCVOID content, CONST U32 size)
+{
+    U32 length = size;
+
+    WriteFile(BINFILEHANDLE(self->Value), content, length, (LPDWORD)&length, NULL);
+
+    return length;
+}
+
 // 0x1008f6f0
 U32 CLASSCALL PointBinFile(BINFILEPTR self, CONST LONG distance, CONST DWORD method)
 {
     return SetFilePointer(BINFILEHANDLE(self->Value), distance, NULL, method);
+}
+
+// 0x1008f710
+U32 CLASSCALL AcquireBinFilePosition(BINFILEPTR self)
+{
+    return SetFilePointer(BINFILEHANDLE(self->Value), 0, NULL, FILE_CURRENT);
+}
+
+// 0x1008f720
+U32 CLASSCALL AcquireBinFileSize(BINFILEPTR self)
+{
+    return GetFileSize(BINFILEHANDLE(self->Value), NULL);
 }
 
 // 0x10090b40
@@ -105,9 +129,7 @@ VOID AcquireBinFile(BINFILEINFOPTR self, CONST U32 archive, LPSTR names, CONST B
     for (BFH x = 0; x < MAX_BINARY_FILE_COUNT; x++)
     {
         if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE
-            || _strcmpi(AssetsState.Files[indx].Name, name) == 0) {
-            break;
-        }
+            || _strcmpi(AssetsState.Files[indx].Name, name) == 0) { break; }
 
         indx = (indx + 1) % MAX_BINARY_FILE_COUNT;
     }
@@ -125,12 +147,27 @@ VOID AcquireBinFile(BINFILEINFOPTR self, CONST U32 archive, LPSTR names, CONST B
     }
 }
 
-// 0x1008f6c0
-U32 CLASSCALL WriteBinFile(BINFILEPTR self, LPCVOID content, CONST U32 size)
+// 0x10090e70
+VOID AcquireBinFile(LPSTR name, CONST U32 archive, CONST BOOL overwrite)
 {
-    U32 length = size;
+    BFH indx = crc32(0, (BYTE*)name, strlen(name)) & (MAX_BINARY_FILE_COUNT - 1);
 
-    WriteFile(BINFILEHANDLE(self->Value), content, length, (LPDWORD)&length, NULL);
+    for (BFH x = 0; x < MAX_BINARY_FILE_COUNT; x++)
+    {
+        if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE
+            || _strcmpi(AssetsState.Files[indx].Name, name) == 0) {
+            break;
+        }
 
-    return length;
+        indx = (indx + 1) % MAX_BINARY_FILE_COUNT;
+    }
+
+    if (AssetsState.Files[indx].Type == BINFILECONTENTTYPE_NONE
+        || _strcmpi(AssetsState.Files[indx].Name, name) != 0 || overwrite)
+    {
+        AssetsState.Files[indx].Name = name;
+        AssetsState.Files[indx].Type = BINFILECONTENTTYPE_FILE;
+        AssetsState.Files[indx].Archive = archive;
+        AssetsState.Files[indx].File.Value = INVALID_BINFILE_VALUE;
+    }
 }

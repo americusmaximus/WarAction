@@ -24,6 +24,7 @@ SOFTWARE.
 #include "BinFile.hxx"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 // 0x100909e0
 BOOL OpenBinArchiveFile(LPSTR name)

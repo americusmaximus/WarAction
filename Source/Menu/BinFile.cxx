@@ -65,10 +65,26 @@ U32 CLASSCALL ReadBinFile(BINFILEPTR self, LPVOID content, CONST U32 size)
     return actual;
 }
 
+// 0x100220e0
+U32 CLASSCALL WriteBinFile(BINFILEPTR self, LPCVOID content, CONST U32 size)
+{
+    U32 length = size;
+
+    WriteFile(BINFILEHANDLE(self->Value), content, length, (LPDWORD)&length, NULL);
+
+    return length;
+}
+
 // 0x10022110
 U32 CLASSCALL PointBinFile(BINFILEPTR self, CONST LONG distance, CONST DWORD method)
 {
     return SetFilePointer(BINFILEHANDLE(self->Value), distance, NULL, method);
+}
+
+// 0x10022130
+U32 CLASSCALL AcquireBinFileSize(BINFILEPTR self)
+{
+    return GetFileSize(BINFILEHANDLE(self->Value), NULL);
 }
 
 // 0x100248a0
@@ -161,20 +177,4 @@ VOID CopyBinFile(BINFILEPTR src, BINFILEPTR dst, CONST U32 size)
 
         actual = actual - length;
     }
-}
-
-// 0x100220e0
-U32 CLASSCALL WriteBinFile(BINFILEPTR self, LPCVOID content, CONST U32 size)
-{
-    U32 length = size;
-
-    WriteFile(BINFILEHANDLE(self->Value), content, length, (LPDWORD)&length, NULL);
-
-    return length;
-}
-
-// 0x10022130
-U32 CLASSCALL AcquireBinFileSize(BINFILEPTR self)
-{
-    return GetFileSize(BINFILEHANDLE(self->Value), NULL);
 }

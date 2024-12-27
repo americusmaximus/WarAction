@@ -29,8 +29,6 @@ SOFTWARE.
 #define DEFAULT_STRING_BUFFER_LENGTH 64
 #define UNIITEM(x, indx) ((BYTE)((LPBYTE)x)[indx])
 
-
-
 // 0x1008eef0
 UNICHAR AcquireUnicode(CONST LPSTR value)
 {

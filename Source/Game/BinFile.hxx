@@ -27,6 +27,7 @@ SOFTWARE.
 #include <BinFile.hxx>
 
 BOOL CLASSCALL OpenBinFile(BINFILEPTR self, LPCSTR name, CONST U32 type);
+U32 CLASSCALL AcquireBinFilePosition(BINFILEPTR self);
 U32 CLASSCALL AcquireBinFileSize(BINFILEPTR self);
 U32 CLASSCALL PointBinFile(BINFILEPTR self, CONST LONG distance, CONST DWORD method);
 U32 CLASSCALL ReadBinFile(BINFILEPTR self, LPVOID content, CONST U32 size);

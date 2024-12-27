@@ -26,6 +26,7 @@ SOFTWARE.
 
 BOOL CLASSCALL IsAssetFileActive(ASSETFILEPTR self);
 BOOL CLASSCALL OpenAssetFile(ASSETFILEPTR self, LPCSTR name);
+S32 CLASSCALL AcquireAssetFileOffset(ASSETFILEPTR self);
 S32 CLASSCALL AcquireAssetFileString(ASSETFILEPTR self, LPSTR content, CONST U32 length);
 S32 CLASSCALL SelectAssetFileOffset(ASSETFILEPTR self, LONG distance, DWORD method);
 U32 CLASSCALL AcquireAssetFileSize(ASSETFILEPTR self);
@@ -36,6 +37,7 @@ BFH AcquireAssetFileIndex(LPCSTR name);
 BOOL IsAssetFileActive(CONST BFH indx);
 BOOL OpenAssetFile(CONST BFH indx);
 LPVOID ReadAssetFileChunk(CONST BFH indx, CONST U32 chunk);
+U32 AcquireAssetFileOffset(CONST U32 indx);
 U32 AcquireAssetFileSize(CONST BFH indx);
 U32 ReadAssetFile(CONST BFH indx, LPVOID content, CONST U32 size);
 U32 ReadMultiChunkAssetFile(LPVOID result, CONST BFH indx, CONST U32 offset, CONST U32 size);

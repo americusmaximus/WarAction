@@ -22,6 +22,7 @@
     <ClInclude Include="Action.hxx" />
     <ClInclude Include="ActionArea.hxx" />
     <ClInclude Include="App.hxx" />
+    <ClInclude Include="AssetFile.hxx" />
     <ClInclude Include="Basic.hxx" />
     <ClInclude Include="BinArchive.hxx" />
     <ClInclude Include="BinAsset.hxx" />

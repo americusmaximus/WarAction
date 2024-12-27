@@ -73,25 +73,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Bin\x32\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x32\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x64\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Bin\x64\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Obj\x64\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\Yoink\Source\1.0.Q;..\..\SDK\zlib</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\WAX;..\..\SDK\DX70\Include;..\..\SDK\zlib</IncludePath>
     <TargetName>$(ProjectName).x64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -206,6 +206,7 @@
     <ClCompile Include="Action.cxx" />
     <ClCompile Include="ActionArea.cxx" />
     <ClCompile Include="Activation.cxx" />
+    <ClCompile Include="AssetFile.cxx" />
     <ClCompile Include="Assets.cxx" />
     <ClCompile Include="BinArchive.cxx" />
     <ClCompile Include="BinFile.cxx" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Action.hxx" />
     <ClInclude Include="ActionArea.hxx" />
     <ClInclude Include="Activation.hxx" />
+    <ClInclude Include="AssetFile.hxx" />
     <ClInclude Include="Assets.hxx" />
     <ClInclude Include="Basic.hxx" />
     <ClInclude Include="BinArchive.hxx" />

@@ -58,3 +58,9 @@ VOID CLASSCALL WriteZipFile(ZIPFILEPTR self, LPVOID value, CONST U32 size)
 
     self->Offset = self->Offset + size;
 }
+
+// 0x10091a10
+VOID CLASSCALL SelectZipFileCompression(ZIPFILEPTR self, CONST U32 level)
+{
+    gzsetparams(self->File, level, 0);
+}
