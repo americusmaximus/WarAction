@@ -22,31 +22,38 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
-#include "Native.Basic.hxx"
+#include "BinFile.hxx"
 
-#define MAX_WINDOW_TITLE_LENGTH     256
+#define INVALID_BINARCHIVE_INDEX    (-1)
 
-typedef enum WindowInputState
+#define BINARCHIVE_MAGIC            0x53465A46 /* FZFS */
+
+typedef enum BinArchiveType
 {
-    WINDOWINPUTSTATE_NONE               = 0,
-    WINDOWINPUTSTATE_ACCEPT_MOUSE       = 1,
-    WINDOWINPUTSTATE_ACCEPT_KEYBOARD    = 2,
-    WINDOWINPUTSTATE_FORCE_DWORD        = 0x7FFFFFFF
-} WINDOWINPUTSTATE, * WINDOWINPUTSTATEPTR;
+    BINARCHIVETYPE_NONE = 0,
+    BINARCHIVETYPE_FILE = 1,
+    BINARCHIVETYPE_DIRECTORY = 2,
+    BINARCHIVETYPE_FORCE_DWORD = 0x7FFFFFF
+} BINARCHIVETYPE, * BINARCHIVETYPEPTR;
 
-typedef struct Window
+typedef struct BinArchiveHeader
 {
-    HINSTANCE   Instance;
-    LPCSTR      Args;
-    HWND        HWND;
-    WNDCLASSA   Class;
-    CHAR        Title[MAX_WINDOW_TITLE_LENGTH];
-    DWORD       Style;
-    S32         X;
-    S32         Y;
-    S32         Width;
-    S32         Height;
-    HMENU       Menu;
-    BOOL        IsActive;
-} WINDOW, * WINDOWPTR;
+    U32                 Magic;
+    U32                 Offset;
+} BINARCHIVEHEADER, * BINARCHIVEHEADERPTR;
+
+typedef struct BinArchiveDescriptor
+{
+    U32                 Size;
+    U32                 Count;
+    U32                 Length;
+} BINARCHIVEDESCRIPTOR, * BINARCHIVEDESCRIPTORPTR;
+
+typedef struct BinArchive
+{
+    BINARCHIVETYPE      Type;
+    CHAR                Name[MAX_FILE_NAME_LENGTH];
+    U32* Offsets;
+    LPSTR               Names;
+    BINFILE             File;
+} BINARCHIVE, * BINARCHIVEPTR;

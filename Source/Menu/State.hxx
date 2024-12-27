@@ -26,7 +26,6 @@ SOFTWARE.
 #include "Window.hxx"
 
 #include <App.hxx>
-#include <RendererModule.Basic.hxx>
 
 typedef struct StateModuleContainer
 {

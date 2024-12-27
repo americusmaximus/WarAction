@@ -23,6 +23,15 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
+#include "Native.Basic.hxx"
+
+#define INVALID_BINFILE_VALUE       (-1)
+
+#define BINFILEOPENTYPE_READ        0x0
+#define BINFILEOPENTYPE_WRITE       0x1
+#define BINFILEOPENTYPE_CREATE      0x2
+
+#define BINFILEHANDLE(x) ((HANDLE)x)
 
 #ifdef _WIN64
 typedef U64 BFH;
@@ -34,3 +43,41 @@ typedef struct BinFile
 {
     BFH Value;
 } BINFILE, * BINFILEPTR;
+
+typedef enum BinFileContentType
+{
+    BINFILECONTENTTYPE_NONE         = 0,
+    BINFILECONTENTTYPE_FILE         = 1, // Actual file
+    BINFILECONTENTTYPE_COMBINED     = 2, // An archive with no data compression
+    BINFILECONTENTTYPE_COMPRESSED   = 8, // An archive with data compression
+    BINFILECONTENTTYPE_FORCE_DWORD  = 0x7FFFFFF
+} BINFILECONTENTTYPE, * BINFILECONTENTTYPEPTR;
+
+typedef struct BinFileContent
+{
+    LPSTR               Name;
+    BINFILECONTENTTYPE  Type;
+    U32                 Archive;
+    BINFILE             File;
+    U32                 Size;
+    U32                 Chunk;
+    U32                 Offset;
+    BOOL                IsActive;
+} BINFILECONTENT, * BINFILECONTENTPTR;
+
+typedef struct BinFileInfo
+{
+    U32                 Name;
+    BINFILECONTENTTYPE  Type;
+    U32                 Index;
+    U32                 Size;
+    U32                 Chunk;
+} BINFILEINFO, * BINFILEINFOPTR;
+
+typedef struct BinFileChunk
+{
+    BFH                 Index;
+    U32                 Chunk;
+    U32                 Size;
+    LPVOID              Content;
+} BINFILECHUNK, * BINFILECHUNKPTR;

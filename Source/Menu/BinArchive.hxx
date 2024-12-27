@@ -23,30 +23,15 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
-#include "Native.Basic.hxx"
 
-#define MAX_WINDOW_TITLE_LENGTH     256
+#include <BinArchive.hxx>
 
-typedef enum WindowInputState
-{
-    WINDOWINPUTSTATE_NONE               = 0,
-    WINDOWINPUTSTATE_ACCEPT_MOUSE       = 1,
-    WINDOWINPUTSTATE_ACCEPT_KEYBOARD    = 2,
-    WINDOWINPUTSTATE_FORCE_DWORD        = 0x7FFFFFFF
-} WINDOWINPUTSTATE, * WINDOWINPUTSTATEPTR;
+BOOL AcquireBinArchive(CONST U32 indx, LPSTR name, LPSTR result, CONST BOOL overwrite);
 
-typedef struct Window
-{
-    HINSTANCE   Instance;
-    LPCSTR      Args;
-    HWND        HWND;
-    WNDCLASSA   Class;
-    CHAR        Title[MAX_WINDOW_TITLE_LENGTH];
-    DWORD       Style;
-    S32         X;
-    S32         Y;
-    S32         Width;
-    S32         Height;
-    HMENU       Menu;
-    BOOL        IsActive;
-} WINDOW, * WINDOWPTR;
+BOOL InitializeBinArchives(LPSTR names);
+
+BOOL OpenBinArchiveDirectory(LPSTR name);
+BOOL OpenBinArchiveFile(LPSTR name);
+BOOL OpenBinArchives(LPSTR names);
+
+LPVOID ReadBinArchive(BINFILEPTR self, U32* count);

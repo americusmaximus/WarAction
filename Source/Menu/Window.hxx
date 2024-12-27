@@ -26,14 +26,6 @@ SOFTWARE.
 
 #include <Window.hxx>
 
-typedef enum WindowInputState
-{
-    WINDOWINPUTSTATE_NONE              = 0,
-    WINDOWINPUTSTATE_ACCEPT_MOUSE      = 1,
-    WINDOWINPUTSTATE_ACCEPT_KEYBOARD   = 2,
-    WINDOWINPUTSTATE_FORCE_DWORD       = 0x7FFFFFFF
-} WINDOWINPUTSTATE, * WINDOWINPUTSTATEPTR;
-
 typedef struct WindowStateModuleContainer
 {
     WINDOW                  Window;     // 0x10059380

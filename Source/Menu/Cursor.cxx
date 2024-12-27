@@ -80,7 +80,7 @@ VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name)
         wsprintfA(path, "%s.ani", name);
         AcquireAssetContent(path, (LPVOID*)&self->Animation, 0);
 
-        IMAGEPALETTESPRITEPTR image =
+        CONST IMAGEPALETTESPRITEPTR image =
             (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[0]);
 
         self->Width = image->Width;

@@ -24,22 +24,7 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#define DEFAULT_ACTION_PRIORITY 0x8000
-
-struct ActionArea;
-typedef struct ActionArea ACTIONAREA, * ACTIONAREAPTR;
-
-struct ActionArea
-{
-    U32             Action;
-    S32             X;
-    S32             Y;
-    S32             Width;
-    S32             Height;
-    U32             Options;
-    U32             Priority;
-    ACTIONAREAPTR   Next;
-};
+#include <ActionArea.hxx>
 
 typedef struct ActionAreaStateModuleContainer
 {

@@ -1,7 +1,7 @@
 LIBRARY
 EXPORTS
-    GetGeckVersion = AcquireModuleVersion	@1	
-    VModule_Done = ReleaseModule			@2
-    VModule_Handle = MessageModule			@3
-    VModule_Init = InitializeModule			@4
-    VModule_Play = ExecuteModule			@5
+    GetGeckVersion = AcquireModuleVersion   @1
+    VModule_Done = ReleaseModule            @2
+    VModule_Handle = MessageModule          @3
+    VModule_Init = InitializeModule         @4
+    VModule_Play = ExecuteModule            @5

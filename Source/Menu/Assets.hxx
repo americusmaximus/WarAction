@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "BinFile.hxx"
+#include "BinArchive.hxx"
 #include "FontAsset.hxx"
 
 #define MAX_BINARY_ARCHIVE_COUNT    16

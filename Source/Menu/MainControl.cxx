@@ -731,7 +731,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         {
             BINFILE file = { INVALID_BINARY_FILE_VALUE };
-            OpenBinFile(&file, "XCHNG\\menu.sav", (BINFILEOPENTYPE)(BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE));
+            OpenBinFile(&file, "XCHNG\\menu.sav", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
             WriteBinFile(&file, &MenuSaveState.Save, 0x1a4); // TODO doesn't match struct size. substruct?
             CloseBinFile(&file);
         }

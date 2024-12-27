@@ -24,15 +24,9 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#define MAX_CONTROL_COMMAND_ITEMS_COUNT 256
+#include <ControlCommand.hxx>
 
-typedef struct ControlCommand
-{
-    U32             Command;
-    U32             Action;
-    U32             Parameter1;
-    U32             Parameter2;
-} CONTROLCOMMAND, * CONTROLCOMMANDPTR;
+#define MAX_CONTROL_COMMAND_ITEMS_COUNT 256
 
 typedef struct ControlCommandStateModuleContainer
 {
@@ -47,30 +41,3 @@ BOOL DequeueControlCommand(CONST U32 command);
 BOOL DequeueControlCommand(CONTROLCOMMANDPTR command, CONST BOOL remove);
 CONTROLCOMMANDPTR DequeueControlCommand(CONST BOOL remove);
 VOID EnqueueControlCommand(CONST U32 command, CONST U32 action, CONST U32 param1, CONST U32 param2);
-
-/* TODO NAMES */
-#define CONTROLCOMMAND_TEXT_CONTROL     0x23232323 /* #### */
-#define CONTROLCOMMAND_VIDEO_CONTROL    0x236D6C74 /* #mlt */
-#define CONTROLCOMMAND_KBD              0x2f4b4244 /* /KBD */
-#define CONTROLCOMMAND_UTF              0x2F555446 /* /UTF */
-
-#define CONTROLCOMMANDACTION_NONE                           0x0000
-#define CONTROLCOMMANDACTION_MOUSE_HOVER                    0x0001
-#define CONTROLCOMMANDACTION_MOUSE_ENTER                    0x0002
-#define CONTROLCOMMANDACTION_MOUSE_LEAVE                    0x0004
-#define CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN                0x0008
-#define CONTROLCOMMANDACTION_MOUSE_LEFT_UP                  0x0010
-#define CONTROLCOMMANDACTION_MOUSE_RIGHT_DOWN               0x0020
-#define CONTROLCOMMANDACTION_MOUSE_RIGHT_UP                 0x0040
-#define CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK         0x0080
-#define CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK        0x0100
-#define CONTROLCOMMANDACTION_IGNORE                         0x0200
-#define CONTROLCOMMANDACTION_SCROLL                         0x0400
-#define CONTROLCOMMANDACTION_RELEASE                        0x8000
-
-#define CONTROLCOMMANDACTION_MOUSE_MOST_ACTIONS             (CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK | CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK \
-                                                                | CONTROLCOMMANDACTION_MOUSE_RIGHT_UP | CONTROLCOMMANDACTION_MOUSE_RIGHT_DOWN           \
-                                                                | CONTROLCOMMANDACTION_MOUSE_LEFT_UP | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN             \
-                                                                | CONTROLCOMMANDACTION_MOUSE_LEAVE | CONTROLCOMMANDACTION_MOUSE_ENTER)
-
-#define CONTROLCOMMANDACTION_MOUSE_ALL_ACTIONS              (CONTROLCOMMANDACTION_MOUSE_MOST_ACTIONS | CONTROLCOMMANDACTION_MOUSE_HOVER)

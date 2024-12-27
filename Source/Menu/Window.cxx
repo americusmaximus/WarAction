@@ -45,6 +45,7 @@ SOFTWARE.
 #define DEFAULT_INITIAL_CURSOR_POSITION     (-100000)
 #define DEFAULT_UPDATE_CURSOR_POSITION      (-1000000)
 
+#define MAX_DOUBLE_CLICK_DISTANCE           4
 #define MAX_WINDOW_MESSAGE_CHARACTER_LENGTH 128
 
 WINDOWSTATEMODULECONTAINER WindowState;
@@ -185,16 +186,10 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
             {
                 if (ticks - WindowState.Cursor.Ticks < GetDoubleClickTime())
                 {
-                    CONST BOOL xs = (CursorState.X - WindowState.Cursor.Left.X) >> 0x1F; // TODO
-
-                    if (((CursorState.X - WindowState.Cursor.Left.X ^ xs) - xs) < 4) // TODO
+                    if (abs(CursorState.X - WindowState.Cursor.Left.X) < MAX_DOUBLE_CLICK_DISTANCE
+                        && abs(CursorState.Y - WindowState.Cursor.Left.Y) < MAX_DOUBLE_CLICK_DISTANCE)
                     {
-                        CONST BOOL ys = (CursorState.Y - WindowState.Cursor.Left.Y) >> 0x1F; // TODO
-
-                        if (((CursorState.Y - WindowState.Cursor.Left.Y ^ ys) - ys) < 4) // TODO
-                        {
-                            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK);
-                        }
+                        CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK);
                     }
                 }
 
@@ -237,16 +232,10 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
             {
                 if (ticks - WindowState.Cursor.Ticks < GetDoubleClickTime())
                 {
-                    CONST BOOL xs = (CursorState.X - WindowState.Cursor.Right.X) >> 0x1F; // TODO
-
-                    if (((CursorState.X - WindowState.Cursor.Right.X ^ xs) - xs) < 4) // TODO
+                    if (abs(CursorState.X - WindowState.Cursor.Left.X) < MAX_DOUBLE_CLICK_DISTANCE
+                        && abs(CursorState.Y - WindowState.Cursor.Left.Y) < MAX_DOUBLE_CLICK_DISTANCE)
                     {
-                        CONST BOOL ys = (CursorState.Y - WindowState.Cursor.Right.Y) >> 0x1F; // TODO
-
-                        if (((CursorState.Y - WindowState.Cursor.Right.Y ^ ys) - ys) < 4) // TODO
-                        {
-                            CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK);
-                        }
+                        CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK);
                     }
                 }
 

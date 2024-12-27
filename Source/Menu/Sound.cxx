@@ -199,7 +199,7 @@ VOID CLASSCALL InitializeSoundState(SOUNDSTATEPTR self, SOUNDPTR state)
     self->Count = 0;
     self->State = state;
 
-    SoundState.SoundState = state;
+    SoundState.Sound = state;
 
     CHAR asset[MAX_FILE_NAME_LENGTH];
 
@@ -521,9 +521,9 @@ VOID CLASSCALL ReleaseSoundStateInactiveSoundTracks(SOUNDPTR self)
 // 0x10023df0
 BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, CONST F32 volume, CONST F32 pan)
 {
-    if (SoundState.SoundState->Instance == NULL)
+    if (SoundState.Sound->Instance == NULL)
     {
-        SoundState.SoundState->State = SOUNDRESULT_NO_SOUND_INSTANCE_ERROR;
+        SoundState.Sound->State = SOUNDRESULT_NO_SOUND_INSTANCE_ERROR;
 
         return FALSE;
     }
@@ -532,14 +532,14 @@ BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, C
 
     if (buffer == NULL)
     {
-        SoundState.SoundState->State = SOUNDRESULT_NO_SOUND_BUFFER_ERROR;
+        SoundState.Sound->State = SOUNDRESULT_NO_SOUND_BUFFER_ERROR;
 
         return FALSE;
     }
 
-    if (SoundState.SoundState->Unk07 <= SoundState.SoundState->Unk08)
+    if (SoundState.Sound->Unk07 <= SoundState.Sound->Unk08)
     {
-        SoundState.SoundState->State = SOUNDRESULT_INVALID_SETTINGS_ERROR;
+        SoundState.Sound->State = SOUNDRESULT_INVALID_SETTINGS_ERROR;
 
         return FALSE;
     }
@@ -550,7 +550,7 @@ BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, C
 
         if (self->Volume <= self->MinVolume)
         {
-            SoundState.SoundState->State = SOUNDRESULT_INVALID_SETTINGS_ERROR;
+            SoundState.Sound->State = SOUNDRESULT_INVALID_SETTINGS_ERROR;
 
             return FALSE;
         }
@@ -558,17 +558,17 @@ BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, C
 
     // Pan
     {
-        CONST S32 value = SoundState.SoundState->IsReverseStereo
+        CONST S32 value = SoundState.Sound->IsReverseStereo
             ? (S32)(pan * DSBPAN_LEFT) : (S32)(pan * DSBPAN_RIGHT);
 
         self->Pan = Max(DSBPAN_LEFT, Min(value, DSBPAN_RIGHT));
     }
 
-    SoundState.SoundState->Result = SoundState.SoundState->Instance->DuplicateSoundBuffer(buffer->Buffer, &self->Buffer);
+    SoundState.Sound->Result = SoundState.Sound->Instance->DuplicateSoundBuffer(buffer->Buffer, &self->Buffer);
 
-    if (FAILED(SoundState.SoundState->Result))
+    if (FAILED(SoundState.Sound->Result))
     {
-        SoundState.SoundState->State = SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR;
+        SoundState.Sound->State = SOUNDRESULT_DUPLICATE_SOUND_BUFFER_ERROR;
 
         return FALSE;
     }
@@ -576,14 +576,14 @@ BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, C
     self->Buffer->SetVolume(self->Volume);
     self->Buffer->SetPan(self->Pan);
 
-    SoundState.SoundState->Result = self->Buffer->Play(DSBPLAY_NONE, 0,
+    SoundState.Sound->Result = self->Buffer->Play(DSBPLAY_NONE, 0,
         buffer->IsActive ? DSBPLAY_LOOPING : DSBPLAY_NONE);
 
-    if (FAILED(SoundState.SoundState->Result))
+    if (FAILED(SoundState.Sound->Result))
     {
         DIRECTSOUNDRELEASE(self->Buffer);
 
-        SoundState.SoundState->State = SOUNDRESULT_BUFFER_PLAY_ERROR;
+        SoundState.Sound->State = SOUNDRESULT_BUFFER_PLAY_ERROR;
 
         return FALSE;
     }
@@ -596,7 +596,7 @@ BOOL CLASSCALL InitializeSoundTrack(SOUNDTRACKPTR self, SOUNDBUFFERPTR buffer, C
 // 0x10023fa0
 VOID CLASSCALL ReleaseSoundTrack(SOUNDTRACKPTR self)
 {
-    if (SoundState.SoundState->Instance != NULL)
+    if (SoundState.Sound->Instance != NULL)
     {
         if (self->Buffer != NULL)
         {

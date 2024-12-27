@@ -213,6 +213,7 @@
     <ClCompile Include="AssetFile.cxx" />
     <ClCompile Include="Assets.cxx" />
     <ClCompile Include="Audio.cxx" />
+    <ClCompile Include="BinArchive.cxx" />
     <ClCompile Include="BinAsset.cxx" />
     <ClCompile Include="BinFile.cxx" />
     <ClCompile Include="Bink.cxx" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Assets.hxx" />
     <ClInclude Include="Audio.hxx" />
     <ClInclude Include="Basic.hxx" />
+    <ClInclude Include="BinArchive.hxx" />
     <ClInclude Include="BinAsset.hxx" />
     <ClInclude Include="BinFile.hxx" />
     <ClInclude Include="Bink.hxx" />

@@ -55,7 +55,7 @@ typedef struct SoundStateModuleContainer
 {
     SOUNDSTATE      State;      // 0x100462c8
 
-    SOUNDPTR        SoundState; // 0x1005ae58
+    SOUNDPTR        Sound;      // 0x1005ae58
 } SOUNDSTATEMODULECONTAINER, * SOUNDSTATEMODULECONTAINERPTR;
 
 EXTERN SOUNDSTATEMODULECONTAINER SoundState;

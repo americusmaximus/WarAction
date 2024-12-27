@@ -23,30 +23,17 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
-#include "Native.Basic.hxx"
 
-#define MAX_WINDOW_TITLE_LENGTH     256
+#define DEFAULT_ACTION_PRIORITY 0x8000
 
-typedef enum WindowInputState
+typedef struct ActionArea
 {
-    WINDOWINPUTSTATE_NONE               = 0,
-    WINDOWINPUTSTATE_ACCEPT_MOUSE       = 1,
-    WINDOWINPUTSTATE_ACCEPT_KEYBOARD    = 2,
-    WINDOWINPUTSTATE_FORCE_DWORD        = 0x7FFFFFFF
-} WINDOWINPUTSTATE, * WINDOWINPUTSTATEPTR;
-
-typedef struct Window
-{
-    HINSTANCE   Instance;
-    LPCSTR      Args;
-    HWND        HWND;
-    WNDCLASSA   Class;
-    CHAR        Title[MAX_WINDOW_TITLE_LENGTH];
-    DWORD       Style;
-    S32         X;
-    S32         Y;
-    S32         Width;
-    S32         Height;
-    HMENU       Menu;
-    BOOL        IsActive;
-} WINDOW, * WINDOWPTR;
+    U32             Action;
+    S32             X;
+    S32             Y;
+    S32             Width;
+    S32             Height;
+    U32             Options;
+    U32             Priority;
+    ActionArea* Next;
+} ACTIONAREA, * ACTIONAREAPTR;

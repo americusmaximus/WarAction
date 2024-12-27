@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.hxx" />
+    <ClInclude Include="ActionArea.hxx" />
     <ClInclude Include="App.hxx" />
     <ClInclude Include="Basic.hxx" />
+    <ClInclude Include="BinArchive.hxx" />
     <ClInclude Include="BinAsset.hxx" />
     <ClInclude Include="BinFile.hxx" />
+    <ClInclude Include="ControlCommand.hxx" />
     <ClInclude Include="DirectDraw.hxx" />
     <ClInclude Include="DirectInput.hxx" />
     <ClInclude Include="DirectPlay.hxx" />

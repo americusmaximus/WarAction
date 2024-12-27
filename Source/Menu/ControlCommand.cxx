@@ -21,6 +21,7 @@ SOFTWARE.
 */
 
 #include "ActionArea.hxx"
+#include "Control.hxx"
 #include "ControlCommand.hxx"
 
 #include <stdlib.h>
@@ -83,7 +84,7 @@ BOOL DequeueControlCommand(CONTROLCOMMANDPTR command, CONST BOOL remove)
 {
     while (CommandControlState.WriteIndex != CommandControlState.ReadIndex)
     {
-        if (CommandControlState.Items[CommandControlState.ReadIndex].Command != -1) // TODO
+        if (CommandControlState.Items[CommandControlState.ReadIndex].Command != CONTROLACTION_UNKNOWN)
         {
             command->Command = CommandControlState.Items[CommandControlState.ReadIndex].Command;
             command->Action = CommandControlState.Items[CommandControlState.ReadIndex].Action;
