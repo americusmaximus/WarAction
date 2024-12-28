@@ -22,32 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
-
-#define DEFAULT_ACTION_HANDLER_PRIORITY 0x10000000
-
-typedef BOOL(*ACTIONHANDLERLAMBDA)(VOID);
-typedef BOOL(*WINDOWACTIONHANDLERLAMBDA)(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result);
-
-#define INVOKEACTIONHANDLERLAMBDA(ACTION) ((ACTIONHANDLERLAMBDA)ACTION)()
-#define INVOKEWINDOWACTIONHANDLERLAMBDA(ACTION, WND, MSG, WP, LP, RESULT) ((WINDOWACTIONHANDLERLAMBDA)ACTION)(WND, MSG, WP, LP, RESULT)
-
-typedef struct ActionHandler
-{
-    LPVOID          Action;
-    U32             Priority;
-    ActionHandler*  Next;
-} ACTIONHANDLER, * ACTIONHANDLERPTR;
-
-#define INITIALIZEACTIONHANDLER(H, A)                                                               \
-    if (A != NULL) {                                                                                \
-        ACTIONHANDLERPTR handler = (ACTIONHANDLERPTR)malloc(sizeof(ACTIONHANDLER));                 \
-        if (handler != NULL) {                                                                      \
-            InitializeActionHandler(handler, H, DEFAULT_ACTION_HANDLER_PRIORITY, A);                \
-        }                                                                                           \
-    }
-
-VOID CLASSCALL InitializeActionHandler(ACTIONHANDLERPTR self, ACTIONHANDLERPTR* destination, CONST U32 priority, ACTIONHANDLERLAMBDA action);
+#include <Action.hxx>
 
 VOID InitializeActionHandler(CONST U32 priority, ACTIONHANDLERLAMBDA action);
 VOID InitializeWindowActionHandler(CONST U32 priority, WINDOWACTIONHANDLERLAMBDA action);
