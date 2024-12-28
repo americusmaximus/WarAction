@@ -32,8 +32,8 @@ typedef struct ControlCommand
     U32             Parameter2;
 } CONTROLCOMMAND, * CONTROLCOMMANDPTR;
 
-#define CONTROLCOMMAND_TEXT_CONTROL     0x23232323 /* #### */ /* TODO */
-#define CONTROLCOMMAND_VIDEO_CONTROL    0x236D6C74 /* #mlt */ /* TODO */
+#define CONTROLCOMMAND_UI               0x23232323 /* #### */
+#define CONTROLCOMMAND_VIDEO            0x236D6C74 /* #mlt */
 #define CONTROLCOMMAND_KBD              0x2f4b4244 /* /KBD */
 #define CONTROLCOMMAND_UTF              0x2F555446 /* /UTF */
 

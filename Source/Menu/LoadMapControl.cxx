@@ -100,7 +100,7 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL && command->Action == CONTROLACTION_LIST_SELECT)
+    if (command != NULL && command->Command == CONTROLCOMMAND_UI && command->Action == CONTROLACTION_LIST_SELECT)
     {
         if (command->Parameter1 == 2) // TODO
         {

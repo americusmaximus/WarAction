@@ -123,7 +123,7 @@ U32 CLASSCALL ActionMultiSelectControl(MULTISELECTCONTROLPTR self)
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL) { return CONTROLACTION_NONE; }
-    if (command->Command != CONTROLCOMMAND_TEXT_CONTROL) { return CONTROLACTION_NONE; }
+    if (command->Command != CONTROLCOMMAND_UI) { return CONTROLACTION_NONE; }
 
     strcpy(State.Name, AcquireInputControlValue(self->Input));
 

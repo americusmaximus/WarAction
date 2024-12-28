@@ -61,7 +61,7 @@ typedef struct ControlType2x38
     LPCSTR                  Unclick;
     U8                      IsAction;
     U8                      IsVisible;
-    U8                      Unk11; // TODO
+    U8                      IsClickable;
     U32                     Unk12; // TODO
     U32                     Ticks;
     U32                     Unk0x2c; // TODO

@@ -65,14 +65,14 @@ U32 CLASSCALL ActionObjectType2x39(CONTROLTYPE2X39PTR self)
     if (result != CONTROLACTION_NONE) { self->IsAction = TRUE; }
 
     CONTROLCOMMAND command;
-    if (DequeueControlCommand(&command, FALSE) && command.Command == CONTROLCOMMAND_TEXT_CONTROL
+    if (DequeueControlCommand(&command, FALSE) && command.Command == CONTROLCOMMAND_UI
         && command.Action == self->Action && command.Parameter1 == 6 /* TODO */)
     {
         self->Unk0x39 = self->Unk0x39 == 0; // TODO
         self->IsAction = FALSE;
 
         DequeueControlCommand(TRUE);
-        EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 2, 0); // TODO
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
     }
 
     return result;

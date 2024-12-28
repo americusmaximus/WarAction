@@ -65,7 +65,7 @@ U32 CLASSCALL ActionMultiJoinControl(MULTIJOINCONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL)
+    if (command != NULL && command->Command == CONTROLCOMMAND_UI)
     {
         if (command->Action == CONTROLACTION_JMULTI1_OK && command->Parameter1 == 4 /* TODO */)
         {

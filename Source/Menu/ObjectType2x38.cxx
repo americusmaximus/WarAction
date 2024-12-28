@@ -56,7 +56,7 @@ VOID CLASSCALL InitializeObjectType2x38(CONTROLTYPE2X38PTR self)
 {
     InitializeButtonControl((BUTTONCONTROLPTR)self);
 
-    self->Unk11 = 1; // TODO
+    self->IsClickable = TRUE;
 
     ReplaceActionAreaAction(self->Action,
         CONTROLCOMMANDACTION_SCROLL | CONTROLCOMMANDACTION_MOUSE_LEFT_UP | CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN | CONTROLCOMMANDACTION_MOUSE_LEAVE);
@@ -65,7 +65,7 @@ VOID CLASSCALL InitializeObjectType2x38(CONTROLTYPE2X38PTR self)
 // 0x10001ec0
 U32 CLASSCALL ActionObjectType2x38(CONTROLTYPE2X38PTR self)
 {
-    if (!self->IsVisible || self->Unk11 == 0 /* TODO */) { return CONTROLACTION_NONE; }
+    if (!self->IsVisible || !self->IsClickable) { return CONTROLACTION_NONE; }
 
     U32 cVar3 = 0; // TODO
 
@@ -86,19 +86,19 @@ U32 CLASSCALL ActionObjectType2x38(CONTROLTYPE2X38PTR self)
         }
         else if (command.Command == CONTROLCOMMAND_UTF && !ControlState.Active)
         {
-            cVar3 = command.Action == self->Shortcut + 0x1000000 ? 1 : 0; // TODO
+            cVar3 = command.Action == self->Shortcut + CONTROLCOMMANDACTION_UTF_KEY_DOWN ? 1 : 0; // TODO
 
-            if (command.Action == self->Shortcut + 0x2000000) { cVar3 = 2; }// TODO
+            if (command.Action == self->Shortcut + CONTROLCOMMANDACTION_UTF_KEY_UP) { cVar3 = 2; }// TODO
         }
     }
 
     if (cVar3 == 1 /* TODO*/)
     {
-        EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->ActualAction, 4, self->Index); // TODO
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->ActualAction, 4, self->Index); // TODO
 
         return CONTROLACTION_1;
     }
-    else if (cVar3 == 2 /* TODO*/) { EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->ActualAction, 6 /* TODO */, self->Index); }
+    else if (cVar3 == 2 /* TODO*/) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->ActualAction, 6 /* TODO */, self->Index); }
 
     return CONTROLACTION_NONE;
 }

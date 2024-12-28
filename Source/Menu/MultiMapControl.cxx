@@ -104,7 +104,7 @@ U32 CLASSCALL ActionMultiMapControl(MULTIMAPCONTROLPTR self)
     
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL)
+    if (command != NULL && command->Command == CONTROLCOMMAND_UI)
     {
         if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2) // TODO
         {

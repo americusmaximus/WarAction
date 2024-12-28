@@ -76,7 +76,7 @@ VOID CLASSCALL InitializeVideoControl(VIDEOCONTROLPTR self)
     VideoState.IsActive = TRUE;
 
     ActivateActionArea(0, 0, GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480,
-        CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN, CONTROLCOMMAND_VIDEO_CONTROL, VIDEO_CONTROL_ACTION_PRIORITY);
+        CONTROLCOMMANDACTION_MOUSE_LEFT_DOWN, CONTROLCOMMAND_VIDEO, VIDEO_CONTROL_ACTION_PRIORITY);
 }
 
 // 0x10001500
@@ -88,7 +88,7 @@ VOID CLASSCALL DisableVideoControl(VIDEOCONTROLPTR self)
 
     VideoState.IsActive = FALSE;
 
-    DequeueControlCommand(CONTROLCOMMAND_VIDEO_CONTROL);
+    DequeueControlCommand(CONTROLCOMMAND_VIDEO);
 }
 
 // 0x10001520
@@ -98,14 +98,14 @@ U32 CLASSCALL ActionVideoControl(VIDEOCONTROLPTR self)
 
     if (command != NULL)
     {
-        if (command->Command == CONTROLCOMMAND_VIDEO_CONTROL)
+        if (command->Command == CONTROLCOMMAND_VIDEO)
         {
             DequeueControlCommand(TRUE);
 
             return CONTROLACTION_PLAY_COMPLETED;
         }
 
-        if (command->Command == CONTROLCOMMAND_VIDEO_CONTROL
+        if (command->Command == CONTROLCOMMAND_VIDEO
             && (command->Action == VK_ESCAPE || command->Action == VK_SPACE))
         {
             DequeueControlCommand(TRUE);
@@ -142,19 +142,19 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, CONST S32 map, CONST S32 m
     CHAR name[MAX_FILE_NAME_LENGTH];
     wsprintfA(name, "%03d%03d", map, mission);
 
-    CHAR buffer[MAX_FILE_NAME_LENGTH]; // TODO name
+    CHAR file[MAX_FILE_NAME_LENGTH];
 
     for (U32 x = 0; x < text.Count; x++)
     {
-        AcquireTextAssetStringValue(&text, x, MAP_MISSION_TEXT_ASSET_PARAM, buffer);
+        AcquireTextAssetStringValue(&text, x, MAP_MISSION_TEXT_ASSET_PARAM, file);
 
-        if (strcmp(name, buffer) == 0)
+        if (strcmp(name, file) == 0)
         {
-            AcquireTextAssetStringValue(&text, x, param, buffer);
+            AcquireTextAssetStringValue(&text, x, param, file);
 
-            if (buffer[0] != '-')
+            if (file[0] != '-')
             {
-                CONST BOOL result = PlayVideoControl(self, buffer);
+                CONST BOOL result = PlayVideoControl(self, file);
 
                 DisposeTextAsset(&text);
 
@@ -177,17 +177,17 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR video)
         ActivateTextAsset(&text);
         InitializeTextAsset(&text, "campaign.seq");
 
-        CHAR buffer[MAX_FILE_NAME_LENGTH]; // TODO name
+        CHAR file[MAX_FILE_NAME_LENGTH];
 
         for (U32 x = 0; x < text.Count; x++)
         {
-            AcquireTextAssetStringValue(&text, x, VIDEO_NAME_ALIAS_TEXT_ASSET_PARAM, buffer);
+            AcquireTextAssetStringValue(&text, x, VIDEO_NAME_ALIAS_TEXT_ASSET_PARAM, file);
 
-            if (strcmp(video, buffer) == 0)
+            if (strcmp(video, file) == 0)
             {
-                AcquireTextAssetStringValue(&text, x, VIDEO_NAME_ACTUAL_TEXT_ASSET_PARAM, buffer);
+                AcquireTextAssetStringValue(&text, x, VIDEO_NAME_ACTUAL_TEXT_ASSET_PARAM, file);
 
-                CONST BOOL result = PlayVideoControl(self, buffer);
+                CONST BOOL result = PlayVideoControl(self, file);
 
                 DisposeTextAsset(&text);
 
@@ -226,25 +226,25 @@ BOOL CLASSCALL PlayVideoControl(VIDEOCONTROLPTR self, LPCSTR video)
         ActivateTextAsset(&text);
         InitializeTextAsset(&text, "campaign.seq");
 
-        CHAR buffer[MAX_FILE_NAME_LENGTH]; // TODO name
+        CHAR value[MAX_FILE_NAME_LENGTH];
 
         for (U32 x = 0; x < text.Count; x++)
         {
-            AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_SIZE_TEXT_ASSET_PARAM, buffer);
+            AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_SIZE_TEXT_ASSET_PARAM, value);
 
-            if (strcmp(buffer, "size") == 0)
+            if (strcmp(value, "size") == 0)
             {
-                AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_NAME_TEXT_ASSET_PARAM, buffer);
+                AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_NAME_TEXT_ASSET_PARAM, value);
 
-                if (strcmp(video, buffer) == 0)
+                if (strcmp(video, value) == 0)
                 {
-                    AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_UNKNOWN1_TEXT_ASSET_PARAM, buffer);
+                    AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_UNKNOWN1_TEXT_ASSET_PARAM, value);
 
-                    self->Max = atoi(buffer);
+                    self->Max = atoi(value);
 
-                    AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_UNKNOWN2_TEXT_ASSET_PARAM, buffer);
+                    AcquireTextAssetStringValue(&text, x, VIDEO_RECORD_UNKNOWN2_TEXT_ASSET_PARAM, value);
 
-                    self->Current = atoi(buffer);
+                    self->Current = atoi(value);
                 }
             }
         }

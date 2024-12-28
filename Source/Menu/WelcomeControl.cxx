@@ -95,19 +95,26 @@ VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self)
 
     for (U32 x = 0; x < RENDERER_VIDEO_MODE_COUNT; x++)
     {
-        CONTROLTYPE2X38PTR resolution =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Resolutions, x);
-        resolution->Unk11 = 0; // TODO
+        // NOTE. Make the display resolutions read-only.
+        {
+            CONST CONTROLTYPE2X38PTR resolution =
+                (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Resolutions, x);
+            resolution->IsClickable = FALSE;
+        }
 
-        CONST CONTROLTYPE2X38PTR operation =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Operations, x);
-
-        CONST ACTIONAREAPTR area = AcquireActionArea(operation->Action);
-
-        // Extend clickable area by 70 pixels to the left,
+        // NOTE. Extend clickable area by 70 pixels to the left,
         // so that clicking on resolution value, i.e. 640x480 equals clicking on the selector button.
-        area->X = area->X - 70;
-        area->Width = area->Width + 70;
+        {
+            CONST CONTROLTYPE2X38PTR operation =
+                (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Operations, x);
+
+            CONST ACTIONAREAPTR area = AcquireActionArea(operation->Action);
+
+            // Extend clickable area by 70 pixels to the left,
+            // so that clicking on resolution value, i.e. 640x480 equals clicking on the selector button.
+            area->X = area->X - 70;
+            area->Width = area->Width + 70;
+        }
     }
 }
 
@@ -140,7 +147,7 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command == NULL || command->Command != CONTROLCOMMAND_TEXT_CONTROL) { return action; }
+    if (command == NULL || command->Command != CONTROLCOMMAND_UI) { return action; }
 
     U32 resolution = RENDERER_VIDEO_MODE_640x480;
 

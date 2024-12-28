@@ -183,7 +183,7 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL
+    if (command != NULL && command->Command == CONTROLCOMMAND_UI
         && command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2 /* TODO*/)
     {
         CONST S32 indx = self->Type == RATINGSTYPE_SINGLE ? self->SingleList->Index : self->CampaignList->Index;

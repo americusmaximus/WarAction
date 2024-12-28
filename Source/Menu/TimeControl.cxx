@@ -108,21 +108,21 @@ U32 CLASSCALL ActionTimeControl(TIMECONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL)
+    if (command != NULL && command->Command == CONTROLCOMMAND_UI)
     {
         if (command->Action == self->Action + 1 && command->Parameter1 == 5 /* TODO */)
         {
             SelectTimeControlFocus(self, TIMECONTROLFOCUS_SECONDS);
 
             DequeueControlCommand(TRUE);
-            EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
         }
         else if (command->Action == self->Action + 2 && command->Parameter1 == 5 /* TODO */)
         {
             SelectTimeControlFocus(self, TIMECONTROLFOCUS_NONE);
 
             DequeueControlCommand(TRUE);
-            EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
         }
     }
 

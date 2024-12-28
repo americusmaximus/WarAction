@@ -263,7 +263,7 @@ VOID CLASSCALL MultiStartControlUnknown1(MULTISTARTCONTROLPTR self)
             (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->ObjectType4x12_4, x);
 
         control->IsAction = FALSE;
-        control->Unk11 = !NetworkState.Connection.IsHost || MenuSaveState.Save.Unk1A4 != 0 ? 0 : 1; // TODO
+        control->IsClickable = !NetworkState.Connection.IsHost || MenuSaveState.Save.Unk1A4 != 0 ? 0 : 1; // TODO
     }
 }
 

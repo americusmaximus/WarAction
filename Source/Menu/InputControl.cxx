@@ -227,7 +227,7 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
                 }
                 case VK_RETURN:
                 {
-                    EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 5, 0); // TODO
+                    EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 5, 0); // TODO
 
                     RemoveInputControlFocus(self);
 
@@ -409,7 +409,7 @@ LPCSTR CLASSCALL AcquireInputControlValue(INPUTCONTROLPTR self)
 // 0x10004210
 VOID CLASSCALL SelectInputControlFocus(INPUTCONTROLPTR self, CONST BOOL focus)
 {
-    if (focus != self->IsFocus) { EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, !focus, 0); }
+    if (focus != self->IsFocus) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, !focus, 0); }
 
     self->IsFocus = focus;
 

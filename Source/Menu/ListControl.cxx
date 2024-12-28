@@ -160,7 +160,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 else
                 {
                     self->Index = item;
-                    EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 2, 0); // TODO
+                    EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
                     self->Unk10 = 1; // TODO
                     PlaySoundStateSound(&SoundState.State, "mouse_click");
                 }
@@ -169,7 +169,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
 
         if ((command->Action & VK_SYMBOL) == 0x80 && 1 < self->Unk10 /* TODO */)
         {
-            EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 7, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 7, 0); // TODO
         }
 
         goto LAB_10006e84; // TODO remove
@@ -181,7 +181,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
     {
         if (self->Index == INVALID_LIST_CONTROL_INDEX)
         {
-            EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 7, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 7, 0); // TODO
             DequeueControlCommand(TRUE);
         }
 
@@ -210,7 +210,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
             }
 
         LAB_10006d9d: // TODO remove
-            EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
             ListControlCommandUnknown1(self);
         }
     }
@@ -297,7 +297,7 @@ VOID CLASSCALL ListControlCommandUnknown1(LISTCONTROLPTR self) // TODO
 
     if (self->Items->Count == 1)
     {
-        EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 2, 0); // TODO
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
         self->Index = 0;
     }
 

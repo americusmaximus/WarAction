@@ -74,7 +74,7 @@ U32 CLASSCALL ActionObjectType4x12(CONTROLTYPE4X12PTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLCOMMAND_TEXT_CONTROL
+    if (command != NULL && command->Command == CONTROLCOMMAND_UI
         && command->Action == self->Action && command->Parameter1 == 4 /* TODO */)
     {
         if (!ClickObjectType4x12(self, command->Parameter2 / 2)) { DequeueControlCommand(TRUE); }
