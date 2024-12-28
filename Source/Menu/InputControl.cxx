@@ -203,7 +203,7 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
             }
             else
             {
-                switch (action & 0xFF)
+                switch (action & VK_SYMBOL)
                 {
                 case VK_BACK:
                 {

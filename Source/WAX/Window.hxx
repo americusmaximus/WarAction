@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Native.Basic.hxx"
 
 #define VK_NULL                     0
+#define VK_SYMBOL                   0xFF
 
 #define MAX_WINDOW_TITLE_LENGTH     256
 

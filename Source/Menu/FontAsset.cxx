@@ -272,7 +272,7 @@ VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CO
     case FONTTYPE_BASIC:
     {
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y, self->Pixels,
-            (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF)); break;
+            (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & VK_SYMBOL)); break;
     }
     case FONTTYPE_COMPLEX:
     {

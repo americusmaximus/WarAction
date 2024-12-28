@@ -290,16 +290,16 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
                 if (WindowState.Key == VK_NULL)
                 {
                     EnqueueControlCommand(CONTROLCOMMAND_UTF,
-                        AcquireUnicodeCharacter(wp & 0xFF), CursorState.X, CursorState.Y);
+                        AcquireUnicodeCharacter(wp & VK_SYMBOL), CursorState.X, CursorState.Y);
 
                     WindowState.Key = VK_NULL;
                 }
             }
-            else if (WindowState.Key == VK_NULL) { WindowState.Key = wp & 0xFF; }
+            else if (WindowState.Key == VK_NULL) { WindowState.Key = wp & VK_SYMBOL; }
             else
             {
                 EnqueueControlCommand(CONTROLCOMMAND_UTF,
-                    AcquireUnicodeCharacter((wp & 0xFF) << 8 | WindowState.Key), CursorState.X, CursorState.Y);
+                    AcquireUnicodeCharacter((wp & VK_SYMBOL) << 8 | WindowState.Key), CursorState.X, CursorState.Y);
 
                 WindowState.Key = VK_NULL;
             }

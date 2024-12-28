@@ -167,7 +167,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
             }
         }
 
-        if ((command->Action & 0xFF) == 0x80 /* TODO */ && 1 < self->Unk10 /* TODO */)
+        if ((command->Action & VK_SYMBOL) == 0x80 && 1 < self->Unk10 /* TODO */)
         {
             EnqueueControlCommand(CONTROLCOMMAND_TEXT_CONTROL, self->Action, 7, 0); // TODO
         }
