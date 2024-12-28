@@ -212,7 +212,7 @@ VOID SetPixelColorMasks(U32 r, U32 g, U32 b)
     ModuleState.Unk22 = ~ModuleState.ActualColorBits;
 
     ModuleState.BackSurfaceShadePixel =
-        ((5 << (11 - (ModuleState.BlueOffset & 0x1F))) + (2 << (11 - (ModuleState.GreenOffset & 0x1F)))) & 0xFFFF;
+        ((5 << (11 - ModuleState.BlueOffset)) + (2 << (11 - ModuleState.GreenOffset))) & DEFAULT_SCREEN_COLOR_MASK;
     ModuleState.BackSurfaceShadePixel = (ModuleState.BackSurfaceShadePixel << 16) | ModuleState.BackSurfaceShadePixel;
 
     if (ModuleState.GreenOffset < ModuleState.RedOffset)
@@ -249,11 +249,11 @@ BOOL InitializeWindow(S32 width, S32 height)
     ReleaseRendererSurface();
 
 #if ACTIVE_TRUE_COLOR_MODE
-        HDC hdc = GetDC(ModuleState.HWND);
+    HDC hdc = GetDC(ModuleState.HWND);
 
-        RendererState.IsTrueColor = GetDeviceCaps(hdc, BITSPIXEL) == GRAPHICS_BITS_PER_PIXEL_32;
+    RendererState.IsTrueColor = GetDeviceCaps(hdc, BITSPIXEL) == GRAPHICS_BITS_PER_PIXEL_32;
 
-        ReleaseDC(ModuleState.HWND, hdc);
+    ReleaseDC(ModuleState.HWND, hdc);
 #endif
 
     if (ModuleState.IsFullScreen)

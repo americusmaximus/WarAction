@@ -27,25 +27,25 @@ SOFTWARE.
 #include <Graphics.Basic.hxx>
 #include <Renderer.Basic.hxx>
 
-#define ADJUSTCOLOR(x)                                                                              \
-        (x >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)          \
-        | (x >> (State.Renderer->GreenOffset & 0x1F) & 0xFFFF & State.Renderer->ActualGreenMask)    \
-        | (x >> (State.Renderer->BlueOffset & 0x1F) & 0xFFFF & State.Renderer->ActualBlueMask)
+#define ADJUSTCOLOR(x)                                                              \
+        ((x >> State.Renderer->RedOffset) & State.Renderer->ActualRedMask)          \
+        | ((x >> State.Renderer->GreenOffset) & State.Renderer->ActualGreenMask)    \
+        | ((x >> State.Renderer->BlueOffset) & State.Renderer->ActualBlueMask)
 
-#define ADJUSTCOLORS(r, g, b)                                                                       \
-        (r >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)          \
-        | (g >> (State.Renderer->GreenOffset & 0x1F) & 0xFFFF & State.Renderer->ActualGreenMask)    \
-        | (b >> (State.Renderer->BlueOffset & 0x1F) & 0xFFFF & State.Renderer->ActualBlueMask)
+#define ADJUSTCOLORS(r, g, b)                                                       \
+        ((r >> State.Renderer->RedOffset) & State.Renderer->ActualRedMask)          \
+        | ((g >> State.Renderer->GreenOffset) & State.Renderer->ActualGreenMask)    \
+        | ((b >> State.Renderer->BlueOffset) & State.Renderer->ActualBlueMask)
 
-#define ADJUSTSPRITECOLOR(x)                                                                                \
-        ((x & 0xF800) >> (State.Renderer->RedOffset & 0x1F) & State.Renderer->ActualRedMask)                \
-        | (((x & 0x07E0) << 5) >> (State.Renderer->GreenOffset & 0x1F) & State.Renderer->ActualGreenMask)   \
-        | (((x & 0x001F) << 11) >> (State.Renderer->BlueOffset & 0x1F) & State.Renderer->ActualBlueMask)
+#define ADJUSTSPRITECOLOR(x)                                                                        \
+        ((((x & 0xF800) << 0) >> State.Renderer->RedOffset) & State.Renderer->ActualRedMask)        \
+        | ((((x & 0x07E0) << 5) >> State.Renderer->GreenOffset) & State.Renderer->ActualGreenMask)  \
+        | ((((x & 0x001F) << 11) >> State.Renderer->BlueOffset) & State.Renderer->ActualBlueMask)
 
-#define ADJUSTSPRITECOLORS(r, g, b)                                                                     \
-        ((r << 8) >> (State.Renderer->RedOffset & 0x1F) & 0xFFFF & State.Renderer->ActualRedMask)       \
-        | ((g << 8) >> (State.Renderer->GreenOffset & 0x1F) & 0xFFFF & State.Renderer->ActualGreenMask) \
-        | ((b << 8) >> (State.Renderer->BlueOffset & 0x1F) & 0xFFFF & State.Renderer->ActualBlueMask)
+#define ADJUSTSPRITECOLORS(r, g, b)                                                     \
+        (((r << 8) >> State.Renderer->RedOffset) & State.Renderer->ActualRedMask)       \
+        | (((g << 8) >> State.Renderer->GreenOffset) & State.Renderer->ActualGreenMask) \
+        | (((b << 8) >> State.Renderer->BlueOffset) & State.Renderer->ActualBlueMask)
 
 VOID WriteBackSurfaceMainSurfaceWindowRectangle(VOID);
 VOID WriteMainSurfaceMainSurfaceWindowRectangle(VOID);

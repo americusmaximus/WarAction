@@ -329,9 +329,19 @@ VOID CLASSCALL SelectFontAssetColor(FONTASSETPTR self, CONST U32 color)
     case FONTTYPE_BASIC: { self->Pixels[1] = (PIXEL)color; break; }
     case FONTTYPE_COMPLEX:
     {
+        CONST PIXEL pixel = color & DEFAULT_SCREEN_COLOR_MASK;
+
         for (U32 x = 0; x < MAX_FONT_ASSET_CHARACTER_COUNT; x++)
         {
-            self->Pixels[x] = ADJUSTCOLOR(color & self->Palette[x]);
+            CONST U32 pix = (((U32)self->Palette[x] & State.Renderer->ActualGreenMask) << State.Renderer->GreenOffset) >> 8;
+
+            CONST U32 r = ((U32)((pixel & State.Renderer->ActualRedMask) << State.Renderer->RedOffset) >> 8) * pix;
+            CONST U32 b = ((U32)((pixel & State.Renderer->ActualBlueMask) << State.Renderer->BlueOffset) >> 8) * pix;
+            CONST U32 g = ((U32)((pixel & State.Renderer->ActualGreenMask) << State.Renderer->GreenOffset) >> 8) * pix;
+
+            self->Pixels[x] = (PIXEL)((((r >> 8) << 8) >> State.Renderer->RedOffset) & State.Renderer->ActualRedMask)
+                | (PIXEL)((((b >> 8) << 8) >> State.Renderer->BlueOffset) & State.Renderer->ActualBlueMask)
+                | (PIXEL)((((g >> 8) << 8) >> State.Renderer->GreenOffset) & State.Renderer->ActualGreenMask);
         }
     }
     }

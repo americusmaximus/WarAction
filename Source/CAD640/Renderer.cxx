@@ -212,7 +212,7 @@ VOID SetPixelColorMasks(U32 r, U32 g, U32 b)
     ModuleState.Unk22 = ~ModuleState.ActualColorBits;
 
     ModuleState.BackSurfaceShadePixel =
-        ((5 << (11 - (ModuleState.BlueOffset & 0x1F))) + (2 << (11 - (ModuleState.GreenOffset & 0x1F)))) & 0xFFFF;
+        ((5 << (11 - ModuleState.BlueOffset)) + (2 << (11 - ModuleState.GreenOffset))) & DEFAULT_SCREEN_COLOR_MASK;
     ModuleState.BackSurfaceShadePixel = (ModuleState.BackSurfaceShadePixel << 16) | ModuleState.BackSurfaceShadePixel;
 
     if (ModuleState.GreenOffset < ModuleState.RedOffset)
