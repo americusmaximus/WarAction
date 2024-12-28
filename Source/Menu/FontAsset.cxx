@@ -131,13 +131,13 @@ U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR item)
 }
 
 // 0x10023390
-U32 AcquireFontAssetHeight(LPCVOID content)
+S32 AcquireFontAssetHeight(LPCVOID content)
 {
     return ((U32*)content)[542] & 0xFF; // TODO ???
 }
 
 // 0x10003e60
-U32 CLASSCALL AcquireFontAssetHeight(FONTASSETPTR self)
+S32 CLASSCALL AcquireFontAssetHeight(FONTASSETPTR self)
 {
     return self->Height;
 }
@@ -172,8 +172,8 @@ U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item)
     case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Width; }
     case FONTTYPE_COMPLEX:
     {
-        return item == NULL
-            ? DEFAULT_FONT_ASSET_SPACING : AcquireFontAssetItem(self->Font, item)->Width;
+        return item == NULL ? DEFAULT_FONT_ASSET_SPACING
+            : (AcquireFontAssetItem(self->Font, item)->Width + DEFAULT_FONT_ASSET_SPACING);
     }
     }
 

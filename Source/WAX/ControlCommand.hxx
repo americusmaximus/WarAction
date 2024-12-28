@@ -32,9 +32,8 @@ typedef struct ControlCommand
     U32             Parameter2;
 } CONTROLCOMMAND, * CONTROLCOMMANDPTR;
 
-/* TODO NAMES */
-#define CONTROLCOMMAND_TEXT_CONTROL     0x23232323 /* #### */
-#define CONTROLCOMMAND_VIDEO_CONTROL    0x236D6C74 /* #mlt */
+#define CONTROLCOMMAND_TEXT_CONTROL     0x23232323 /* #### */ /* TODO */
+#define CONTROLCOMMAND_VIDEO_CONTROL    0x236D6C74 /* #mlt */ /* TODO */
 #define CONTROLCOMMAND_KBD              0x2f4b4244 /* /KBD */
 #define CONTROLCOMMAND_UTF              0x2F555446 /* /UTF */
 
@@ -58,3 +57,9 @@ typedef struct ControlCommand
                                                                 | CONTROLCOMMANDACTION_MOUSE_LEAVE | CONTROLCOMMANDACTION_MOUSE_ENTER)
 
 #define CONTROLCOMMANDACTION_MOUSE_ALL_ACTIONS              (CONTROLCOMMANDACTION_MOUSE_MOST_ACTIONS | CONTROLCOMMANDACTION_MOUSE_HOVER)
+
+#define CONTROLCOMMANDACTION_KBD_KEY_DOWN                   0x100
+#define CONTROLCOMMANDACTION_KBD_KEY_UP                     0x200
+#define CONTROLCOMMANDACTION_UTF_KEY_DOWN                   0x01000000
+#define CONTROLCOMMANDACTION_UTF_KEY_UP                     0x02000000
+#define CONTROLCOMMANDACTION_UTF_KEY_ANY                    0xFF000000

@@ -123,33 +123,26 @@ VOID CLASSCALL TickInputControl(INPUTCONTROLPTR self)
 
     U32 width = 0;
 
+    for (LPSTR value = self->Value; (ADDR)value - (ADDR)self->Value < self->Input; value = AcquireNextString(value))
     {
-        LPSTR value = self->Value;
-        for (U32 x = 0; x < self->Input; x++)
-        {
-            width = width + AcquireFontAssetItemWidth(self->Font, AcquireUnicode(value));
-
-            value = AcquireNextString(value);
-        }
+        width = width + AcquireFontAssetItemWidth(self->Font, AcquireUnicode(value));
     }
 
     if (self->Alignment == FONTALIGNMENT_LEFT)
     {
         if (self->IsFocus)
         {
-            S32 max = self->Width;
+            if (self->Width < width + 3 + self->Margin) { self->Margin = self->Width - width - 3; }
 
-            if (max < width + 3 + self->Margin) { self->Margin = max - width - 3; }
-
-            if (width + 3 + self->Margin < max / 2) { self->Margin = self->Margin + AcquireFontAssetItemWidth(self->Font, NULL); }
+            if (width + 3 + self->Margin < self->Width / 2) { self->Margin = self->Margin + AcquireFontAssetItemWidth(self->Font, NULL); }
 
             if (0 < self->Margin) { self->Margin = 0; }
         }
     }
     else { self->Margin = (self->Width - width) / 2; }
 
-    CONST U32 x = self->X + self->Margin;
-    CONST U32 y = self->Y + (self->Height - AcquireFontAssetHeight(self->Font)) / 2;
+    CONST S32 x = self->X + self->Margin;
+    CONST S32 y = self->Y + (self->Height - AcquireFontAssetHeight(self->Font)) / 2;
 
     SelectFontAssetColor(self->Font, ADJUSTCOLOR(0xFF00));
 
@@ -185,10 +178,11 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
 
             CONST U32 action = command->Action;
 
-            if ((action & 0x1000000) == 0) // TODO
+            if (!(action & CONTROLCOMMANDACTION_UTF_KEY_DOWN))
             {
-                if ((action & 0xFF000000) == 0 // TODO
-                    && IsInputControlInputAllowed(self, action) && IsInputControlAllowItemsAllowed(&self->Allowed, action))
+                if (!(action & CONTROLCOMMANDACTION_UTF_KEY_ANY)
+                    && IsInputControlInputAllowed(self, action)
+                    && IsInputControlAllowItemsAllowed(&self->Allowed, action))
                 {
                     CONST U32 length = AcquireUnicodeLength(action);
 
@@ -196,20 +190,20 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
                     {
                         MoveMemory((LPSTR)((ADDR)self->Value + self->Input + length),
                             (LPCSTR)((ADDR)self->Value + self->Input),
-                            strlen((LPCSTR)((ADDR)self->Value + self->Input)));
+                            strlen((LPCSTR)((ADDR)self->Value + self->Input)) + 1);
 
                         {
-                            CONST U32 length = AppendUnicode((LPSTR)((ADDR)self->Value + self->Input), action);
+                            CONST U32 count = AppendUnicode((LPSTR)((ADDR)self->Value + self->Input), action);
 
-                            self->Length = self->Length + length;
-                            self->Input = self->Input + length;
+                            self->Length = self->Length + count;
+                            self->Input = self->Input + count;
                         }
                     }
                 }
             }
             else
             {
-                switch (action & 0xFF) // TODO
+                switch (action & 0xFF)
                 {
                 case VK_BACK:
                 {
@@ -221,9 +215,9 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
                         {
                             CONST U32 length = AcquireAnsiLength((LPSTR)((ADDR)self->Value + self->Input));
 
-                            memmove((LPSTR)((ADDR)self->Value + self->Input),
+                            MoveMemory((LPSTR)((ADDR)self->Value + self->Input),
                                 (LPSTR)((ADDR)self->Value + self->Input + length),
-                                strlen((LPSTR)((ADDR)self->Value + self->Input + length)));
+                                strlen((LPSTR)((ADDR)self->Value + self->Input + length)) + 1);
 
                             self->Length = self->Length - length;
                         }
@@ -278,34 +272,34 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
 
                             if (input != NULL)
                             {
-                                CONST U32 inputlength = strlen(input);
-                                CONST U32 contentlength = AcquireUnicodeString(NULL, 0, input, inputlength);
+                                CONST U32 size = strlen(input);
+                                CONST U32 length = AcquireUnicodeString(NULL, 0, input, size);
 
-                                LPSTR content = (LPSTR)malloc(contentlength + 1);
+                                LPSTR content = (LPSTR)malloc(length + 1);
 
-                                AcquireUnicodeString(content, contentlength + 1, input, inputlength);
+                                AcquireUnicodeString(content, length + 1, input, size);
 
-                                S32 offset = (S32)contentlength;
-                                if (offset >= 0) // TODO simplify?
+                                if (length != 0)
                                 {
-                                    do
+                                    U32 count = length;
+
+                                    while (count >= 0)
                                     {
-                                        if (self->Length + offset <= self->Capacity) { break; }
+                                        if (self->Length + count <= self->Capacity) { break; }
 
-                                        offset = (ADDR)AcquirePriorString((LPSTR)((ADDR)content + offset)) - (ADDR)content;
-                                    } while (offset >= 0);
+                                        count = (ADDR)AcquirePriorString((LPSTR)((ADDR)content + count)) - (ADDR)content;
+                                    }
 
-                                    if (offset > 0)
+                                    if (count > 0)
                                     {
-                                        CONST U32 length = strlen((LPSTR)((ADDR)self->Value + self->Input));
+                                        MoveMemory((LPSTR)((ADDR)self->Value + self->Input + count),
+                                            (LPSTR)((ADDR)self->Value + self->Input),
+                                            strlen((LPSTR)((ADDR)self->Value + self->Input)) + 1);
 
-                                        MoveMemory((LPSTR)((ADDR)self->Value + self->Input + offset),
-                                            (LPSTR)((ADDR)self->Value + self->Input), length);
+                                        CopyMemory((LPSTR)((ADDR)self->Value + self->Input), content, count);
 
-                                        CopyMemory((LPSTR)((ADDR)self->Value + self->Input), content, length);
-
-                                        self->Input = self->Input + offset;
-                                        self->Length = self->Length + offset;
+                                        self->Input = self->Input + count;
+                                        self->Length = self->Length + count;
                                     }
                                 }
 
@@ -326,9 +320,9 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
                     {
                         CONST U32 length = AcquireAnsiLength((LPSTR)((ADDR)self->Value + self->Input));
 
-                        memmove((LPSTR)((ADDR)self->Value + self->Input),
+                        MoveMemory((LPSTR)((ADDR)self->Value + self->Input),
                             (LPSTR)((ADDR)self->Value + self->Input + length),
-                            strlen((LPSTR)((ADDR)self->Value + self->Input + length)));
+                            strlen((LPSTR)((ADDR)self->Value + self->Input + length)) + 1);
 
                         self->Length = self->Length - length;
                     }
@@ -380,7 +374,7 @@ VOID CLASSCALL DisposeInputControl(INPUTCONTROLPTR self)
 // 0x10004050
 VOID CLASSCALL SelectInputControlValue(INPUTCONTROLPTR self, LPCSTR value)
 {
-    self->Length = strlen(value) + 1;
+    self->Length = strlen(value);
 
     strcpy(self->Value, value);
 
@@ -449,9 +443,7 @@ VOID CLASSCALL RemoveInputControlFocus(INPUTCONTROLPTR self)
 // 0x10004820
 BOOL CLASSCALL IsInputControlInputAllowed(INPUTCONTROLPTR self, CONST U32 action)
 {
-    if (action < ' ') { return FALSE; }
-
-    if (0xFFFF < action) { return FALSE; } // TODO
+    if (action < ' ' || 0xFFFF < action) { return FALSE; }
 
     if (self->Invalid != NULL)
     {

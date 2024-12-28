@@ -59,7 +59,7 @@ typedef struct FontAsset
 
 BOOL CLASSCALL InitializeFontAsset(FONTASSETPTR self, LPCSTR name, CONST FONTTYPE type);
 FONTASSETPTR CLASSCALL ActivateFontAsset(FONTASSETPTR self);
-U32 CLASSCALL AcquireFontAssetHeight(FONTASSETPTR self);
+S32 CLASSCALL AcquireFontAssetHeight(FONTASSETPTR self);
 U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR item);
 U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item);
 U32 CLASSCALL AcquireFontAssetTextWidth(FONTASSETPTR self, LPCSTR text);
@@ -72,7 +72,7 @@ VOID CLASSCALL SelectFontAssetColor(FONTASSETPTR self, CONST U32 color);
 VOID CLASSCALL SelectFontAssetColor(FONTASSETPTR self, CONST U32 r, CONST U32 g, CONST U32 b);
 
 IMAGEPALETTESPRITEPTR AcquireFontAssetItem(LPCVOID content, CONST U32 indx);
-U32 AcquireFontAssetHeight(LPCVOID content);
+S32 AcquireFontAssetHeight(LPCVOID content);
 U32 AcquireFontAssetTextWidth(LPCSTR text, LPCVOID content, CONST U32 spacing);
 VOID DrawFontAssetText(CONST U32 x, CONST U32 y, LPCSTR text, LPCVOID asset, PIXEL* pixels, CONST U32 alignment, CONST U32 spacing);
 U32 AcquireFontAssetItemWidth(CONST U32 x, CONST U32 width, CONST U32 alignment);

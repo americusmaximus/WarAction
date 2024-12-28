@@ -32,6 +32,7 @@ SOFTWARE.
 #define MAX_BINSAVEFILE_LENGTH          10000000
 #define DEFAULT_SAVE_STATE_GAME_VALUE   (-1)
 
+// 0x10046e48
 SAVEMODULESTATECONTAINER SaveState;
 
 // TODO move sring values to defines

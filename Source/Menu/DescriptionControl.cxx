@@ -305,8 +305,8 @@ VOID CLASSCALL DrawDescriptionControlCharacter(DESCRIPTIONCONTROLPTR self, CONST
         self->LineCount = self->LineCount + 1;
     }
 
-    CONST U32 height = AcquireFontAssetHeight(self->Font);
-    CONST U32 offset = (height + self->Unk08) * self->LineCount + self->Unk09 + self->Unk07 + self->Y;
+    CONST S32 height = AcquireFontAssetHeight(self->Font);
+    CONST S32 offset = (height + self->Unk08) * self->LineCount + self->Unk09 + self->Unk07 + self->Y;
 
     if (self->Y <= height + offset)
     {

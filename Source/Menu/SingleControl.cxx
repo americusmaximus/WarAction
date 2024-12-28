@@ -110,10 +110,6 @@ VOID CLASSCALL InitializeSingleControl(SINGLECONTROLPTR self)
 
     self->IsMessage = FALSE;
     self->Names->Index = INVALID_LIST_CONTROL_INDEX;
-
-    // TODO:
-    // 1. palyer name cannot be typed in, and not displayed at all.
-    // 2. difficulty cannot be changed...
 }
 
 // 0x10016a10

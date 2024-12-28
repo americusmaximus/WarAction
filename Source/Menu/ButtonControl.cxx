@@ -134,14 +134,14 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
         }
         else if (command.Command == CONTROLCOMMAND_UTF && !ControlState.Active)
         {
-            if (command.Action == self->Shortcut + 0x1000000)// TODO
+            if (command.Action == self->Shortcut + CONTROLCOMMANDACTION_UTF_KEY_DOWN)
             {
                 self->IsAction = TRUE;
 
                 DequeueControlCommand(TRUE);
             }
 
-            if (command.Action == self->Shortcut + 0x2000000)// TODO
+            if (command.Action == self->Shortcut + CONTROLCOMMANDACTION_UTF_KEY_UP)
             {
                 self->IsAction = FALSE;
                 result = CONTROLACTION_1;

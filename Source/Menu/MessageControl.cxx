@@ -108,7 +108,7 @@ VOID CLASSCALL TickMessageControl(MESSAGECONTROLPTR self)
         }
     }
 
-    U32 offset = 197 - (AcquireFontAssetHeight(&AssetsState.Fonts.Main) * (lines * 10 - 4)) / 20;
+    S32 offset = 197 - (AcquireFontAssetHeight(&AssetsState.Fonts.Main) * (lines * 10 - 4)) / 20;
 
     SelectFontAssetColor(&AssetsState.Fonts.Main, ADJUSTCOLORS(0xFF00, 0xFF00, 0x0000));
 

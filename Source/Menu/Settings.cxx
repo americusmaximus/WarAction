@@ -34,6 +34,8 @@ SOFTWARE.
 // 0x10014af0
 VOID CLASSCALL SaveSettingsValue(SETTINGSPTR self, CONST S32 input)
 {
+    self->Value = input;
+
     STRINGVALUE name, value;
     AcquireSettingsValue(&name, self->ID);
     AcquireStringValue(&value, "%d", input);

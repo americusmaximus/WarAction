@@ -39,7 +39,7 @@ SOFTWARE.
 #define MAX_DOUBLE_CLICK_DISTANCE           4
 #define MAX_WINDOW_MESSAGE_CHARACTER_LENGTH 128
 
-WINDOWSTATEMODULECONTAINER WindowState;
+WINDOWCONTAINER WindowState;
 
 // 0x1008e5d0
 VOID SelectWindowInputState(CONST WINDOWINPUTSTATE state)
@@ -186,16 +186,20 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         {
-            EnqueueControlCommand(CONTROLCOMMAND_KBD, wp + 0x100, CursorState.X, CursorState.Y); // TODO
-            EnqueueControlCommand(CONTROLCOMMAND_UTF, wp + 0x1000000, CursorState.X, CursorState.Y); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_KBD,
+                wp + CONTROLCOMMANDACTION_KBD_KEY_DOWN, CursorState.X, CursorState.Y);
+            EnqueueControlCommand(CONTROLCOMMAND_UTF,
+                wp + CONTROLCOMMANDACTION_UTF_KEY_DOWN, CursorState.X, CursorState.Y);
 
             break;
         }
         case WM_KEYUP:
         case WM_SYSKEYUP:
         {
-            EnqueueControlCommand(CONTROLCOMMAND_KBD, wp + 0x200, CursorState.X, CursorState.Y); // TODO
-            EnqueueControlCommand(CONTROLCOMMAND_UTF, wp + 0x2000000, CursorState.X, CursorState.Y); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_KBD,
+                wp + CONTROLCOMMANDACTION_KBD_KEY_UP, CursorState.X, CursorState.Y);
+            EnqueueControlCommand(CONTROLCOMMAND_UTF,
+                wp + CONTROLCOMMANDACTION_UTF_KEY_UP, CursorState.X, CursorState.Y);
 
             break;
         }
@@ -206,21 +210,21 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
             if (!IsAnsiCharacter(wp))
             {
-                if (WindowState.Key == 0) // TODO
+                if (WindowState.Key == VK_NULL)
                 {
                     EnqueueControlCommand(CONTROLCOMMAND_UTF,
-                        AcquireUnicodeCharacter(wp & 0xFF), CursorState.X, CursorState.Y); // TODO
+                        AcquireUnicodeCharacter(wp & 0xFF), CursorState.X, CursorState.Y);
 
-                    WindowState.Key = 0; // TODO
+                    WindowState.Key = VK_NULL;
                 }
             }
-            else if (WindowState.Key == 0) { WindowState.Key = wp & 0xFF; } // TODO
+            else if (WindowState.Key == VK_NULL) { WindowState.Key = wp & 0xFF; }
             else
             {
                 EnqueueControlCommand(CONTROLCOMMAND_UTF,
-                    AcquireUnicodeCharacter((wp & 0xFF) << 8 | WindowState.Key), CursorState.X, CursorState.Y); // TODO
+                    AcquireUnicodeCharacter((wp & 0xFF) << 8 | WindowState.Key), CursorState.X, CursorState.Y);
 
-                WindowState.Key = 0; // TODO
+                WindowState.Key = VK_NULL;
             }
 
             break;
@@ -261,5 +265,5 @@ U32 AcquireUnicodeCharacter(CONST U32 value)
 
     if (result != 2) { string[0] = '?'; string[1] = NULL; }
 
-    return (U32)(((U32)string[0]) << 16 | (U32)string[1]);
+    return *(U32*)string;
 }

@@ -25,6 +25,8 @@ SOFTWARE.
 #include "Basic.hxx"
 #include "Native.Basic.hxx"
 
+#define VK_NULL                     0
+
 #define MAX_WINDOW_TITLE_LENGTH     256
 
 typedef enum WindowInputState

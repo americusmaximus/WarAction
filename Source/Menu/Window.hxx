@@ -26,7 +26,7 @@ SOFTWARE.
 
 #include <Window.hxx>
 
-typedef struct WindowStateModuleContainer
+typedef struct WindowContainer
 {
     WINDOW                  Window;     // 0x10059380
 
@@ -55,9 +55,9 @@ typedef struct WindowStateModuleContainer
     } Cursor;
 
     U32                     Key;        // 0x1005abf0
-} WINDOWSTATEMODULECONTAINER, * WINDOWSTATEMODULECONTAINERPTR;
+} WINDOWCONTAINER, * WINDOWCONTAINERPTR;
 
-EXTERN WINDOWSTATEMODULECONTAINER WindowState;
+EXTERN WINDOWCONTAINER WindowState;
 
 WINDOWPTR CLASSCALL ActivateWindowState(WINDOWPTR self, ACTIONHANDLERLAMBDA initialize, ACTIONHANDLERLAMBDA execute, ACTIONHANDLERLAMBDA complete);
 VOID CLASSCALL InitializeWindowState(WINDOWPTR self);
