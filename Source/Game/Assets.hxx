@@ -31,8 +31,21 @@ SOFTWARE.
 typedef struct AssetStateModuleContainer
 {
     BINFILECONTENT      Files[MAX_BINARY_FILE_COUNT];       // 0x10385728
-
+    struct
+    {
+        U32             Count;                              // 0x10385720
+        BINFILECHUNK    Values[MAX_BINARY_CHUNK_COUNT];     // 0x103a5728
+    } Chunks;
     BINARCHIVE          Archives[MAX_BINARY_ARCHIVE_COUNT]; // 0x103a57a8
 } ASSETSTATEMODULECONTAINER, * ASSETSTATEMODULECONTAINERPTR;
 
 EXTERN ASSETSTATEMODULECONTAINER AssetsState;
+
+LPCSTR AcquireAssetMessage(CONST U32 indx);
+LPVOID AcquireBinFileChunk(CONST BFH indx, CONST U32 chunk);
+LPVOID InitializeBinFileChunk(CONST BFH indx, CONST U32 chunk, CONST U32 size);
+U32 AcquireBinFileChunkSize(CONST BFH indx, CONST U32 offset);
+VOID DisposeAssets(VOID);
+VOID DisposeBinFileChunks(VOID);
+VOID ReleaseAssets(VOID);
+VOID ReleaseBinFileChunks(VOID);

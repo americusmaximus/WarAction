@@ -113,6 +113,8 @@ VOID ReleaseBinFileChunks(VOID)
 // 0x10024670
 VOID DisposeBinFileChunks(VOID)
 {
+    AssetsState.Chunks.Count = 0;
+
     for (U32 x = 0; x < MAX_BINARY_CHUNK_COUNT; x++)
     {
         if (AssetsState.Chunks.Values[x].Content != NULL) { AssetsState.Chunks.Values[x].Content = NULL; }

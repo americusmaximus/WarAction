@@ -354,7 +354,7 @@ U32 SelectAssetFileOffset(CONST U32 indx, LONG distance, DWORD method)
 }
 
 // 0x10091780
-U32 SelectAssetFileOffset(CONST U32 indx)
+U32 AcquireAssetFileOffset(CONST U32 indx)
 {
     CONST BINFILECONTENTTYPE type = AssetsState.Files[indx].Type;
 
