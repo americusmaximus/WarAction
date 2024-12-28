@@ -24,4 +24,18 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
+#define MAX_LOG_MESSAGE_LENGTH  512
+
+typedef struct LoggerState
+{
+    HMODULE     Text;                               // 0x10384444
+    CHAR        Message[MAX_LOG_MESSAGE_LENGTH];    // 0x10294d40
+    CHAR        Value[MAX_LOG_MESSAGE_LENGTH];      // 0x10294f40
+} LOGGERSTATE, * LPGGERSTATEPTR;
+
+EXTERN LOGGERSTATE LoggerState;
+
 VOID LogMessage(LPCSTR format, ...);
+
+VOID LogError(LPCSTR name, CONST U32 id, ...);
+VOID LogError(LPCSTR name, LPCSTR format, ...);

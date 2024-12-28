@@ -26,11 +26,78 @@ SOFTWARE.
 
 #include <stdio.h>
 
-#define MAX_LOG_MESSAGE_LENGTH  512
+LOGGERSTATE LoggerState;
 
 VOID CLASSCALL LogMessage(LOGGERPTR self, LPCSTR message);
 VOID CLASSCALL LogMessage(LOGGERPTR self, LPCSTR format, va_list args);
 VOID CLASSCALL SendLogMessage(LOGGERPTR self, LPCSTR message);
+
+VOID LogError(LPCSTR name, LPCSTR format, va_list args);
+VOID LogError(LPCSTR name, CONST U32 id, va_list args);
+
+// 0x1003b8d0
+VOID LogError(LPCSTR name, LPCSTR format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    LogError(name, format, args);
+
+    va_end(args);
+}
+
+// 0x1004ba50
+VOID LogError(LPCSTR name, CONST U32 id, ...)
+{
+    va_list args;
+    va_start(args, id);
+
+    LogError(name, id, args);
+
+    va_end(args);
+}
+
+// 0x10056e40
+VOID LogError(LPCSTR name, LPCSTR format, va_list args)
+{
+    if (State.Logger !=NULL)
+    {
+        LogMessage(State.Logger, "---------Error---------\n");
+
+        if (State.Logger != NULL)
+        {
+            wsprintfA(LoggerState.Message, "%s: %s", name, format);
+            LogMessage(State.Logger, LoggerState.Message, args);
+        }
+
+        LogMessage(State.Logger, "---------*****---------\n");
+    }
+
+    vsprintf(LoggerState.Message, format, args);
+    MessageBoxA(State.Window->HWND, LoggerState.Message, name, MB_OK | MB_ICONHAND);
+}
+
+// 0x10056ed0
+VOID LogError(LPCSTR name, CONST U32 id, va_list args)
+{
+    LoadStringA(LoggerState.Text, id, LoggerState.Value, MAX_LOG_MESSAGE_LENGTH);
+
+    if (State.Logger != NULL)
+    {
+        LogMessage(State.Logger, "---------Error---------\n");
+
+        if (State.Logger != NULL)
+        {
+            wsprintfA(LoggerState.Message, "%s: %s", name, LoggerState.Value);
+            LogMessage(State.Logger, LoggerState.Message, args);
+        }
+
+        LogMessage(State.Logger, "---------*****---------\n");
+    }
+
+    vsprintf(LoggerState.Message, LoggerState.Value, args);
+    MessageBoxA(State.Window->HWND, LoggerState.Message, name, MB_OK | MB_ICONHAND);
+}
 
 // 0x1008f0e0
 VOID LogMessage(LPCSTR format, ...)

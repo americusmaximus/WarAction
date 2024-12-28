@@ -25,6 +25,7 @@ SOFTWARE.
 #include "BinFile.hxx"
 
 #define INVALID_ASSET_FILE_OFFSET           (-1)
+#define INVALID_ASSET_FILE_SIZE             (-1)
 #define INVALID_ASSET_FILE_STRING_LENGTH    (-1)
 
 typedef struct AssetFile

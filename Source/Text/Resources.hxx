@@ -15,7 +15,7 @@
 #define IDS_STRING32                    32
 #define IDS_STRING35                    35
 #define IDS_STRING36                    36
-#define IDS_STRING37                    37
+#define IDS_OUF_OF_COMM_BUFF            37
 #define IDS_STRING38                    38
 #define IDS_STRING39                    39
 #define IDS_STRING40                    40

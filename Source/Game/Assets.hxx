@@ -41,10 +41,16 @@ typedef struct AssetStateModuleContainer
 
 EXTERN ASSETSTATEMODULECONTAINER AssetsState;
 
-LPCSTR AcquireAssetMessage(CONST U32 indx);
 LPVOID AcquireBinFileChunk(CONST BFH indx, CONST U32 chunk);
 LPVOID InitializeBinFileChunk(CONST BFH indx, CONST U32 chunk, CONST U32 size);
 U32 AcquireBinFileChunkSize(CONST BFH indx, CONST U32 offset);
+
+BOOL AcquireAssetContent(LPCSTR name, CONST U32 offset, LPVOID content, CONST U32 size);
+LPVOID AcquireAssetContentCount(LPCSTR name, U32* count);
+LPVOID AcquireAssetContentIndexes(LPCSTR name, U32* indexes, CONST U32 count);
+LPVOID AcquireAssetContent(LPCSTR name, CONST U32 offset, CONST U32 size);
+U32 AcquireAssetContentOffset(LPCSTR name, CONST U32 indx, LPVOID content, CONST U32 size);
+
 VOID DisposeAssets(VOID);
 VOID DisposeBinFileChunks(VOID);
 VOID ReleaseAssets(VOID);

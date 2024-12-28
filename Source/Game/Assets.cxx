@@ -25,9 +25,188 @@ SOFTWARE.
 #include "BinFile.hxx"
 #include "Logger.hxx"
 
+#include <../Text/Resources.hxx>
+
 #include <stdlib.h>
 
 ASSETSTATEMODULECONTAINER AssetsState;
+
+// 0x10056990
+BOOL AcquireAssetContent(LPCSTR name, CONST U32 offset, LPVOID content, CONST U32 size)
+{
+    ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
+    if (!OpenAssetFile(&file, name))
+    {
+        LogError("CAFILE", "File not found %s\n", name);
+
+        return FALSE;
+    }
+
+    if (offset != INVALID_ASSET_FILE_OFFSET) { SelectAssetFileOffset(&file, offset, FILE_BEGIN); }
+
+    U32 length = size;
+
+    if (length == INVALID_ASSET_FILE_SIZE)
+    {
+        CONST U32 end = AcquireAssetFileSize(&file);
+
+        length = offset == INVALID_ASSET_FILE_OFFSET ? end - AcquireAssetFileOffset(&file) : end - offset;
+    }
+
+    ReadAssetFile(&file, content, length);
+    CloseAssetFile(&file);
+
+    return TRUE;
+}
+
+// 0x10056a30
+LPVOID AcquireAssetContent(LPCSTR name, CONST U32 offset, CONST U32 size)
+{
+    ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
+    if (!OpenAssetFile(&file, name))
+    {
+        LogError("CAFILE", "File not found %s\n", name);
+
+        return NULL;
+    }
+
+    if (offset != INVALID_ASSET_FILE_OFFSET) { SelectAssetFileOffset(&file, offset, FILE_BEGIN); }
+
+    U32 length = size;
+
+    if (length == INVALID_ASSET_FILE_SIZE)
+    {
+        CONST U32 end = AcquireAssetFileSize(&file);
+
+        length = offset == INVALID_ASSET_FILE_OFFSET ? end - AcquireAssetFileOffset(&file) : end - offset;
+    }
+
+    if (length == 0)
+    {
+        CloseAssetFile(&file);
+
+        return NULL;
+    }
+
+    LPVOID content = AllocateZero(length);
+
+    if (content == NULL)
+    {
+        CloseAssetFile(&file);
+
+        return NULL;
+    }
+
+    ReadAssetFile(&file, content, length);
+    CloseAssetFile(&file);
+
+    return content;
+}
+
+// 0x10056b00
+LPVOID AcquireAssetContentIndexes(LPCSTR name, U32* indexes, CONST U32 count)
+{
+    ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
+    if (!OpenAssetFile(&file, name))
+    {
+        LogError("CAFILE", "File not found %s\n", name);
+
+        return NULL;
+    }
+
+    ReadAssetFile(&file, indexes, count * sizeof(U32));
+
+    U32 end = 0;
+    ReadAssetFile(&file, &end, sizeof(U32));
+
+    CONST U32 size = end - indexes[0];
+
+    LPVOID content = AllocateZero(size);
+
+    if (content == NULL)
+    {
+        CloseAssetFile(&file);
+        LogError("CAFILE", IDS_OUT_OF_MEMORY);
+
+        return NULL;
+    }
+
+    ReadAssetFile(&file, content, size);
+    CloseAssetFile(&file);
+
+    for (U32 x = 0; x < count; x++)
+    {
+        indexes[x] = (ADDR)content + indexes[x] - (count + 1) * sizeof(U32);
+    }
+
+    return content;
+}
+
+// 0x10056bf0
+LPVOID AcquireAssetContentCount(LPCSTR name, U32* count)
+{
+    ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
+    if (!OpenAssetFile(&file, name))
+    {
+        LogError("CAFILE", "File not found %s\n", name);
+
+        return NULL;
+    }
+
+    CONST U32 size = AcquireAssetFileSize(&file) - sizeof(U32);
+    LPVOID content = AllocateZero(size);
+
+    U32 items = 0;
+    ReadAssetFile(&file, &items, sizeof(U32));
+    ReadAssetFile(&file, content, size);
+    CloseAssetFile(&file);
+
+    ADDR* indxs = (ADDR*)content;
+    for (U32 x = 0; x < items; x++)
+    {
+        indxs[x] = (ADDR)content + indxs[x] - sizeof(U32);
+    }
+
+    if (count != NULL) { *count = items; }
+
+    return content;
+}
+
+// 0x10056ca0
+U32 AcquireAssetContentOffset(LPCSTR name, CONST U32 indx, LPVOID content, CONST U32 size)
+{
+    ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
+    if (!OpenAssetFile(&file, name))
+    {
+        LogError("CAFILE", "File not found %s\n", name);
+
+        return FALSE;
+    }
+
+    SelectAssetFileOffset(&file, (indx + 1) * sizeof(U32), FILE_BEGIN);
+
+    U32 start = 0, end = 0;
+    ReadAssetFile(&file, &start, sizeof(U32));
+    ReadAssetFile(&file, &end, sizeof(U32));
+
+    if (start == end) { return 0; }
+
+    U32 length = end - start;
+
+    if (size < length) { length = size; }
+
+    CONST U32 result = SelectAssetFileOffset(&file, start, FILE_BEGIN);
+
+    ReadAssetFile(&file, content, length);
+    CloseAssetFile(&file);
+
+    return result;
+}
 
 // 0x10091570
 LPVOID AcquireBinFileChunk(CONST BFH indx, CONST U32 chunk)
