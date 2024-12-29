@@ -61,5 +61,4 @@ typedef struct ImageControl
 #pragma pack(pop)
 
 IMAGECONTROLPTR CLASSCALL ActivateImageControl(IMAGECONTROLPTR self, BINASSETPTR asset, CONST U32 indx);
-
 VOID CLASSCALL TickImageControl(IMAGECONTROLPTR self);

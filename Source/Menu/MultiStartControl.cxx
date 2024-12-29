@@ -57,22 +57,22 @@ MULTISTARTCONTROLPTR CLASSCALL ActivateMultiStartControl(MULTISTARTCONTROLPTR se
     self->Scene = ActivateSceneControl(ALLOCATE(SCENECONTROL),
         &AssetsState.Assets.Multi4BK, &AssetsState.Assets.Multi4BT, CONTROLACTION_MULTI4_START);
 
-    self->Colors = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->Colors = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_1060, &AssetsState.Assets.Multi4CO, FALSE);
 
-    self->Team = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->Team = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_1061, &AssetsState.Assets.Multi4NOP, TRUE);
 
-    self->Nation = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->Nation = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_1064, &AssetsState.Assets.Multi4TOP, TRUE);
 
-    self->ObjectType4x12_4 = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->ObjectType4x12_4 = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_1062, &AssetsState.Assets.Multi4LOP, TRUE);
-    SelectObjectType4x12XY(self->ObjectType4x12_4, 0, 0);
+    SelectRadioControlPosition(self->ObjectType4x12_4, 0, 0);
 
-    self->ObjectType4x12_6 = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->ObjectType4x12_6 = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_1063, &AssetsState.Assets.Multi4ROP, TRUE);
-    SelectObjectType4x12XY(self->ObjectType4x12_6, 5, 5);
+    SelectRadioControlPosition(self->ObjectType4x12_6, 5, 5);
 
     self->Chat = ActivateChatControl(ALLOCATE(CHATCONTROL), CONTROLACTION_1065, 47, 288, 379, 80,
         ActivateScrollControl(ALLOCATE(SCROLLCONTROL), &AssetsState.Assets.Multi4SC, CONTROLACTION_SCROLL), &AssetsState.Fonts.Main);

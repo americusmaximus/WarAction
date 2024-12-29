@@ -61,6 +61,5 @@ typedef struct SceneControl
 #pragma pack(pop)
 
 SCENECONTROLPTR CLASSCALL ActivateSceneControl(SCENECONTROLPTR self, BINASSETPTR background, BINASSETPTR buttons, CONST U32 action);
-
-U32 CLASSCALL AcquireSceneButtonCount(SCENECONTROLPTR self);
 BUTTONCONTROLPTR CLASSCALL AcquireSceneControlButton(SCENECONTROLPTR self, CONST U32 indx);
+U32 CLASSCALL AcquireSceneButtonCount(SCENECONTROLPTR self);

@@ -71,5 +71,5 @@ typedef struct ToggleControl
 #pragma pack(pop)
 
 TOGGLECONTROLPTR CLASSCALL ActivateToggleControl(TOGGLECONTROLPTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action);
-VOID CLASSCALL InitializeToggleControl(TOGGLECONTROLPTR self);
 U32 CLASSCALL ActionToggleControl(TOGGLECONTROLPTR self);
+VOID CLASSCALL InitializeToggleControl(TOGGLECONTROLPTR self);

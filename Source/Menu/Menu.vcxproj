@@ -254,7 +254,7 @@
     <ClCompile Include="SwapControl.cxx" />
     <ClCompile Include="ObjectType3x3d.cxx" />
     <ClCompile Include="SceneControl.cxx" />
-    <ClCompile Include="ObjectType4x12.cxx" />
+    <ClCompile Include="RadioControl.cxx" />
     <ClCompile Include="MultiResultControl.cxx" />
     <ClCompile Include="Unknown.cxx" />
     <ClCompile Include="WelcomeControl.cxx" />
@@ -336,7 +336,7 @@
     <ClInclude Include="SwapControl.hxx" />
     <ClInclude Include="ObjectType3x3d.hxx" />
     <ClInclude Include="SceneControl.hxx" />
-    <ClInclude Include="ObjectType4x12.hxx" />
+    <ClInclude Include="RadioControl.hxx" />
     <ClInclude Include="MultiResultControl.hxx" />
     <ClInclude Include="Unknown.hxx" />
     <ClInclude Include="WelcomeControl.hxx" />

@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "ButtonControl.hxx"
 #include "PanelControl.hxx"
-#include "ObjectType4x12.hxx"
+#include "RadioControl.hxx"
 
 #define WELCOME_SINGLE_PLAYER_BUTTON_INDEX  0
 #define WELCOME_MULTI_PLAYER_BUTTON_INDEX   1
@@ -64,15 +64,15 @@ typedef struct WelcomeControl
     CONTROLNODEPTR          Nodes;
     BINASSETPTR             Background;
     BINASSETPTR             Buttons;
-    CONTROLTYPE4X12PTR      Operations;
-    CONTROLTYPE4X12PTR      Resolutions;
+    RADIOCONTROLPTR         Operations;
+    RADIOCONTROLPTR         Resolutions;
     BUTTONCONTROLPTR        Greetings;
     SETTINGS                Settings;
-    U32                     Unk10; // TODO
+    U32                     Unknown;
 } WELCOMECONTROL, * WELCOMECONTROLPTR;
 #pragma pack(pop)
 
 WELCOMECONTROLPTR CLASSCALL ActivateWelcomeControl(WELCOMECONTROLPTR self);
+U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self);
 VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self);
 VOID CLASSCALL TickWelcomeControl(WELCOMECONTROLPTR self);
-U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self);

@@ -71,7 +71,7 @@ typedef struct StarControl
 EXTERN STARCONTROL StarControlState;
 
 STARCONTROLPTR CLASSCALL ActivateStarControl(STARCONTROLPTR self);
-VOID CLASSCALL InitializeStarControl(STARCONTROLPTR self);
-VOID CLASSCALL TickStarControl(STARCONTROLPTR self);
 U32 CLASSCALL AcquireStarControlAssetHeight(STARCONTROLPTR self);
 U32 CLASSCALL AcquireStarControlAssetWidth(STARCONTROLPTR self);
+VOID CLASSCALL InitializeStarControl(STARCONTROLPTR self);
+VOID CLASSCALL TickStarControl(STARCONTROLPTR self);

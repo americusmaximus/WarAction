@@ -59,7 +59,7 @@ MULTIMAPCONTROLPTR CLASSCALL ActivateMultiMapControl(MULTIMAPCONTROLPTR self)
     self->List = ActivateListControl(ALLOCATE(LISTCONTROL),
         CONTROLACTION_LIST_SELECT, 49, 87, 270, 303, self->Scroll, &AssetsState.Fonts.Main, self->Items);
 
-    self->Options = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->Options = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_MULTI3_OPTIONS, &AssetsState.Assets.Multi3OP, TRUE);
 
     self->Size = ActivateLabelControl(ALLOCATE(LABELCONTROL), 532, 344, 78, 15, NULL);
@@ -90,7 +90,7 @@ VOID CLASSCALL InitializeMultiMapControl(MULTIMAPCONTROLPTR self)
 
     InitializeScrollControlArea(self->Scroll, 7, -13, 3);
     InitializePanelControl((PANELCONTROLPTR)self);
-    ClickObjectType4x12(self->Options, MULTI_MAP_GAME_MAPS_BUTTON_INDEX);
+    SelectRadioControlItem(self->Options, MULTI_MAP_GAME_MAPS_BUTTON_INDEX);
     FUN_1000f340(self);
     SelectListControlItem(self->List, 0);
 }
@@ -111,7 +111,7 @@ U32 CLASSCALL ActionMultiMapControl(MULTIMAPCONTROLPTR self)
             CHAR path[MAX_FILE_NAME_LENGTH];
             ZeroMemory(path, MAX_FILE_NAME_LENGTH);
 
-            if (FUN_10002440(self->Options) == 0) // TODO
+            if (AcquireRadioControlItemIndex(self->Options) == 0) // TODO
             {
                 {
                     STRINGVALUE name, value;

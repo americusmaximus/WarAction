@@ -71,5 +71,5 @@ typedef struct MultiSelectControl
 #pragma pack(pop)
 
 MULTISELECTCONTROLPTR CLASSCALL ActivateMultiSelectControl(MULTISELECTCONTROLPTR self);
-VOID CLASSCALL InitializeMultiSelectControl(MULTISELECTCONTROLPTR self);
 U32 CLASSCALL ActionMultiSelectControl(MULTISELECTCONTROLPTR self);
+VOID CLASSCALL InitializeMultiSelectControl(MULTISELECTCONTROLPTR self);

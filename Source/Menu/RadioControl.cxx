@@ -22,26 +22,26 @@ SOFTWARE.
 
 #include "BinAsset.hxx"
 #include "ControlCommand.hxx"
-#include "ObjectType4x12.hxx"
+#include "RadioControl.hxx"
 #include "Sound.hxx"
 
 #include <stdlib.h>
 
 // 0x1003a2f0
-CONTROLTYPE4X12SELF ObjectType4x12SelfState =
+RADIOCONTROLSELF RadioControlSelfState =
 {
     (CONTROLTYPE4X12TYPEACTION)AcquireControlTypePanel,
     (CONTROLTYPE4X12INITIALIZEACTION)InitializePanelControl,
     (CONTROLTYPE4X12DISABLEACTION)DisablePanelControl,
     (CONTROLTYPE4X12TICKACTION)TickPanelControl,
-    ActionObjectType4x12,
+    ActionRadioControl,
     (CONTROLTYPE4X12RELEASEACTION)ReleasePanelControl
 };
 
 // 0x10002300
-CONTROLTYPE4X12PTR CLASSCALL ActivateObjectType4x12(CONTROLTYPE4X12PTR self, CONST U32 action, BINASSETPTR asset, CONST U8 sound)
+RADIOCONTROLPTR CLASSCALL ActivateRadioControl(RADIOCONTROLPTR self, CONST U32 action, BINASSETPTR asset, CONST U8 sound)
 {
-    self->Self = &ObjectType4x12SelfState;
+    self->Self = &RadioControlSelfState;
 
     self->IsActive = FALSE;
     self->Nodes = NULL;
@@ -68,7 +68,7 @@ CONTROLTYPE4X12PTR CLASSCALL ActivateObjectType4x12(CONTROLTYPE4X12PTR self, CON
 }
 
 // 0x100023e0
-U32 CLASSCALL ActionObjectType4x12(CONTROLTYPE4X12PTR self)
+U32 CLASSCALL ActionRadioControl(RADIOCONTROLPTR self)
 {
     ActionPanelControl((PANELCONTROLPTR)self);
 
@@ -77,7 +77,7 @@ U32 CLASSCALL ActionObjectType4x12(CONTROLTYPE4X12PTR self)
     if (command != NULL && command->Command == CONTROLCOMMAND_UI
         && command->Action == self->Action && command->Parameter1 == 4 /* TODO */)
     {
-        if (!ClickObjectType4x12(self, command->Parameter2 / 2)) { DequeueControlCommand(TRUE); }
+        if (!SelectRadioControlItem(self, command->Parameter2 / 2)) { DequeueControlCommand(TRUE); }
     }
 
     return CONTROLACTION_NONE;
@@ -85,7 +85,7 @@ U32 CLASSCALL ActionObjectType4x12(CONTROLTYPE4X12PTR self)
 
 // 0x10002430
 // 0x10002490
-BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
+BOOL CLASSCALL SelectRadioControlItem(RADIOCONTROLPTR self, CONST S32 indx)
 {
     if (!self->IsSound)
     {
@@ -122,7 +122,7 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 }
 
 // 0x10002550
-VOID CLASSCALL SelectObjectType4x12XY(CONTROLTYPE4X12PTR self, CONST S32 x, CONST S32 y) // TODO
+VOID CLASSCALL SelectRadioControlPosition(RADIOCONTROLPTR self, CONST S32 x, CONST S32 y)
 {
     CONST U32 count = AcquireBinAssetItemCount(self->Asset) / 2;
 
@@ -137,9 +137,9 @@ VOID CLASSCALL SelectObjectType4x12XY(CONTROLTYPE4X12PTR self, CONST S32 x, CONS
 }
 
 // 0x10002440
-S32 CLASSCALL FUN_10002440(CONTROLTYPE4X12PTR self)
+S32 CLASSCALL AcquireRadioControlItemIndex(RADIOCONTROLPTR self)
 {
-    S32 result = INVALID_OBJECTTYPE4X12_INDEX; // TODO
+    S32 result = INVALID_RADIO_ITEM_INDEX;
 
     CONST U32 count = AcquireBinAssetItemCount(self->Asset) / 2;
 

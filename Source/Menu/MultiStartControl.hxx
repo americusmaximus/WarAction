@@ -26,8 +26,8 @@ SOFTWARE.
 #include "InputControl.hxx"
 #include "LabelControl.hxx"
 #include "MapControl.hxx"
-#include "ObjectType4x12.hxx"
 #include "PanelControl.hxx"
+#include "RadioControl.hxx"
 #include "SceneControl.hxx"
 #include "SwapControl.hxx"
 #include "TimeControl.hxx"
@@ -69,12 +69,12 @@ typedef struct MultiStartControl
     U8                          IsActive;
     CONTROLNODEPTR              Nodes;
     SCENECONTROLPTR             Scene;
-    CONTROLTYPE4X12PTR          Colors; // TODO
-    CONTROLTYPE4X12PTR          Team; // TODO
-    CONTROLTYPE4X12PTR          Nation; // TODO
-    CONTROLTYPE4X12PTR          ObjectType4x12_4; // TODO
-    CONTROLTYPE4X12PTR          ObjectType4x12_5; // TODO
-    CONTROLTYPE4X12PTR          ObjectType4x12_6; // TODO
+    RADIOCONTROLPTR             Colors; // TODO
+    RADIOCONTROLPTR             Team; // TODO
+    RADIOCONTROLPTR             Nation; // TODO
+    RADIOCONTROLPTR             ObjectType4x12_4; // TODO
+    RADIOCONTROLPTR             ObjectType4x12_5; // TODO
+    RADIOCONTROLPTR             ObjectType4x12_6; // TODO
     SWAPCONTROLPTR              ObjectType2x39; // TODO
     INPUTCONTROLPTR             Input;
     TIMECONTROLPTR              Inactivity;
@@ -93,11 +93,11 @@ typedef struct MultiStartControl
 #pragma pack(pop)
 
 MULTISTARTCONTROLPTR CLASSCALL ActivateMultiStartControl(MULTISTARTCONTROLPTR self);
-VOID CLASSCALL InitializeMultiStartControl(MULTISTARTCONTROLPTR self);
-VOID CLASSCALL DisableMultiStartControl(MULTISTARTCONTROLPTR self);
-VOID CLASSCALL TickMultiStartControl(MULTISTARTCONTROLPTR self);
-U32 CLASSCALL ActionMultiStartControl(MULTISTARTCONTROLPTR self);
 MULTISTARTCONTROLPTR CLASSCALL ReleaseMultiStartControl(MULTISTARTCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
+U32 CLASSCALL ActionMultiStartControl(MULTISTARTCONTROLPTR self);
+VOID CLASSCALL DisableMultiStartControl(MULTISTARTCONTROLPTR self);
 VOID CLASSCALL DisposeMultiStartControl(MULTISTARTCONTROLPTR self);
+VOID CLASSCALL InitializeMultiStartControl(MULTISTARTCONTROLPTR self);
 VOID CLASSCALL MultiStartControlUnknown1(MULTISTARTCONTROLPTR self); // TODO
 VOID CLASSCALL MultiStartControlUnknown2(MULTISTARTCONTROLPTR self); // TODO
+VOID CLASSCALL TickMultiStartControl(MULTISTARTCONTROLPTR self);

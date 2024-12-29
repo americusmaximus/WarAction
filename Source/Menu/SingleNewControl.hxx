@@ -73,5 +73,5 @@ typedef struct SingleNewControl
 #pragma pack(pop)
 
 SINGLENEWCONTROLPTR CLASSCALL ActivateSingleNewControl(SINGLENEWCONTROLPTR self, CONST BOOL addon);
-U32 CLASSCALL ActionSingleNewControl(SINGLENEWCONTROLPTR self);
 BOOL CLASSCALL SaveSingleNewControlState(SINGLENEWCONTROLPTR self);
+U32 CLASSCALL ActionSingleNewControl(SINGLENEWCONTROLPTR self);

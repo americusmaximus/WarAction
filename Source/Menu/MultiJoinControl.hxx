@@ -63,7 +63,6 @@ typedef struct MultiJoinControl
 #pragma pack(pop)
 
 MULTIJOINCONTROLPTR CLASSCALL ActivateMultiJoinControl(MULTIJOINCONTROLPTR self);
-U32 CLASSCALL ActionMultiJoinControl(MULTIJOINCONTROLPTR self);
-
 LPCSTR CLASSCALL AcquireMultiJoinControlInputValue(MULTIJOINCONTROLPTR self);
+U32 CLASSCALL ActionMultiJoinControl(MULTIJOINCONTROLPTR self);
 VOID CLASSCALL SelectMultiJoinControlInputValue(MULTIJOINCONTROLPTR self, LPCSTR value);

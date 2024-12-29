@@ -72,5 +72,5 @@ typedef struct SwapControl
 #pragma pack(pop)
 
 SWAPCONTROLPTR CLASSCALL ActivateSwapControl(SWAPCONTROLPTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action);
-VOID CLASSCALL InitializeSwapControl(SWAPCONTROLPTR self);
 U32 CLASSCALL ActionSwapControl(SWAPCONTROLPTR self);
+VOID CLASSCALL InitializeSwapControl(SWAPCONTROLPTR self);

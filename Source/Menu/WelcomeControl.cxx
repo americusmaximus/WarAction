@@ -66,21 +66,22 @@ WELCOMECONTROLPTR CLASSCALL ActivateWelcomeControl(WELCOMECONTROLPTR self)
         self->Settings.Value = AcquireSettingsValue(value, RENDERER_VIDEO_MODE_640x480);
     }
 
-    self->Operations = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->Operations = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_MAIN_RESOLUTIONS, &AssetsState.Assets.MainOP, TRUE);
-    self->Resolutions = ActivateObjectType4x12(ALLOCATE(CONTROLTYPE4X12),
+    self->Resolutions = ActivateRadioControl(ALLOCATE(RADIOCONTROL),
         CONTROLACTION_MAIN_RESOLUTIONS2, &AssetsState.Assets.MainRES, TRUE);
+
     self->Greetings = ActivateButtonControl(ALLOCATE(BUTTONCONTROL),
         &AssetsState.Assets.MenuG, 0, CONTROLACTION_MAIN_GREETINGS);
 
-    SelectObjectType4x12XY(self->Operations, 0, 1);
-    SelectObjectType4x12XY(self->Resolutions, 0, 1);
+    SelectRadioControlPosition(self->Operations, 0, 1);
+    SelectRadioControlPosition(self->Resolutions, 0, 1);
 
     AppendPanelControlNode((PANELCONTROLPTR)self, (CONTROLPTR)self->Operations);
     AppendPanelControlNode((PANELCONTROLPTR)self, (CONTROLPTR)self->Resolutions);
     AppendPanelControlNode((PANELCONTROLPTR)self, (CONTROLPTR)self->Greetings);
 
-    self->Unk10 = 0;
+    self->Unknown = 0;
 
     return self;
 }
@@ -90,8 +91,8 @@ VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self)
 {
     InitializePanelControl((PANELCONTROLPTR)self);
 
-    ClickObjectType4x12(self->Operations, INVALID_OBJECTTYPE4X12_INDEX);
-    ClickObjectType4x12(self->Resolutions, self->Settings.Value - 1);
+    SelectRadioControlItem(self->Operations, INVALID_RADIO_ITEM_INDEX);
+    SelectRadioControlItem(self->Resolutions, self->Settings.Value - 1);
 
     for (U32 x = 0; x < RENDERER_VIDEO_MODE_COUNT; x++)
     {
@@ -108,7 +109,7 @@ VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self)
             CONST TOGGLECONTROLPTR operation =
                 (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Operations, x);
 
-            CONST ACTIONAREAPTR area = AcquireActionArea(operation->Action);
+            ACTIONAREAPTR area = AcquireActionArea(operation->Action);
 
             // Extend clickable area by 70 pixels to the left,
             // so that clicking on resolution value, i.e. 640x480 equals clicking on the selector button.
@@ -162,7 +163,7 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
             DequeueControlCommand(TRUE);
 
             SaveSettingsValue(&self->Settings, command->Parameter2 / 2 + 1);
-            ClickObjectType4x12(self->Resolutions, command->Parameter2 / 2);
+            SelectRadioControlItem(self->Resolutions, command->Parameter2 / 2);
             // DAT_10046f80 = 1; // TODO Is this needed?
 
             if (resolution == RENDERER_VIDEO_MODE_1024x768) goto LAB_10014abe; // TODO
@@ -174,7 +175,7 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
 LAB_10014abe:
     DequeueControlCommand(TRUE);
 
-    ClickObjectType4x12(self->Operations, INVALID_OBJECTTYPE4X12_INDEX);
+    SelectRadioControlItem(self->Operations, INVALID_RADIO_ITEM_INDEX);
 
     return action;
 }

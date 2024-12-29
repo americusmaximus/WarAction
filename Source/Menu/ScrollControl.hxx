@@ -66,17 +66,17 @@ typedef struct ScrollControl
 } SCROLLCONTROL, * SCROLLCONTROLPTR;
 #pragma pack(pop)
 
-BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self);
-S32 CLASSCALL AcquireScrollControlVerticalOffset(SCROLLCONTROLPTR self, CONST S32 offset);
 SCROLLCONTROLPTR CLASSCALL ActivateScrollControl(SCROLLCONTROLPTR self, BINASSETPTR asset, CONST U32 action);
 SCROLLCONTROLPTR CLASSCALL ReleaseScrollControl(SCROLLCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
+BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self);
+S32 CLASSCALL AcquireScrollControlVerticalOffset(SCROLLCONTROLPTR self, CONST S32 offset);
 U32 CLASSCALL ActionScrollControl(SCROLLCONTROLPTR self);
 VOID CLASSCALL DisableScrollControl(SCROLLCONTROLPTR self);
 VOID CLASSCALL DisableScrollerScrollControl(SCROLLCONTROLPTR self);
 VOID CLASSCALL DisposeScrollControl(SCROLLCONTROLPTR self);
 VOID CLASSCALL InitializeScrollControl(SCROLLCONTROLPTR self);
-VOID CLASSCALL InitializeScrollControlArea(SCROLLCONTROLPTR self, CONST U32 action, CONST S32 x, CONST S32 y, CONST S32 height);
 VOID CLASSCALL InitializeScrollControlArea(SCROLLCONTROLPTR self, CONST S32 x, CONST S32 offsetUp, CONST S32 offsetDown);
+VOID CLASSCALL InitializeScrollControlArea(SCROLLCONTROLPTR self, CONST U32 action, CONST S32 x, CONST S32 y, CONST S32 height);
 VOID CLASSCALL InitializeScrollerScrollControl(SCROLLCONTROLPTR self);
 VOID CLASSCALL ScrollScrollControl(SCROLLCONTROLPTR self);
 VOID CLASSCALL TickScrollControl(SCROLLCONTROLPTR self);

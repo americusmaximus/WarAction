@@ -25,8 +25,8 @@ SOFTWARE.
 #include "LabelControl.hxx"
 #include "ListControl.hxx"
 #include "MapControl.hxx"
-#include "ObjectType4x12.hxx"
 #include "PanelControl.hxx"
+#include "RadioControl.hxx"
 #include "ScrollControl.hxx"
 
 #define MULTI_MAP_OK_BUTTON_INDEX           0
@@ -66,7 +66,7 @@ typedef struct MultiMapControl
     CONTROLNODEPTR          Nodes;
     BINASSETPTR             Background;
     BINASSETPTR             Buttons;
-    CONTROLTYPE4X12PTR      Options;
+    RADIOCONTROLPTR         Options;
     SCROLLCONTROLPTR        Scroll;
     LISTCONTROLPTR          List;
     STRINGLISTPTR           Items;

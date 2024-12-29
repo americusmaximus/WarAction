@@ -66,5 +66,5 @@ typedef struct LoadSaveControl
 #pragma pack(pop)
 
 LOADSAVECONTROLPTR CLASSCALL ActivateLoadSaveControl(LOADSAVECONTROLPTR self);
-VOID CLASSCALL InitializeLoadSaveControl(LOADSAVECONTROLPTR self);
 U32 CLASSCALL ActionLoadSaveControl(LOADSAVECONTROLPTR self);
+VOID CLASSCALL InitializeLoadSaveControl(LOADSAVECONTROLPTR self);
