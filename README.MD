@@ -36,13 +36,13 @@ Modern Visual Studio makes the binary dependent on modern runtime libraries that
 ## Modules
 
 ### Launcher
-The launcher module is the game executable. It's purpose is to do initial setup, read some settings, load proper renderer module, and transition control to the menu module.
+The launcher module is the game's executable. Its purpose is to do initial setup, read some settings, load proper renderer module, and transition control to the menu module.
 
 ### Renderer
-The game ships with 3 renderer modules. THey have essentially the same codebase, the only difference is the size of the game screen that they support. Available options are: 640x480, 800x600, 1024x768.
+The game ships with 3 renderer modules. The renderers have, essentially, the same codebase, the only difference is the size of the game screen supported. Available options are: 640x480, 800x600, 1024x768.
 
 ### Menu
-The menu module is responsible for guiding user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
+The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
 
 ### Game
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
