@@ -23,7 +23,7 @@ SOFTWARE.
 #pragma once
 
 #include "PanelControl.hxx"
-#include "ObjectType2x38.hxx"
+#include "ToggleControl.hxx"
 
 #define INVALID_OBJECTTYPE4X12_INDEX    (-1) /* TODO */
 

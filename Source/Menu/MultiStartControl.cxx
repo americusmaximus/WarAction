@@ -111,7 +111,7 @@ MULTISTARTCONTROLPTR CLASSCALL ActivateMultiStartControl(MULTISTARTCONTROLPTR se
     self->MapActors->Font = &AssetsState.Fonts.Main;
     self->MapActors->Color = ADJUSTCOLOR(0xC800);
 
-    self->ObjectType2x39 = ActivateObjectType2x39(ALLOCATE(CONTROLTYPE2X39),
+    self->ObjectType2x39 = ActivateSwapControl(ALLOCATE(SWAPCONTROL),
         &AssetsState.Assets.Multi4ParmOP, 0, CONTROLACTION_1067);
 
     ControlType3x3dState = ActivateObjectType3x3d(ALLOCATE(CONTROLTYPE3X3D),
@@ -141,9 +141,9 @@ MULTISTARTCONTROLPTR CLASSCALL ActivateMultiStartControl(MULTISTARTCONTROLPTR se
         AppendControlNode(self->Nodes, (CONTROLPTR)self->Players[x]);
     }
 
-    ((CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Nation, 0))->Click = "ack_ally"; // TODO
-    ((CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Nation, 1))->Click = "ack_deu"; // TODO
-    ((CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Nation, 2))->Click = "ack_rus"; // TODO
+    ((TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Nation, 0))->Click = "ack_ally"; // TODO
+    ((TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Nation, 1))->Click = "ack_deu"; // TODO
+    ((TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Nation, 2))->Click = "ack_rus"; // TODO
 
     return self;
 }
@@ -259,8 +259,8 @@ VOID CLASSCALL MultiStartControlUnknown1(MULTISTARTCONTROLPTR self)
 {
     for (U32 x = 0; x < MAX_PLAYER_COUNT; x++) // TODO Is this correct?
     {
-        CONTROLTYPE2X38PTR control =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->ObjectType4x12_4, x);
+        TOGGLECONTROLPTR control =
+            (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->ObjectType4x12_4, x);
 
         control->IsAction = FALSE;
         control->IsClickable = !NetworkState.Connection.IsHost || MenuSaveState.Save.Unk1A4 != 0 ? 0 : 1; // TODO

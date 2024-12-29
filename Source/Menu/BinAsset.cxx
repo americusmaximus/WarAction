@@ -91,7 +91,7 @@ VOID CLASSCALL AsStringBinAsset(BINASSETPTR self)
 
     CopyMemory(self->Content, (LPVOID)((ADDR)self->Content + sizeof(U32)), count * sizeof(U32));
 
-    ((U32*)self->Content)[count] = 0; // TODO
+    ((U32*)self->Content)[count] = NULL;
 }
 
 // 0x10006060
@@ -169,6 +169,7 @@ VOID AdjustBinAssetImage(IMAGESPRITEPTR self, CONST U32 ro, CONST U32 rm, CONST 
             for (U32 xx = 0; xx < count; xx++)
             {
                 CONST PIXEL color = pixels->Pixels[xx];
+
                 if (color != MAGENTA_PIXEL)
                 {
                     pixels->Pixels[xx] = ((color & 0x1F) | (color >> 1)) & 0xFFE0; // TODO

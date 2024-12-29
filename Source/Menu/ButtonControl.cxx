@@ -72,7 +72,7 @@ VOID CLASSCALL InitializeButtonControl(BUTTONCONTROLPTR self)
     InitializeControl((CONTROLPTR)self);
 
     self->IsVisible = TRUE;
-    self->Unk11 = TRUE;
+    self->IsClickable = TRUE;
     self->IsAction = FALSE;
 
     CONST IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireBinAssetContent(self->Asset, self->Index);
@@ -82,7 +82,7 @@ VOID CLASSCALL InitializeButtonControl(BUTTONCONTROLPTR self)
         ((50 - self->X) * image->Width * 2) / 100, ((50 - self->Y) * image->Height * 2) / 100,
         CONTROLCOMMANDACTION_BUTTON_ACTION, self->Action, DEFAULT_ACTION_PRIORITY);
 
-    self->Unk12 = 0; // TODO
+    self->IsContinuous = FALSE;
     self->Shortcut = AcquireShortcut(&ShortcutsState.State, self->Action);
 }
 
@@ -113,7 +113,7 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
         return CONTROLACTION_NONE;
     }
 
-    if (!self->Unk11) { return CONTROLACTION_NONE; }
+    if (!self->IsClickable) { return CONTROLACTION_NONE; }
 
     CONST U8 action = self->IsAction;
 
@@ -151,19 +151,19 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
         }
     }
 
-    if (self->Unk12 != 0)
+    if (self->IsContinuous)
     {
         if (!self->IsAction) { self->Ticks = 0; }
         else if (!action)
         {
             self->Ticks = GetTickCount();
-            self->Unk0x2c = 0;
+            self->Iteration = 0;
         }
         else
         {
             CONST U32 ticks = GetTickCount();
 
-            if (ticks - self->Ticks < (self->Unk0x2c == 0 ? 500 : 100))
+            if (ticks - self->Ticks < (self->Iteration == 0 ? 500 : 100))
             {
                 if (action != self->IsAction)
                 {
@@ -176,7 +176,7 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
             }
 
             self->Ticks = ticks;
-            self->Unk0x2c = self->Unk0x2c + 1;
+            self->Iteration = self->Iteration + 1;
         }
     }
 

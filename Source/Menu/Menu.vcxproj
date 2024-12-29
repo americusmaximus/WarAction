@@ -250,8 +250,8 @@
     <ClCompile Include="DescriptionControl.cxx" />
     <ClCompile Include="MultiSelectControl.cxx" />
     <ClCompile Include="MultiJoinControl.cxx" />
-    <ClCompile Include="ObjectType2x38.cxx" />
-    <ClCompile Include="ObjectType2x39.cxx" />
+    <ClCompile Include="ToggleControl.cxx" />
+    <ClCompile Include="SwapControl.cxx" />
     <ClCompile Include="ObjectType3x3d.cxx" />
     <ClCompile Include="SceneControl.cxx" />
     <ClCompile Include="ObjectType4x12.cxx" />
@@ -332,8 +332,8 @@
     <ClInclude Include="DescriptionControl.hxx" />
     <ClInclude Include="MultiSelectControl.hxx" />
     <ClInclude Include="MultiJoinControl.hxx" />
-    <ClInclude Include="ObjectType2x38.hxx" />
-    <ClInclude Include="ObjectType2x39.hxx" />
+    <ClInclude Include="ToggleControl.hxx" />
+    <ClInclude Include="SwapControl.hxx" />
     <ClInclude Include="ObjectType3x3d.hxx" />
     <ClInclude Include="SceneControl.hxx" />
     <ClInclude Include="ObjectType4x12.hxx" />

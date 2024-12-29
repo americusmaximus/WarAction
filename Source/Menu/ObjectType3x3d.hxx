@@ -33,7 +33,7 @@ typedef VOID(CLASSCALL* CONTROLTYPE3X3DTICKACTION)(ControlType3x3d* self);
 typedef U32(CLASSCALL* CONTROLTYPE3X3DACTIONACTION)(ControlType3x3d* self);
 typedef ControlType3x3d* (CLASSCALL* CONTROLTYPE3X3DRELEASEACTION)(ControlType3x3d* self, CONST OBJECTRELEASETYPE mode);
 
-// INHERITANCE: ControlSelf
+// INHERITANCE: ImageControlSelf
 typedef struct ControlType3x3dSelf
 {
     CONTROLTYPE3X3DTYPEACTION Type;

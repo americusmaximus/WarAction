@@ -53,8 +53,8 @@ CONTROLTYPE4X12PTR CLASSCALL ActivateObjectType4x12(CONTROLTYPE4X12PTR self, CON
 
     for (U32 x = 0; x < count; x++)
     {
-        CONTROLTYPE2X38PTR control =
-            ActivateObjectType2x38(ALLOCATE(CONTROLTYPE2X38), asset, x * 2, action);
+        TOGGLECONTROLPTR control =
+            ActivateToggleControl(ALLOCATE(TOGGLECONTROL), asset, x * 2, action);
 
         if (self->Nodes == NULL)
         {
@@ -89,10 +89,10 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 {
     if (!self->IsSound)
     {
-        CONTROLTYPE2X38PTR control =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, indx);
+        TOGGLECONTROLPTR control =
+            (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self, indx);
 
-        control->IsAction = ~control->IsAction; // XOR 0x1 // TODO
+        control->IsAction = ~control->IsAction;
 
         PlaySoundStateSound(&SoundState.State, control->Click);
 
@@ -105,8 +105,8 @@ BOOL CLASSCALL ClickObjectType4x12(CONTROLTYPE4X12PTR self, CONST S32 indx)
 
     for (U32 x = 0; x < count; x++)
     {
-        CONTROLTYPE2X38PTR control =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, x);
+        TOGGLECONTROLPTR control =
+            (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self, x);
 
         if (x == indx && !control->IsAction)
         {
@@ -128,8 +128,8 @@ VOID CLASSCALL SelectObjectType4x12XY(CONTROLTYPE4X12PTR self, CONST S32 x, CONS
 
     for (U32 xx = 0; xx < count; xx++)
     {
-        CONTROLTYPE2X38PTR control =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, xx);
+        TOGGLECONTROLPTR control =
+            (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self, xx);
 
         control->X = x;
         control->Y = y;
@@ -139,16 +139,16 @@ VOID CLASSCALL SelectObjectType4x12XY(CONTROLTYPE4X12PTR self, CONST S32 x, CONS
 // 0x10002440
 S32 CLASSCALL FUN_10002440(CONTROLTYPE4X12PTR self)
 {
-    S32 result = -1; // TODO
+    S32 result = INVALID_OBJECTTYPE4X12_INDEX; // TODO
 
     CONST U32 count = AcquireBinAssetItemCount(self->Asset) / 2;
 
     for (U32 x = 0; x < count; x++)
     {
-        CONTROLTYPE2X38PTR control =
-            (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self, x);
+        CONST TOGGLECONTROLPTR control =
+            (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self, x);
 
-        if (control->IsAction != 0) { result = x; } // TODO
+        if (control->IsAction) { result = x; }
     }
 
     return result;

@@ -22,45 +22,44 @@ SOFTWARE.
 
 #include "ButtonControl.hxx"
 #include "ControlCommand.hxx"
-#include "ObjectType2x38.hxx"
-#include "ObjectType2x39.hxx"
+#include "SwapControl.hxx"
 #include "VideoControl.hxx"
 
 // 0x1003a2a8
-CONTROLTYPE2X39SELF ObjectType2x39SelfState =
+SWAPCONTROLSELF SwapControlSelfState =
 {
-    (CONTROLTYPE2X39TYPEACTION)AcquireObjectType2,
-    InitializeObjectType2x39,
+    (CONTROLTYPE2X39TYPEACTION)AcquireControlTypeToggle,
+    InitializeSwapControl,
     (CONTROLTYPE2X39DISABLEACTION)DisableButtonControl,
     (CONTROLTYPE2X39TICKACTION)TickButtonControl,
-    ActionObjectType2x39,
+    ActionSwapControl,
     (CONTROLTYPE2X39RELEASEACTION)ReleaseVideoControl
 };
 
 // 0x10001fa0
-CONTROLTYPE2X39PTR CLASSCALL ActivateObjectType2x39(CONTROLTYPE2X39PTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action)
+SWAPCONTROLPTR CLASSCALL ActivateSwapControl(SWAPCONTROLPTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action)
 {
-    ActivateObjectType2x38((CONTROLTYPE2X38PTR)self, asset, indx, action);
+    ActivateToggleControl((TOGGLECONTROLPTR)self, asset, indx, action);
 
-    self->Self = &ObjectType2x39SelfState;
+    self->Self = &SwapControlSelfState;
 
-    self->Unk0x39 = FALSE;
+    self->IsToggle = FALSE;
 
     return self;
 }
 
 // 0x10001fd0
-VOID CLASSCALL InitializeObjectType2x39(CONTROLTYPE2X39PTR self)
+VOID CLASSCALL InitializeSwapControl(SWAPCONTROLPTR self)
 {
-    InitializeObjectType2x38((CONTROLTYPE2X38PTR)self);
+    InitializeToggleControl((TOGGLECONTROLPTR)self);
 
-    self->Unk0x39 = FALSE;
+    self->IsToggle = FALSE;
 }
 
 // 0x10001fe0
-U32 CLASSCALL ActionObjectType2x39(CONTROLTYPE2X39PTR self)
+U32 CLASSCALL ActionSwapControl(SWAPCONTROLPTR self)
 {
-    U32 result = ActionObjectType2x38((CONTROLTYPE2X38PTR)self);
+    U32 result = ActionToggleControl((TOGGLECONTROLPTR)self);
 
     if (result != CONTROLACTION_NONE) { self->IsAction = TRUE; }
 
@@ -68,7 +67,7 @@ U32 CLASSCALL ActionObjectType2x39(CONTROLTYPE2X39PTR self)
     if (DequeueControlCommand(&command, FALSE) && command.Command == CONTROLCOMMAND_UI
         && command.Action == self->Action && command.Parameter1 == 6 /* TODO */)
     {
-        self->Unk0x39 = self->Unk0x39 == 0; // TODO
+        self->IsToggle = ~self->IsToggle;
         self->IsAction = FALSE;
 
         DequeueControlCommand(TRUE);

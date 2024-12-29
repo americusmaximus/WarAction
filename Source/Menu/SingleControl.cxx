@@ -73,7 +73,7 @@ SINGLECONTROLPTR CLASSCALL ActivateSingleControl(SINGLECONTROLPTR self)
     self->Names = ActivateListControl(ALLOCATE(LISTCONTROL),
         CONTROLACTION_LIST_SELECT, 354, 99, 212, 281, self->Scroll, &AssetsState.Fonts.Main, self->Items);
 
-    self->Difficulty = ActivateObjectType2x39(ALLOCATE(CONTROLTYPE2X39),
+    self->Difficulty = ActivateSwapControl(ALLOCATE(SWAPCONTROL),
         &AssetsState.Assets.Single0Dif, 0, CONTROLACTION_SINGLE0_DIFFICULTY);
 
     self->Nodes = ALLOCATE(CONTROLNODE);

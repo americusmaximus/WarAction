@@ -231,7 +231,7 @@ VOID CLASSCALL ActionMultiResultControlButtons(MULTIRESULTCONTROLPTR self)
         BUTTONCONTROLPTR label =
             (BUTTONCONTROLPTR)AcquireSceneControlButton(self->Scene, MULTI_RESULT_DESTROYED_LOST_BALANCE_LABEL_INDEX);
 
-        label->Unk11 = 0; // TODO
+        label->IsClickable = FALSE;
         label->IsVisible = self->Type == MULTIRESULTSTATISTICSTYPE_DETAIL;
         label->IsAction = self->Kind == MULTIRESULTSTATISTICSKIND_WINS;
     }

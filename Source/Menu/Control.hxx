@@ -30,7 +30,7 @@ typedef enum ControlType
 {
     CONTROLTYPE_CONTROL             = 0,
     CONTROLTYPE_BUTTON              = 1,
-    CONTROLTYPE_2                   = 2, // TODO
+    CONTROLTYPE_TOGGLE              = 2,
     CONTROLTYPE_IMAGE               = 3,
     CONTROLTYPE_PANEL               = 4,
     CONTROLTYPE_SCROLL              = 6,
@@ -105,7 +105,7 @@ CONTROLTYPE CLASSCALL AcquireControlTypeMultiSelect(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypeMultiStart(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypePanel(LPVOID);
 CONTROLTYPE CLASSCALL AcquireControlTypeScroll(LPVOID);
-CONTROLTYPE CLASSCALL AcquireObjectType2(LPVOID); // TODO
+CONTROLTYPE CLASSCALL AcquireControlTypeToggle(LPVOID);
 
 #define CONTROLACTION_MAIN_SINGLE                           1000
 #define CONTROLACTION_MAIN_MULTI                            1001

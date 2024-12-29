@@ -67,10 +67,10 @@ SCROLLCONTROLPTR CLASSCALL ActivateScrollControl(SCROLLCONTROLPTR self, BINASSET
 VOID CLASSCALL InitializeScrollControl(SCROLLCONTROLPTR self)
 {
     self->Up->Self->Initialize(self->Up);
-    self->Up->Unk12 = 1; // TODO
+    self->Up->IsContinuous = TRUE;
 
     self->Down->Self->Initialize(self->Down);
-    self->Down->Unk12 = 1; // TODO
+    self->Down->IsContinuous = TRUE;
 
     InitializeScrollerScrollControl(self);
 }

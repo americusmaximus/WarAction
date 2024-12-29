@@ -26,10 +26,10 @@ SOFTWARE.
 #include "InputControl.hxx"
 #include "LabelControl.hxx"
 #include "MapControl.hxx"
-#include "ObjectType2x39.hxx"
 #include "ObjectType4x12.hxx"
 #include "PanelControl.hxx"
 #include "SceneControl.hxx"
+#include "SwapControl.hxx"
 #include "TimeControl.hxx"
 
 #include <Game.hxx>
@@ -75,7 +75,7 @@ typedef struct MultiStartControl
     CONTROLTYPE4X12PTR          ObjectType4x12_4; // TODO
     CONTROLTYPE4X12PTR          ObjectType4x12_5; // TODO
     CONTROLTYPE4X12PTR          ObjectType4x12_6; // TODO
-    CONTROLTYPE2X39PTR          ObjectType2x39; // TODO
+    SWAPCONTROLPTR              ObjectType2x39; // TODO
     INPUTCONTROLPTR             Input;
     TIMECONTROLPTR              Inactivity;
     TIMECONTROLPTR              Capture;

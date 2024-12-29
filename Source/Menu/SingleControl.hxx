@@ -24,10 +24,10 @@ SOFTWARE.
 
 #include "InputControl.hxx"
 #include "ListControl.hxx"
-#include "ObjectType2x39.hxx"
 #include "SceneControl.hxx"
 #include "ScrollControl.hxx"
 #include "Settings.hxx"
+#include "SwapControl.hxx"
 
 #include <Game.hxx>
 
@@ -73,7 +73,7 @@ typedef struct SingleControl
     SCROLLCONTROLPTR        Scroll;
     LISTCONTROLPTR          Names;
     STRINGLISTPTR           Items;
-    CONTROLTYPE2X39PTR      Difficulty;
+    SWAPCONTROLPTR          Difficulty;
     SETTINGS                Settings;
     BOOL                    IsMessage;
 } SINGLECONTROL, * SINGLECONTROLPTR;

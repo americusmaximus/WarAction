@@ -24,26 +24,26 @@ SOFTWARE.
 #include "ButtonControl.hxx"
 #include "ControlCommand.hxx"
 #include "Cursor.hxx"
-#include "ObjectType2x38.hxx"
+#include "ToggleControl.hxx"
 #include "VideoControl.hxx"
 
 // 0x1003a290
-CONTROLTYPE2X38SELF ObjectType2x38SelfState =
+TOGGLECONTROLSELF ToggleControlSelfState =
 {
-    (CONTROLTYPE2X38TYPEACTION)AcquireObjectType2,
-    InitializeObjectType2x38,
-    (CONTROLTYPE2X38DISABLEACTION)DisableButtonControl,
-    (CONTROLTYPE2X38TICKACTION)TickButtonControl,
-    ActionObjectType2x38,
-    (CONTROLTYPE2X38RELEASEACTION)ReleaseVideoControl
+    (TOGGLECONTROLTYPEACTION)AcquireControlTypeToggle,
+    InitializeToggleControl,
+    (TOGGLECONTROLDISABLEACTION)DisableButtonControl,
+    (TOGGLECONTROLTICKACTION)TickButtonControl,
+    ActionToggleControl,
+    (TOGGLECONTROLRELEASEACTION)ReleaseVideoControl
 };
 
 // 0x10001e50
-CONTROLTYPE2X38PTR CLASSCALL ActivateObjectType2x38(CONTROLTYPE2X38PTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action)
+TOGGLECONTROLPTR CLASSCALL ActivateToggleControl(TOGGLECONTROLPTR self, BINASSETPTR asset, CONST U32 indx, CONST U32 action)
 {
     ActivateButtonControl((BUTTONCONTROLPTR)self, asset, indx, indx * 0x1000 + action); // TODO
 
-    self->Self = &ObjectType2x38SelfState;
+    self->Self = &ToggleControlSelfState;
 
     self->Click = "switch";
     self->ActualAction = action;
@@ -52,7 +52,7 @@ CONTROLTYPE2X38PTR CLASSCALL ActivateObjectType2x38(CONTROLTYPE2X38PTR self, BIN
 }
 
 // 0x10001ea0
-VOID CLASSCALL InitializeObjectType2x38(CONTROLTYPE2X38PTR self)
+VOID CLASSCALL InitializeToggleControl(TOGGLECONTROLPTR self)
 {
     InitializeButtonControl((BUTTONCONTROLPTR)self);
 
@@ -63,7 +63,7 @@ VOID CLASSCALL InitializeObjectType2x38(CONTROLTYPE2X38PTR self)
 }
 
 // 0x10001ec0
-U32 CLASSCALL ActionObjectType2x38(CONTROLTYPE2X38PTR self)
+U32 CLASSCALL ActionToggleControl(TOGGLECONTROLPTR self)
 {
     if (!self->IsVisible || !self->IsClickable) { return CONTROLACTION_NONE; }
 

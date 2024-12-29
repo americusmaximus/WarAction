@@ -97,16 +97,16 @@ VOID CLASSCALL InitializeWelcomeControl(WELCOMECONTROLPTR self)
     {
         // NOTE. Make the display resolutions read-only.
         {
-            CONST CONTROLTYPE2X38PTR resolution =
-                (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Resolutions, x);
+            CONST TOGGLECONTROLPTR resolution =
+                (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Resolutions, x);
             resolution->IsClickable = FALSE;
         }
 
         // NOTE. Extend clickable area by 70 pixels to the left,
         // so that clicking on resolution value, i.e. 640x480 equals clicking on the selector button.
         {
-            CONST CONTROLTYPE2X38PTR operation =
-                (CONTROLTYPE2X38PTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Operations, x);
+            CONST TOGGLECONTROLPTR operation =
+                (TOGGLECONTROLPTR)AcquirePanelControlNode((PANELCONTROLPTR)self->Operations, x);
 
             CONST ACTIONAREAPTR area = AcquireActionArea(operation->Action);
 

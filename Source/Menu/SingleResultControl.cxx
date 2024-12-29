@@ -103,7 +103,7 @@ VOID CLASSCALL InitializeSingleResultControl(SINGLERESULTCONTROLPTR self)
     {
         BUTTONCONTROLPTR button = AcquireSceneControlButton((SCENECONTROLPTR)self, SINGLE_RESULT_CONTINUE_BUTTON_INDEX);
 
-        button->Unk11 = FALSE;
+        button->IsClickable = FALSE;
         button->IsAction = TRUE;
     }
 }
