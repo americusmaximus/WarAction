@@ -223,6 +223,7 @@
     <ClCompile Include="ControlCommand.cxx" />
     <ClCompile Include="ControlNode.cxx" />
     <ClCompile Include="Cursor.cxx" />
+    <ClCompile Include="Dossier.cxx" />
     <ClCompile Include="FileFinder.cxx" />
     <ClCompile Include="FontAsset.cxx" />
     <ClCompile Include="Graphics.cxx" />
@@ -305,6 +306,7 @@
     <ClInclude Include="ControlCommand.hxx" />
     <ClInclude Include="ControlNode.hxx" />
     <ClInclude Include="Cursor.hxx" />
+    <ClInclude Include="Dossier.hxx" />
     <ClInclude Include="FileFinder.hxx" />
     <ClInclude Include="FontAsset.hxx" />
     <ClInclude Include="Graphics.hxx" />
