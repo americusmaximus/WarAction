@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,85 +21,44 @@ SOFTWARE.
 */
 
 #include "AssetFile.hxx"
+#include "Control.hxx"
 #include "Dossier.hxx"
-#include "Lock.hxx"
 #include "Shortcuts.hxx"
 
 #include <stdlib.h>
 #include <string>
 
-//**********************************************************************************************
-// TODO
-//**********************************************************************************************
-
-typedef struct UnkObj // TODO
-{
-    int todo;
-    // TODO total size 0x10
-} UNKOBJ, * UNKOBJPTR;
-
-
-//**********************************************************************************************
-// TODO
-//**********************************************************************************************
-
 #define MAX_SHORTCUT_LENGTH     256
 
-SHORTCUTSTATEMODULECONTAINER ShortcutsState;
+SHORTCUTS Shortcuts;
 
-// 0x10007110
-SHORTCUTSTATEPTR CLASSCALL ActivateShortcuts(SHORTCUTSTATEPTR self)
-{
-    self->Unk00 = 0; // TODO
-    self->Unk01 = 0; // TODO
-    self->Unk05 = 0; // TODO
+// The shortcut configuration file consists of two sections.
+// The first section is the key definitions:
+//
+//      define	ESC	1B
+//      define	S   53
+//      define	L   4C
+//
+// The second section is the shortcut action definition:
+//
+//      SINGLE0_SINGLEMISSIONS  S
+//      SINGLE0_LOAD            L
+//      SINGLE0_CANCEL		    ESC
+//
+// The shortcuts loading process is essentially reading those two lists and mapping,
+// and mapping those to the list of predefined actions (events), so that
+// there is a clear mapping from a numeric action to a numeric key value.
 
-    LOCK lock;
-    ActivateLock(&lock);
-
-    if (ShortcutsState.Items == NULL)
-    {
-        ShortcutsState.Items = ALLOCATE(SHORTCUT);
-
-        ShortcutsState.Items[0].Unk00 = NULL;
-        ShortcutsState.Items[0].Unk01 = NULL;
-        ShortcutsState.Items[0].Unk02 = NULL;
-        ShortcutsState.Items[0].Unk05 = 1; // TODO
-    }
-
-    ShortcutsState.Count = ShortcutsState.Count + 1;
-
-    ReleaseLock(&lock);
-
-    SHORTCUTPTR shortcut = ALLOCATE(SHORTCUT);
-
-    shortcut->Unk01 = ShortcutsState.Items;
-    shortcut->Unk05 = 0; // TODO
-    shortcut->Unk00 = shortcut;
-
-    self->Unk09 = 0; // TODO
-    self->Items = shortcut;
-    self->Items->Unk02 = self->Items;
-
-    return self;
-}
 
 // 0x100071c0
-VOID CLASSCALL InitializeShortcuts(SHORTCUTSTATEPTR self)
+VOID CLASSCALL InitializeShortcuts(SHORTCUTSPTR self)
 {
-    UNKOBJ todo1, todo2;
-    // TODO ActivateUnknownObject(&todo1, &stack0x00000063, 0, &stack0x00000061);
-    // TODO ActivateUnknownObject(&todo2, &stack0xfffffff6, 0, &stack0x00000062);
+    std::map<std::string, U32> keys;
+    std::map<std::string, std::string> names;
 
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
 
-    if (!OpenAssetFile(&file, "shortcuts"))
-    {
-        // TODO ReleaseUnknownObject(&todo2);
-        // TODO ReleaseUnknownObject(&todo1);
-
-        return;
-    }
+    if (!OpenAssetFile(&file, "shortcuts")) { return; }
 
     DOSSIER dossier;
     ActivateDossier(&dossier);
@@ -128,9 +87,9 @@ VOID CLASSCALL InitializeShortcuts(SHORTCUTSTATEPTR self)
                         value = value * 16 + i;
                     }
 
-                    std::string todostr1 = dossier.Strings[1];
+                    std::string key = dossier.Strings[1];
 
-                    // TODO
+                    keys.insert(std::map<std::string, U32>::value_type(key, value));
 
                     continue;
                 }
@@ -140,103 +99,813 @@ VOID CLASSCALL InitializeShortcuts(SHORTCUTSTATEPTR self)
                 // MAIN_SINGLE	S
                 // MAIN_MULTI	M
 
-                std::string todostr2 = dossier.Strings[0];
-                std::string todostr1 = dossier.Strings[1];
+                std::string key = dossier.Strings[0];
+                std::string value = dossier.Strings[1];
 
-                // TODO
+                names.insert(std::map<std::string, std::string>::value_type(key, value));
             }
-
-            // TODOFUN_1000a470(puVar9, TRUE);
         }
     }
 
     CloseAssetFile(&file);
 
-    std::string shortcut = "MAIN_SINGLE";
+    {
+        std::string shortcut = "MAIN_SINGLE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_SINGLE, keys[key]));
+            }
+        }
+    }
 
+    {
+        std::string shortcut = "MAIN_MULTI";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_MULTI, keys[key]));
+            }
+        }
+    }
 
+    {
+        std::string shortcut = "MAIN_INTRO";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_INTRO, keys[key]));
+            }
+        }
+    }
 
+    {
+        std::string shortcut = "MAIN_CREDITS";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_CREDITS, keys[key]));
+            }
+        }
+    }
 
-    // TODO
+    {
+        std::string shortcut = "MAIN_EXIT";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_EXIT, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MAIN_RATING";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_RATING, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MAIN_GREETINGS";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_GREETINGS, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MAIN_RESOLUTIONS";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_RESOLUTIONS, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MAIN_RESOLUTIONS2";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MAIN_RESOLUTIONS2, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_NEW";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_NEW, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_SINGLEMISSIONS";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_SINGLEMISSIONS, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_LOAD";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_LOAD, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_DELETE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_DELETE, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_ADDON_CAMPAIGNS";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE0_DIFFICULTY";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE0_DIFFICULTY, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE2_BRITISH";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE2_BRITISH, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE2_AMERIKOSY";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE2_AMERICAN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE2_GERMAN";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE2_GERMAN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE2_RUSSIAN";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE2_RUSSIAN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE2_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE2_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE3_LOAD";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE3_LOAD, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE3_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE3_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE4_LOAD";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE4_LOAD, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE4_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE4_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE5_CONTINUE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE5_CONTINUE, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE5_REPLAY";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE5_REPLAY, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE5_EXIT";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE5_EXIT, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "SINGLE5_VICTORY";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_SINGLE5_VICTORY, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "DIAL_DIAL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_DIAL_DIAL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "DIAL_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_DIAL_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "DIAL_ADD";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_DIAL_ADD, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "DIAL_REMOVE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_DIAL_REMOVE, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI1_INTERNET";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI1_INTERNET, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI1_LAN";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI1_LAN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI1_MODEM";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI1_MODEM, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI1_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI1_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI2_CREATE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI2_CREATE, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI2_JOIN";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI2_JOIN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI2_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI2_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI2_DELETE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI2_DELETE, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "JMULTI1_OK";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_JMULTI1_OK, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "JMULTI1_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_JMULTI1_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "JMULTI2_JOIN";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_JMULTI2_JOIN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "JMULTI2_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_JMULTI2_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI3_OK";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI3_OK, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI3_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI3_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI3_OPTIONS";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI3_OPTIONS, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI4_START";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI4_START, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI4_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI4_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI4_GREYSTART";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI4_GREYSTART, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MULTI4_READY";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MULTI4_READY, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "GREETINGS_EXIT";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_GREETINGS_EXIT, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "RATING_COMPAIGN";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_RATING_CAMPAIGN, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "RATING_SINGLE";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_RATING_SINGLE, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "RATING_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_RATING_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "BRIEF_OK";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_BRIEF_OK, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "BRIEF_MENU";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_BRIEF_MENU, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "BRIEF_THIRDBUTTON";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_BRIEF_THIRDBUTTON, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSGBOX_OK";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSGBOX_OK, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSGBOX_CANCEL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSGBOX_CANCEL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSTAT_DETAIL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSTAT_DETAIL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSTAT_TOTAL";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSTAT_TOTAL, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSTAT_EXIT";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSTAT_EXIT, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSTAT_DESTROYED";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSTAT_DESTROYED, keys[key]));
+            }
+        }
+    }
+
+    {
+        std::string shortcut = "MSTAT_LOST";
+        if (names.find(shortcut) != names.end())
+        {
+            std::string key = names[shortcut];
+            if (keys.find(key) != keys.end())
+            {
+                Shortcuts.insert(std::map<U32, U32>::value_type(CONTROLACTION_MSTAT_LOST, keys[key]));
+            }
+        }
+    }
 }
 
 // 0x10009d40
-S32 CLASSCALL AcquireShortcut(SHORTCUTSTATEPTR self, CONST U32 action)
+U32 CLASSCALL AcquireShortcut(SHORTCUTSPTR self, CONST U32 action)
 {
-    // TODO NOT IMPLEMENTED
-    /*Shortcut** ppSVar1;
-    Shortcut* local_8;
-    Shortcut* local_4;
+    if (self->find(action) != self->end()) { return self->operator[](action); }
 
-    local_8 = FUN_1000b700(self, &action);
-    local_4 = self->Items;
-
-    if ((local_8 == local_4) || (action < (int)local_8->Unk03)) {
-        ppSVar1 = &local_4;
-    }
-    else {
-        ppSVar1 = &local_8;
-    }
-    if (*ppSVar1 != local_4) {
-        return (*ppSVar1)->Unk04;
-    }*/
-
-    return 0; // TODO
-}
-
-// 0x1000b700
-SHORTCUTPTR CLASSCALL FUN_1000b700(SHORTCUTSTATEPTR self, int* param_2)
-{
-    Shortcut* pSVar1;
-    Shortcut* pSVar2;
-    Shortcut* pSVar3;
-
-    pSVar2 = self->Items;
-    if (pSVar2->Unk01 != ShortcutsState.Items) {
-        pSVar1 = pSVar2;
-        pSVar3 = pSVar2->Unk01;
-        do {
-            pSVar2 = pSVar3;
-            if ((int)pSVar2->Unk03 < *param_2) {
-                pSVar3 = pSVar2->Unk02;
-                pSVar2 = pSVar1;
-            }
-            else {
-                pSVar3 = pSVar2->Unk00;
-            }
-            pSVar1 = pSVar2;
-        } while (pSVar3 != ShortcutsState.Items);
-    }
-
-    return pSVar2;
-}
-
-// 0x1000bce0
-VOID CLASSCALL FUN_1000bce0(SHORTCUTPTR self) // TODO
-{
-    SHORTCUTPTR pSVar1; // TODO
-
-    SHORTCUTPTR pSVar2 = self->Unk00->Unk02; // TODO
-    if (pSVar2 != ShortcutsState.Items)
-    {
-        for (pSVar1 = pSVar2->Unk00; pSVar1 != ShortcutsState.Items; pSVar1 = pSVar1->Unk00)
-        {
-            pSVar2 = pSVar1;
-        }
-
-        self->Unk00 = pSVar2;
-        return;
-    }
-
-    pSVar2 = self->Unk00->Unk01;
-
-    if (self->Unk00 == pSVar2->Unk02)
-    {
-        do {
-            self->Unk00 = pSVar2;
-            pSVar2 = pSVar2->Unk01;
-        } while (self->Unk00 == pSVar2->Unk02);
-    }
-
-    if (self->Unk00->Unk02 != pSVar2) { self->Unk00 = pSVar2; }
+    return CONTROLACTION_NONE;
 }

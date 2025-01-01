@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +24,15 @@ SOFTWARE.
 
 #include "Basic.hxx"
 
-#define SHORTCUT_NONE   0
+#include <map>
 
-#pragma pack(push, 1)
-typedef struct Shortcut
-{
-    Shortcut*   Unk00; // TODO
-    Shortcut*   Unk01; // TODO
-    Shortcut*   Unk02; // TODO
-    U32         Unk03; // TODO
-    U32         Unk04; // TODO
-    U32         Unk05; // TODO
-} SHORTCUT, * SHORTCUTPTR;
-#pragma pack(pop)
+// The shortcuts code uses statically-initialized std::map.
+// There is no clean and easy way to re-implement the same, therefore, let the compiler do its work.
 
-#pragma pack(push, 1)
-typedef struct ShortcutState
-{
-    U8          Unk00; // TODO
-    U8          Unk01; // TODO
-    U8          Unk02; // TODO
-    U8          Unk03; // TODO
-    SHORTCUTPTR Items; // TODO
-    U8          Unk05; // TODO
-    U8          Unk06; // TODO
-    U8          Unk07; // TODO
-    U8          Unk08; // TODO
-    U32         Unk09; // TODO
-} SHORTCUTSTATE, * SHORTCUTSTATEPTR;
-#pragma pack(pop)
+typedef std::map<U32, U32> SHORTCUTS, * SHORTCUTSPTR;
 
-typedef struct ShortcutStateModuleContainer
-{
-    SHORTCUTSTATE   State;  // 0x100462a0
-    U32             Count;  // 0x100462b0
-    SHORTCUTPTR     Items;  // 0x100462b4
-} SHORTCUTSTATEMODULECONTAINER, * SHORTCUTSTATEMODULECONTAINERPTR;
+EXTERN SHORTCUTS Shortcuts;
 
-EXTERN SHORTCUTSTATEMODULECONTAINER ShortcutsState;
+VOID CLASSCALL InitializeShortcuts(SHORTCUTSPTR self);
 
-SHORTCUTSTATEPTR CLASSCALL ActivateShortcuts(SHORTCUTSTATEPTR self); // TODO name
-VOID CLASSCALL InitializeShortcuts(SHORTCUTSTATEPTR self);
-
-VOID CLASSCALL FUN_1000bce0(SHORTCUTPTR self); // TODO Name
-S32 CLASSCALL AcquireShortcut(SHORTCUTSTATEPTR self, CONST U32 action); // TODO return type
+U32 CLASSCALL AcquireShortcut(SHORTCUTSPTR self, CONST U32 action);

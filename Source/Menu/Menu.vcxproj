@@ -233,7 +233,6 @@
     <ClCompile Include="InputControl.cxx" />
     <ClCompile Include="LabelControl.cxx" />
     <ClCompile Include="ListControl.cxx" />
-    <ClCompile Include="Lock.cxx" />
     <ClCompile Include="Logger.cxx" />
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="MainControl.cxx" />
@@ -316,7 +315,6 @@
     <ClInclude Include="InputControl.hxx" />
     <ClInclude Include="LabelControl.hxx" />
     <ClInclude Include="ListControl.hxx" />
-    <ClInclude Include="Lock.hxx" />
     <ClInclude Include="Logger.hxx" />
     <ClInclude Include="MainControl.hxx" />
     <ClInclude Include="Map.hxx" />

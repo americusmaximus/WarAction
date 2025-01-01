@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ SOFTWARE.
 #include "Computer.hxx"
 #include "Cursor.hxx"
 #include "Input.hxx"
-#include "Lock.hxx"
 #include "MessageControl.hxx"
 #include "Module.hxx"
 #include "Network.hxx"
@@ -44,7 +43,7 @@ VOID Activate(VOID)
 {
     ActivateMessageControlState();
     ActivateComputerState();
-    ActivateShortcutsState();
+    ActivateShortcuts();
     ActivateSoundModuleState();
     ActivateStatisticsState();
     ActivateAudioPlayerState();
@@ -175,92 +174,9 @@ VOID ActivateComputerState(VOID)
 }
 
 // 0x10006fe0
-VOID ActivateShortcutsState(VOID)
-{
-    ActivateShortcuts();
-    ActivateReleaseShortcuts();
-}
-
-// 0x10006ff0
 VOID ActivateShortcuts(VOID)
 {
-    ActivateShortcuts(&ShortcutsState.State);
-}
-
-// 0x10007000
-VOID ActivateReleaseShortcuts(VOID)
-{
-    atexit(ReleaseShortcutsAction);
-}
-
-// 0x10007010
-VOID ReleaseShortcutsAction(VOID)
-{
-    // TODO Make this method make sense
-    if (ShortcutsState.State.Unk09 == 0) // TODO
-    {
-        ShortcutsState.State.Unk09 = 0; // TODO
-
-        SHORTCUTPTR current = ShortcutsState.State.Items->Unk00;
-        SHORTCUTPTR next = current;
-
-        // TODO
-        /*while (current = next, next != ShortcutsState.State.Items)
-        {
-            FUN_1000bce0(current);
-            FUN_1000a730(&ShortcutsState.State, &local_4, next);
-            next = current;
-        }*/
-    }
-    else
-    {
-        SHORTCUTPTR pSVar1 = NULL; // TODO
-        SHORTCUTPTR pSVar2 = ShortcutsState.State.Items->Unk01;
-
-        // TODO
-        /*if (ShortcutsState.State.Items->Unk01 != ShortcutsState.Items)
-        {
-            do
-            {
-                FUN_1000ab10(pSVar2->Unk02);
-                pSVar1 = pSVar2->Unk00;
-                free(pSVar2);
-                pSVar2 = pSVar1;
-            } while (pSVar1 != ShortcutsState.Items);
-        }*/
-
-        ShortcutsState.State.Unk09 = 0;
-
-        ShortcutsState.State.Items->Unk01 = ShortcutsState.Items;
-        ShortcutsState.State.Items->Unk00 = ShortcutsState.State.Items;
-        ShortcutsState.State.Items->Unk02 = ShortcutsState.State.Items;
-
-        //FUN_1000a240(&ShortcutsState.State, (Shortcut*)&stack0xfffffff8); // TODO
-    }
-
-    free(ShortcutsState.State.Items);
-
-    ShortcutsState.State.Items = NULL;
-    ShortcutsState.State.Unk09 = 0; // TODO
-
-    {
-        LOCK lock;
-        ActivateLock(&lock);
-
-        SHORTCUTPTR current = ShortcutsState.Items;
-        ShortcutsState.Count = ShortcutsState.Count - 1;
-
-        SHORTCUTPTR shortcut = NULL;
-        if (ShortcutsState.Count == 0)
-        {
-            ShortcutsState.Items = NULL;
-            shortcut = current;
-        }
-
-        ReleaseLock(&lock);
-
-        if (shortcut != NULL) { free(shortcut); }
-    }
+    // This method is intentionally left blank. See shortcut comments.
 }
 
 // 0x1000c070

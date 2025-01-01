@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -165,7 +165,7 @@ CONTROLTYPE CLASSCALL AcquireControlTypeToggle(LPVOID);
 #define CONTROLACTION_MULTI3_OPTIONS                        1055
 #define CONTROLACTION_MULTI4_START                          1056
 #define CONTROLACTION_MULTI4_CANCEL                         1057
-#define CONTROLACTION_MULTI4_GREYSTART                      1058 /* TODO */
+#define CONTROLACTION_MULTI4_GREYSTART                      1058
 #define CONTROLACTION_MULTI4_READY                          1059
 #define CONTROLACTION_1060                                  1060 /* TODO */
 #define CONTROLACTION_1061                                  1061 /* TODO */

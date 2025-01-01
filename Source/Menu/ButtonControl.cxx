@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ BUTTONCONTROLPTR CLASSCALL ActivateButtonControl(BUTTONCONTROLPTR self, BINASSET
 
     self->IsActive = FALSE;
 
-    self->Shortcut = SHORTCUT_NONE;
+    self->Shortcut = CONTROLACTION_NONE;
 
     self->Click = NULL;
     self->Unclick = NULL;
@@ -83,7 +83,7 @@ VOID CLASSCALL InitializeButtonControl(BUTTONCONTROLPTR self)
         CONTROLCOMMANDACTION_BUTTON_ACTION, self->Action, DEFAULT_ACTION_PRIORITY);
 
     self->IsContinuous = FALSE;
-    self->Shortcut = AcquireShortcut(&ShortcutsState.State, self->Action);
+    self->Shortcut = AcquireShortcut(&Shortcuts, self->Action);
 }
 
 // 0x10001c50

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -295,10 +295,8 @@ VOID ActivateReleaseInputMessage(VOID);
 VOID ActivateReleaseInputRelease(VOID);
 VOID ActivateReleaseMessageControl(VOID);
 VOID ActivateReleaseNetwork(VOID);
-VOID ActivateReleaseShortcuts(VOID);
 VOID ActivateReleaseStarControl(VOID);
 VOID ActivateShortcuts(VOID);
-VOID ActivateShortcutsState(VOID);
 VOID ActivateSoundModuleState(VOID);
 VOID ActivateStarControl(VOID);
 VOID ActivateStarControlState(VOID);
@@ -390,5 +388,4 @@ VOID ReleaseInputMessageAction(VOID);
 VOID ReleaseInputReleaseAction(VOID);
 VOID ReleaseMessageControlAction(VOID);
 VOID ReleaseNetworkAction(VOID);
-VOID ReleaseShortcutsAction(VOID);
 VOID ReleaseStarControlAction(VOID);
