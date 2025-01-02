@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ SOFTWARE.
 // 0x10024f00
 BFH AcquireAssetFileIndex(LPCSTR name)
 {
-    BFH indx = crc32(0, (BYTE*)name, strlen(name)) & (MAX_BINARY_FILE_COUNT - 1);
+    BFH indx = crc32(0, (BYTE*)name, strlen(name) + 1) & (MAX_BINARY_FILE_COUNT - 1);
 
     for (BFH x = 0; x < MAX_BINARY_FILE_COUNT; x++)
     {
