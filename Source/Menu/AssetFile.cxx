@@ -79,9 +79,7 @@ BOOL CLASSCALL OpenAssetFile(ASSETFILEPTR self, LPCSTR name)
 {
     self->Value = AcquireAssetFileIndex(name);
 
-    if (self->Value == INVALID_BINFILE_VALUE) { return FALSE; }
-
-    return OpenAssetFile(self->Value);
+    return self->Value != INVALID_BINFILE_VALUE ? OpenAssetFile(self->Value) : FALSE;
 }
 
 // 0x10024f90
