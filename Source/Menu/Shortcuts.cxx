@@ -49,15 +49,17 @@ SHORTCUTS Shortcuts;
 // and mapping those to the list of predefined actions (events), so that
 // there is a clear mapping from a numeric action to a numeric key value.
 
-#define ACTIVATESHORTCUT(N, A)                                                          \
-    {                                                                                   \
-        std::string shortcut = N;                                                       \
-        if (names.find(shortcut) != names.end()) {                                      \
-            std::string key = names[shortcut];                                          \
-            if (keys.find(key) != keys.end()) {                                         \
-                Shortcuts.insert(std::map<U32, U32>::value_type(A, keys[key]));         \
-            }                                                                           \
-        }                                                                               \
+STATIC VOID MakeShortcut(SHORTCUTSPTR self, std::map<std::string, std::string>& names, std::map<std::string, U32>& keys, LPCSTR name, CONST U32 action)
+{
+    std::string shortcut = name;
+    if (names.find(shortcut) != names.end())
+    {
+        std::string key = names[shortcut];
+        if (keys.find(key) != keys.end())
+        {
+            Shortcuts.insert(std::map<U32, U32>::value_type(action, keys[key]));
+        }
+    }
 }
 
 // 0x100071c0
@@ -119,72 +121,72 @@ VOID CLASSCALL InitializeShortcuts(SHORTCUTSPTR self)
 
     CloseAssetFile(&file);
 
-    ACTIVATESHORTCUT("MAIN_SINGLE",             CONTROLACTION_MAIN_SINGLE);
-    ACTIVATESHORTCUT("MAIN_MULTI",              CONTROLACTION_MAIN_MULTI);
-    ACTIVATESHORTCUT("MAIN_INTRO",              CONTROLACTION_MAIN_INTRO);
-    ACTIVATESHORTCUT("MAIN_CREDITS",            CONTROLACTION_MAIN_CREDITS);
-    ACTIVATESHORTCUT("MAIN_EXIT",               CONTROLACTION_MAIN_EXIT);
-    ACTIVATESHORTCUT("MAIN_RATING",             CONTROLACTION_MAIN_RATING);
-    ACTIVATESHORTCUT("MAIN_GREETINGS",          CONTROLACTION_MAIN_GREETINGS);
-    ACTIVATESHORTCUT("MAIN_RESOLUTIONS",        CONTROLACTION_MAIN_RESOLUTIONS);
-    ACTIVATESHORTCUT("MAIN_RESOLUTIONS2",       CONTROLACTION_MAIN_RESOLUTIONS2);
-    ACTIVATESHORTCUT("SINGLE0_NEW",             CONTROLACTION_SINGLE0_NEW);
-    ACTIVATESHORTCUT("SINGLE0_SINGLEMISSIONS",  CONTROLACTION_SINGLE0_SINGLEMISSIONS);
-    ACTIVATESHORTCUT("SINGLE0_LOAD",            CONTROLACTION_SINGLE0_LOAD);
-    ACTIVATESHORTCUT("SINGLE0_CANCEL",          CONTROLACTION_SINGLE0_CANCEL);
-    ACTIVATESHORTCUT("SINGLE0_DELETE",          CONTROLACTION_SINGLE0_DELETE);
-    ACTIVATESHORTCUT("SINGLE0_ADDON_CAMPAIGNS", CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS);
-    ACTIVATESHORTCUT("SINGLE0_DIFFICULTY",      CONTROLACTION_SINGLE0_DIFFICULTY);
-    ACTIVATESHORTCUT("SINGLE2_BRITISH",         CONTROLACTION_SINGLE2_BRITISH);
-    ACTIVATESHORTCUT("SINGLE2_AMERIKOSY",       CONTROLACTION_SINGLE2_AMERICAN);
-    ACTIVATESHORTCUT("SINGLE2_GERMAN",          CONTROLACTION_SINGLE2_GERMAN);
-    ACTIVATESHORTCUT("SINGLE2_RUSSIAN",         CONTROLACTION_SINGLE2_RUSSIAN);
-    ACTIVATESHORTCUT("SINGLE2_CANCEL",          CONTROLACTION_SINGLE2_CANCEL);
-    ACTIVATESHORTCUT("SINGLE3_LOAD",            CONTROLACTION_SINGLE3_LOAD);
-    ACTIVATESHORTCUT("SINGLE3_CANCEL",          CONTROLACTION_SINGLE3_CANCEL);
-    ACTIVATESHORTCUT("SINGLE4_LOAD",            CONTROLACTION_SINGLE4_LOAD);
-    ACTIVATESHORTCUT("SINGLE4_CANCEL",          CONTROLACTION_SINGLE4_CANCEL);
-    ACTIVATESHORTCUT("SINGLE5_CONTINUE",        CONTROLACTION_SINGLE5_CONTINUE);
-    ACTIVATESHORTCUT("SINGLE5_REPLAY",          CONTROLACTION_SINGLE5_REPLAY);
-    ACTIVATESHORTCUT("SINGLE5_EXIT",            CONTROLACTION_SINGLE5_EXIT);
-    ACTIVATESHORTCUT("SINGLE5_VICTORY",         CONTROLACTION_SINGLE5_VICTORY);
-    ACTIVATESHORTCUT("DIAL_DIAL",               CONTROLACTION_DIAL_DIAL);
-    ACTIVATESHORTCUT("DIAL_CANCEL",             CONTROLACTION_DIAL_CANCEL);
-    ACTIVATESHORTCUT("DIAL_ADD",                CONTROLACTION_DIAL_ADD);
-    ACTIVATESHORTCUT("DIAL_REMOVE",             CONTROLACTION_DIAL_REMOVE);
-    ACTIVATESHORTCUT("MULTI1_INTERNET",         CONTROLACTION_MULTI1_INTERNET);
-    ACTIVATESHORTCUT("MULTI1_LAN",              CONTROLACTION_MULTI1_LAN);
-    ACTIVATESHORTCUT("MULTI1_MODEM",            CONTROLACTION_MULTI1_MODEM);
-    ACTIVATESHORTCUT("MULTI1_CANCEL",           CONTROLACTION_MULTI1_CANCEL);
-    ACTIVATESHORTCUT("MULTI2_CREATE",           CONTROLACTION_MULTI2_CREATE);
-    ACTIVATESHORTCUT("MULTI2_JOIN",             CONTROLACTION_MULTI2_JOIN);
-    ACTIVATESHORTCUT("MULTI2_CANCEL",           CONTROLACTION_MULTI2_CANCEL);
-    ACTIVATESHORTCUT("MULTI2_DELETE",           CONTROLACTION_MULTI2_DELETE);
-    ACTIVATESHORTCUT("JMULTI1_OK",              CONTROLACTION_JMULTI1_OK);
-    ACTIVATESHORTCUT("JMULTI1_CANCEL",          CONTROLACTION_JMULTI1_CANCEL);
-    ACTIVATESHORTCUT("JMULTI2_JOIN",            CONTROLACTION_JMULTI2_JOIN);
-    ACTIVATESHORTCUT("JMULTI2_CANCEL",          CONTROLACTION_JMULTI2_CANCEL);
-    ACTIVATESHORTCUT("MULTI3_OK",               CONTROLACTION_MULTI3_OK);
-    ACTIVATESHORTCUT("MULTI3_CANCEL",           CONTROLACTION_MULTI3_CANCEL);
-    ACTIVATESHORTCUT("MULTI3_OPTIONS",          CONTROLACTION_MULTI3_OPTIONS);
-    ACTIVATESHORTCUT("MULTI4_START",            CONTROLACTION_MULTI4_START);
-    ACTIVATESHORTCUT("MULTI4_CANCEL",           CONTROLACTION_MULTI4_CANCEL);
-    ACTIVATESHORTCUT("MULTI4_GREYSTART",        CONTROLACTION_MULTI4_GREYSTART);
-    ACTIVATESHORTCUT("MULTI4_READY",            CONTROLACTION_MULTI4_READY);
-    ACTIVATESHORTCUT("GREETINGS_EXIT",          CONTROLACTION_GREETINGS_EXIT);
-    ACTIVATESHORTCUT("RATING_COMPAIGN",         CONTROLACTION_RATING_CAMPAIGN);
-    ACTIVATESHORTCUT("RATING_SINGLE",           CONTROLACTION_RATING_SINGLE);
-    ACTIVATESHORTCUT("RATING_CANCEL",           CONTROLACTION_RATING_CANCEL);
-    ACTIVATESHORTCUT("BRIEF_OK",                CONTROLACTION_BRIEF_OK);
-    ACTIVATESHORTCUT("BRIEF_MENU",              CONTROLACTION_BRIEF_MENU);
-    ACTIVATESHORTCUT("BRIEF_THIRDBUTTON",       CONTROLACTION_BRIEF_THIRDBUTTON);
-    ACTIVATESHORTCUT("MSGBOX_OK",               CONTROLACTION_MSGBOX_OK);
-    ACTIVATESHORTCUT("MSGBOX_CANCEL",           CONTROLACTION_MSGBOX_CANCEL);
-    ACTIVATESHORTCUT("MSTAT_DETAIL",            CONTROLACTION_MSTAT_DETAIL);
-    ACTIVATESHORTCUT("MSTAT_TOTAL",             CONTROLACTION_MSTAT_TOTAL);
-    ACTIVATESHORTCUT("MSTAT_EXIT",              CONTROLACTION_MSTAT_EXIT);
-    ACTIVATESHORTCUT("MSTAT_DESTROYED",         CONTROLACTION_MSTAT_DESTROYED);
-    ACTIVATESHORTCUT("MSTAT_LOST",              CONTROLACTION_MSTAT_LOST);
+    MakeShortcut(self, names, keys, "MAIN_SINGLE",             CONTROLACTION_MAIN_SINGLE);
+    MakeShortcut(self, names, keys, "MAIN_MULTI",              CONTROLACTION_MAIN_MULTI);
+    MakeShortcut(self, names, keys, "MAIN_INTRO",              CONTROLACTION_MAIN_INTRO);
+    MakeShortcut(self, names, keys, "MAIN_CREDITS",            CONTROLACTION_MAIN_CREDITS);
+    MakeShortcut(self, names, keys, "MAIN_EXIT",               CONTROLACTION_MAIN_EXIT);
+    MakeShortcut(self, names, keys, "MAIN_RATING",             CONTROLACTION_MAIN_RATING);
+    MakeShortcut(self, names, keys, "MAIN_GREETINGS",          CONTROLACTION_MAIN_GREETINGS);
+    MakeShortcut(self, names, keys, "MAIN_RESOLUTIONS",        CONTROLACTION_MAIN_RESOLUTIONS);
+    MakeShortcut(self, names, keys, "MAIN_RESOLUTIONS2",       CONTROLACTION_MAIN_RESOLUTIONS2);
+    MakeShortcut(self, names, keys, "SINGLE0_NEW",             CONTROLACTION_SINGLE0_NEW);
+    MakeShortcut(self, names, keys, "SINGLE0_SINGLEMISSIONS",  CONTROLACTION_SINGLE0_SINGLEMISSIONS);
+    MakeShortcut(self, names, keys, "SINGLE0_LOAD",            CONTROLACTION_SINGLE0_LOAD);
+    MakeShortcut(self, names, keys, "SINGLE0_CANCEL",          CONTROLACTION_SINGLE0_CANCEL);
+    MakeShortcut(self, names, keys, "SINGLE0_DELETE",          CONTROLACTION_SINGLE0_DELETE);
+    MakeShortcut(self, names, keys, "SINGLE0_ADDON_CAMPAIGNS", CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS);
+    MakeShortcut(self, names, keys, "SINGLE0_DIFFICULTY",      CONTROLACTION_SINGLE0_DIFFICULTY);
+    MakeShortcut(self, names, keys, "SINGLE2_BRITISH",         CONTROLACTION_SINGLE2_BRITISH);
+    MakeShortcut(self, names, keys, "SINGLE2_AMERIKOSY",       CONTROLACTION_SINGLE2_AMERICAN);
+    MakeShortcut(self, names, keys, "SINGLE2_GERMAN",          CONTROLACTION_SINGLE2_GERMAN);
+    MakeShortcut(self, names, keys, "SINGLE2_RUSSIAN",         CONTROLACTION_SINGLE2_RUSSIAN);
+    MakeShortcut(self, names, keys, "SINGLE2_CANCEL",          CONTROLACTION_SINGLE2_CANCEL);
+    MakeShortcut(self, names, keys, "SINGLE3_LOAD",            CONTROLACTION_SINGLE3_LOAD);
+    MakeShortcut(self, names, keys, "SINGLE3_CANCEL",          CONTROLACTION_SINGLE3_CANCEL);
+    MakeShortcut(self, names, keys, "SINGLE4_LOAD",            CONTROLACTION_SINGLE4_LOAD);
+    MakeShortcut(self, names, keys, "SINGLE4_CANCEL",          CONTROLACTION_SINGLE4_CANCEL);
+    MakeShortcut(self, names, keys, "SINGLE5_CONTINUE",        CONTROLACTION_SINGLE5_CONTINUE);
+    MakeShortcut(self, names, keys, "SINGLE5_REPLAY",          CONTROLACTION_SINGLE5_REPLAY);
+    MakeShortcut(self, names, keys, "SINGLE5_EXIT",            CONTROLACTION_SINGLE5_EXIT);
+    MakeShortcut(self, names, keys, "SINGLE5_VICTORY",         CONTROLACTION_SINGLE5_VICTORY);
+    MakeShortcut(self, names, keys, "DIAL_DIAL",               CONTROLACTION_DIAL_DIAL);
+    MakeShortcut(self, names, keys, "DIAL_CANCEL",             CONTROLACTION_DIAL_CANCEL);
+    MakeShortcut(self, names, keys, "DIAL_ADD",                CONTROLACTION_DIAL_ADD);
+    MakeShortcut(self, names, keys, "DIAL_REMOVE",             CONTROLACTION_DIAL_REMOVE);
+    MakeShortcut(self, names, keys, "MULTI1_INTERNET",         CONTROLACTION_MULTI1_INTERNET);
+    MakeShortcut(self, names, keys, "MULTI1_LAN",              CONTROLACTION_MULTI1_LAN);
+    MakeShortcut(self, names, keys, "MULTI1_MODEM",            CONTROLACTION_MULTI1_MODEM);
+    MakeShortcut(self, names, keys, "MULTI1_CANCEL",           CONTROLACTION_MULTI1_CANCEL);
+    MakeShortcut(self, names, keys, "MULTI2_CREATE",           CONTROLACTION_MULTI2_CREATE);
+    MakeShortcut(self, names, keys, "MULTI2_JOIN",             CONTROLACTION_MULTI2_JOIN);
+    MakeShortcut(self, names, keys, "MULTI2_CANCEL",           CONTROLACTION_MULTI2_CANCEL);
+    MakeShortcut(self, names, keys, "MULTI2_DELETE",           CONTROLACTION_MULTI2_DELETE);
+    MakeShortcut(self, names, keys, "JMULTI1_OK",              CONTROLACTION_JMULTI1_OK);
+    MakeShortcut(self, names, keys, "JMULTI1_CANCEL",          CONTROLACTION_JMULTI1_CANCEL);
+    MakeShortcut(self, names, keys, "JMULTI2_JOIN",            CONTROLACTION_JMULTI2_JOIN);
+    MakeShortcut(self, names, keys, "JMULTI2_CANCEL",          CONTROLACTION_JMULTI2_CANCEL);
+    MakeShortcut(self, names, keys, "MULTI3_OK",               CONTROLACTION_MULTI3_OK);
+    MakeShortcut(self, names, keys, "MULTI3_CANCEL",           CONTROLACTION_MULTI3_CANCEL);
+    MakeShortcut(self, names, keys, "MULTI3_OPTIONS",          CONTROLACTION_MULTI3_OPTIONS);
+    MakeShortcut(self, names, keys, "MULTI4_START",            CONTROLACTION_MULTI4_START);
+    MakeShortcut(self, names, keys, "MULTI4_CANCEL",           CONTROLACTION_MULTI4_CANCEL);
+    MakeShortcut(self, names, keys, "MULTI4_GREYSTART",        CONTROLACTION_MULTI4_GREYSTART);
+    MakeShortcut(self, names, keys, "MULTI4_READY",            CONTROLACTION_MULTI4_READY);
+    MakeShortcut(self, names, keys, "GREETINGS_EXIT",          CONTROLACTION_GREETINGS_EXIT);
+    MakeShortcut(self, names, keys, "RATING_COMPAIGN",         CONTROLACTION_RATING_CAMPAIGN);
+    MakeShortcut(self, names, keys, "RATING_SINGLE",           CONTROLACTION_RATING_SINGLE);
+    MakeShortcut(self, names, keys, "RATING_CANCEL",           CONTROLACTION_RATING_CANCEL);
+    MakeShortcut(self, names, keys, "BRIEF_OK",                CONTROLACTION_BRIEF_OK);
+    MakeShortcut(self, names, keys, "BRIEF_MENU",              CONTROLACTION_BRIEF_MENU);
+    MakeShortcut(self, names, keys, "BRIEF_THIRDBUTTON",       CONTROLACTION_BRIEF_THIRDBUTTON);
+    MakeShortcut(self, names, keys, "MSGBOX_OK",               CONTROLACTION_MSGBOX_OK);
+    MakeShortcut(self, names, keys, "MSGBOX_CANCEL",           CONTROLACTION_MSGBOX_CANCEL);
+    MakeShortcut(self, names, keys, "MSTAT_DETAIL",            CONTROLACTION_MSTAT_DETAIL);
+    MakeShortcut(self, names, keys, "MSTAT_TOTAL",             CONTROLACTION_MSTAT_TOTAL);
+    MakeShortcut(self, names, keys, "MSTAT_EXIT",              CONTROLACTION_MSTAT_EXIT);
+    MakeShortcut(self, names, keys, "MSTAT_DESTROYED",         CONTROLACTION_MSTAT_DESTROYED);
+    MakeShortcut(self, names, keys, "MSTAT_LOST",              CONTROLACTION_MSTAT_LOST);
 }
 
 // 0x10009d40
