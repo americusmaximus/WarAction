@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -134,8 +134,6 @@ VOID CLASSCALL TickListControl(LISTCONTROLPTR self)
 // 0x10006c90
 U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
 {
-    // TODO MAke this method pretty
-
     ActionControl((CONTROLPTR)self);
 
     self->Scroll->Self->Action(self->Scroll);
@@ -172,12 +170,14 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
             EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 7, 0); // TODO
         }
 
-        goto LAB_10006e84; // TODO remove
+        DequeueControlCommand(TRUE);
+
+        return indx != self->Index;
     }
 
     if (self->Index == INVALID_LIST_CONTROL_INDEX) { return indx != self->Index; }
 
-    if (command->Action == 269) // TODO
+    if (command->Action == (VK_RETURN + CONTROLCOMMANDACTION_KBD_KEY_DOWN))
     {
         if (self->Index == INVALID_LIST_CONTROL_INDEX)
         {
@@ -188,9 +188,9 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
         return indx != self->Index;
     }
 
-    if (command->Action == 294) // TODO
+    if (command->Action == (VK_UP + CONTROLCOMMANDACTION_KBD_KEY_DOWN))
     {
-        if (self->Index == INVALID_LIST_CONTROL_INDEX)
+        if (self->Index > 0)
         {
             self->Index = self->Index - 1;
 
@@ -200,29 +200,23 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 ScrollScrollControl(self->Scroll);
             }
 
-            if (self->Scroll->Min - 1 + self->Scroll->Current < self->Index)
+            while (self->Scroll->Min - 1 + self->Scroll->Current < self->Index)
             {
-                do
-                {
-                    self->Scroll->Current = self->Scroll->Current + 1;
-                    ScrollScrollControl(self->Scroll);
-                } while (self->Scroll->Min - 1 + self->Scroll->Current < self->Index);
+                self->Scroll->Current = self->Scroll->Current + 1;
+                ScrollScrollControl(self->Scroll);
             }
 
-        LAB_10006d9d: // TODO remove
             EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
             ListControlCommandUnknown1(self);
         }
+
+        DequeueControlCommand(TRUE);
     }
-    else
+    else if (command->Action == (VK_DOWN + CONTROLCOMMANDACTION_KBD_KEY_DOWN))
     {
-        if (command->Action != 296 /* TODO*/) { return indx != self->Index; }
-
-        self->Index = self->Index + 1;
-
-        if (self->Index < self->Items->Count)
+        if (self->Index + 1 < self->Items->Count)
         {
-            self->Index = self->Index;
+            self->Index = self->Index + 1;
 
             if (self->Index < self->Scroll->Current)
             {
@@ -230,20 +224,18 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 ScrollScrollControl(self->Scroll);
             }
 
-            if (self->Scroll->Min - 1 + self->Scroll->Current < self->Index)
+            while (self->Scroll->Min - 1 + self->Scroll->Current < self->Index)
             {
-                do
-                {
-                    self->Scroll->Current = self->Scroll->Current + 1;
-                    ScrollScrollControl(self->Scroll);
-                } while (self->Scroll->Min - 1 + self->Scroll->Current < self->Index);
+                self->Scroll->Current = self->Scroll->Current + 1;
+                ScrollScrollControl(self->Scroll);
             }
 
-            goto LAB_10006d9d; // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+            ListControlCommandUnknown1(self);
         }
+
+        DequeueControlCommand(TRUE);
     }
-LAB_10006e84: // TODO remove
-    DequeueControlCommand(TRUE);
 
     return indx != self->Index;
 }

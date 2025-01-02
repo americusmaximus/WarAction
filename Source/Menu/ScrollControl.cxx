@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -307,7 +307,7 @@ VOID CLASSCALL InitializeScrollControlArea(SCROLLCONTROLPTR self, CONST S32 x, C
 // 0x10022540
 BOOL AcquireScrollControlActionArea(CONST U32 action, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height)
 {
-    ACTIONAREAPTR area = AcquireActionArea(action);
+    CONST ACTIONAREAPTR area = AcquireActionArea(action);
 
     if (area == NULL) { return FALSE; }
 
