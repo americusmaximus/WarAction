@@ -100,7 +100,7 @@ U32 CLASSCALL ActionScrollControl(SCROLLCONTROLPTR self)
 
     CONST U32 current = self->Current;
 
-    if (self->Up->Self->Action(self->Up) != CONTROLACTION_NONE && (self->Current != 0))
+    if (self->Up->Self->Action(self->Up) != CONTROLACTION_NONE && self->Current != 0)
     {
         self->Current = self->Current - 1;
 
