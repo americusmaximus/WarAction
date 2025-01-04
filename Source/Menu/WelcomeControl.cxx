@@ -152,30 +152,31 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
 
     U32 resolution = RENDERER_VIDEO_MODE_640x480;
 
-    // TODO make it pretty (below)
     if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS && command->Parameter1 == CONTROLACTION_UI_CLICK) { resolution = RENDERER_VIDEO_MODE_800x600; }
-    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS2 && command->Parameter1 == CONTROLACTION_UI_CLICK) { resolution = RENDERER_VIDEO_MODE_1024x768; }
+    else if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS2 && command->Parameter1 == CONTROLACTION_UI_CLICK) { resolution = RENDERER_VIDEO_MODE_1024x768; }
 
-    if (command->Action != CONTROLACTION_MAIN_RESOLUTIONS || command->Parameter1 != CONTROLACTION_UI_TOGGLE)
+    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS && command->Parameter1 == CONTROLACTION_UI_TOGGLE)
     {
-        if (resolution == RENDERER_VIDEO_MODE_800x600 || resolution == RENDERER_VIDEO_MODE_1024x768)
-        {
-            DequeueControlCommand(TRUE);
+        DequeueControlCommand(TRUE);
 
-            SaveSettingsValue(&self->Settings, command->Parameter2 / 2 + 1);
-            SelectRadioControlItem(self->Resolutions, command->Parameter2 / 2);
-            // DAT_10046f80 = 1; // TODO Is this needed?
+        SelectRadioControlItem(self->Operations, INVALID_RADIO_ITEM_INDEX);
 
-            if (resolution == RENDERER_VIDEO_MODE_1024x768) goto LAB_10014abe; // TODO
-        }
-
-        if (resolution != RENDERER_VIDEO_MODE_1024x768) { return action; }
+        return action;
     }
 
-LAB_10014abe:
-    DequeueControlCommand(TRUE);
+    if (resolution == RENDERER_VIDEO_MODE_800x600 || resolution == RENDERER_VIDEO_MODE_1024x768)
+    {
+        DequeueControlCommand(TRUE);
 
-    SelectRadioControlItem(self->Operations, INVALID_RADIO_ITEM_INDEX);
+        SaveSettingsValue(&self->Settings, command->Parameter2 / 2 + 1);
+        SelectRadioControlItem(self->Resolutions, command->Parameter2 / 2);
+    }
+    else if (resolution == RENDERER_VIDEO_MODE_COUNT)
+    {
+        DequeueControlCommand(TRUE);
+
+        SelectRadioControlItem(self->Operations, INVALID_RADIO_ITEM_INDEX);
+    }
 
     return action;
 }
