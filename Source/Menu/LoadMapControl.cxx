@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ SOFTWARE.
 #include "Settings.hxx"
 #include "State.hxx"
 
-#include <../Text/Resources.hxx>
+#include <..\Text\Resources.hxx>
 
 // 0x1003a6a4
 LOADMAPCONTROLSELF LoadMapControlSelfState =
@@ -102,7 +102,7 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
 
     if (command != NULL && command->Command == CONTROLCOMMAND_UI && command->Action == CONTROLACTION_LIST_SELECT)
     {
-        if (command->Parameter1 == 2) // TODO
+        if (command->Parameter1 == CONTROLACTION_UI_CHANGE)
         {
             CHAR path[MAX_FILE_NAME_LENGTH];
 
@@ -130,7 +130,7 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
             InitializeMapMapControl(self->Map, path);
         }
 
-        if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 7) // TODO
+        if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_SELECT)
         {
             action = CONTROLACTION_SINGLE4_LOAD;
             goto LAB_10015ba5; // TODO

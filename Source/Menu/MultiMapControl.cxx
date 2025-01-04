@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ SOFTWARE.
 #include "SceneControl.hxx"
 #include "State.hxx"
 
-#include <../Text/Resources.hxx>
+#include <..\Text\Resources.hxx>
 
 #include <stdlib.h>
 
@@ -106,7 +106,7 @@ U32 CLASSCALL ActionMultiMapControl(MULTIMAPCONTROLPTR self)
 
     if (command != NULL && command->Command == CONTROLCOMMAND_UI)
     {
-        if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2) // TODO
+        if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_CHANGE)
         {
             CHAR path[MAX_FILE_NAME_LENGTH];
             ZeroMemory(path, MAX_FILE_NAME_LENGTH);
@@ -136,13 +136,13 @@ U32 CLASSCALL ActionMultiMapControl(MULTIMAPCONTROLPTR self)
             DequeueControlCommand(TRUE);
         }
 
-        if (command->Action == CONTROLACTION_MULTI3_OPTIONS && command->Parameter1 == 4) // TODO
+        if (command->Action == CONTROLACTION_MULTI3_OPTIONS && command->Parameter1 == CONTROLACTION_UI_CLICK)
         {
             DequeueControlCommand(TRUE);
             FUN_1000f340(self);
         }
 
-        if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 7) // TODO
+        if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_SELECT)
         {
             action = CONTROLACTION_MULTI3_OK;
             goto LAB_1000f98e; // TODO refactor out

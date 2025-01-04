@@ -241,3 +241,14 @@ EXTERN CONTROLACTIONQUEUE ControlActionQueueState;
 
 VOID EnqueueControlActionQueue(CONST U32 value);
 U32 DequeueControlActionQueue(VOID);
+
+#define CONTROLACTION_UI_NONE                               0
+#define CONTROLACTION_UI_FOCUS                              1
+#define CONTROLACTION_UI_CHANGE                             2
+#define CONTROLACTION_UI_REPEAT                             3
+#define CONTROLACTION_UI_CLICK                              4
+#define CONTROLACTION_UI_COMMIT                             5
+#define CONTROLACTION_UI_TOGGLE                             6
+#define CONTROLACTION_UI_SELECT                             7
+
+#define DEFAULT_CONTROLACTION_UI_VALUE                      0

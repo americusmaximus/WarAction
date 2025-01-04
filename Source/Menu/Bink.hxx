@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ typedef enum BinkVideoResult
 {
     BINKVIDEORESULT_CONTINUE    = 0,
     BINKVIDEORESULT_COMPLETED   = 1,
-    BINKVIDEORESULT_2           = 2, // TODO
+    BINKVIDEORESULT_UNKNOWN     = 2,
     BINKVIDEORESULT_FORCE_DWORD = 0x7FFFFFFF
 } BINKVIDEORESULT, * BINKVIDEORESULTPTR;
 

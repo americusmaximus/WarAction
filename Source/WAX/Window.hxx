@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Native.Basic.hxx"
 
 #define VK_NULL                     0
-#define VK_SYMBOL                   0xFF
+#define VK_INPUT                    0xFF
 
 #define MAX_WINDOW_TITLE_LENGTH     256
 

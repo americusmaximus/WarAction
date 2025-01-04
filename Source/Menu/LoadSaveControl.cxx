@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Saves.hxx"
 #include "Settings.hxx"
 
-#include <../Text/Resources.hxx>
+#include <..\Text\Resources.hxx>
 
 // 0x1003a68c
 LOADSAVECONTROLSELF LoadSaveControlSelfState =
@@ -151,7 +151,7 @@ U32 CLASSCALL ActionLoadSaveControl(LOADSAVECONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command == NULL || command->Action != CONTROLACTION_LIST_SELECT || command->Parameter1 != 7) // TODO
+    if (command == NULL || command->Action != CONTROLACTION_LIST_SELECT || command->Parameter1 != CONTROLACTION_UI_SELECT)
     {
         if (action != CONTROLACTION_SINGLE3_LOAD)
         {

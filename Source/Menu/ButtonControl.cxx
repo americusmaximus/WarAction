@@ -167,7 +167,11 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
             {
                 if (action != self->IsAction)
                 {
-                    if (self->IsAction) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 3, 0); } // TODO
+                    if (self->IsAction)
+                    {
+                        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                            CONTROLACTION_UI_REPEAT, DEFAULT_CONTROLACTION_UI_VALUE);
+                    }
 
                     PlaySoundStateSound(&SoundState.State, self->IsAction ? self->Click : self->Unclick);
                 }
@@ -180,11 +184,19 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
         }
     }
 
-    if (result != CONTROLACTION_NONE) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 4, 0); } // TODO
+    if (result != CONTROLACTION_NONE)
+    {
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+            CONTROLACTION_UI_CLICK, DEFAULT_CONTROLACTION_UI_VALUE);
+    }
 
     if (action != self->IsAction)
     {
-        if (self->IsAction) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 3, 0); } // TODO
+        if (self->IsAction)
+        {
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_REPEAT, DEFAULT_CONTROLACTION_UI_VALUE);
+        }
 
         PlaySoundStateSound(&SoundState.State, self->IsAction ? self->Click : self->Unclick);
     }

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,14 +67,14 @@ U32 CLASSCALL ActionMultiJoinControl(MULTIJOINCONTROLPTR self)
 
     if (command != NULL && command->Command == CONTROLCOMMAND_UI)
     {
-        if (command->Action == CONTROLACTION_JMULTI1_OK && command->Parameter1 == 4 /* TODO */)
+        if (command->Action == CONTROLACTION_JMULTI1_OK && command->Parameter1 == CONTROLACTION_UI_CLICK)
         {
             DequeueControlCommand(TRUE);
 
             return CONTROLACTION_JMULTI1_OK;
         }
 
-        if (command->Action == CONTROLACTION_JMULTI1_CANCEL && command->Parameter1 == 4 /* TODO */)
+        if (command->Action == CONTROLACTION_JMULTI1_CANCEL && command->Parameter1 == CONTROLACTION_UI_CLICK)
         {
             DequeueControlCommand(TRUE);
 

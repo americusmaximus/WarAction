@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -94,11 +94,16 @@ U32 CLASSCALL ActionToggleControl(TOGGLECONTROLPTR self)
 
     if (cVar3 == 1 /* TODO*/)
     {
-        EnqueueControlCommand(CONTROLCOMMAND_UI, self->ActualAction, 4, self->Index); // TODO
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->ActualAction,
+            CONTROLACTION_UI_CLICK, self->Index);
 
         return CONTROLACTION_1;
     }
-    else if (cVar3 == 2 /* TODO*/) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->ActualAction, 6 /* TODO */, self->Index); }
+    else if (cVar3 == 2 /* TODO*/)
+    {
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->ActualAction,
+            CONTROLACTION_UI_TOGGLE, self->Index);
+    }
 
     return CONTROLACTION_NONE;
 }

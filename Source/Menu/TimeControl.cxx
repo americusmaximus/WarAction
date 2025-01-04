@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -110,19 +110,21 @@ U32 CLASSCALL ActionTimeControl(TIMECONTROLPTR self)
 
     if (command != NULL && command->Command == CONTROLCOMMAND_UI)
     {
-        if (command->Action == self->Action + 1 && command->Parameter1 == 5 /* TODO */)
+        if (command->Action == (self->Action + 1) && command->Parameter1 == CONTROLACTION_UI_COMMIT)
         {
             SelectTimeControlFocus(self, TIMECONTROLFOCUS_SECONDS);
 
             DequeueControlCommand(TRUE);
-            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
         }
-        else if (command->Action == self->Action + 2 && command->Parameter1 == 5 /* TODO */)
+        else if (command->Action == (self->Action + 2) && command->Parameter1 == CONTROLACTION_UI_COMMIT)
         {
             SelectTimeControlFocus(self, TIMECONTROLFOCUS_NONE);
 
             DequeueControlCommand(TRUE);
-            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
         }
     }
 

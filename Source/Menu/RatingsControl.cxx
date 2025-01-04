@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -184,7 +184,7 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_UI
-        && command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2 /* TODO*/)
+        && command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_CHANGE)
     {
         CONST S32 indx = self->Type == RATINGSTYPE_SINGLE ? self->SingleList->Index : self->CampaignList->Index;
 

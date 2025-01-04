@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -153,10 +153,10 @@ U32 CLASSCALL ActionWelcomeControl(WELCOMECONTROLPTR self)
     U32 resolution = RENDERER_VIDEO_MODE_640x480;
 
     // TODO make it pretty (below)
-    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS && command->Parameter1 == 4) { resolution = RENDERER_VIDEO_MODE_800x600; } // TODO
-    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS2 && command->Parameter1 == 4) { resolution = RENDERER_VIDEO_MODE_1024x768; } // TODO
+    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS && command->Parameter1 == CONTROLACTION_UI_CLICK) { resolution = RENDERER_VIDEO_MODE_800x600; }
+    if (command->Action == CONTROLACTION_MAIN_RESOLUTIONS2 && command->Parameter1 == CONTROLACTION_UI_CLICK) { resolution = RENDERER_VIDEO_MODE_1024x768; }
 
-    if (command->Action != CONTROLACTION_MAIN_RESOLUTIONS || command->Parameter1 != 6) // TODO
+    if (command->Action != CONTROLACTION_MAIN_RESOLUTIONS || command->Parameter1 != CONTROLACTION_UI_TOGGLE)
     {
         if (resolution == RENDERER_VIDEO_MODE_800x600 || resolution == RENDERER_VIDEO_MODE_1024x768)
         {

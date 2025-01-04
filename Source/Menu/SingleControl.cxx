@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -160,10 +160,10 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
 
     strcpy(State.Name, AcquireInputControlValue(self->Name));
 
-    if ((command->Action == CONTROLACTION_SINGLE0_NEW && command->Parameter1 == 4) // TODO
-        || (command->Action == CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS && command->Parameter1 == 4) // TODO
-        || (command->Action == CONTROLACTION_SINGLE0_SINGLEMISSIONS && command->Parameter1 == 4) // TODO
-        || (command->Action == CONTROLACTION_SINGLE0_LOAD && command->Parameter1 == 4)) // TODO
+    if ((command->Action == CONTROLACTION_SINGLE0_NEW && command->Parameter1 == CONTROLACTION_UI_CLICK)
+        || (command->Action == CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS && command->Parameter1 == CONTROLACTION_UI_CLICK)
+        || (command->Action == CONTROLACTION_SINGLE0_SINGLEMISSIONS && command->Parameter1 == CONTROLACTION_UI_CLICK)
+        || (command->Action == CONTROLACTION_SINGLE0_LOAD && command->Parameter1 == CONTROLACTION_UI_CLICK))
     {
         U32 action = CONTROLACTION_NONE;
 
@@ -185,13 +185,13 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
 
         return action;
     }
-    else if (command->Action == CONTROLACTION_SINGLE0_CANCEL && command->Parameter1 == 4 /* TODO */)
+    else if (command->Action == CONTROLACTION_SINGLE0_CANCEL && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         DequeueControlCommand(TRUE);
 
         return CONTROLACTION_SINGLE0_CANCEL;
     }
-    else if (command->Action == CONTROLACTION_SINGLE0_DELETE && command->Parameter1 != 4 /* TODO */)
+    else if (command->Action == CONTROLACTION_SINGLE0_DELETE && command->Parameter1 != CONTROLACTION_UI_CLICK)
     {
         if (self->Names->Index != INVALID_LIST_CONTROL_INDEX)
         {
@@ -201,7 +201,7 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
                 AcquireAssetMessage(ASSET_MESSAGE_DELETE_PLAYER_AND_ALL_SAVES_QUESTION), MESSAGE_BUTTON_OKCANCEL);
         }
     }
-    else if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == 2 /* TODO*/)
+    else if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_CHANGE)
     {
         if (self->Names->Index != INVALID_LIST_CONTROL_INDEX)
         {
@@ -210,7 +210,7 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
             SelectInputControlValue(self->Name, AcquireStringListItem(self->Items, self->Names->Index));
         }
     }
-    else if (command->Action == CONTROLACTION_SINGLE0_DIFFICULTY && command->Parameter1 == 2 /* TODO */)
+    else if (command->Action == CONTROLACTION_SINGLE0_DIFFICULTY && command->Parameter1 == CONTROLACTION_UI_CHANGE)
     {
         SaveSettingsValue(&self->Settings, (self->Settings.Value + 1) % MAX_GAMEDIFFICULTY_VALUE);
     }

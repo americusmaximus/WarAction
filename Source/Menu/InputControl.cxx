@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -203,7 +203,7 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
             }
             else
             {
-                switch (action & VK_SYMBOL)
+                switch (action & VK_INPUT)
                 {
                 case VK_BACK:
                 {
@@ -227,7 +227,8 @@ U32 CLASSCALL ActionInputControl(INPUTCONTROLPTR self)
                 }
                 case VK_RETURN:
                 {
-                    EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 5, 0); // TODO
+                    EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                        CONTROLACTION_UI_COMMIT, DEFAULT_CONTROLACTION_UI_VALUE);
 
                     RemoveInputControlFocus(self);
 
@@ -409,7 +410,11 @@ LPCSTR CLASSCALL AcquireInputControlValue(INPUTCONTROLPTR self)
 // 0x10004210
 VOID CLASSCALL SelectInputControlFocus(INPUTCONTROLPTR self, CONST BOOL focus)
 {
-    if (focus != self->IsFocus) { EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, !focus, 0); }
+    if (focus != self->IsFocus)
+    {
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+            focus ? CONTROLACTION_UI_FOCUS : CONTROLACTION_UI_NONE, DEFAULT_CONTROLACTION_UI_VALUE);
+    }
 
     self->IsFocus = focus;
 

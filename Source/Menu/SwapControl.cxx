@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -65,13 +65,14 @@ U32 CLASSCALL ActionSwapControl(SWAPCONTROLPTR self)
 
     CONTROLCOMMAND command;
     if (DequeueControlCommand(&command, FALSE) && command.Command == CONTROLCOMMAND_UI
-        && command.Action == self->Action && command.Parameter1 == 6 /* TODO */)
+        && command.Action == self->Action && command.Parameter1 == CONTROLACTION_UI_TOGGLE)
     {
         self->IsToggle = ~self->IsToggle;
         self->IsAction = FALSE;
 
         DequeueControlCommand(TRUE);
-        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+            CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
     }
 
     return result;

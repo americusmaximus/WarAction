@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -272,7 +272,7 @@ VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CO
     case FONTTYPE_BASIC:
     {
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y, self->Pixels,
-            (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & VK_SYMBOL)); break;
+            (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & VK_INPUT)); break;
     }
     case FONTTYPE_COMPLEX:
     {

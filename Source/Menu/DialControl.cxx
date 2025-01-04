@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -98,13 +98,15 @@ U32 CLASSCALL ActionDialControl(DIALCONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
+    // TODO command is NULL when Joining Modem game
+
     if (action == CONTROLACTION_DIAL_DIAL)
     {
         if (AcquireInputControlValue(self->Phone)[0] != NULL) { return CONTROLACTION_DIAL_DIAL; }
     }
     else if (action == CONTROLACTION_DIAL_CANCEL) { return CONTROLACTION_DIAL_CANCEL; }
 
-    if (command->Action == CONTROLACTION_DIAL_ADD && command->Parameter1 == 4 /* TODO */)
+    if (command->Action == CONTROLACTION_DIAL_ADD && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         if (AcquireInputControlValue(self->Name)[0] == NULL
             && AcquireInputControlValue(self->Phone)[0] == NULL) { return CONTROLACTION_NONE; }
@@ -117,11 +119,11 @@ U32 CLASSCALL ActionDialControl(DIALCONTROLPTR self)
     }
     else
     {
-        if (command->Action != CONTROLACTION_DIAL_REMOVE || command->Parameter1 != 4 /* TODO */)
+        if (command->Action != CONTROLACTION_DIAL_REMOVE || command->Parameter1 != CONTROLACTION_UI_CLICK)
         {
             if (command->Action != CONTROLACTION_LIST_SELECT) { return CONTROLACTION_NONE; }
 
-            if (command->Parameter1 == 2 && INVALID_LIST_CONTROL_INDEX != self->List->Index) // TODO
+            if (command->Parameter1 == CONTROLACTION_UI_CHANGE && INVALID_LIST_CONTROL_INDEX != self->List->Index)
             {
                 CHAR name[MAX_MULTIPLAYER_PLAYER_INFO_LENGTH];
                 self->Items->Self->AcquireValue(self->Items, self->List->Index, name);
@@ -145,7 +147,7 @@ U32 CLASSCALL ActionDialControl(DIALCONTROLPTR self)
             }
             else
             {
-                if (command->Parameter1 != 7) { return CONTROLACTION_NONE; } // TODO
+                if (command->Parameter1 != CONTROLACTION_UI_SELECT) { return CONTROLACTION_NONE; }
 
                 DequeueControlCommand(TRUE);
 

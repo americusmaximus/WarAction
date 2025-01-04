@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -75,7 +75,7 @@ U32 CLASSCALL ActionRadioControl(RADIOCONTROLPTR self)
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command != NULL && command->Command == CONTROLCOMMAND_UI
-        && command->Action == self->Action && command->Parameter1 == 4 /* TODO */)
+        && command->Action == self->Action && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         if (!SelectRadioControlItem(self, command->Parameter2 / 2)) { DequeueControlCommand(TRUE); }
     }

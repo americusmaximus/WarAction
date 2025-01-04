@@ -158,16 +158,19 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 else
                 {
                     self->Index = item;
-                    EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+                    EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                        CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
+
                     self->Unk10 = 1; // TODO
                     PlaySoundStateSound(&SoundState.State, "mouse_click");
                 }
             }
         }
 
-        if ((command->Action & VK_SYMBOL) == 0x80 && 1 < self->Unk10 /* TODO */)
+        if ((command->Action & VK_INPUT) == CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK && 1 < self->Unk10 /* TODO */)
         {
-            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 7, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_SELECT, DEFAULT_CONTROLACTION_UI_VALUE);
         }
 
         DequeueControlCommand(TRUE);
@@ -181,7 +184,9 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
     {
         if (self->Index == INVALID_LIST_CONTROL_INDEX)
         {
-            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 7, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_SELECT, DEFAULT_CONTROLACTION_UI_VALUE);
+
             DequeueControlCommand(TRUE);
         }
 
@@ -206,7 +211,9 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 ScrollScrollControl(self->Scroll);
             }
 
-            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
+
             ListControlCommandUnknown1(self);
         }
 
@@ -230,7 +237,9 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 ScrollScrollControl(self->Scroll);
             }
 
-            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+            EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+                CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
+
             ListControlCommandUnknown1(self);
         }
 
@@ -289,7 +298,9 @@ VOID CLASSCALL ListControlCommandUnknown1(LISTCONTROLPTR self) // TODO
 
     if (self->Items->Count == 1)
     {
-        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action, 2, 0); // TODO
+        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
+            CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
+
         self->Index = 0;
     }
 

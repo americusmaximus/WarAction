@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ SOFTWARE.
 #include "State.hxx"
 #include "Strings.hxx"
 
-#include <../Text/Resources.hxx>
+#include <..\Text\Resources.hxx>
 
 #define MAX_MULTIPLAYER_NAME_LENGTH 30
 
@@ -128,21 +128,21 @@ U32 CLASSCALL ActionMultiSelectControl(MULTISELECTCONTROLPTR self)
     strcpy(State.Name, AcquireInputControlValue(self->Input));
 
     // TODO make it pretty
-    if (command->Action == CONTROLACTION_MULTI2_CREATE && command->Parameter1 == 4) // TODO
+    if (command->Action == CONTROLACTION_MULTI2_CREATE && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         if (AcquireInputControlValue(self->Input)[0] != NULL) { result = CONTROLACTION_MULTI2_CREATE; }
     }
-    else if (command->Action == CONTROLACTION_MULTI2_JOIN && command->Parameter1 == 4) // TODO
+    else if (command->Action == CONTROLACTION_MULTI2_JOIN && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         if (AcquireInputControlValue(self->Input)[0] != NULL) { result = CONTROLACTION_MULTI2_JOIN; }
     }
-    else if (command->Action == CONTROLACTION_MULTI2_CANCEL && command->Parameter1 == 4) // TODO
+    else if (command->Action == CONTROLACTION_MULTI2_CANCEL && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         result = CONTROLACTION_MULTI2_CANCEL;
     }
     else
     {
-        if (command->Action != CONTROLACTION_MULTI2_DELETE || command->Parameter1 != 4) goto LAB_10012260; // TDOO
+        if (command->Action != CONTROLACTION_MULTI2_DELETE || command->Parameter1 != CONTROLACTION_UI_CLICK) goto LAB_10012260; // TDOO
 
         if (self->List->Index != INVALID_LIST_CONTROL_INDEX)
         {
@@ -156,7 +156,7 @@ U32 CLASSCALL ActionMultiSelectControl(MULTISELECTCONTROLPTR self)
 
 LAB_10012260: // TDOO
     if (command->Action == CONTROLACTION_LIST_SELECT
-        && command->Parameter1 == 2 && self->List->Index != INVALID_LIST_CONTROL_INDEX) // TODO
+        && command->Parameter1 == CONTROLACTION_UI_CHANGE && self->List->Index != INVALID_LIST_CONTROL_INDEX)
     {
 
         if (ControlState.Active != NULL) { RemoveInputControlFocus((INPUTCONTROLPTR)ControlState.Active); }
