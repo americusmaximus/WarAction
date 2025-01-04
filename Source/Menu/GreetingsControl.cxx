@@ -153,21 +153,24 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
         for (U32 result = Durations[1].Item1; result < ticks; indx++)
         {
             result = Durations[indx + 2].Item1;
+
+            if (result == 0) { break; }
         }
 
         if (indx != 0 && Durations[indx + 1].Item1 != 0)
         {
+            // NOTE. The following logic is not exact to the game's logic, but close enough.
+            // Especially for minor feature like this, which is also not present in the sequels.
+
             // Display/wait durations.
 
             CONST F64 value1 = (ticks - Durations[indx].Item1) * (Durations[indx + 1].Item2 - Durations[indx].Item2);
             CONST f64 value2 = Durations[indx + 1].Item1 - Durations[indx].Item1;
 
-            CONST F64 value3 = (value1 / value2 + (F64)Durations[indx].Item2) * 250.0;
+            CONST F64 value3 = (value1 / value2 + Durations[indx].Item2) * 250.0;
 
             CONST F64 value4 = sqr5(cos(0.012566370614 * value3));
-
-            CONST S32 value5 = (S32)(value4 * 255.0);
-            CONST S32 value6 = (S32)(sqr5(cos(value4 * M_PI / 1000.0)) * 255.0);
+            CONST S32 value5 = (S32)(sqr5(cos(value4 * M_PI / 1000.0)) * 255.0);
 
             AcquireTextAssetString(&self->Text, self->Item, greeting);
 
@@ -202,15 +205,14 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
 
             // Visual effects and position offsets.
 
-            CONST F64 fVar17 = sin(((F64)left / (F64)duration) * M_PI);
+            CONST F64 shade = sqrt(sqrt(sin(((F64)left / (F64)duration) * M_PI)));
 
-            // TODO, the Y amplitude of the text rotation is about twice as big as in the original game.
-            CONST F64 amplitude = (F64)(value5 / 512 + value6 / 32);
+            CONST F64 amplitude = (F64)((S32)(value4 * 255.0) / 512 + value5 / 32);
 
-            CONST F64 value111 = (F64)((left % 1000) * 2) * 0.001 * 2.0 * M_PI;
+            CONST F64 delta = (F64)((left % 1000) * 2) * 0.001 * 2.0 * M_PI;
 
-            CONST S32 iStack_100 = (S32)(amplitude * cos(value111));
-            CONST S32 iStack_110 = (S32)(amplitude * sin(value111));
+            CONST S32 dx = (S32)(amplitude * cos(delta));
+            CONST S32 dy = (S32)(amplitude * sin(delta));
 
             S32 lines = 1;
 
@@ -246,18 +248,14 @@ VOID CLASSCALL TickGreetingsControl(GREETINGSCONTROLPTR self)
                     item = item + (MAX_COLOR_VALUE_LENGTH + 1);
                 }
 
-                {
-                    CONST F64 modifier = sqrt(sqrt(fVar17));
-
-                    SelectFontAssetColor(&AssetsState.Fonts.Comic,
-                        (U32)(r * modifier), (U32)(g * modifier), (U32)(b * modifier));
-                }
+                SelectFontAssetColor(&AssetsState.Fonts.Comic,
+                    (U32)(r * shade), (U32)(g * shade), (U32)(b * shade));
 
                 {
                     CONST BOOL even = ((self->Item + xx) % 2);
 
-                    CONST S32 x = (even ? 1 : -1) * iStack_100;
-                    CONST S32 y = (height * (lines - 2 * xx)) / 2 - (even ? 1 : -1) * iStack_110;
+                    CONST S32 x = (even ? 1 : -1) * dx;
+                    CONST S32 y = (height * (lines - 2 * xx)) / 2 - (even ? 1 : -1) * dy;
 
                     DrawFontAssetText(&AssetsState.Fonts.Comic,
                         GRAPHICS_RESOLUTION_640 / 2 + x, GRAPHICS_RESOLUTION_480 / 2 - y, item);
