@@ -48,8 +48,8 @@ The menu module is responsible for guiding the user through all kinds of options
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
 
 ## Similar & Related Projects
-1. [War Motion](https://github.com/americusmaximus/WarMotion)
-2. [War Storm](https://github.com/americusmaximus/WarStorm)
+1. [War Storm](https://github.com/americusmaximus/WarStorm)
+2. [War Motion](https://github.com/americusmaximus/WarMotion)
 3. [War Tool Kit](https://github.com/americusmaximus/WarToolKit)
 
 ## Thanks
