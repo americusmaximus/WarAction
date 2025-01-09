@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -144,13 +144,13 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
     {
         CONST U32 ticks = WindowState.IsActive ? GetTickCount() : wp;
 
-        CONST S32 x = CursorState.X;
-        CONST S32 y = CursorState.Y;
-
         switch (msg)
         {
         case WM_MOUSEMOVE:
         {
+            CONST S32 x = CursorState.X;
+            CONST S32 y = CursorState.Y;
+
             CursorState.X = GET_X_LPARAM(lp);
             CursorState.Y = GET_Y_LPARAM(lp);
 
@@ -215,8 +215,8 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
             {
                 if (ticks - WindowState.Cursor.Ticks < GetDoubleClickTime())
                 {
-                    if (abs(CursorState.X - WindowState.Cursor.Left.X) < MAX_DOUBLE_CLICK_DISTANCE
-                        && abs(CursorState.Y - WindowState.Cursor.Left.Y) < MAX_DOUBLE_CLICK_DISTANCE)
+                    if (abs(CursorState.X - WindowState.Cursor.Right.X) < MAX_DOUBLE_CLICK_DISTANCE
+                        && abs(CursorState.Y - WindowState.Cursor.Right.Y) < MAX_DOUBLE_CLICK_DISTANCE)
                     {
                         CursorMessageHandler(CONTROLCOMMANDACTION_MOUSE_RIGHT_DOUBLECLICK);
                     }
@@ -224,10 +224,10 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
 
                 WindowState.Cursor.Ticks = ticks;
 
-                WindowState.Cursor.Left.Y = CursorState.Y;
-                WindowState.Cursor.Left.X = CursorState.X;
+                WindowState.Cursor.Right.X = CursorState.X;
+                WindowState.Cursor.Right.Y = CursorState.Y;
 
-                WindowState.Cursor.Right.X = WindowState.Cursor.Right.Y = DEFAULT_UPDATE_CURSOR_POSITION;
+                WindowState.Cursor.Left.X = WindowState.Cursor.Left.Y = DEFAULT_UPDATE_CURSOR_POSITION;
             }
 
             CursorState.IsLeft = wp & MK_LBUTTON;

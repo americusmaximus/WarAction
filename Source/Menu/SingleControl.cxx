@@ -150,9 +150,6 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
         self->IsMessage = FALSE;
     }
 
-    // TODO: Delete player button gets stuck when it should silently unclick
-    // when any of the message box option is clicked
-
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
     if (command == NULL) { return CONTROLACTION_NONE; }
@@ -191,7 +188,7 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
 
         return CONTROLACTION_SINGLE0_CANCEL;
     }
-    else if (command->Action == CONTROLACTION_SINGLE0_DELETE && command->Parameter1 != CONTROLACTION_UI_CLICK)
+    else if (command->Action == CONTROLACTION_SINGLE0_DELETE && command->Parameter1 == CONTROLACTION_UI_CLICK)
     {
         if (self->Names->Index != INVALID_LIST_CONTROL_INDEX)
         {
