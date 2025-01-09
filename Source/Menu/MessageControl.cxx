@@ -97,15 +97,9 @@ VOID CLASSCALL TickMessageControl(MESSAGECONTROLPTR self)
 
     U32 lines = 1;
 
+    for (U32 x = 0; self->Message[x] != NULL; x++)
     {
-        U32 x = 0;
-
-        while (self->Message[x] != NULL)
-        {
-            if (self->Message[x] == '\n' && self->Message[x + 1] != NULL) { lines = lines + 1; }
-
-            x = x + 1;
-        }
+        if (self->Message[x] == '\n' && self->Message[x + 1] != NULL) { lines = lines + 1; }
     }
 
     S32 offset = 197 - (AcquireFontAssetHeight(&AssetsState.Fonts.Main) * (lines * 10 - 4)) / 20;

@@ -171,7 +171,7 @@ VOID CLASSCALL RemoveComputerPlayer(COMPUTERPTR self, CONST U32 indx, CONST BOOL
         {
             do
             {
-                strncpy(path, context.Path, MAX_FILE_NAME_LENGTH);
+                strcat(path, context.Path);
 
                 DeleteFileA(path);
 

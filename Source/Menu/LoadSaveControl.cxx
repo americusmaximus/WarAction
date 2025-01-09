@@ -47,7 +47,7 @@ S32 SortSaveFileItem(void const* a, void const* b)
     SAVEFILEITEMPTR first = (SAVEFILEITEMPTR)a;
     SAVEFILEITEMPTR second = (SAVEFILEITEMPTR)b;
 
-    return CompareFileTime(&first->Time, &second->Time);
+    return CompareFileTime(&second->Time, &first->Time);
 }
 
 // 0x10014c00
@@ -134,7 +134,6 @@ VOID CLASSCALL InitializeLoadSaveControl(LOADSAVECONTROLPTR self)
         // NOTE: Originally in-place bubble sorting
         qsort(saves, count, sizeof(SAVEFILEITEM), SortSaveFileItem);
 
-        // TODO verify ascending/descending order
         for (U32 x = 0; x < count; x++) { AppendStringList(self->Items, saves[x].Name); }
     }
 
