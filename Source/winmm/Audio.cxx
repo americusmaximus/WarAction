@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -239,7 +239,7 @@ BOOL PlayAudio()
         length = length + result;
     }
 
-    for (INT x = 0; x < (length / sizeof(SHORT)); x++)
+    for (UINT x = 0; x < (length / sizeof(SHORT)); x++)
     {
         ((SHORT*)buffer)[x] = (SHORT)((SHORT*)buffer)[x] * ((FLOAT)AudioState.Volume / 100.0f);
     }

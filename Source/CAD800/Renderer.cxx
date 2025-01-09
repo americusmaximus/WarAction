@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -348,7 +348,7 @@ VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
                 pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
             }
 
-            for (U32 xx = 0; xx < max - x + 1; xx++) { pixels[xx] = pixel; }
+            for (S32 xx = 0; xx < max - x + 1; xx++) { pixels[xx] = pixel; }
         }
     }
 }
@@ -1770,7 +1770,7 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
 
         if (RendererState.Sprite.Height <= 0 || RendererState.Sprite.Height == ModuleState.Window.Y - y) { return; }
 
-        for (U32 x = 0; x < ModuleState.Window.Y - y; x++)
+        for (S32 x = 0; x < ModuleState.Window.Y - y; x++)
         {
             content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
             next = (LPVOID)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
@@ -1959,7 +1959,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
 
         if (RendererState.Sprite.Height <= 0 || RendererState.Sprite.Height == ModuleState.Window.Y - y) { return; }
 
-        for (U32 x = 0; x < ModuleState.Window.Y - y; x++)
+        for (S32 x = 0; x < ModuleState.Window.Y - y; x++)
         {
             content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
             next = (LPVOID)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
@@ -2156,7 +2156,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
 
         if (RendererState.Sprite.Height <= 0 || RendererState.Sprite.Height == ModuleState.Window.Y - y) { return; }
 
-        for (U32 x = 0; x < ModuleState.Window.Y - y; x++)
+        for (S32 x = 0; x < ModuleState.Window.Y - y; x++)
         {
             content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
             next = (LPVOID)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
@@ -2330,7 +2330,7 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* pal
 
         if (RendererState.Sprite.Height <= 0 || RendererState.Sprite.Height == ModuleState.Window.Y - y) { return; }
 
-        for (U32 x = 0; x < ModuleState.Window.Y - y; x++)
+        for (S32 x = 0; x < ModuleState.Window.Y - y; x++)
         {
             content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
             next = (LPVOID)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));

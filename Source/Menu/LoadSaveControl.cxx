@@ -131,7 +131,7 @@ VOID CLASSCALL InitializeLoadSaveControl(LOADSAVECONTROLPTR self)
 
     if (count != 0)
     {
-        // NOTE: Originally in-place bubble sorting
+        // NOTE: Originally in-place bubble sorting.
         qsort(saves, count, sizeof(SAVEFILEITEM), SortSaveFileItem);
 
         for (U32 x = 0; x < count; x++) { AppendStringList(self->Items, saves[x].Name); }

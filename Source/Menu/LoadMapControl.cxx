@@ -206,7 +206,7 @@ VOID CLASSCALL FUN_10015620(LOADMAPCONTROLPTR self)
 
     if (count != 0)
     {
-        // NOTE: Originally in-place bubble sorting
+        // NOTE: Originally in-place bubble sorting.
         qsort(maps, count, sizeof(MAPFILEITEM), SortMapFileItem);
 
         // TODO verify ascending/descending order
