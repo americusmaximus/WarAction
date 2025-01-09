@@ -408,7 +408,7 @@ BOOL ExecuteModuleAction(VOID)
             }
 
             ActionMessageControl(&MessageControlState);
-            ExecuteModuleCommands();
+            ConsumeQueuedCommands();
         } while (DequeueControlCommand(FALSE) != NULL);
 
         if (State.Window->IsActive && !VideoState.IsActive)
@@ -670,7 +670,7 @@ VOID AcquireIniFileState(VOID)
 }
 
 // 0x10021cc0
-BOOL ExecuteModuleCommands(VOID)
+BOOL ConsumeQueuedCommands(VOID)
 {
     BOOL result = FALSE;
 

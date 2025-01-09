@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,4 +39,4 @@ VOID ReleaseStartArguments(VOID);
 VOID AcquireIniFileState(VOID);
 STATUS AcquireGameStatus(VOID);
 
-BOOL ExecuteModuleCommands(VOID);
+BOOL ConsumeQueuedCommands(VOID);

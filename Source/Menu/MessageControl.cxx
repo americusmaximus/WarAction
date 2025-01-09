@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -151,13 +151,11 @@ VOID CLASSCALL TickMessageControl(MESSAGECONTROLPTR self)
     }
 
     {
-        U32 x = 0;
         CHAR message[MAX_MESSAGE_CONTROL_MESSAGE_LENTH];
 
-        while (self->Message[x] != NULL)
+        for (U32 x = 0; self->Message[x] != NULL;)
         {
             U32 xx = 0;
-
             while (self->Message[x] != '\n' && self->Message[x] != NULL)
             {
                 message[xx] = self->Message[x];
@@ -285,9 +283,7 @@ VOID CLASSCALL ShowMessageControl(MESSAGECONTROLPTR self, LPCSTR message, CONST 
     case MESSAGE_BUTTON_OKCANCEL:
     {
         self->Buttons.Combined.Ok->Self->Initialize(self->Buttons.Combined.Ok);
-        self->Buttons.Combined.Cancel->Self->Initialize(self->Buttons.Combined.Cancel);
-
-        break;
+        self->Buttons.Combined.Cancel->Self->Initialize(self->Buttons.Combined.Cancel); break;
     }
     }
 }

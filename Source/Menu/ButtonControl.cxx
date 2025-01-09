@@ -163,24 +163,13 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
         {
             CONST U32 ticks = GetTickCount();
 
-            if (ticks - self->Ticks < (self->Iteration == 0 ? 500 : 100))
+            if ((self->Iteration == 0 ? 500 : 100) <= ticks - self->Ticks)
             {
-                if (action != self->IsAction)
-                {
-                    if (self->IsAction)
-                    {
-                        EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
-                            CONTROLACTION_UI_REPEAT, DEFAULT_CONTROLACTION_UI_VALUE);
-                    }
+                self->Ticks = ticks;
+                self->Iteration = self->Iteration + 1;
 
-                    PlaySoundStateSound(&SoundState.State, self->IsAction ? self->Click : self->Unclick);
-                }
-
-                return CONTROLACTION_NONE;
+                result = CONTROLACTION_1;
             }
-
-            self->Ticks = ticks;
-            self->Iteration = self->Iteration + 1;
         }
     }
 
@@ -207,7 +196,7 @@ U32 CLASSCALL ActionButtonControl(BUTTONCONTROLPTR self)
 // 0x10001df0
 VOID CLASSCALL SelectButtonControlVisibility(BUTTONCONTROLPTR self, CONST BOOL visible)
 {
-    if (visible != self->IsVisible)
+    if (self->IsVisible != visible)
     {
         self->IsVisible = visible;
         self->IsAction = FALSE;
