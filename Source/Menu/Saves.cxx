@@ -98,7 +98,7 @@ BOOL InitializeGameState(VOID)
 
 // 0x10015010
 // a.k.a. ssaveLoadState
-BOOL LoadSaveState(LPCSTR name)
+BOOL LoadSaveState(LPCSTR save)
 {
     CHAR path[MAX_FILE_NAME_LENGTH];
 
@@ -115,6 +115,7 @@ BOOL LoadSaveState(LPCSTR name)
         ReleaseStringValue(actual);
     }
 
+    strcat(path, save);
     strcat(path, ".sss");
 
     State.Module->Game.IsNetwork = FALSE;
@@ -124,7 +125,7 @@ BOOL LoadSaveState(LPCSTR name)
     State.Module->Game.Unk09 = 5; // TODO
     State.Module->Game.Difficulty = GAMEDIFFICULTY_EASY;
 
-    LogMessage("LOAD: Loading '%s' - ", name);
+    LogMessage("LOAD: Loading '%s' - ", save);
 
     if (!UnpackSaveFile(path))
     {
@@ -478,14 +479,14 @@ BOOL LoadGameState(BINFILEPTR save)
 }
 
 // 0x1001a5a0
-BOOL UnpackSaveFile(LPCSTR name)
+BOOL UnpackSaveFile(LPCSTR save)
 {
     BINFILE file = { (BFH)INVALID_BINFILE_VALUE };
 
     ZIPFILE zip;
     ZeroMemory(&zip, sizeof(ZIPFILE));
 
-    if (!OpenZipFile(&zip, name, ZIPFILE_OPEN_READ)) { return FALSE; }
+    if (!OpenZipFile(&zip, save, ZIPFILE_OPEN_READ)) { return FALSE; }
 
     U32 length = 0;
     ReadZipFile(&zip, &length, sizeof(U32));
@@ -525,12 +526,12 @@ S32 AcquireCurrentGameMission(VOID) // TODO name
 }
 
 // 0x10019680
-BOOL WriteSaveState(LPCSTR name)
+BOOL WriteSaveState(LPCSTR save)
 {
     ZIPFILE zip;
     ZeroMemory(&zip, sizeof(ZIPFILE));
 
-    if (!OpenZipFile(&zip, name, ZIPFILE_OPEN_READ)) { return FALSE; }
+    if (!OpenZipFile(&zip, save, ZIPFILE_OPEN_READ)) { return FALSE; }
 
     BINFILE file = { (BFH)INVALID_BINFILE_VALUE };
 

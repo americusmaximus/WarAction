@@ -42,7 +42,7 @@ LOADSAVECONTROLSELF LoadSaveControlSelfState =
     (LOADSAVECONTROLRELEASEACTION)ReleasePanelControl
 };
 
-S32 SortSaveFileItem(void const* a, void const* b)
+STATIC S32 SortSaveFileItem(void const* a, void const* b)
 {
     SAVEFILEITEMPTR first = (SAVEFILEITEMPTR)a;
     SAVEFILEITEMPTR second = (SAVEFILEITEMPTR)b;
@@ -115,7 +115,8 @@ VOID CLASSCALL InitializeLoadSaveControl(LOADSAVECONTROLPTR self)
 
             strupr(path);
 
-            SAVEFILEITEMPTR items = (SAVEFILEITEMPTR)realloc(saves, (count + 1) * sizeof(SAVEFILEITEM));
+            SAVEFILEITEMPTR items =
+                (SAVEFILEITEMPTR)realloc(saves, (count + 1) * sizeof(SAVEFILEITEM));
 
             if (items != NULL) { saves = items; } else { break; }
 

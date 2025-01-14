@@ -87,11 +87,11 @@ VOID DeleteGameState(VOID);
 // TODO Improve names of the functions
 
 BOOL LoadGameState(BINFILEPTR save);
-BOOL LoadSaveState(LPCSTR name);
+BOOL LoadSaveState(LPCSTR save);
 BOOL SaveGameState(BINFILEPTR save);
-BOOL WriteSaveState(LPCSTR name);
+BOOL WriteSaveState(LPCSTR save);
 
-BOOL UnpackSaveFile(LPCSTR name);
+BOOL UnpackSaveFile(LPCSTR save);
 
 S32 AcquireCurrentGameMap(VOID);
 S32 AcquireCurrentGameMission(VOID);
