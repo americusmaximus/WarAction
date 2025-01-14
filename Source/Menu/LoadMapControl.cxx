@@ -33,6 +33,8 @@ SOFTWARE.
 
 #include <..\Text\Resources.hxx>
 
+#include <stdio.h>
+
 // 0x1003a6a4
 LOADMAPCONTROLSELF LoadMapControlSelfState =
 {
@@ -44,6 +46,14 @@ LOADMAPCONTROLSELF LoadMapControlSelfState =
     (LOADMAPCONTROLRELEASEACTION)ReleasePanelControl
 };
 
+STATIC S32 SortMapFileItem(void const* a, void const* b)
+{
+    MAPFILEITEMPTR first = (MAPFILEITEMPTR)a;
+    MAPFILEITEMPTR second = (MAPFILEITEMPTR)b;
+
+    return CompareFileTime(&second->Time, &first->Time);
+}
+
 // 0x10015410
 LOADMAPCONTROLPTR CLASSCALL ActivateLoadMapControl(LOADMAPCONTROLPTR self)
 {
@@ -52,7 +62,8 @@ LOADMAPCONTROLPTR CLASSCALL ActivateLoadMapControl(LOADMAPCONTROLPTR self)
 
     self->Self = &LoadMapControlSelfState;
 
-    self->Scroll = ActivateScrollControl(ALLOCATE(SCROLLCONTROL), &AssetsState.Assets.Single4SC, CONTROLACTION_SCROLL);
+    self->Scroll = ActivateScrollControl(ALLOCATE(SCROLLCONTROL),
+        &AssetsState.Assets.Single4SC, CONTROLACTION_SCROLL);
 
     self->Items = ActivateStringList(ALLOCATE(STRINGLIST));
 
@@ -80,7 +91,7 @@ VOID CLASSCALL InitializeLoadMapControl(LOADMAPCONTROLPTR self)
 
     InitializeScrollControlArea(self->Scroll, 7, -13, 3);
     InitializePanelControl((PANELCONTROLPTR)self);
-    FUN_10015620(self);// TODO
+    InitializeMapsLoadMapControl(self);
     SelectListControlItem(self->List, 0);
 }
 
@@ -120,9 +131,9 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
             }
 
             self->Items->Self->AcquireValue(self->Items, self->List->Index,
-                (LPSTR)((ADDR)path + (ADDR)(strlen(path) + 1)));
+                (LPSTR)((ADDR)path + (ADDR)strlen(path)));
 
-            LPSTR colon = strrchr(path, ':'); // TODO is this correct?
+            LPSTR colon = strrchr(path, ':');
             if (colon != NULL) { colon[0] = NULL; }
 
             strcat(path, ".ssm");
@@ -149,13 +160,9 @@ LAB_10015ba5:
 }
 
 // 0x10015620
-VOID CLASSCALL FUN_10015620(LOADMAPCONTROLPTR self)
+VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self)
 {
     ReleaseStringList(self->Items);
-
-    // TODO NOT IMPLEMENTED
-
-    /*
 
     self->List->Index = INVALID_LIST_CONTROL_INDEX;
 
@@ -184,21 +191,52 @@ VOID CLASSCALL FUN_10015620(LOADMAPCONTROLPTR self)
 
     if (handle != INVALID_HANDLE_VALUE)
     {
-        CHAR path[MAX_FILE_NAME_LENGTH];
+        CHAR file[MAX_FILE_NAME_LENGTH];
 
         do
         {
-            strcpy(path, context.Path);
+            strcpy(file, context.Path);
 
-            CHAR* dot = strrchr(path, '.');
+            LPSTR dot = strrchr(file, '.');
             if (dot != NULL) { dot[0] = NULL; }
 
-            strupr(path);
+            strupr(file);
 
+            CHAR path[MAX_FILE_NAME_LENGTH];
 
-            TODO
+            {
+                STRINGVALUE name, value;
+                AcquireSettingsValue(&name, IDS_SINGLE_MAP_DIR);
+                AcquireStringValue(&value, StringsState.Scratch);
 
-            count = count + 1;
+                STRINGVALUE setting;
+                STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);
+
+                strcpy(path, actual->Value);
+
+                ReleaseStringValue(actual);
+            }
+
+            strcat(path, file);
+            strcat(path, ".ssm");
+
+            if (ValidateMapFile(path))
+            {
+                MAPPTR map = ActivateMap(ALLOCATE(MAP));
+                InitializeSingleMap(path, map);
+
+                maps = (MAPFILEITEMPTR)realloc(maps, (count + 1) * sizeof(MAPFILEITEM));
+
+                ZeroMemory(&maps[count].Time, sizeof(FILETIME));
+
+                if (map->Unk0x154 == NULL) { strcpy(maps[count].Name, file); }
+                else { sprintf(maps[count].Name, "%s: %s", file, map->Unk0x154); }
+
+                count = count + 1;
+
+                DisposeMap(map);
+                free(map);
+            }
         } while (FindFileNext(handle, &context));
     }
 
@@ -209,12 +247,11 @@ VOID CLASSCALL FUN_10015620(LOADMAPCONTROLPTR self)
         // NOTE: Originally in-place bubble sorting.
         qsort(maps, count, sizeof(MAPFILEITEM), SortMapFileItem);
 
-        // TODO verify ascending/descending order
         for (U32 x = 0; x < count; x++) { AppendStringList(self->Items, maps[x].Name); }
     }
 
     free(maps);
+
     ListControlCommandUnknown1(self->List);
     InitializeMapMapControl(self->Map, NULL);
-    */
 }

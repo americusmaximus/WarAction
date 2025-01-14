@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ typedef VOID(CLASSCALL* LOADMAPCONTROLTICKACTION)(LoadMapControl* self);
 typedef U32(CLASSCALL* LOADMAPCONTROLACTIONACTION)(LoadMapControl* self);
 typedef LoadMapControl* (CLASSCALL* LOADMAPCONTROLRELEASEACTION)(LoadMapControl* self, CONST OBJECTRELEASETYPE mode);
 
-// INHERITANCE: PanelControlSelf
+// INHERITANCE: SceneControlSelf
 typedef struct LoadMapControlSelf
 {
     LOADMAPCONTROLTYPEACTION        Type;
@@ -55,14 +55,14 @@ typedef struct LoadMapControlSelf
 EXTERN LOADMAPCONTROLSELF LoadMapControlSelfState;
 
 #pragma pack(push, 1)
-// INHERITANCE: PanelControl
+// INHERITANCE: SceneControl
 typedef struct LoadMapControl
 {
     LOADMAPCONTROLSELFPTR   Self;
     U8                      IsActive;
     CONTROLNODEPTR          Nodes;
-    U32                     Unk03; // TODO
-    U32                     Unk04; // TODO
+    BINASSETPTR             Background;
+    BINASSETPTR             Buttons;
     SCROLLCONTROLPTR        Scroll;
     LISTCONTROLPTR          List;
     STRINGLISTPTR           Items;
@@ -73,7 +73,7 @@ typedef struct LoadMapControl
 #pragma pack(pop)
 
 LOADMAPCONTROLPTR CLASSCALL ActivateLoadMapControl(LOADMAPCONTROLPTR self);
-VOID CLASSCALL InitializeLoadMapControl(LOADMAPCONTROLPTR self);
-VOID CLASSCALL DisableLoadMapControl(LOADMAPCONTROLPTR self);
 U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self);
-VOID CLASSCALL FUN_10015620(LOADMAPCONTROLPTR self);// TODO name
+VOID CLASSCALL DisableLoadMapControl(LOADMAPCONTROLPTR self);
+VOID CLASSCALL InitializeLoadMapControl(LOADMAPCONTROLPTR self);
+VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self);

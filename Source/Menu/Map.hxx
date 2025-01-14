@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,14 @@ SOFTWARE.
 #define MAX_MAP_STRUCT3_COUNT   16 /* TODO */
 #define MAX_MAP_STRUCT4_COUNT   32 /* TODO */
 
-#define MAP_FILE_SINGLE_MAGIC   0x4D535353 /* MSSS */ /* TODO NAME*/
-#define MAP_FILE_MULTI_MAGIC    0x4D4D5353 /* MMSS */ /* TODO NAME*/
+#define MAP_FILE_SINGLE_MAGIC   0x4D535353 /* MSSS */
+#define MAP_FILE_MULTI_MAGIC    0x4D4D5353 /* MMSS */
+
+typedef struct MapFileItem
+{
+    CHAR        Name[MAX_FILE_NAME_LENGTH];
+    FILETIME    Time;
+} MAPFILEITEM, * MAPFILEITEMPTR;
 
 typedef struct MapStruct1 // TODO
 {
@@ -88,3 +94,4 @@ VOID CLASSCALL DisposeMap(MAPPTR self);
 BOOL InitializeSingleMap(LPCSTR name, MAPPTR map);
 BOOL InitializeMultiMap(LPCSTR name, MAPPTR map);
 BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file); // TODO
+BOOL ValidateMapFile(LPCSTR name);

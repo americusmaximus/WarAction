@@ -110,7 +110,7 @@ VOID CLASSCALL InitializeLoadSaveControl(LOADSAVECONTROLPTR self)
         {
             strcpy(path, context.Path);
 
-            CHAR* dot = strrchr(path, '.');
+            LPSTR dot = strrchr(path, '.');
             if (dot != NULL) { dot[0] = NULL; }
 
             strupr(path);

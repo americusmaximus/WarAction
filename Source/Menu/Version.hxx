@@ -22,7 +22,5 @@ SOFTWARE.
 
 #pragma once
 
-// TODO names
-
 #define MODULE_VERSION_VALUE 271
 #define MODULE_MULTI_MAP_VERSION_VALUE 274

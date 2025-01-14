@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -310,6 +310,39 @@ BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file) // TODO
             free(value);
         }
     }
+
+    return TRUE;
+}
+
+// 0x1001a9f0
+BOOL ValidateMapFile(LPCSTR name)
+{
+    ZIPFILE zip;
+    ZeroMemory(&zip, sizeof(ZIPFILE));
+
+    if (!OpenZipFile(&zip, name, 0)) { return FALSE; }
+
+    U32 magic = 0;
+    ReadZipFile(&zip, &magic, sizeof(U32));
+
+    if (magic != MAP_FILE_SINGLE_MAGIC)
+    {
+        CloseZipFile(&zip);
+
+        return FALSE;
+    }
+
+    U32 version = 0;
+    ReadZipFile(&zip, &version, sizeof(U32));
+
+    if (version != MODULE_VERSION_VALUE)
+    {
+        CloseZipFile(&zip);
+
+        return FALSE;
+    }
+
+    CloseZipFile(&zip);
 
     return TRUE;
 }
