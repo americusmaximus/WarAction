@@ -58,12 +58,12 @@ typedef struct DescriptionControl
     S32                         Y;
     S32                         Width;
     S32                         Height;
-    U32                         HorizontalOffset;
-    U32                         VerticalOffset;
+    S32                         HorizontalOffset;
+    S32                         VerticalOffset;
     U32                         Unk08; // TODO
     U32                         Unk09; // TODO
-    U32                         LineCount;
-    U32                         LineLength;
+    S32                         LineCount;
+    S32                         LineLength;
     U32                         MinDelay;
     U32                         MidDelay;
     U32                         MaxDelay;

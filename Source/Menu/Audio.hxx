@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -89,7 +89,7 @@ typedef struct AudioPlayer
     CHAR                                Message[MAX_AUDIOPLAYER_MESSAGE_LENGTH];
     HANDLE                              Event;
     AUDIOCOMMAND                        Command;
-    U32                                 Unk17; // TODO
+    U32                                 Unknown;
     U32                                 Ticks;
 } AUDIOPLAYER, * AUDIOPLAYERPTR;
 
@@ -103,8 +103,9 @@ BOOL CLASSCALL InitializeAudioPlayerEvent(AUDIOPLAYERPTR self, CONST U32 count);
 BOOL CLASSCALL InitializeAudioPlayerMixer(AUDIOPLAYERPTR self);
 BOOL CLASSCALL ReleaseAudioPlayerEvent(AUDIOPLAYERPTR self);
 BOOL CLASSCALL SelectAudioPlayerMixerDetails(AUDIOPLAYERPTR self, CONST U32 count, PMIXERCONTROLDETAILS_UNSIGNED channels);
-BOOL SendAudioPlayerMessage(AUDIOPLAYERPTR self, LPCSTR format, ...);
-DWORD WINAPI AudioPlayerWorker(LPVOID context);
 U32 CLASSCALL AcquireAudioPlayerMode(AUDIOPLAYERPTR self);
 VOID CLASSCALL DisposeAudioPlayer(AUDIOPLAYERPTR self);
 VOID CLASSCALL InitializeAudioPlayer(AUDIOPLAYERPTR self);
+
+BOOL SendAudioPlayerMessage(AUDIOPLAYERPTR self, LPCSTR format, ...);
+DWORD WINAPI AudioPlayerWorker(LPVOID context);

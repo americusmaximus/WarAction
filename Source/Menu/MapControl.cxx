@@ -138,10 +138,10 @@ U32 CLASSCALL ActionMapControl(MAPCONTROLPTR self)
 
     CONST CONTROLCOMMANDPTR command = DequeueControlCommand(FALSE);
 
-    if (command != NULL && command->Command == CONTROLACTION_MAP_HOVER) // TODO is this correct?
+    if (command != NULL && command->Command == CONTROLACTION_MAP_HOVER)
     {
-        if (command->Action == 2) { self->IsHover = TRUE; } // TODO
-        else if (command->Action == 4) { self->IsHover = FALSE; } // TODO
+        if (command->Action == CONTROLCOMMANDACTION_MOUSE_ENTER) { self->IsHover = TRUE; }
+        else if (command->Action == CONTROLCOMMANDACTION_MOUSE_LEAVE) { self->IsHover = FALSE; }
 
         DequeueControlCommand(TRUE);
     }
