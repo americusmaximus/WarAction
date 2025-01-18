@@ -26,7 +26,7 @@ SOFTWARE.
 #include "Statistics.hxx"
 #include "Strings.hxx"
 
-#include <Game.hxx>
+#include <Extension.hxx>
 
 #include <stdlib.h>
 
@@ -88,7 +88,7 @@ RATINGSCONTROLPTR CLASSCALL ActivateRatingsControl(RATINGSCONTROLPTR self)
 VOID CLASSCALL InitializeRatingsControl(RATINGSCONTROLPTR self)
 {
     FUN_1000cac0(&StatisticsState.State,
-        AcquireStatisticsFileExtension(SINGLE_FILE_EXTENSION, GAMEDIFFICULTY_UNKNOWN), self->SingleStatistics);
+        AcquireStatisticsFileExtension(FILE_EXT_SINGLE, GAMEDIFFICULTY_UNKNOWN), self->SingleStatistics);
 
     InitializeTextAsset(&self->Text, "Campaign.seq");
 
@@ -202,7 +202,7 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
 
                 AcquireStatisticsControlStatistics(self->Statistics,
                     AcquireStringValue(&value, "%s.%s", text,
-                        AcquireStatisticsFileExtension(SINGLE_FILE_EXTENSION, GAMEDIFFICULTY_UNKNOWN))->Value);
+                        AcquireStatisticsFileExtension(FILE_EXT_SINGLE, GAMEDIFFICULTY_UNKNOWN))->Value);
             }
             else
             {
@@ -220,7 +220,7 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
 
                 AcquireStatisticsControlStatistics(self->Statistics,
                     AcquireStringValue(&value, "%s.%s", text,
-                        AcquireStatisticsFileExtension(CAMPAIGN_FILE_EXTENSION, GAMEDIFFICULTY_UNKNOWN))->Value);
+                        AcquireStatisticsFileExtension(FILE_EXT_CAMPAIGN, GAMEDIFFICULTY_UNKNOWN))->Value);
             }
 
             ReleaseStringValue(&value);

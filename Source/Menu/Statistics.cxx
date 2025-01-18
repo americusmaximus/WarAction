@@ -28,6 +28,8 @@ SOFTWARE.
 
 #include <..\Text\Resources.hxx>
 
+#include <Extension.hxx>
+
 // 0x1003f88c
 STATIC CHAR StatisticsFileExtension[] = "rts";
 
@@ -52,7 +54,7 @@ VOID CLASSCALL AcquireStatistics(STATISTICSPTR self, LPCSTR path)
     strcpy(self->Path, path);
     ZeroMemory(&self->Players, MAX_STATISTICS_PLAYERS_COUNT * sizeof(PLAYER));
 
-    CONST BOOL single = path[strlen(path) - 2] == SINGLE_FILE_EXTENSION;
+    CONST BOOL single = path[strlen(path) - 2] == FILE_EXT_SINGLE;
 
     if (single) { strcpy(self->Name, SaveState.Path); } // TODO is this correct?
 

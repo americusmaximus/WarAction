@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,8 @@ SOFTWARE.
 #include "SingleResultControl.hxx"
 #include "State.hxx"
 #include "Statistics.hxx"
+
+#include <Extension.hxx>
 
 // 0x1003a704
 SINGLERESULTCONTROLSELF SingleResultControlSelfState =
@@ -81,7 +83,7 @@ VOID CLASSCALL InitializeSingleResultControl(SINGLERESULTCONTROLPTR self)
     if (SaveState.Path[0] == NULL)
     {
         wsprintfA(path, "%03d%03d.%s", AcquireCurrentGameMap(), AcquireCurrentGameMission(),
-            AcquireStatisticsFileExtension(CAMPAIGN_FILE_EXTENSION, SaveState.Difficulty));
+            AcquireStatisticsFileExtension(FILE_EXT_CAMPAIGN, SaveState.Difficulty));
     }
     else
     {
@@ -91,7 +93,7 @@ VOID CLASSCALL InitializeSingleResultControl(SINGLERESULTCONTROLPTR self)
         if (dot != NULL) { dot[0] = NULL; }
 
         wsprintfA((LPSTR)((ADDR)path + strlen(path)), ".%s",
-            AcquireStatisticsFileExtension(SINGLE_FILE_EXTENSION, SaveState.Difficulty));
+            AcquireStatisticsFileExtension(FILE_EXT_SINGLE, SaveState.Difficulty));
     }
 
     LogMessage("TopTen filename: %s\n", path);

@@ -28,7 +28,11 @@ SOFTWARE.
 #include "State.hxx"
 #include "Strings.hxx"
 
+#include <Extension.hxx>
+
 #include <stdlib.h>
+
+#define MAX_MAP_CONTROL_TEXT_LENGTH 256
 
 // 0x1003a580
 MAPCONTROLSELF MapControlSelfState =
@@ -172,7 +176,7 @@ VOID CLASSCALL DisposeMapControl(MAPCONTROLPTR self)
 // 0x1000eda0
 VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
 {
-    CHAR message[256]; // TODO
+    CHAR message[MAX_MAP_CONTROL_TEXT_LENGTH];
 
     if (name != NULL)
     {
@@ -182,9 +186,8 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
         {
             BOOL loaded = FALSE;
 
-            if (name[length - 2] == MULTIPLAYER_FILE_EXTENSION) { loaded = InitializeMultiMap(name, &self->Map); }
-            else if (name[length - 2] == SINGLE_FILE_EXTENSION) { loaded = InitializeSingleMap(name, &self->Map); }
-            else { goto DEFAULT; }
+            if (name[length - 2] == FILE_EXT_MULTI) { loaded = InitializeMultiMap(name, &self->Map); }
+            else if (name[length - 2] == FILE_EXT_SINGLE) { loaded = InitializeSingleMap(name, &self->Map); }
 
             if (loaded)
             {
@@ -234,8 +237,6 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
             }
         }
     }
-
-DEFAULT:
 
     self->Map.Descriptor.Height = 0;
     self->Map.Descriptor.Width = 0;

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,6 @@ SOFTWARE.
 
 #define GAME_VERSION_MAJOR          1
 #define GAME_VERSION_MINOR          21
-
-#define CAMPAIGN_FILE_EXTENSION     'c'
-#define SINGLE_FILE_EXTENSION       's'
-#define MULTIPLAYER_FILE_EXTENSION  'm'
-// TODO find the right place for ^^
 
 #define MAX_PLAYER_COUNT            12
 
