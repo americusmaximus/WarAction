@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,8 +67,8 @@ VOID CLASSCALL InitializeMapControl(MAPCONTROLPTR self)
 {
     self->Description->Self->Initialize(self->Description);
 
-    self->Map.Unk01.Height = 0;
-    self->Map.Unk01.Width = 0;
+    self->Map.Descriptor.Height = 0;
+    self->Map.Descriptor.Width = 0;
 
     self->IsHover = FALSE;
 
@@ -93,12 +93,13 @@ VOID CLASSCALL TickMapControl(MAPCONTROLPTR self)
 {
     self->Description->Self->Tick(self->Description);
 
-    if (self->Map.Unk01.Width != 0 && self->X != 0)
+    if (self->Map.Descriptor.Width != 0 && self->X != 0)
     {
-        CONST BOOL large = self->Map.Unk01.Width <= MAX_MAP_SIZE && self->Map.Unk01.Height <= MAX_MAP_SIZE;
+        CONST BOOL normal =
+            self->Map.Descriptor.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Height <= MAX_MAP_SIZE;
 
-        CONST U32 height = large ? self->Map.Unk01.Height / 2 : self->Map.Unk01.Height;
-        CONST U32 width = large ? self->Map.Unk01.Width / 2 : self->Map.Unk01.Width;
+        CONST U32 height = normal ? self->Map.Descriptor.Height : self->Map.Descriptor.Height / 2;
+        CONST U32 width = normal ? self->Map.Descriptor.Width : self->Map.Descriptor.Width / 2;
 
         for (U32 x = 0; x < height; x++)
         {
@@ -181,8 +182,8 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
         {
             BOOL loaded = FALSE;
 
-            if (name[length - 1] == MULTIPLAYER_FILE_EXTENSION) { loaded = InitializeMultiMap(name, &self->Map); }
-            else if (name[length - 1] == SINGLE_FILE_EXTENSION) { loaded = InitializeSingleMap(name, &self->Map); }
+            if (name[length - 2] == MULTIPLAYER_FILE_EXTENSION) { loaded = InitializeMultiMap(name, &self->Map); }
+            else if (name[length - 2] == SINGLE_FILE_EXTENSION) { loaded = InitializeSingleMap(name, &self->Map); }
             else { goto DEFAULT; }
 
             if (loaded)
@@ -197,28 +198,29 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
 
                 if (self->Size != NULL)
                 {
-                    wsprintfA(message, "%dx%d", self->Map.Unk01.Width, self->Map.Unk01.Height);
+                    wsprintfA(message, "%dx%d", self->Map.Descriptor.Width, self->Map.Descriptor.Height);
                     SlectLabelControlText(self->Size, message);
                 }
 
                 if (self->Actors != NULL)
                 {
-                    if (self->Map.Unk01.Actors.Min == self->Map.Unk01.Actors.Max)
+                    if (self->Map.Descriptor.Actors.Min == self->Map.Descriptor.Actors.Max)
                     {
-                        wsprintfA(message, "%d", self->Map.Unk01.Actors.Min);
+                        wsprintfA(message, "%d", self->Map.Descriptor.Actors.Min);
                     }
                     else
                     {
-                        wsprintfA(message, "%d-%d", self->Map.Unk01.Actors.Min, self->Map.Unk01.Actors.Max);
+                        wsprintfA(message, "%d-%d", self->Map.Descriptor.Actors.Min, self->Map.Descriptor.Actors.Max);
                     }
 
                     SlectLabelControlText(self->Actors, message);
                 }
 
-                CONST BOOL large = self->Map.Unk01.Width <= MAX_MAP_SIZE && self->Map.Unk01.Height <= MAX_MAP_SIZE;
+                CONST BOOL normal =
+                    self->Map.Descriptor.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Height <= MAX_MAP_SIZE;
 
-                CONST U32 height = large ? self->Map.Unk01.Height / 2 : self->Map.Unk01.Height;
-                CONST U32 width = large ? self->Map.Unk01.Width / 2 : self->Map.Unk01.Width;
+                CONST U32 height = normal ? self->Map.Descriptor.Height : self->Map.Descriptor.Height / 2;
+                CONST U32 width = normal ? self->Map.Descriptor.Width : self->Map.Descriptor.Width / 2;
 
                 for (U32 x = 0; x < height; x++)
                 {
@@ -235,10 +237,10 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
 
 DEFAULT:
 
-    self->Map.Unk01.Height = 0;
-    self->Map.Unk01.Width = 0;
+    self->Map.Descriptor.Height = 0;
+    self->Map.Descriptor.Width = 0;
 
-    self->Map.Unk01.Actors.Max = 0;
+    self->Map.Descriptor.Actors.Max = 0;
 
     self->Description->Self->Disable(self->Description);
 

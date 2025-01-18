@@ -176,7 +176,7 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
         if (tick->Text[0] != NULL)
         {
             tick->Unk8 = 0; // TODO
-            DrawDescriptionControlText(self, tick->Text, width);
+            DrawTextDescriptionControl(self, tick->Text, width);
         }
 
         UNICHAR item = NULL;
@@ -189,10 +189,10 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
             {
                 if (tick->Unk8 == 0) { item = ' '; } else { item = '\n'; } // TODO
 
-                DrawDescriptionControlCharacter(self, item);
+                DrawTextItemDescriptionControl(self, item);
                 tick->Unk8 = 1; // TODO
             }
-            else if (item != '\r' && item != '~') { DrawDescriptionControlCharacter(self, item); }
+            else if (item != '\r' && item != '~') { DrawTextItemDescriptionControl(self, item); }
 
             text = AcquireNextString(text);
         }
@@ -279,25 +279,21 @@ VOID CLASSCALL SelectDescriptionControlText(DESCRIPTIONCONTROLPTR self, LPCSTR t
 }
 
 // 0x1000e5a0
-VOID CLASSCALL DrawDescriptionControlText(DESCRIPTIONCONTROLPTR self, LPSTR text, CONST U32 width)
+VOID CLASSCALL DrawTextDescriptionControl(DESCRIPTIONCONTROLPTR self, LPSTR text, CONST U32 width)
 {
     if (self->Width < self->Unk06 + self->LineLength + width && self->LineLength != 0)
     {
-        DrawDescriptionControlCharacter(self, '\n');
+        DrawTextItemDescriptionControl(self, '\n');
     }
 
-    UNICHAR item = NULL;
-    LPSTR value = text;
-
-    while ((item = AcquireUnicode(value)) != NULL)
+    for (UNICHAR x = AcquireUnicode(text); x != NULL; text = AcquireNextString(text), x = AcquireUnicode(text))
     {
-        value = AcquireNextString(text);
-        DrawDescriptionControlCharacter(self, item);
+        DrawTextItemDescriptionControl(self, x);
     }
 }
 
 // 0x1000e520
-VOID CLASSCALL DrawDescriptionControlCharacter(DESCRIPTIONCONTROLPTR self, CONST UNICHAR value) // TODO better name
+VOID CLASSCALL DrawTextItemDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST UNICHAR value)
 {
     if (value == '\n')
     {

@@ -229,8 +229,8 @@ VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self)
 
                 ZeroMemory(&maps[count].Time, sizeof(FILETIME));
 
-                if (map->Unk0x154 == NULL) { strcpy(maps[count].Name, file); }
-                else { sprintf(maps[count].Name, "%s: %s", file, map->Unk0x154); }
+                if (map->MissionDescription == NULL) { strcpy(maps[count].Name, file); }
+                else { sprintf(maps[count].Name, "%s: %s", file, map->MissionDescription); }
 
                 count = count + 1;
 

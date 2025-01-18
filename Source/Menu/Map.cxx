@@ -29,24 +29,24 @@ SOFTWARE.
 // 0x10017e00
 MAPPTR CLASSCALL ActivateMap(MAPPTR self)
 {
-    self->Unk00.Unk00 = 0; // TODO
-    self->Unk00.Unk01 = 0; // TODO
-    self->Unk00.Unk02 = 0; // TODO
-    self->Unk00.Unk03 = 0; // TODO
+    self->Header.Unk00 = 0; // TODO
+    self->Header.Unk01 = 0; // TODO
+    self->Header.Unk02 = 0; // TODO
+    self->Header.Unk03 = 0; // TODO
 
-    self->Unk01.Actors.Min = 0;
-    self->Unk01.Actors.Max = 0;
+    self->Descriptor.Actors.Min = 0;
+    self->Descriptor.Actors.Max = 0;
 
-    self->Unk01.Unk02 = 0; // TODO
-    self->Unk01.Unk03 = 0; // TODO
-    self->Unk01.Unk04 = 0; // TODO
+    self->Descriptor.Unk02 = 0; // TODO
+    self->Descriptor.Unk03 = 0; // TODO
+    self->Descriptor.Unk04 = 0; // TODO
 
-    self->Unk01.Width = 0;
-    self->Unk01.Height = 0;
+    self->Descriptor.Width = 0;
+    self->Descriptor.Height = 0;
 
     self->Description = NULL;
     self->Pixels = NULL;
-    self->Unk0x154 = NULL;
+    self->MissionDescription = NULL;
 
     return self;
 }
@@ -61,11 +61,11 @@ VOID CLASSCALL DisposeMap(MAPPTR self)
         self->Description = NULL;
     }
 
-    if (self->Unk0x154 != NULL)
+    if (self->MissionDescription != NULL)
     {
-        free(self->Unk0x154);
+        free(self->MissionDescription);
 
-        self->Unk0x154 = NULL;
+        self->MissionDescription = NULL;
     }
 
     if (self->Pixels != NULL)
@@ -110,13 +110,13 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
         }
     }
 
-    ReadZipFile(&zip, &map->Unk00, sizeof(MAPSTRUCT1));
-    ReadZipFile(&zip, &map->Unk01, sizeof(MAPSTRUCT2));
+    ReadZipFile(&zip, &map->Header, sizeof(MAPHEADER));
+    ReadZipFile(&zip, &map->Descriptor, sizeof(MAPDESCRIPTOR));
 
-    map->Unk01.Actors.Min = 1;
-    map->Unk01.Actors.Max = 1;
-    map->Unk01.Unk02 = 1; // TODO
-    map->Unk01.Unk03 = 1; // TODO
+    map->Descriptor.Actors.Min = 1;
+    map->Descriptor.Actors.Max = 1;
+    map->Descriptor.Unk02 = 1; // TODO
+    map->Descriptor.Unk03 = 1; // TODO
 
     {
         U32 length = 0;
@@ -145,13 +145,13 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
 
         strcpy(map->Description, &description[x]);
 
-        map->Unk0x154 = (LPSTR)malloc(strlen(description));
+        map->MissionDescription = (LPSTR)malloc(strlen(description));
 
-        strcpy(map->Unk0x154, description);
+        strcpy(map->MissionDescription, description);
 
         free(description);
     }
-    else { map->Unk0x154 = NULL; }
+    else { map->MissionDescription = NULL; }
 
     for (U32 x = 0; map->Description[x] != NULL; x++)
     {
@@ -159,9 +159,9 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
     }
 
     {
-        CONST U32 size = map->Unk01.Width <= MAX_MAP_SIZE && map->Unk01.Height <= MAX_MAP_SIZE
-            ? map->Unk01.Height * map->Unk01.Width * sizeof(PIXEL)
-            : map->Unk01.Height * map->Unk01.Width / 2;
+        CONST U32 size = map->Descriptor.Width <= MAX_MAP_SIZE && map->Descriptor.Height <= MAX_MAP_SIZE
+            ? map->Descriptor.Height * map->Descriptor.Width * sizeof(PIXEL)
+            : map->Descriptor.Height * map->Descriptor.Width / 2;
 
         map->Pixels = (PIXEL*)malloc(size);
         ReadZipFile(&zip, map->Pixels, size);
@@ -205,15 +205,15 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
         }
     }
 
-    ReadZipFile(&zip, &map->Unk00, sizeof(MAPSTRUCT1));
-    ReadZipFile(&zip, &map->Unk01.Actors, sizeof(MAPMINMAX));
+    ReadZipFile(&zip, &map->Header, sizeof(MAPHEADER));
+    ReadZipFile(&zip, &map->Descriptor.Actors, sizeof(MAPMINMAX));
 
     ReadZipFile(&zip, &map->Unk02, MAX_MAP_STRUCT3_COUNT * sizeof(MAPSTRUCT3));
 
     for (U32 x = 0; x < MAX_MAP_STRUCT3_COUNT; x++)
     {
         if (map->Unk02[x].Unk00 < 0 || map->Unk02[x].Unk01 < 0
-            || map->Unk01.Width <= map->Unk02[x].Unk00 || map->Unk01.Height <= map->Unk02[x].Unk01
+            || map->Descriptor.Width <= map->Unk02[x].Unk00 || map->Descriptor.Height <= map->Unk02[x].Unk01
             || map->Unk02[x].Unk02 < 0 || (MAX_MAP_SIZE - 1) < map->Unk02[x].Unk02)
         {
             map->Unk02[x].Unk00 = 0;
@@ -222,7 +222,7 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
         }
     }
 
-    ReadZipFile(&zip, &map->Unk01.Unk04, 3 * sizeof(U32) /* TODO */);
+    ReadZipFile(&zip, &map->Descriptor.Unk04, 3 * sizeof(U32) /* TODO */);
 
     for (U32 x = 0; x < MAX_MAP_STRUCT4_COUNT; x++)
     {
@@ -264,13 +264,13 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
 
         strcpy(map->Description, &description[x]);
 
-        map->Unk0x154 = (LPSTR)malloc(strlen(description));
+        map->MissionDescription = (LPSTR)malloc(strlen(description));
 
-        strcpy(map->Unk0x154, description);
+        strcpy(map->MissionDescription, description);
 
         free(description);
     }
-    else { map->Unk0x154 = NULL; }
+    else { map->MissionDescription = NULL; }
 
     for (U32 x = 0; map->Description[x] != NULL; x++)
     {
@@ -278,9 +278,9 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
     }
 
     {
-        CONST U32 size = map->Unk01.Width <= MAX_MAP_SIZE && map->Unk01.Height <= MAX_MAP_SIZE
-            ? map->Unk01.Height * map->Unk01.Width * sizeof(PIXEL)
-            : map->Unk01.Height * map->Unk01.Width / 2; // TODO
+        CONST U32 size = map->Descriptor.Width <= MAX_MAP_SIZE && map->Descriptor.Height <= MAX_MAP_SIZE
+            ? map->Descriptor.Height * map->Descriptor.Width * sizeof(PIXEL)
+            : map->Descriptor.Height * map->Descriptor.Width / 2; // TODO
 
         map->Pixels = (PIXEL*)malloc(size);
         ReadZipFile(&zip, map->Pixels, size);

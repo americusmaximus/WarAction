@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -81,8 +81,8 @@ DESCRIPTIONCONTROLPTR CLASSCALL ReleaseDescriptionControl(DESCRIPTIONCONTROLPTR 
 U32 CLASSCALL ActionDescriptionControl(DESCRIPTIONCONTROLPTR self);
 VOID CLASSCALL DisableDescriptionControl(DESCRIPTIONCONTROLPTR self);
 VOID CLASSCALL DisposeDescriptionControl(DESCRIPTIONCONTROLPTR self);
-VOID CLASSCALL DrawDescriptionControlCharacter(DESCRIPTIONCONTROLPTR self, CONST UNICHAR value);
-VOID CLASSCALL DrawDescriptionControlText(DESCRIPTIONCONTROLPTR self, LPSTR text, CONST U32 width);
+VOID CLASSCALL DrawTextDescriptionControl(DESCRIPTIONCONTROLPTR self, LPSTR text, CONST U32 width);
+VOID CLASSCALL DrawTextItemDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST UNICHAR value);
 VOID CLASSCALL FUN_1000e910(DESCRIPTIONCONTROLPTR self); // TODO name
 VOID CLASSCALL InitializeDescriptionControl(DESCRIPTIONCONTROLPTR self);
 VOID CLASSCALL SelectDescriptionControlText(DESCRIPTIONCONTROLPTR self, LPCSTR text);

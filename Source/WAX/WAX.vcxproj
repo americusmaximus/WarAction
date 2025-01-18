@@ -37,6 +37,7 @@
     <ClInclude Include="Game.hxx" />
     <ClInclude Include="Graphics.Basic.hxx" />
     <ClInclude Include="Logger.hxx" />
+    <ClInclude Include="Map.hxx" />
     <ClInclude Include="Mathematics.Basic.hxx" />
     <ClInclude Include="Module.hxx" />
     <ClInclude Include="Native.Basic.hxx" />
