@@ -106,7 +106,7 @@ VOID CLASSCALL InitializeSingleControl(SINGLECONTROLPTR self)
     SelectInputControlInvalidValue(self->Name, NULL);
     SelectInputControlValue(self->Name, State.Name);
     InitializeComputerPlayerList(&ComputerState, self->Items);
-    ListControlCommandUnknown1(self->Names);
+    AdjustScrollControlListControl(self->Names);
 
     self->IsMessage = FALSE;
     self->Names->Index = INVALID_LIST_CONTROL_INDEX;
@@ -142,7 +142,7 @@ U32 CLASSCALL ActionSingleControl(SINGLECONTROLPTR self)
         {
             RemoveComputerPlayer(&ComputerState, self->Names->Index, TRUE);
             InitializeComputerPlayerList(&ComputerState, self->Items);
-            ListControlCommandUnknown1(self->Names);
+            AdjustScrollControlListControl(self->Names);
 
             self->Names->Index = INVALID_LIST_CONTROL_INDEX;
         }

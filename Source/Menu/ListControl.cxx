@@ -71,15 +71,15 @@ VOID CLASSCALL InitializeListControl(LISTCONTROLPTR self)
     self->Scroll->Current = 0;
     ScrollScrollControl(self->Scroll);
 
-    self->Scroll->Max = self->Items->Count;
+    self->Scroll->Count = self->Items->Count;
     ScrollScrollControl(self->Scroll);
 
     if (self->Items->Count == 1) { self->Index = 0; }
 
-    self->Scroll->Min = self->Height / AcquireFontAssetHeight(self->Font);
+    self->Scroll->Visible = self->Height / AcquireFontAssetHeight(self->Font);
     ScrollScrollControl(self->Scroll);
 
-    self->Height = self->Scroll->Min * AcquireFontAssetHeight(self->Font);
+    self->Height = self->Scroll->Visible * AcquireFontAssetHeight(self->Font);
 
     self->Scroll->Self->Initialize(self->Scroll);
 
@@ -89,7 +89,7 @@ VOID CLASSCALL InitializeListControl(LISTCONTROLPTR self)
 
     InitializeControl((CONTROLPTR)self);
 
-    self->Unk10 = 0; // TODO
+    self->Iteration = 0;
 }
 
 // 0x10006ae0
@@ -108,7 +108,7 @@ VOID CLASSCALL TickListControl(LISTCONTROLPTR self)
     State.Renderer->Window.Width = self->X - 1 + self->Width;
     State.Renderer->Window.Height = self->Y - 1 + self->Height;
 
-    for (S32 x = 0; x < self->Scroll->Min; x++)
+    for (S32 x = 0; x < self->Scroll->Visible; x++)
     {
         CONST S32 current = self->Scroll->Current + x;
 
@@ -154,20 +154,20 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
 
             if (item < self->Items->Count)
             {
-                if (self->Index == item) { self->Unk10 = self->Unk10 + 1; } // TODO
+                if (self->Index == item) { self->Iteration = self->Iteration + 1; }
                 else
                 {
                     self->Index = item;
                     EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
                         CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
 
-                    self->Unk10 = 1; // TODO
+                    self->Iteration = 1;
                     PlaySoundStateSound(&SoundState.State, "mouse_click");
                 }
             }
         }
 
-        if ((command->Action & VK_INPUT) == CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK && 1 < self->Unk10 /* TODO */)
+        if ((command->Action & VK_INPUT) == CONTROLCOMMANDACTION_MOUSE_LEFT_DOUBLECLICK && 1 < self->Iteration)
         {
             EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
                 CONTROLACTION_UI_SELECT, DEFAULT_CONTROLACTION_UI_VALUE);
@@ -205,7 +205,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 ScrollScrollControl(self->Scroll);
             }
 
-            while (self->Scroll->Min - 1 + self->Scroll->Current < self->Index)
+            while (self->Scroll->Visible - 1 + self->Scroll->Current < self->Index)
             {
                 self->Scroll->Current = self->Scroll->Current + 1;
                 ScrollScrollControl(self->Scroll);
@@ -214,7 +214,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
             EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
                 CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
 
-            ListControlCommandUnknown1(self);
+            AdjustScrollControlListControl(self);
         }
 
         DequeueControlCommand(TRUE);
@@ -231,7 +231,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
                 ScrollScrollControl(self->Scroll);
             }
 
-            while (self->Scroll->Min - 1 + self->Scroll->Current < self->Index)
+            while (self->Scroll->Visible - 1 + self->Scroll->Current < self->Index)
             {
                 self->Scroll->Current = self->Scroll->Current + 1;
                 ScrollScrollControl(self->Scroll);
@@ -240,7 +240,7 @@ U32 CLASSCALL ActionListControl(LISTCONTROLPTR self)
             EnqueueControlCommand(CONTROLCOMMAND_UI, self->Action,
                 CONTROLACTION_UI_CHANGE, DEFAULT_CONTROLACTION_UI_VALUE);
 
-            ListControlCommandUnknown1(self);
+            AdjustScrollControlListControl(self);
         }
 
         DequeueControlCommand(TRUE);
@@ -288,9 +288,11 @@ BOOL CLASSCALL SelectListControlItem(LISTCONTROLPTR self, CONST S32 indx)
 }
 
 // 0x10006ea0
-VOID CLASSCALL ListControlCommandUnknown1(LISTCONTROLPTR self) // TODO
+VOID CLASSCALL AdjustScrollControlListControl(LISTCONTROLPTR self)
 {
     if (!self->IsActive) { return; }
+
+    self->Scroll->Count = self->Items->Count;
 
     ScrollScrollControl(self->Scroll);
 
@@ -304,9 +306,9 @@ VOID CLASSCALL ListControlCommandUnknown1(LISTCONTROLPTR self) // TODO
         self->Index = 0;
     }
 
-    if (self->Items->Count < self->Scroll->Current + self->Scroll->Min)
+    if (self->Items->Count < self->Scroll->Current + self->Scroll->Visible)
     {
-        CONST S32 indx = self->Items->Count - self->Scroll->Min;
+        CONST S32 indx = self->Items->Count - self->Scroll->Visible;
         self->Scroll->Current = indx < 0 ? 0 : indx;
 
         ScrollScrollControl(self->Scroll);

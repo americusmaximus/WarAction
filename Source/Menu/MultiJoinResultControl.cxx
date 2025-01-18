@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -136,7 +136,7 @@ BOOL CLASSCALL ObjectType15x25Unknown(MULTIJOINRESULTCONTROLPTR self) // TODO na
         AppendStringList(self->Items, name);
     }
 
-    ListControlCommandUnknown1(self->List);
+    AdjustScrollControlListControl(self->List);
 
     return TRUE;
 }

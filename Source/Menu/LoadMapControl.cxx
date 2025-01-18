@@ -150,7 +150,7 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
 
     if (action != CONTROLACTION_SINGLE4_LOAD) { return action; }
 
-LAB_10015ba5:
+LAB_10015ba5: // TODO
     if (self->List->Index == INVALID_LIST_CONTROL_INDEX) { return CONTROLACTION_NONE; }
 
     MenuSaveState.Save.Unk1A4 = 0; // TODO
@@ -252,6 +252,6 @@ VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self)
 
     free(maps);
 
-    ListControlCommandUnknown1(self->List);
+    AdjustScrollControlListControl(self->List);
     InitializeMapMapControl(self->Map, NULL);
 }

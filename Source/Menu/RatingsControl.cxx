@@ -112,8 +112,8 @@ VOID CLASSCALL InitializeRatingsControl(RATINGSCONTROLPTR self)
     self->SinglePanel->Self->Initialize(self->SinglePanel);
     self->CampaignPanel->Self->Initialize(self->CampaignPanel);
 
-    ListControlCommandUnknown1(self->SingleList);
-    ListControlCommandUnknown1(self->CampaignList);
+    AdjustScrollControlListControl(self->SingleList);
+    AdjustScrollControlListControl(self->CampaignList);
 
     self->Type = RATINGSTYPE_CAMPAIGN;
 }

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -56,8 +56,8 @@ typedef struct ScrollControl
     S32                     X;
     S32                     Y;
     S32                     Height;
-    S32                     Max;
-    S32                     Min;
+    S32                     Count;
+    S32                     Visible;
     S32                     Current;
     U8                      IsAction;
     BUTTONCONTROLPTR        Up;

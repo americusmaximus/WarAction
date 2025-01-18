@@ -96,7 +96,7 @@ VOID CLASSCALL TickScrollControl(SCROLLCONTROLPTR self)
 // 0x100067f0
 U32 CLASSCALL ActionScrollControl(SCROLLCONTROLPTR self)
 {
-    if (self->Max <= self->Min) { return CONTROLACTION_NONE; }
+    if (self->Count <= self->Visible) { return CONTROLACTION_NONE; }
 
     CONST U32 current = self->Current;
 
@@ -107,7 +107,7 @@ U32 CLASSCALL ActionScrollControl(SCROLLCONTROLPTR self)
         ScrollScrollControl(self);
     }
 
-    if (self->Down->Self->Action(self->Down) != CONTROLACTION_NONE && (self->Min + self->Current < self->Max))
+    if (self->Down->Self->Action(self->Down) != CONTROLACTION_NONE && (self->Visible + self->Current < self->Count))
     {
         self->Current = self->Current + 1;
 
@@ -159,14 +159,14 @@ VOID CLASSCALL InitializeScrollerScrollControl(SCROLLCONTROLPTR self)
 // 0x100062d0
 VOID CLASSCALL ScrollScrollControl(SCROLLCONTROLPTR self)
 {
-    if (self->IsActive && self->Min < self->Max)
+    if (self->IsActive && self->Visible < self->Count)
     {
         IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireBinAssetContent(&AssetsState.Assets.ScrollBar, 0);
 
         S32 h = 0;
         S32 y = 0;
 
-        if (self->Max == 0)
+        if (self->Count == 0)
         {
             y = self->Y;
             h = self->Height;
@@ -176,7 +176,7 @@ VOID CLASSCALL ScrollScrollControl(SCROLLCONTROLPTR self)
             h = self->Current;
 
             y = AcquireScrollControlVerticalOffset(self, h);
-            h = AcquireScrollControlVerticalOffset(self, self->Min + h);
+            h = AcquireScrollControlVerticalOffset(self, self->Visible + h);
 
             h = h - 1;
         }
@@ -188,7 +188,7 @@ VOID CLASSCALL ScrollScrollControl(SCROLLCONTROLPTR self)
 // 0x100062b0
 S32 CLASSCALL AcquireScrollControlVerticalOffset(SCROLLCONTROLPTR self, CONST S32 offset)
 {
-    return ((self->Height - self->Y) * offset) / self->Max + self->Y;
+    return ((self->Height - self->Y) * offset) / self->Count + self->Y;
 }
 
 // 0x100063c0
@@ -203,7 +203,7 @@ VOID CLASSCALL DisableScrollerScrollControl(SCROLLCONTROLPTR self)
 // 0x100063e0
 VOID CLASSCALL TickScrollerScrollControl(SCROLLCONTROLPTR self)
 {
-    if (self->Min < self->Max)
+    if (self->Visible < self->Count)
     {
         CONST ACTIONAREAPTR area = AcquireActionArea(self->Action);
         CONST IMAGESPRITEPTR image = (IMAGESPRITEPTR)AcquireBinAssetContent(&AssetsState.Assets.ScrollBar, 0);
@@ -234,15 +234,15 @@ BOOL CLASSCALL ActionScrollerScrollControl(SCROLLCONTROLPTR self)
 {
     ActionControl((CONTROLPTR)self);
 
-    if (self->Max <= self->Min) { return FALSE; }
+    if (self->Count <= self->Visible) { return FALSE; }
 
     CONST S32 value = self->Current;
 
-    S32 current = (CursorState.Y - self->Y) * self->Max / (self->Height - self->Y) - self->Min / 2;
+    S32 current = (CursorState.Y - self->Y) * self->Count / (self->Height - self->Y) - self->Visible / 2;
 
     if (current < 0) { current = 0; }
 
-    if (self->Max < self->Min + current) { current = self->Max - self->Min; }
+    if (self->Count < self->Visible + current) { current = self->Count - self->Visible; }
 
     if (!CursorState.IsLeft) { self->IsAction = FALSE; }
 
@@ -289,8 +289,8 @@ VOID CLASSCALL InitializeScrollControlArea(SCROLLCONTROLPTR self, CONST U32 acti
     self->Height = height;
 
     self->Current = 0;
-    self->Min = 0;
-    self->Max = 0;
+    self->Visible = 0;
+    self->Count = 0;
 
     self->IsAction = FALSE;
 }

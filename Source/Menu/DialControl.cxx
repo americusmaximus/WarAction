@@ -170,7 +170,7 @@ U32 CLASSCALL ActionDialControl(DIALCONTROLPTR self)
     }
 
     InitializeComputerPlayerList(&ComputerState, self->Items);
-    ListControlCommandUnknown1(self->List);
+    AdjustScrollControlListControl(self->List);
 
     self->List->Index = INVALID_LIST_CONTROL_INDEX;
 

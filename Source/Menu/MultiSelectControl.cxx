@@ -94,7 +94,7 @@ VOID CLASSCALL InitializeMultiSelectControl(MULTISELECTCONTROLPTR self)
 
     SelectInputControlValue(self->Input, State.Name);
     InitializeComputerPlayerList(&ComputerState, self->Items);
-    ListControlCommandUnknown1(self->List);
+    AdjustScrollControlListControl(self->List);
 
     self->List->Index = INVALID_LIST_CONTROL_INDEX;
 }
@@ -110,7 +110,7 @@ U32 CLASSCALL ActionMultiSelectControl(MULTISELECTCONTROLPTR self)
         {
             RemoveComputerPlayer(&ComputerState, self->List->Index, 1);
             InitializeComputerPlayerList(&ComputerState, self->Items);
-            ListControlCommandUnknown1(self->List);
+            AdjustScrollControlListControl(self->List);
 
             self->List->Index = INVALID_LIST_CONTROL_INDEX;
         }

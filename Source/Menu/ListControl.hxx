@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,17 +64,17 @@ typedef struct ListControl
     S32                 Height;
     SCROLLCONTROLPTR    Scroll;
     FONTASSETPTR        Font;
-    U32                 Unk10; // TODO
+    U32                 Iteration;
     S32                 Index;
 } LISTCONTROL, * LISTCONTROLPTR;
 #pragma pack(pop)
 
 LISTCONTROLPTR CLASSCALL ActivateListControl(LISTCONTROLPTR self, CONST U32 action, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, SCROLLCONTROLPTR scroll, FONTASSETPTR font, STRINGLISTPTR items);
 LISTCONTROLPTR CLASSCALL ReleaseListControl(LISTCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
-VOID CLASSCALL InitializeListControl(LISTCONTROLPTR self);
-VOID CLASSCALL DisableListControl(LISTCONTROLPTR self);
-VOID CLASSCALL TickListControl(LISTCONTROLPTR self);
-U32 CLASSCALL ActionListControl(LISTCONTROLPTR self);
-VOID CLASSCALL DisposeListControl(LISTCONTROLPTR self);
 BOOL CLASSCALL SelectListControlItem(LISTCONTROLPTR self, CONST S32 indx);
-VOID CLASSCALL ListControlCommandUnknown1(LISTCONTROLPTR self); // TODO Name
+U32 CLASSCALL ActionListControl(LISTCONTROLPTR self);
+VOID CLASSCALL AdjustScrollControlListControl(LISTCONTROLPTR self);
+VOID CLASSCALL DisableListControl(LISTCONTROLPTR self);
+VOID CLASSCALL DisposeListControl(LISTCONTROLPTR self);
+VOID CLASSCALL InitializeListControl(LISTCONTROLPTR self);
+VOID CLASSCALL TickListControl(LISTCONTROLPTR self);
