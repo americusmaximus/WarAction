@@ -102,15 +102,15 @@ VOID CLASSCALL TickMapControl(MAPCONTROLPTR self)
         CONST BOOL normal =
             self->Map.Descriptor.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Height <= MAX_MAP_SIZE;
 
-        CONST U32 height = normal ? self->Map.Descriptor.Height : self->Map.Descriptor.Height / 2;
-        CONST U32 width = normal ? self->Map.Descriptor.Width : self->Map.Descriptor.Width / 2;
+        CONST S32 height = normal ? self->Map.Descriptor.Height : self->Map.Descriptor.Height / 2;
+        CONST S32 width = normal ? self->Map.Descriptor.Width : self->Map.Descriptor.Width / 2;
 
-        for (U32 x = 0; x < height; x++)
+        for (S32 x = 0; x < height; x = x + 2)
         {
-            for (U32 xx = 0; xx < width; xx++)
+            for (S32 xx = 0; xx < width; xx = xx + 2)
             {
-                State.Renderer->Actions.DrawMainSurfaceColorPoint(
-                    self->X + xx, self->Y + x, self->Map.Pixels[x * height + xx]); // TODO is this correct?
+                State.Renderer->Actions.DrawMainSurfaceColorPoint(self->X + (-x + xx) / 2,
+                    self->Y + (x + xx) / 4, self->Map.Pixels[width * x + xx]);
             }
         }
 
@@ -122,9 +122,9 @@ VOID CLASSCALL TickMapControl(MAPCONTROLPTR self)
             // TODO 236
             // TODO 98
 
-            for (U32 x = 0; x < height; x++)
+            for (S32 x = 0; x < height; x++)
             {
-                for (U32 xx = 0; xx < width; xx++)
+                for (S32 xx = 0; xx < width; xx++)
                 {
                     // TODO Fix me!
                     State.Renderer->Actions.DrawMainSurfaceColorPoint(
@@ -229,7 +229,7 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
                 {
                     for (U32 xx = 0; xx < width; xx++)
                     {
-                        self->Map.Pixels[x * height + xx] = ADJUSTCOLOR(self->Map.Pixels[x * height + xx]);
+                        self->Map.Pixels[x * height + xx] = ADJUSTSPRITECOLOR(self->Map.Pixels[x * height + xx]);
                     }
                 }
 
