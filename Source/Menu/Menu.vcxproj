@@ -343,7 +343,6 @@
     <ClInclude Include="LoadMapControl.hxx" />
     <ClInclude Include="MultiMapControl.hxx" />
     <ClInclude Include="ObjectType4x5d.hxx" />
-    <ClInclude Include="Objects.hxx" />
     <ClInclude Include="PanelControl.hxx" />
     <ClInclude Include="RatingsControl.hxx" />
     <ClInclude Include="Resources.hxx" />

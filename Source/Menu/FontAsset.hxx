@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -60,11 +60,11 @@ typedef struct FontAsset
 BOOL CLASSCALL InitializeFontAsset(FONTASSETPTR self, LPCSTR name, CONST FONTTYPE type);
 FONTASSETPTR CLASSCALL ActivateFontAsset(FONTASSETPTR self);
 S32 CLASSCALL AcquireFontAssetHeight(FONTASSETPTR self);
-U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR item);
-U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item);
+U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR value);
+U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR value);
 U32 CLASSCALL AcquireFontAssetTextWidth(FONTASSETPTR self, LPCSTR text);
 VOID CLASSCALL DisposeFontAsset(FONTASSETPTR self);
-VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CONST UNICHAR item);
+VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CONST UNICHAR value);
 VOID CLASSCALL DrawFontAssetText(FONTASSETPTR self, CONST U32 x, CONST U32 y, LPCSTR text);
 VOID CLASSCALL DrawFontAssetText(FONTASSETPTR self, CONST U32 x, CONST U32 y, LPCSTR text, CONST U32 alignment);
 VOID CLASSCALL InitializeFontAsset(FONTASSETPTR self);

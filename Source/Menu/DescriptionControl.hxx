@@ -58,8 +58,8 @@ typedef struct DescriptionControl
     S32                         Y;
     S32                         Width;
     S32                         Height;
-    U32                         Unk06; // TODO
-    U32                         Unk07; // TODO
+    U32                         HorizontalOffset;
+    U32                         VerticalOffset;
     U32                         Unk08; // TODO
     U32                         Unk09; // TODO
     U32                         LineCount;
@@ -71,12 +71,12 @@ typedef struct DescriptionControl
     LPSTR                       Text;
     LPSTR                       End;
     U32                         Ticks;
-    U32                         Unk19; // TODO
+    U32                         Unk19; // TODO Ticks again!
     U32                         Color;
 } DESCRIPTIONCONTROL, * DESCRIPTIONCONTROLPTR;
 #pragma pack(pop)
 
-DESCRIPTIONCONTROLPTR CLASSCALL ActivateDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, FONTASSETPTR font, U32 param_7, U32 param_8);
+DESCRIPTIONCONTROLPTR CLASSCALL ActivateDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, FONTASSETPTR font, CONST U32 xo, CONST U32 yo);
 DESCRIPTIONCONTROLPTR CLASSCALL ReleaseDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
 U32 CLASSCALL ActionDescriptionControl(DESCRIPTIONCONTROLPTR self);
 VOID CLASSCALL DisableDescriptionControl(DESCRIPTIONCONTROLPTR self);

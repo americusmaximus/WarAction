@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,11 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
-
 typedef enum ObjectReleaseType
 {
-    OBJECTRELEASETYPE_STACK         = 0,
-    OBJECTRELEASETYPE_ALLOCATED     = 1,
-    OBJECTRELEASETYPE_FORCE_DWORD   = 0x7FFFFFF
+    OBJECTRELEASETYPE_STACK             = 0,
+    OBJECTRELEASETYPE_ALLOCATED         = 1,
+    OBJECTRELEASETYPE_STACK_ARRAY       = 2,
+    OBJECTRELEASETYPE_ALLOCATED_ARRAY   = 3,
+    OBJECTRELEASETYPE_FORCE_DWORD       = 0x7FFFFFF
 } OBJECTRELEASETYPE, * OBJECTRELEASETYPEPTR;

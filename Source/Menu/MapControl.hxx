@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ typedef struct MapControl
 } MAPCONTROL, * MAPCONTROLPTR;
 #pragma pack(pop)
 
-MAPCONTROLPTR CLASSCALL ActivateMapControl(MAPCONTROLPTR self, CONST S32 cx, CONST S32 cy, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, LABELCONTROLPTR size, LABELCONTROLPTR actors);
+MAPCONTROLPTR CLASSCALL ActivateMapControl(MAPCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 dx, CONST S32 dy, CONST S32 width, CONST S32 height, LABELCONTROLPTR size, LABELCONTROLPTR actors);
 MAPCONTROLPTR CLASSCALL ReleaseMapControl(MAPCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
 U32 CLASSCALL ActionMapControl(MAPCONTROLPTR self);
 VOID CLASSCALL DisableMapControl(MAPCONTROLPTR self);

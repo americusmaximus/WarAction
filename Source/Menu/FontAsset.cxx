@@ -119,12 +119,12 @@ VOID CLASSCALL DisposeFontAsset(FONTASSETPTR self)
 }
 
 // 0x10003cb0
-U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR item)
+U32 CLASSCALL AcquireFontAssetItemHeight(FONTASSETPTR self, CONST UNICHAR value)
 {
     switch (self->Type)
     {
-    case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Height; }
-    case FONTTYPE_COMPLEX: { return item == NULL ? self->Height : AcquireFontAssetItem(self->Font, item)->Height; }
+    case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, value & 0xFF))->Height; }
+    case FONTTYPE_COMPLEX: { return value == NULL ? self->Height : AcquireFontAssetItem(self->Font, value)->Height; }
     }
 
     return DEFAULT_FONT_ASSET_HEIGHT;
@@ -165,15 +165,15 @@ U32 CLASSCALL AcquireFontAssetTextWidth(FONTASSETPTR self, LPCSTR text)
 }
 
 // 0x10003c50
-U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR item)
+U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR value)
 {
     switch (self->Type)
     {
-    case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & 0xFF))->Width; }
+    case FONTTYPE_BASIC: { return ((IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, value & 0xFF))->Width; }
     case FONTTYPE_COMPLEX:
     {
-        return item == NULL ? DEFAULT_FONT_ASSET_SPACING
-            : (AcquireFontAssetItem(self->Font, item)->Width + DEFAULT_FONT_ASSET_SPACING);
+        return value == NULL ? DEFAULT_FONT_ASSET_SPACING
+            : (AcquireFontAssetItem(self->Font, value)->Width + DEFAULT_FONT_ASSET_SPACING);
     }
     }
 
@@ -265,19 +265,19 @@ VOID CLASSCALL DrawFontAssetText(FONTASSETPTR self, CONST U32 x, CONST U32 y, LP
 }
 
 // 0x10003bc0
-VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CONST UNICHAR item)
+VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CONST UNICHAR value)
 {
     switch (self->Type)
     {
     case FONTTYPE_BASIC:
     {
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y, self->Pixels,
-            (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, item & VK_INPUT)); break;
+            (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, value & VK_INPUT)); break;
     }
     case FONTTYPE_COMPLEX:
     {
         State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y + self->Height - self->Offset,
-            self->Pixels, AcquireFontAssetItem(self->Font, item)); break;
+            self->Pixels, AcquireFontAssetItem(self->Font, value)); break;
     }
     }
 }

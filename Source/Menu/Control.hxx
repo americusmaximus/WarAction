@@ -22,9 +22,10 @@ SOFTWARE.
 
 #pragma once
 
-#include "Objects.hxx"
+#include "Basic.hxx"
 
 #include <Control.hxx>
+#include <Objects.hxx>
 
 typedef enum ControlType
 {

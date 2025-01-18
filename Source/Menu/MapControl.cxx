@@ -42,7 +42,7 @@ MAPCONTROLSELF MapControlSelfState =
 };
 
 // 0x1000e950
-MAPCONTROLPTR CLASSCALL ActivateMapControl(MAPCONTROLPTR self, CONST S32 cx, CONST S32 cy, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, LABELCONTROLPTR size, LABELCONTROLPTR actors)
+MAPCONTROLPTR CLASSCALL ActivateMapControl(MAPCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 dx, CONST S32 dy, CONST S32 width, CONST S32 height, LABELCONTROLPTR size, LABELCONTROLPTR actors)
 {
     self->Self = &MapControlSelfState;
 
@@ -51,10 +51,10 @@ MAPCONTROLPTR CLASSCALL ActivateMapControl(MAPCONTROLPTR self, CONST S32 cx, CON
     ActivateMap(&self->Map);
 
     self->Description = ActivateDescriptionControl(ALLOCATE(DESCRIPTIONCONTROL),
-        x, y, width, height, &AssetsState.Fonts.Main, 3, 3); // TODO
+        dx, dy, width, height, &AssetsState.Fonts.Main, 3, 3);
 
-    self->X = cx;
-    self->Y = cy;
+    self->X = x;
+    self->Y = y;
 
     self->Actors = actors;
     self->Size = size;

@@ -57,7 +57,7 @@ DESCRIPTIONCONTROLSELF DescriptionControlSelfState =
 };
 
 // 0x1000e2a0
-DESCRIPTIONCONTROLPTR CLASSCALL ActivateDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, FONTASSETPTR font, U32 param_7, U32 param_8)
+DESCRIPTIONCONTROLPTR CLASSCALL ActivateDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, FONTASSETPTR font, CONST U32 xo, CONST U32 yo)
 {
     self->Self = &DescriptionControlSelfState;
 
@@ -70,9 +70,11 @@ DESCRIPTIONCONTROLPTR CLASSCALL ActivateDescriptionControl(DESCRIPTIONCONTROLPTR
 
     self->Font = font;
 
-    self->Unk06 = param_7; // TODO
-    self->Unk07 = param_8; // TODO
+    self->HorizontalOffset = xo;
+    self->VerticalOffset = yo;
+
     self->Unk08 = 0; // TODO
+
     self->Text = NULL;
     self->Color = WHITE_COLOR;
 
@@ -98,6 +100,7 @@ VOID CLASSCALL InitializeDescriptionControl(DESCRIPTIONCONTROLPTR self)
 
     self->LineCount = 0;
     self->LineLength = 0;
+
     self->Unk09 = 0; // TODO
     self->Unk19 = 0; // TODO
     self->Ticks = GetTickCount();
@@ -118,12 +121,13 @@ VOID CLASSCALL DisableDescriptionControl(DESCRIPTIONCONTROLPTR self)
 // 0x1000e610
 VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
 {
-    DESCRIPTIONCONTROLTICKPTR tick = (DESCRIPTIONCONTROLTICKPTR)alloca(sizeof(DESCRIPTIONCONTROLTICK));
+    DESCRIPTIONCONTROLTICKPTR tick =
+        (DESCRIPTIONCONTROLTICKPTR)alloca(sizeof(DESCRIPTIONCONTROLTICK));
 
     tick->Unk4 = 0; // TODO
 
-    self->LineLength = 0; // TODO
-    self->LineCount = 0; // TODO
+    self->LineLength = 0;
+    self->LineCount = 0;
 
     State.Renderer->Window.X = self->X;
     State.Renderer->Window.Y = self->Y;
@@ -143,7 +147,7 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
         tick->Width = 0;
         tick->Unk4 = next;
 
-        // Calculate the width of the string in pixels that will fit into the control's width
+        // Calculate the width of the string in pixels that will fit into the control's width.
         while (' ' < AcquireUnicode(text) && width < self->Width)
         {
             if (AcquireUnicode(text) != '~')
@@ -171,7 +175,7 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
             text = AcquireNextString(text);
         }
 
-        // Draw the text that fits into the width, if any
+        // Draw the text that fits into the width, if any.
         next[0] = NULL;
         if (tick->Text[0] != NULL)
         {
@@ -182,7 +186,7 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
         UNICHAR item = NULL;
         uVar8 = uVar8 | (text == self->End); // TODO ???
 
-        // Skip the drawn text, if needed, and draw line termination characters
+        // Skip the drawn text, if needed, and draw line termination characters.
         if (!uVar8 && (item = AcquireUnicode(text)) != NULL)
         {
             if (item == '\n')
@@ -212,9 +216,9 @@ U32 CLASSCALL ActionDescriptionControl(DESCRIPTIONCONTROLPTR self)
     if (self->Unk19 == 0) // TODO
     {
         CONST S32 h = AcquireFontAssetHeight(self->Font);
-        CONST S32 height = (h + self->Unk08) * (self->LineCount + 1) + self->Unk07 + self->Y + self->Unk09;
+        CONST S32 y = (h + self->Unk08) * (self->LineCount + 1) + self->VerticalOffset + self->Y + self->Unk09;
 
-        if (self->Height + self->Y - 1 < height)
+        if (self->Height + self->Y - 1 < y)
         {
             self->Unk09 = self->Unk09 - 1;
             self->Ticks = GetTickCount();
@@ -281,7 +285,7 @@ VOID CLASSCALL SelectDescriptionControlText(DESCRIPTIONCONTROLPTR self, LPCSTR t
 // 0x1000e5a0
 VOID CLASSCALL DrawTextDescriptionControl(DESCRIPTIONCONTROLPTR self, LPSTR text, CONST U32 width)
 {
-    if (self->Width < self->Unk06 + self->LineLength + width && self->LineLength != 0)
+    if (self->Width < self->HorizontalOffset + self->LineLength + width && self->LineLength != 0)
     {
         DrawTextItemDescriptionControl(self, '\n');
     }
@@ -299,14 +303,16 @@ VOID CLASSCALL DrawTextItemDescriptionControl(DESCRIPTIONCONTROLPTR self, CONST 
     {
         self->LineLength = 0;
         self->LineCount = self->LineCount + 1;
+
+        return;
     }
 
-    CONST S32 height = AcquireFontAssetHeight(self->Font);
-    CONST S32 offset = (height + self->Unk08) * self->LineCount + self->Unk09 + self->Unk07 + self->Y;
+    CONST S32 h = AcquireFontAssetHeight(self->Font);
+    CONST S32 y = (h + self->Unk08) * self->LineCount + self->Unk09 + self->VerticalOffset + self->Y;
 
-    if (self->Y <= height + offset)
+    if (self->Y <= h + y)
     {
-        DrawFontAssetItem(self->Font, self->LineLength + self->Unk06 + self->X, offset, value);
+        DrawFontAssetItem(self->Font, self->LineLength + self->HorizontalOffset + self->X, y, value);
     }
 
     self->LineLength = self->LineLength + AcquireFontAssetItemWidth(self->Font, value);
