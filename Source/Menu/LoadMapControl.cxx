@@ -154,7 +154,7 @@ LAB_10015ba5: // TODO
     if (self->List->Index == INVALID_LIST_CONTROL_INDEX) { return CONTROLACTION_NONE; }
 
     MenuSaveState.Save.Unk1A4 = 0; // TODO
-    self->Items->Self->AcquireValue(self->Items, self->List->Index, MenuSaveItem_10048880.Name);
+    self->Items->Self->AcquireValue(self->Items, self->List->Index, State.Map.Name);
 
     return action;
 }

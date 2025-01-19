@@ -32,6 +32,13 @@ typedef struct MapFileItem
     FILETIME    Time;
 } MAPFILEITEM, * MAPFILEITEMPTR;
 
+typedef struct MapFileInfo
+{
+    DWORD       Size;
+    FILETIME    Time;
+    CHAR        Name[MAX_FILE_NAME_LENGTH];
+} MAPFILEINFO, * MAPFILEINFOPTR;
+
 MAPPTR CLASSCALL ActivateMap(MAPPTR self);
 VOID CLASSCALL DisposeMap(MAPPTR self);
 

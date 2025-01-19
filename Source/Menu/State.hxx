@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,8 @@ typedef struct StateModuleContainer
     MAINCONTROLPTR                  Main;                           // 0x10059bac
 
     CHAR                            Name[MAX_PLAYER_NAME_LENGTH];   // 0x10048860
+
+    MAPFILEINFO                     Map;                            // 0x10048880
 } STATEMODULECONTAINER, * STATEMODULECONTAINERPTR;
 
 EXTERN STATEMODULECONTAINER State;

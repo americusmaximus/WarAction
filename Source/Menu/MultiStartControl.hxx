@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@ SOFTWARE.
 #pragma once
 
 #include "ChatControl.hxx"
+#include "Game.hxx"
 #include "InputControl.hxx"
 #include "LabelControl.hxx"
 #include "MapControl.hxx"
@@ -31,8 +32,6 @@ SOFTWARE.
 #include "SceneControl.hxx"
 #include "SwapControl.hxx"
 #include "TimeControl.hxx"
-
-#include <Game.hxx>
 
 #define MULTI_START_START_BUTTON_INDEX          0
 #define MULTI_START_CANCEL_BUTTON_INDEX         1

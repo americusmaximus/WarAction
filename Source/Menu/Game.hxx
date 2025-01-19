@@ -20,6 +20,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "MenuSave.hxx"
+#pragma once
 
-MENUSAVESTATEMODULECONTAINER MenuSaveState;
+#include "Basic.hxx"
+
+#include <Game.hxx>
+
+BOOL InitializeSingleGame(VOID);

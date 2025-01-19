@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,6 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
-
-// TODO should be part of network?
-
-typedef struct MenuSaveItem // TODO name
-{
-    DWORD       Size;
-    FILETIME    Time;
-    CHAR        Name[MAX_FILE_NAME_LENGTH];
-} MENUSAVEITEM, * MENUSAVEITEMPTR; // TODO name
 
 typedef struct MenuSaveFileContent /* TOOD better name*/
 // TODO reads/rites are 0x1a4, which is smalled that whole stuct. Make a substruct?
@@ -62,6 +53,3 @@ typedef struct MenuSaveStateModuleContainer
 } MENUSAVESTATEMODULECONTAINER, * MENUSAVESTATEMODULECONTAINERPTR;
 
 EXTERN MENUSAVESTATEMODULECONTAINER MenuSaveState;
-
-// 0x10048880
-EXTERN MenuSaveItem MenuSaveItem_10048880; // TODO make part of the state

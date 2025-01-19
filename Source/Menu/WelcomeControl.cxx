@@ -23,6 +23,7 @@ SOFTWARE.
 #include "ActionArea.hxx"
 #include "Assets.hxx"
 #include "ControlCommand.hxx"
+#include "Game.hxx"
 #include "Input.hxx"
 #include "SceneControl.hxx"
 #include "Settings.hxx"
@@ -30,8 +31,6 @@ SOFTWARE.
 #include "WelcomeControl.hxx"
 
 #include <..\Text\Resources.hxx>
-
-#include <Game.hxx>
 
 #define RENDERER_VIDEO_MODE_640x480         0
 #define RENDERER_VIDEO_MODE_800x600         1

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,7 @@ SOFTWARE.
 #pragma once
 
 #include "BinFile.hxx"
-
-#include <Game.hxx>
+#include "Game.hxx"
 
 #define DEFAULT_GAME_MAP_INDEX          (-1)
 #define DEFAULT_GAME_MISSION_INDEX      (-1)

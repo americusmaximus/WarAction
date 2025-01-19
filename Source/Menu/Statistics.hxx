@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,8 @@ SOFTWARE.
 
 #pragma once
 
+#include "Game.hxx"
 #include "StringList.hxx"
-
-#include <Game.hxx>
 
 #define INVALID_STATISTICS_ITEM_INDEX   (-1)
 #define MAX_STATISTICS_PLAYERS_COUNT      (MAX_PLAYER_COUNT + 1)

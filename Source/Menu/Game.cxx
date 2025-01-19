@@ -20,6 +20,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "MenuSave.hxx"
+#include "Game.hxx"
+#include "Saves.hxx"
+#include "Settings.hxx"
+#include "State.hxx"
+#include "Strings.hxx"
 
-MENUSAVESTATEMODULECONTAINER MenuSaveState;
+#include <..\Text\Resources.hxx>
+
+// 0x10015bf0
+BOOL InitializeSingleGame(VOID)
+{
+    CHAR path[MAX_FILE_NAME_LENGTH];
+
+    {
+        STRINGVALUE name, value;
+        AcquireSettingsValue(&name, IDS_SINGLE_MAP_DIR);
+        AcquireStringValue(&value, StringsState.Scratch);
+
+        STRINGVALUE setting;
+        STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);
+
+        strcpy(path, actual->Value);
+
+        ReleaseStringValue(actual);
+    }
+
+    LPSTR divider = strchr(State.Map.Name, ':');
+    if (divider != NULL) { divider[0] = NULL; }
+
+    strcpy(SaveState.Path, State.Map.Name);
+
+    strcat(path, State.Map.Name);
+    strcat(path, ".ssm");
+
+    return WriteSaveState(path);
+}

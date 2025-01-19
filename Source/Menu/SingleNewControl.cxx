@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,13 @@ SOFTWARE.
 */
 
 #include "Assets.hxx"
-#include "SingleNewControl.hxx"
+#include "Game.hxx"
 #include "Saves.hxx"
 #include "Settings.hxx"
+#include "SingleNewControl.hxx"
 #include "State.hxx"
 
 #include <..\Text\Resources.hxx>
-
-#include <Game.hxx>
 
 // 0x1003a6bc
 SINGLENEWCONTROLSELF SingleNewControlSelfState =

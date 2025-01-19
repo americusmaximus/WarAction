@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -313,7 +313,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_SINGLE2_RUSSIAN:
     case CONTROLACTION_SINGLE2_AMERICAN: { action = SaveSingleNewControlState((SINGLENEWCONTROLPTR)self->Active) ? CONTROLACTION_BRIEF : CONTROLACTION_1092; break; }
     case CONTROLACTION_SINGLE3_LOAD: { State.App->InitModule = GAME_MODULE_STATE_INDEX; break; }
-    case CONTROLACTION_SINGLE4_LOAD: { action = FUN_10015bf0() ? CONTROLACTION_BRIEF : CONTROLACTION_1092; break; }
+    case CONTROLACTION_SINGLE4_LOAD: { action = InitializeSingleGame() ? CONTROLACTION_BRIEF : CONTROLACTION_1092; break; }
     case CONTROLACTION_SINGLE5_CONTINUE:
     {
         LogMessage("GECK: curMap=%d, curMis=%d, nextMap=%d, nextMis=%d\n",
@@ -338,7 +338,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     {
         DAT_10046f7c = 1; // TODO
 
-        strcpy(MenuSaveItem_10048880.Name, "demo");
+        strcpy(State.Map.Name, "demo");
 
         PlaySoundStateSound(&SoundState.State, "accept");
 
@@ -350,7 +350,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         PlaySoundStateSound(&SoundState.State, "accept");
 
-        strcpy(MenuSaveItem_10048880.Name, "???");
+        strcpy(State.Map.Name, "???");
 
         // TODO SWITCH
         if (DAT_1003fba4 == 0) { action = CONTROLACTION_JMULTI1_OK; } // TODO

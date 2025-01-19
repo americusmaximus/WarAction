@@ -226,6 +226,7 @@
     <ClCompile Include="Dossier.cxx" />
     <ClCompile Include="FileFinder.cxx" />
     <ClCompile Include="FontAsset.cxx" />
+    <ClCompile Include="Game.cxx" />
     <ClCompile Include="Graphics.cxx" />
     <ClCompile Include="GreetingsControl.cxx" />
     <ClCompile Include="ImageControl.cxx" />
@@ -308,6 +309,7 @@
     <ClInclude Include="Dossier.hxx" />
     <ClInclude Include="FileFinder.hxx" />
     <ClInclude Include="FontAsset.hxx" />
+    <ClInclude Include="Game.hxx" />
     <ClInclude Include="Graphics.hxx" />
     <ClInclude Include="GreetingsControl.hxx" />
     <ClInclude Include="ImageControl.hxx" />

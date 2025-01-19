@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,8 +47,6 @@ EXTERN U32 DAT_10058e18; // 0x10058e18
 
 // TODO
 EXTERN U32 DAT_100470cc; // 0x100470cc
-
-U32 FUN_10015bf0(VOID); // TODO
 
 BOOL FUN_10019d10(VOID); // TODO
 BOOL FUN_1001d7c0(VOID); // TODO
