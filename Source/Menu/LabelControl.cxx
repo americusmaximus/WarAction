@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ LABELCONTROLSELF LabelControlSelfState =
 };
 
 // 0x10005d50
-LABELCONTROLPTR CLASSCALL ActivateLabelControl(LABELCONTROLPTR self, CONST U32 x, CONST U32 y, CONST U32 width, CONST U32 height, LPCSTR text)
+LABELCONTROLPTR CLASSCALL ActivateLabelControl(LABELCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, LPCSTR text)
 {
     self->Self = &LabelControlSelfState;
 
@@ -75,10 +75,9 @@ VOID CLASSCALL TickLabelControl(LABELCONTROLPTR self)
     State.Renderer->Window.Width = self->X - 1 + self->Width;
     State.Renderer->Window.Height = self->Y - 1 + self->Height;
 
-    U32 x = 0;
-    U32 y = 0;
-    CONST U32 width = AcquireFontAssetTextWidth(self->Font, self->Text);
-    CONST U32 height = AcquireFontAssetHeight(self->Font);
+    S32 x = 0, y = 0;
+    CONST S32 width = AcquireFontAssetTextWidth(self->Font, self->Text);
+    CONST S32 height = AcquireFontAssetHeight(self->Font);
 
     if (width < self->Width && self->IsCentered) { x = (self->Width - width) / 2; }
     if (self->Height < height || self->IsCentered) { y = (self->Height - height) / 2; }

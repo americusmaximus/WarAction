@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,8 +54,8 @@ typedef struct ControlType4x5d
     CONTROLTYPE4X5DSELFPTR  Self;
     U8                      IsActive;
     CONTROLNODEPTR          Nodes;
-    U32                     Unk03; // TODO
-    U32                     Unk04; // TODO
+    BINASSETPTR             Background;
+    BINASSETPTR             Buttons;
     LPVOID                  AniFile; // TODO
     LPVOID                  ArrColFile; // TODO
     LPVOID                  SeqFile; // TODO

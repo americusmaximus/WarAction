@@ -110,7 +110,7 @@ VOID CLASSCALL TickMapControl(MAPCONTROLPTR self)
             for (S32 xx = 0; xx < width; xx = xx + 2)
             {
                 State.Renderer->Actions.DrawMainSurfaceColorPoint(self->X + (-x + xx) / 2,
-                    self->Y + (x + xx) / 4, self->Map.Pixels[width * x + xx]);
+                    self->Y + (x + xx) / 4, self->Map.Pixels[x * width + xx]);
             }
         }
 
@@ -119,17 +119,27 @@ VOID CLASSCALL TickMapControl(MAPCONTROLPTR self)
             State.Renderer->Actions.DrawMainSurfaceSprite(0, 0,
                 (IMAGESPRITEPTR)AcquireBinAssetContent(&AssetsState.Assets.KartaBK, 0));
 
-            // TODO 236
-            // TODO 98
+            S32 ox = 236;
 
             for (S32 x = 0; x < height; x++)
             {
+                S32 oy = x + 98;
+
                 for (S32 xx = 0; xx < width; xx++)
                 {
-                    // TODO Fix me!
-                    State.Renderer->Actions.DrawMainSurfaceColorPoint(
-                        self->X + xx, self->Y + x, self->Map.Pixels[x * height + xx]); // TODO
+                    CONST PIXEL pixel = self->Map.Pixels[x * width + xx];
+
+                    State.Renderer->Actions.DrawMainSurfaceColorPoint(ox + xx, oy, pixel);
+
+                    if (ox < 236 && xx < width - 1)
+                    {
+                        State.Renderer->Actions.DrawMainSurfaceColorPoint(ox + xx + 1, oy, pixel);
+                    }
+
+                    oy = oy + 1;
                 }
+
+                ox = ox - 1;
             }
         }
     }

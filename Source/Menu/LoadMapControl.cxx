@@ -220,7 +220,7 @@ VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self)
             strcat(path, file);
             strcat(path, ".ssm");
 
-            if (ValidateMapFile(path))
+            if (ValidateSingleMapFile(path))
             {
                 MAPPTR map = ActivateMap(ALLOCATE(MAP));
                 InitializeSingleMap(path, map);

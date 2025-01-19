@@ -315,7 +315,7 @@ BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file) // TODO
 }
 
 // 0x1001a9f0
-BOOL ValidateMapFile(LPCSTR name)
+BOOL ValidateSingleMapFile(LPCSTR name)
 {
     ZIPFILE zip;
     ZeroMemory(&zip, sizeof(ZIPFILE));

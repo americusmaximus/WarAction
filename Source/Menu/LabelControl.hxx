@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,10 +53,10 @@ typedef struct LabelControl
 {
     LABELCONTROLSELFPTR Self;
     U8                  IsActive;
-    U32                 X;
-    U32                 Y;
-    U32                 Width;
-    U32                 Height;
+    S32                 X;
+    S32                 Y;
+    S32                 Width;
+    S32                 Height;
     BOOL                IsVisible;
     FONTASSETPTR        Font;
     LPSTR               Text;
@@ -65,7 +65,7 @@ typedef struct LabelControl
 } LABELCONTROL, * LABELCONTROLPTR;
 #pragma pack(pop)
 
-LABELCONTROLPTR CLASSCALL ActivateLabelControl(LABELCONTROLPTR self, CONST U32 x, CONST U32 y, CONST U32 width, CONST U32 height, LPCSTR text);
+LABELCONTROLPTR CLASSCALL ActivateLabelControl(LABELCONTROLPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, LPCSTR text);
 LABELCONTROLPTR CLASSCALL ReleaseLabelControl(LABELCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
 VOID CLASSCALL DisposeLabelControl(LABELCONTROLPTR self);
 VOID CLASSCALL SlectLabelControlText(LABELCONTROLPTR self, LPCSTR text);

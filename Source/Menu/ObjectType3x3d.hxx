@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,8 +54,8 @@ typedef struct ControlType3x3d
     U8                      IsActive;
     BINASSETPTR             Asset;
     U32                     Index;
-    U32                     X;
-    U32                     Y;
+    S32                     X;
+    S32                     Y;
     U32                     Action;
     U32 Unk07; // TODO
     U32 Unk08; // TODO

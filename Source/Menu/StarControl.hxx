@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -61,8 +61,8 @@ typedef struct StarControl
     STARCONTROLSELFPTR  Self;
     U8                  IsActive;
     S32                 Index;
-    U32                 Width;
-    U32                 Bottom;
+    S32                 Width;
+    S32                 Bottom;
     U32                 Asset;
     STATISTICSAREAPTR   Area;
 } STARCONTROL, * STARCONTROLPTR;
