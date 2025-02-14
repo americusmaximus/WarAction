@@ -44,7 +44,7 @@ VOID CLASSCALL DisposeMap(MAPPTR self);
 
 BOOL InitializeSingleMap(LPCSTR name, MAPPTR map);
 BOOL InitializeMultiMap(LPCSTR name, MAPPTR map);
-BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file); // TODO
-void script_command_perser(MAPPTR map, LPVOID value); // TODO
+BOOL ScriptParser(MAPPTR map, ZIPFILEPTR file); // TODO
+void ScriptCommandPerser(MAPPTR map, LPVOID value); // TODO
 BOOL ValidateSingleMapFile(LPCSTR name);
 BOOL ValidateMultiMapFile(LPCSTR name);

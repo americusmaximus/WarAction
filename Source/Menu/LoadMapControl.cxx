@@ -95,6 +95,18 @@ VOID CLASSCALL InitializeLoadMapControl(LOADMAPCONTROLPTR self)
     SelectListControlItem(self->List, 0);
 }
 
+// 0x1000F7B0
+VOID CLASSCALL InitializeLoadMultiMapControl(LOADMAPCONTROLPTR self) // TODO
+{
+    //self->Unk10 = 0; 
+
+    InitializeScrollControlArea(self->Scroll, 7, -13, 3);
+    InitializePanelControl((PANELCONTROLPTR)self);
+    //sub_10002430(0);
+    //InitializeMultiMapsLoadMapControl(self);
+    SelectListControlItem(self->List, 0);
+}
+
 // 0x10015d60
 VOID CLASSCALL DisableLoadMapControl(LOADMAPCONTROLPTR self)
 {

@@ -234,7 +234,7 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
         ReadZipFile(&zip, buffer, 272); // TODO
     }
 
-    FUN_10017f60(map, &zip);
+    ScriptParser(map, &zip);
 
     {
         U32 length = 0;
@@ -291,7 +291,7 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
 }
 
 // 0x10017f60
-BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file) // TODO
+BOOL ScriptParser(MAPPTR map, ZIPFILEPTR file) // TODO
 {
     U32 script_num = 0;
     ReadZipFile(file, &script_num, sizeof(U32));
@@ -305,7 +305,7 @@ BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file) // TODO
         {
             LPVOID scripts = malloc(script_length); // TODO
             ReadZipFile(file, scripts, script_length);
-            script_command_perser(map, scripts); // TODO Decoding script commands
+            ScriptCommandPerser(map, scripts); // TODO Decoding script commands
             free(scripts);
         }
     }
@@ -379,7 +379,7 @@ BOOL ValidateMultiMapFile(LPCSTR name)
 }
 
 //Decoding script commands
-void script_command_perser(MAPPTR map, LPVOID value)
+void ScriptCommandPerser(MAPPTR map, LPVOID value)
 {
     S32 v7; // [esp+4h] [ebp-1004h]
     S8 v8; // [esp+8h] [ebp-1000h] BYREF
@@ -491,18 +491,18 @@ void script_command_perser(MAPPTR map, LPVOID value)
                 case MultiReinforcementForFlags:
                     v4 = *(Stack_for_num_scripts - 5);
                     Stack_for_num_scripts -= 5;
-                    //sub_100181F0(map, v4);
+                    //CommandParser(map, v4);
                     break;
                 case MultiPlanesForFlags:
                 case MultiPlanesMissionsForFlags:
                     v4 = *(Stack_for_num_scripts - 3);
                     Stack_for_num_scripts -= 3;
-                    //sub_100181F0(map, v4);
+                    //CommandParser(map, v4);
                     break;
                 case MultiPhraseForFlags:
                     v4 = *(Stack_for_num_scripts - 2);
                     Stack_for_num_scripts -= 2;
-                    //sub_100181F0(map, v4);
+                    //CommandParser(map, v4);
                     break;
                 default:
                     break;
@@ -521,7 +521,7 @@ void script_command_perser(MAPPTR map, LPVOID value)
     //return 0;
 }
 
-//S16* sub_100181F0(MAPPTR map, int a2)
+//S16* CommandParser(MAPPTR map, int a2)
 //{
 //    S32 v2 = -1;
 //    S16* v3 = (S16*)(map + 144);
