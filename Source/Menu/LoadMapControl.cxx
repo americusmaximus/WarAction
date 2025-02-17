@@ -103,7 +103,7 @@ VOID CLASSCALL InitializeLoadMultiMapControl(LOADMAPCONTROLPTR self) // TODO
     InitializeScrollControlArea(self->Scroll, 7, -13, 3);
     InitializePanelControl((PANELCONTROLPTR)self);
     //sub_10002430(0);
-    //InitializeMultiMapsLoadMapControl(self);
+    InitializeMultiMapsLoadMapControl(self);
     SelectListControlItem(self->List, 0);
 }
 
@@ -266,4 +266,10 @@ VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self)
 
     AdjustScrollControlListControl(self->List);
     InitializeMapMapControl(self->Map, NULL);
+}
+
+// 0x1000F340
+VOID CLASSCALL InitializeMultiMapsLoadMapControl(LOADMAPCONTROLPTR self)
+{
+   
 }

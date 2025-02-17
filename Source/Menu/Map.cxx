@@ -386,7 +386,7 @@ void ScriptCommandPerser(MAPPTR map, LPVOID value)
 
     S32* result = (S32*)value;
     S32* position = (S32*)value;
-    if (*(S32*)value != ScriptEND)
+    if (*(S32*)value != SCRIPT_END)
     {
         S32 v4 = v7;
         S32* Stack_for_num_scripts = (S32*)&v8;
@@ -397,109 +397,109 @@ void ScriptCommandPerser(MAPPTR map, LPVOID value)
             {
                 switch (scripts)
                 {
-                case And:
-                case Or:
-                case IfCountDown:
-                case IfTimeFromMissionStart:
-                case IfGroupBehaviour:
-                case IfGroupBehaviourZone1:
-                case IfGroupBehaviourZone2:
-                case IfGroupBehaviourGroup1:
-                case IfGroupBehaviourGroup2:
+                case AND:
+                case OR:
+                case IF_COUNT_DOWN:
+                case IF_TIME_FROM_MISSION_START:
+                case IF_GROUP_BEHAVIOUR:
+                case IF_GROUP_BEHAVIOUR_ZONE1:
+                case IF_GROUP_BEHAVIOUR_ZONE2:
+                case IF_GROUP_BEHAVIOUR_GROUP1:
+                case IF_GROUP_BEHAVIOUR_GROUP2:
                     v4 = *(Stack_for_num_scripts - 2);
                     --Stack_for_num_scripts;
                     break;
-                case IfGroupUnitCountOfType:
-                case IfPlayerUnitCountOfType:
-                case IfZoneUnitCountForGroup:
-                case IfZoneUnitCountForPlayer:
-                case IfPlanesForPlayerCount:
-                case IfPlanesForPlayerMissionsCount:
-                case IfZoneUnitCountPercentForGroup:
-                case IfZoneUnitCountPercentForPlayer:
+                case IF_GROUP_UNIT_COUNT_OF_TYPE:
+                case IF_PLAYER_UNIT_COUNT_OF_TYPE:
+                case IF_ZONE_UNIT_COUNT_FOR_GROUP:
+                case IF_ZONE_UNIT_COUNT_FOR_PLAYER:
+                case IF_PLANES_FOR_PLAYER_COUNT:
+                case IF_PLANES_FOR_PLAYER_MISSIONS_COUNT:
+                case IF_ZONE_UNIT_COUNT_PERCENT_FOR_GROUP:
+                case IF_ZONE_UNIT_COUNT_PERCENT_FOR_PLAYER:
                     v4 = *(Stack_for_num_scripts - 4);
                     Stack_for_num_scripts -= 3;
                     break;
-                case ReturnIfFalse:
-                case TimerStop:
-                case ZonePointTo:
-                case PhraseShow:
-                case CountDownStart:
-                case CampaignSetNextMission:
-                case MissionComplete:
-                case PlanesRouteAddObject:
-                case PlanesRouteAddObjectAsDrop:
+                case RETURN_IF_FALSE:
+                case TIMER_STOP:
+                case ZONE_POINT_TO:
+                case PHRASE_SHOW:
+                case COUNT_DOWN_START:
+                case CAMPAIGN_SET_NEXT_MISSION:
+                case MISSION_COMPLETE:
+                case PLANES_ROUTE_ADD_OBJECT:
+                case PLANES_ROUTE_ADD_OBJECT_AS_DROP:
                     --Stack_for_num_scripts;
                     v4 = *Stack_for_num_scripts;
                     break;
-                case PlanesForPlayerSendToZoneAndLand:
-                case PlanesForPlayerSendToObjectAndLand:
-                case MultiReinforcementStart:
+                case PLANES_FOR_PLAYER_SEND_TO_ZONE_AND_LAND:
+                case PLANES_FOR_PLAYER_SEND_TO_OBJECT_AND_LAND:
+                case MULTI_REINFORCEMENT_START:
                     Stack_for_num_scripts -= 4;
                     v4 = *Stack_for_num_scripts;
                     break;
-                case TimerStart:
-                case GroupBehaviourSet:
-                case GroupBehaviourZone1Set:
-                case GroupBehaviourZone2Set:
-                case GroupBehaviourGroup1Set:
-                case GroupBehaviourGroup2Set:
-                case VariableSet:
-                case PhraseShowAndPointToMarker:
-                case GroupGiveToPlayer:
-                case GroupShotOneRocketArtilleryToZone:
-                case GroupShotOneRocketArtilleryToObject:
+                case TIMER_START:
+                case GROUP_BEHAVIOUR_SET:
+                case GROUP_BEHAVIOUR_ZONE_1SET:
+                case GROUP_BEHAVIOUR_ZONE_2SET:
+                case GROUP_BEHAVIOUR_GROUP_1SET:
+                case GROUP_BEHAVIOUR_GROUP_2SET:
+                case VARIABLE_SET:
+                case PHRASE_SHOW_AND_POINT_TO_MARKER:
+                case GROUP_GIVE_TO_PLAYER:
+                case GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_ZONE:
+                case GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_OBJECT:
                     Stack_for_num_scripts -= 2;
                     v4 = *Stack_for_num_scripts;
                     break;
-                case PlanesAddToPlayer:
-                case PlanesMissionsAddToPlayer:
-                case PlanesRouteSendAndLandForPlayer:
-                case VariableModify:
+                case PLANES_ADD_TO_PLAYER:
+                case PLANES_MISSIONS_ADD_TO_PLAYER:
+                case PLANES_ROUTE_SEND_AND_LAND_FOR_PLAYER:
+                case VARIABLE_MODIFY:
                     Stack_for_num_scripts -= 3;
                     v4 = *Stack_for_num_scripts;
                     break;
-                case Negate:
-                case IfTimerComplete:
-                case IfObjectIsDestroyed:
+                case NEGATE:
+                case IF_TIMER_COMPLETE:
+                case IF_OBJECT_IS_DESTROYED:
                     v4 = *(Stack_for_num_scripts - 1);
                     break;
-                case IfGroupUnitCountPercentOfTypeRelativeToGroup:
+                case IF_GROUP_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_GROUP:
                     v4 = *(Stack_for_num_scripts - 6);
                     Stack_for_num_scripts -= 5;
                     break;
-                case IfPlayerUnitCountPercentOfTypeRelativeToPlayer:
+                case IF_PLAYER_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_PLAYER:
                     v4 = *(Stack_for_num_scripts - 5);
                     Stack_for_num_scripts -= 4;
                     break;
-                case GroupResurrectThroughFlagWithParams:
+                case GROUP_RESURRECT_THROUGH_FLAG_WITH_PARAMS:
                     Stack_for_num_scripts -= 7;
                     v4 = *Stack_for_num_scripts;
                     break;
-                case ReinforcementSend:
+                case REINFORCEMENT_SEND:
                     Stack_for_num_scripts -= 5;
                     break; // 50/50
-                case IfGroupWasAttackedTimeAgo:
-                case IfVariableValue:
+                case IF_GROUP_WAS_ATTACKED_TIME_AGO:
+                case IF_VARIABLE_VALUE:
                     v4 = *(Stack_for_num_scripts - 3);
                     Stack_for_num_scripts -= 2;
                     break;
-                case IfMissionStart:
+                case IF_MiISSION_START:
                     *Stack_for_num_scripts = v4;
                     Stack_for_num_scripts++;
                     break;
-                case MultiReinforcementForFlags:
+                case MULTI_REINFORCEMENT_FOR_FLAGS:
                     v4 = *(Stack_for_num_scripts - 5);
                     Stack_for_num_scripts -= 5;
                     //CommandParser(map, v4);
                     break;
-                case MultiPlanesForFlags:
-                case MultiPlanesMissionsForFlags:
+                case MULTI_PLANES_FOR_FLAGS:
+                case MULTI_PLANES_MISSIONS_FOR_FLAGS:
                     v4 = *(Stack_for_num_scripts - 3);
                     Stack_for_num_scripts -= 3;
                     //CommandParser(map, v4);
                     break;
-                case MultiPhraseForFlags:
+                case MULTI_PHRASE_FOR_FLAGS:
                     v4 = *(Stack_for_num_scripts - 2);
                     Stack_for_num_scripts -= 2;
                     //CommandParser(map, v4);
@@ -515,7 +515,7 @@ void ScriptCommandPerser(MAPPTR map, LPVOID value)
             }
             result = (S32*)position[1];
             ++position;
-        } while (result != (S32*)ScriptEND);
+        } while (result != (S32*)SCRIPT_END);
     }
     //return (S32)result;
     //return 0;

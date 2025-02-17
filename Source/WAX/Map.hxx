@@ -98,69 +98,69 @@ typedef struct Map
 	MIS_SCRIPTS Mis_Scripts; // TODO
 } MAP, * MAPPTR;
 
-enum SCRIPTS_NUM
+typedef enum ScriptsCommands
 {
-	None = 0x00,
-	And,
-	Or,
-	IfGroupUnitCountOfType, //unit type, group, comparison type, quantity
-	IfPlayerUnitCountOfType, //unit type, player, comparison type, quantity
-	IfZoneUnitCountForGroup, //comparison type, quantity, group, zone
-	IfZoneUnitCountForPlayer, //comparison type, quantity, player, zone
-	ReturnIfFalse,
-	PlanesForPlayerSendToZoneAndLand, //Number, type of aircraft, player, zone, airfield
-	IfPlanesForPlayerCount, //Player, comparison type, quantity, aircraft type
-	IfPlanesForPlayerMissionsCount, //Player, comparison type, quantity, aircraft type
-	ScriptTurnOff,
-	TimerStart, //timer number, time in seconds
-	TimerStop, //timer number
-	ZonePointTo, //zone number
-	PhraseShow, //phrase number
-	CountDownStart, //time in seconds
-	CampaignSetNextMission, //parameters of the next mission
-	MissionComplete, //result (0 - draw, 1 - win, 2- loss)
-	GroupBehaviourSet, //Group, behavior
-	GroupBehaviourZone1Set, //Group, zone
-	GroupBehaviourZone2Set, //Group, zone
-	GroupBehaviourGroup1Set, //Group, install group
-	GroupBehaviourGroup2Set, //Group, install group
-	PlanesAddToPlayer, //Player, number, type of aircraft
-	PlanesMissionsAddToPlayer, //Player, number, type of aircraft
-	Negate,
-	IfTimerComplete, //timer number
-	IfCountDown, //comparison type (0 - strictly, 1 - more than, 2 - less than), time in seconds
-	IfTimeFromMissionStart, //comparison type (1 - more than, 2 - less than), time in seconds
-	IfZoneUnitCountPercentForGroup, //comparison type, percentage, group, zone
-	IfZoneUnitCountPercentForPlayer, //comparison type, percentage, group, zone
-	IfGroupUnitCountPercentOfTypeRelativeToGroup, //Unit type, group, comparison type, percentage, type in another group, another group
-	IfPlayerUnitCountPercentOfTypeRelativeToPlayer, //Unit type, player, comparison type, percentage, other player's type, other player
-	IfGroupBehaviour, //Group, behavior
-	IfGroupBehaviourZone1, //Group, zone
-	IfGroupBehaviourZone2, //Group, zone
-	IfGroupBehaviourGroup1, //Group, verification group
-	IfGroupBehaviourGroup2, //Group, verification group
-	GroupResurrectThroughFlagWithParams, //Group, flag, Zone, Delay, Health%, Ammo %, Experience%, Morale % {SSRW + fuel}
-	ReinforcementSend, //Player, reinforcements, Flag, Zone, delay in seconds
-	IfObjectIsDestroyed, //Object
-	PlanesForPlayerSendToObjectAndLand, //Number, type of aircraft, player, object, airfield
-	PlanesRouteStart, //No parameters
-	PlanesRouteAddObject, //Object
-	PlanesRouteAddObjectAsDrop, //Object
-	PlanesRouteSendAndLandForPlayer, //Number, type of aircraft, player, airfield
-	VariableSet, //Cell reference, value, or value reference
-	VariableModify, //Cell reference, operation (0 - increase, 1 - decrease), value, or value reference
-	IfGroupWasAttackedTimeAgo, //Group, type of comparison, time seconds
-	IfVariableValue, //Cell, comparison type, value, or cell reference
-	IfMissionStart,
-	MultiReinforcementStart, //Reinforcement ru, reinforcement de, reinforcement an, reinforcement us, reinforcement J, delay in seconds
-	MultiReinforcementForFlags, //Set of flags, ru reinforcement, de reinforcement, AN reinforcement, US reinforcement, J reinforcement, delay in seconds
-	MultiPlanesForFlags, //Set of flags, number, type of aircraft (0 - bombers, 1 - reconnaissance, 2 - transports, 3 - cargo, 4 - interceptors)
-	MultiPhraseForFlags, //A set of flags, a message
-	MultiPlanesMissionsForFlags, //Set of flags, number, type of aircraft    
-	PhraseShowAndPointToMarker, //phrase number, object number
-	GroupGiveToPlayer, //Group, player     
-	GroupShotOneRocketArtilleryToZone, //group number, zone number
-	GroupShotOneRocketArtilleryToObject = 0x3C, //group number, object number
-	ScriptStart = 0x464F4143,
-	ScriptEND = 0x7fffffff,
-};
+	NONE = 0x00,
+	AND,
+	OR,
+	IF_GROUP_UNIT_COUNT_OF_TYPE, //unit type, group, comparison type, quantity
+	IF_PLAYER_UNIT_COUNT_OF_TYPE, //unit type, player, comparison type, quantity
+	IF_ZONE_UNIT_COUNT_FOR_GROUP, //comparison type, quantity, group, zone
+	IF_ZONE_UNIT_COUNT_FOR_PLAYER, //comparison type, quantity, player, zone
+	RETURN_IF_FALSE,
+	PLANES_FOR_PLAYER_SEND_TO_ZONE_AND_LAND, //Number, type of aircraft, player, zone, airfield
+	IF_PLANES_FOR_PLAYER_COUNT, //Player, comparison type, quantity, aircraft type
+	IF_PLANES_FOR_PLAYER_MISSIONS_COUNT, //Player, comparison type, quantity, aircraft type
+	SCRIPT_TURN_OFF,
+	TIMER_START, //timer number, time in seconds
+	TIMER_STOP, //timer number
+	ZONE_POINT_TO, //zone number
+	PHRASE_SHOW, //phrase number
+	COUNT_DOWN_START, //time in seconds
+	CAMPAIGN_SET_NEXT_MISSION, //parameters of the next mission
+	MISSION_COMPLETE, //result (0 - draw, 1 - win, 2- loss)
+	GROUP_BEHAVIOUR_SET, //Group, behavior
+	GROUP_BEHAVIOUR_ZONE_1SET, //Group, zone
+	GROUP_BEHAVIOUR_ZONE_2SET, //Group, zone
+	GROUP_BEHAVIOUR_GROUP_1SET, //Group, install group
+	GROUP_BEHAVIOUR_GROUP_2SET, //Group, install group
+	PLANES_ADD_TO_PLAYER, //Player, number, type of aircraft
+	PLANES_MISSIONS_ADD_TO_PLAYER, //Player, number, type of aircraft
+	NEGATE,
+	IF_TIMER_COMPLETE, //timer number
+	IF_COUNT_DOWN, //comparison type (0 - strictly, 1 - more than, 2 - less than), time in seconds
+	IF_TIME_FROM_MISSION_START, //comparison type (1 - more than, 2 - less than), time in seconds
+	IF_ZONE_UNIT_COUNT_PERCENT_FOR_GROUP, //comparison type, percentage, group, zone
+	IF_ZONE_UNIT_COUNT_PERCENT_FOR_PLAYER, //comparison type, percentage, group, zone
+	IF_GROUP_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_GROUP, //Unit type, group, comparison type, percentage, type in another group, another group
+	IF_PLAYER_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_PLAYER, //Unit type, player, comparison type, percentage, other player's type, other player
+	IF_GROUP_BEHAVIOUR, //Group, behavior
+	IF_GROUP_BEHAVIOUR_ZONE1, //Group, zone
+	IF_GROUP_BEHAVIOUR_ZONE2, //Group, zone
+	IF_GROUP_BEHAVIOUR_GROUP1, //Group, verification group
+	IF_GROUP_BEHAVIOUR_GROUP2, //Group, verification group
+	GROUP_RESURRECT_THROUGH_FLAG_WITH_PARAMS, //Group, flag, Zone, Delay, Health%, Ammo %, Experience%, Morale % {SSRW + fuel}
+	REINFORCEMENT_SEND, //Player, reinforcements, Flag, Zone, delay in seconds
+	IF_OBJECT_IS_DESTROYED, //Object
+	PLANES_FOR_PLAYER_SEND_TO_OBJECT_AND_LAND, //Number, type of aircraft, player, object, airfield
+	PLANES_ROUTE_START, //No parameters
+	PLANES_ROUTE_ADD_OBJECT, //Object
+	PLANES_ROUTE_ADD_OBJECT_AS_DROP, //Object
+	PLANES_ROUTE_SEND_AND_LAND_FOR_PLAYER, //Number, type of aircraft, player, airfield
+	VARIABLE_SET, //Cell reference, value, or value reference
+	VARIABLE_MODIFY, //Cell reference, operation (0 - increase, 1 - decrease), value, or value reference
+	IF_GROUP_WAS_ATTACKED_TIME_AGO, //Group, type of comparison, time seconds
+	IF_VARIABLE_VALUE, //Cell, comparison type, value, or cell reference
+	IF_MiISSION_START,
+	MULTI_REINFORCEMENT_START, //Reinforcement ru, reinforcement de, reinforcement an, reinforcement us, reinforcement J, delay in seconds
+	MULTI_REINFORCEMENT_FOR_FLAGS, //Set of flags, ru reinforcement, de reinforcement, AN reinforcement, US reinforcement, J reinforcement, delay in seconds
+	MULTI_PLANES_FOR_FLAGS, //Set of flags, number, type of aircraft (0 - bombers, 1 - reconnaissance, 2 - transports, 3 - cargo, 4 - interceptors)
+	MULTI_PHRASE_FOR_FLAGS, //A set of flags, a message
+	MULTI_PLANES_MISSIONS_FOR_FLAGS, //Set of flags, number, type of aircraft    
+	PHRASE_SHOW_AND_POINT_TO_MARKER, //phrase number, object number
+	GROUP_GIVE_TO_PLAYER, //Group, player     
+	GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_ZONE, //group number, zone number
+	GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_OBJECT = 0x3C, //group number, object number
+	SCRIPT_START = 0x464F4143,
+	SCRIPT_END = 0x7fffffff,
+}SCRIPTSCOMMANDS, * SCRIPTSCOMMANDSPTR;
