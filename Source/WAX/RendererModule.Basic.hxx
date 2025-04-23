@@ -186,10 +186,10 @@ typedef struct RendererSurface // TODO Refactor the struct out.
     LPVOID  Renderer;   // The DirectDraw surface.
 } RENDERERSURFACE, * RENDERERSURFACEPTR;
 
-typedef struct Sprite0x50 // TODO Name
+typedef struct Fog // TODO Name fog of war
 {
     U8    Unk[0x50]; // TODO
-} SPRITE0X50, * SPRITE0X50PTR; // TODO Name
+} FOG, * FOGPTR; // TODO Name
 
 typedef struct Renderer
 {
@@ -221,9 +221,9 @@ typedef struct Renderer
     U32                         Unk27; // TODO
     U32                         Pitch;
     DOUBLEPIXEL                 BackSurfaceShadePixel;
-    SPRITE0X50                  Sprites[112]; // TODO
+    FOG                         Sprites[112]; // TODO
 
-    U8                          Unknown000[34304]; // TODO
+    U8                          RhombsPalette[34304]; // TODO 10014e5c arrays palette (rhomb.pl)
 
     HWND                        HWND;
     BOOL                        IsFullScreen;
