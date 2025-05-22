@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -49,8 +49,8 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.ConvertVisibleColors                        = ConvertVisibleColors;
     ModuleState.Actions.ConvertAllColors                            = ConvertAllColors;
     ModuleState.Actions.AcquireTextLength                           = AcquireTextLength;
-    ModuleState.Actions.FUN_100033c0                                = FUN_100033c0; // TODO
-    ModuleState.Actions.FUN_10003360                                = FUN_10003360; // TODO
+    ModuleState.Actions.DrawBackSurfaceText                         = DrawBackSurfaceText;
+    ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
     ModuleState.Actions.FUN_10001e90                                = FUN_10001e90; // TODO
     ModuleState.Actions.FUN_10001f10                                = FUN_10001f10; // TODO
     ModuleState.Actions.FUN_10004390                                = FUN_10004390; // TODO
