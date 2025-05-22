@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,10 @@ static VOID Init(RENDERERPTR state)
 
 static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 width, S32 height, S32 count, RECTANGLEPTR rect)
 {
-    //SavePixels(MakeFileName("WriteMainSurfaceRendererSurfaceRectangle", "bmp", event->Action), state->Surface.Renderer, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT, state->Pitch / sizeof(PIXEL));
+#if !ACTIVE_TRUE_COLOR_MODE
+    SavePixels(MakeFileName("WriteMainSurfaceRendererSurfaceRectangle", "bmp", event->Action),
+        (PIXEL*)state->Surface.Renderer, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT, state->Pitch / sizeof(PIXEL));
+#endif
 
     event->Result = TRUE;
 }

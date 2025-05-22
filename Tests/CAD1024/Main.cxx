@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ SOFTWARE.
 #include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
 #include "DrawBackSurfacePaletteShadeSprite.hxx"
+#include "DrawBackSurfaceText.hxx"
 #include "DrawMainSurfaceAnimationSprite.hxx"
 #include "DrawMainSurfaceColorBox.hxx"
 #include "DrawMainSurfaceColorEllipse.hxx"
@@ -36,6 +37,7 @@ SOFTWARE.
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfacePaletteSprite.hxx"
 #include "DrawMainSurfaceSprite.hxx"
+#include "DrawMainSurfaceText.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
 #include "DrawStencilSurfaceWindowRectangle.hxx"
 #include "MaskStencilSurfaceRectangle.hxx"
@@ -80,6 +82,8 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
     ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);
     ACTION(WriteSurfaceSurfaceRectangle, state, event);
+    ACTION(DrawBackSurfaceText, state, event);
+    ACTION(DrawMainSurfaceText, state, event);
 
     // TODO
 }

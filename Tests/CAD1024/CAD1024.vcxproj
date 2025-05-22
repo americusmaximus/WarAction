@@ -161,6 +161,7 @@
     <ClCompile Include="ConvertVisibleColors.cxx" />
     <ClCompile Include="DrawBackSurfaceColorPoint.cxx" />
     <ClCompile Include="DrawBackSurfacePaletteShadeSprite.cxx" />
+    <ClCompile Include="DrawBackSurfaceText.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSprite.cxx" />
     <ClCompile Include="DrawMainSurfaceColorBox.cxx" />
     <ClCompile Include="DrawMainSurfaceColorEllipse.cxx" />
@@ -170,6 +171,7 @@
     <ClCompile Include="DrawMainSurfaceHorizontalColorLine.cxx" />
     <ClCompile Include="DrawMainSurfacePaletteSprite.cxx" />
     <ClCompile Include="DrawMainSurfaceSprite.cxx" />
+    <ClCompile Include="DrawMainSurfaceText.cxx" />
     <ClCompile Include="DrawMainSurfaceVerticalColorLine.cxx" />
     <ClCompile Include="DrawStencilSurfaceWindowRectangle.cxx" />
     <ClCompile Include="File.cxx" />
@@ -192,6 +194,7 @@
     <ClInclude Include="ConvertVisibleColors.hxx" />
     <ClInclude Include="DrawBackSurfaceColorPoint.hxx" />
     <ClInclude Include="DrawBackSurfacePaletteShadeSprite.hxx" />
+    <ClInclude Include="DrawBackSurfaceText.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSprite.hxx" />
     <ClInclude Include="DrawMainSurfaceColorBox.hxx" />
     <ClInclude Include="DrawMainSurfaceColorEllipse.hxx" />
@@ -201,6 +204,7 @@
     <ClInclude Include="DrawMainSurfaceHorizontalColorLine.hxx" />
     <ClInclude Include="DrawMainSurfacePaletteSprite.hxx" />
     <ClInclude Include="DrawMainSurfaceSprite.hxx" />
+    <ClInclude Include="DrawMainSurfaceText.hxx" />
     <ClInclude Include="DrawMainSurfaceVerticalColorLine.hxx" />
     <ClInclude Include="DrawStencilSurfaceWindowRectangle.hxx" />
     <ClInclude Include="File.hxx" />
