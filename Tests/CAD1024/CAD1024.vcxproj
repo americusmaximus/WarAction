@@ -162,7 +162,9 @@
     <ClCompile Include="DrawBackSurfaceColorPoint.cxx" />
     <ClCompile Include="DrawBackSurfacePaletteShadeSprite.cxx" />
     <ClCompile Include="DrawBackSurfaceText.cxx" />
-    <ClCompile Include="DrawMainSurfaceAnimationSprite.cxx" />
+    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion2.cxx" />
+    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion3.cxx" />
+    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion4.cxx" />
     <ClCompile Include="DrawMainSurfaceColorBox.cxx" />
     <ClCompile Include="DrawMainSurfaceColorEllipse.cxx" />
     <ClCompile Include="DrawMainSurfaceColorOutline.cxx" />
@@ -176,6 +178,7 @@
     <ClCompile Include="DrawStencilSurfaceWindowRectangle.cxx" />
     <ClCompile Include="File.cxx" />
     <ClCompile Include="FilePath.cxx" />
+    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion1.cxx" />
     <ClCompile Include="Initialize.cxx" />
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="MaskStencilSurfaceRectangle.cxx" />
@@ -195,7 +198,9 @@
     <ClInclude Include="DrawBackSurfaceColorPoint.hxx" />
     <ClInclude Include="DrawBackSurfacePaletteShadeSprite.hxx" />
     <ClInclude Include="DrawBackSurfaceText.hxx" />
-    <ClInclude Include="DrawMainSurfaceAnimationSprite.hxx" />
+    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion2.hxx" />
+    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion3.hxx" />
+    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion4.hxx" />
     <ClInclude Include="DrawMainSurfaceColorBox.hxx" />
     <ClInclude Include="DrawMainSurfaceColorEllipse.hxx" />
     <ClInclude Include="DrawMainSurfaceColorOutline.hxx" />
@@ -209,6 +214,7 @@
     <ClInclude Include="DrawStencilSurfaceWindowRectangle.hxx" />
     <ClInclude Include="File.hxx" />
     <ClInclude Include="FilePath.hxx" />
+    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion1.hxx" />
     <ClInclude Include="Initialize.hxx" />
     <ClInclude Include="MaskStencilSurfaceRectangle.hxx" />
     <ClInclude Include="Module.hxx" />

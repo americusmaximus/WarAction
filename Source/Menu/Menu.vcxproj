@@ -106,7 +106,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4554;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -133,7 +133,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4554;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -162,7 +162,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile />
-      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4554;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>false</ExceptionHandling>
@@ -188,7 +188,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4018;4229;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4229;4554;4996;6001;6011;6031;6053;6255;6308;6335;6385;6386;6486;6387;26813;28159;28182;28183</DisableSpecificWarnings>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ExceptionHandling>false</ExceptionHandling>

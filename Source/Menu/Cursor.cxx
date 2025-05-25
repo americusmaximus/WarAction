@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -126,8 +126,7 @@ VOID CLASSCALL CursorUnknown2(CURSORPTR self) // TODO name
     IMAGEPALETTESPRITEPTR image =
         (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[indx]);
 
-    State.Renderer->Actions.DrawMainSurfaceAnimationSprite(CursorState.X, CursorState.Y,
-        100/* TODO */, (ANIMATIONPIXEL*)self->Palette /* TODO */, image);// TODO
+    State.Renderer->Actions.DrawMainSurfaceAnimationSpriteVersion2(CursorState.X, CursorState.Y, 100/* TODO */, self->Palette, image); // TODO
 }
 
 // 0x100037a0

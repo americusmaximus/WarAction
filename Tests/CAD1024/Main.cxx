@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 - 2025 Americus Maximus
+Copyright (c) 2024 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,10 @@ SOFTWARE.
 #include "DrawBackSurfaceColorPoint.hxx"
 #include "DrawBackSurfacePaletteShadeSprite.hxx"
 #include "DrawBackSurfaceText.hxx"
-#include "DrawMainSurfaceAnimationSprite.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion1.hxx" // TODO
+#include "DrawMainSurfaceAnimationSpriteVersion2.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion3.hxx" // TODO
+#include "DrawMainSurfaceAnimationSpriteVersion4.hxx" // TODO
 #include "DrawMainSurfaceColorBox.hxx"
 #include "DrawMainSurfaceColorEllipse.hxx"
 #include "DrawMainSurfaceColorOutline.hxx"
@@ -63,7 +66,11 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
     ACTION(DrawBackSurfacePaletteShadeSprite, state, event);
-    ACTION(DrawMainSurfaceAnimationSprite, state, event);
+    ACTION(DrawBackSurfaceText, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion1, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion2, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion3, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion4, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);
     ACTION(DrawMainSurfaceColorEllipse, state, event);
     ACTION(DrawMainSurfaceColorOutline, state, event);
@@ -72,6 +79,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfacePaletteSprite, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);
+    ACTION(DrawMainSurfaceText, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
     ACTION(DrawStencilSurfaceWindowRectangle, state, event);
     ACTION(MaskStencilSurfaceRectangle, state, event);
@@ -82,8 +90,6 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
     ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);
     ACTION(WriteSurfaceSurfaceRectangle, state, event);
-    ACTION(DrawBackSurfaceText, state, event);
-    ACTION(DrawMainSurfaceText, state, event);
 
     // TODO
 }

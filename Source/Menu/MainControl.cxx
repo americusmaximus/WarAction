@@ -475,19 +475,19 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
                     case 4: // TODO
                     {
                         STRINGVALUE name;
-                        AcquireSettingsValue(name, IDS_PING_TCP_IP);
+                        AcquireSettingsValue(&name, IDS_PING_TCP_IP);
                         MenuSaveState.Save.MaxDelay = AcquireSettingsValue(name, 800 /* TODO */); break;
                     }
                     case 1: // TODO
                     {
                         STRINGVALUE name;
-                        AcquireSettingsValue(name, IDS_PING_LAN);
+                        AcquireSettingsValue(&name, IDS_PING_LAN);
                         MenuSaveState.Save.MaxDelay = AcquireSettingsValue(name, 100 /* TODO */); break;
                     }
                     case 2: // TODO
                     {
                         STRINGVALUE name;
-                        AcquireSettingsValue(name, IDS_PING_MODEM);
+                        AcquireSettingsValue(&name, IDS_PING_MODEM);
                         MenuSaveState.Save.MaxDelay = AcquireSettingsValue(name, 400 /* TODO */); break;
                     }
                     default: { MenuSaveState.Save.MaxDelay = 500; /* TODO */ break; }

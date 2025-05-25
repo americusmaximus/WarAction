@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +21,11 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
-#include "DrawMainSurfaceAnimationSprite.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion1.hxx"
 #include "File.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
+#include "SetPixelColorMasks.hxx"
 
 #include <stdio.h>
 
@@ -64,11 +65,13 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         {
             IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
 
-            state->Actions.DrawMainSurfaceAnimationSprite(x + xx * 25, y, 100, (ANIMATIONPIXEL*)palette, sprite);
+            state->Actions.DrawMainSurfaceAnimationSpriteVersion1(x + xx * 25, y, 100, (ANIMATIONPIXEL*)palette, sprite);
         }
     }
 
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSprite", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion1_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion1_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion1_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);
@@ -76,15 +79,21 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
     event->Result = TRUE;
 }
 
-
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceAnimationSprite(RENDERERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceAnimationSpriteVersion1(RENDERERPTR state, MODULEEVENTPTR event)
 {
+    // Initialize.
+    InitializePixelMasks(state);
+    state->Actions.SetPixelColorMasks(0xF800, 0x7E0, 0x1F);
+
     // Offset to 0:0
     {
         state->Actions.OffsetSurfaces(0, 0);
 
-        EXECUTE("X: 100 Y: 100 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 100, 100, 0, 0, 0, 0, "cursor", 0);
+        EXECUTE("X: 100 Y: 100 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 100, 100, 0, 0, 0, 0, "d_star_", 0);
     }
+
+    // Finalize.
+    InitializePixelMasks(state);
 }
