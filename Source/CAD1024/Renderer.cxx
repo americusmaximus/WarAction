@@ -1962,9 +1962,55 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
 // 0x10002b90
 BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
 {
-    // TODO NOT IMPLEMENTED
+    bool locked = false;
 
-    return TRUE;
+    if (ModuleState.Surface.Renderer == NULL)
+    {
+        if (!LockRendererSurface()) { return false; }
+        locked = true;
+    }
+
+    //S32 RenderHeightCheck = height + (1 - y);                                                                                              
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main + (ADDR)(ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x) * sizeof(PIXEL));
+    LPVOID dst = (LPVOID)((ADDR)ModuleState.Surface.Renderer + (ADDR)(ModuleState.Pitch * y + x * sizeof(PIXEL)));
+
+    if (y < ModuleState.Surface.Y)
+    {
+        //      const S32 delta = y + height - ModuleState.Surface.Y;
+        //      const S32 heighta = y + RenderHeightCheck; */                                                    
+        const S32 delta = y + height - ModuleState.Surface.Y;
+        if ((y + height) < ModuleState.Surface.Y || delta == 0)
+        {
+            for (S32 xx = 0; xx < width; xx++)
+            {
+                if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+                else { ((PIXEL*)dst)[xx] = src[xx]; }
+            }
+
+            src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
+        }
+        else
+        {
+            for (S32 xx = 0; xx < width; xx++)
+            {
+                if (RendererState.IsTrueColor) { ((DOUBLEPIXEL*)dst)[xx] = RGB565_TO_RGB888(src[xx]); }
+                else { ((PIXEL*)dst)[xx] = src[xx]; }
+            }
+
+            src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+            dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
+        }
+    }
+    else
+    {
+        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+    }
+
+
+
+    if (locked) { UnlockRendererSurface(); }
+    return locked;
 }
 
 // 0x10002fb0
