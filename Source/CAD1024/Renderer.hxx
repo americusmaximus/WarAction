@@ -83,7 +83,7 @@ typedef struct RendererStateContainer
         S32     Overage;            // 0x1001009e
     } Sprite;
 
-    struct TILE
+    struct
     {
         S32 Unk01;             // 0x10010030
         S32 Unk02;             // 0x10010034
@@ -102,7 +102,7 @@ typedef struct RendererStateContainer
             S16 Width;  // 0x1001004E
             S16 Height; // 0x10010050
         } Window;
-    };
+    } Tile;
 
 
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
