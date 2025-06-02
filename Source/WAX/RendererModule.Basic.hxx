@@ -186,7 +186,8 @@ typedef struct RendererSurface // TODO Refactor the struct out.
     LPVOID  Renderer;   // The DirectDraw surface.
 } RENDERERSURFACE, * RENDERERSURFACEPTR;
 
-typedef struct Fog // TODO Name fog of war
+
+typedef struct Fog // TODO Name - arrays fog of war
 {
     U8    Unk[0x50]; // TODO
 } FOG, * FOGPTR; // TODO Name

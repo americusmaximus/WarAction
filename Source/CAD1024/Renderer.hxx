@@ -82,6 +82,29 @@ typedef struct RendererStateContainer
         S32     Height;             // 0x1001009a
         S32     Overage;            // 0x1001009e
     } Sprite;
+
+    struct TILE
+    {
+        S32 Unk01;             // 0x10010030
+        S32 Unk02;             // 0x10010034
+        PIXEL* Stencil;        // 0x10010038
+        S8  Unk04;             // 0x1001003c
+
+        S32 Lerp;              // 0x1001003d
+        S32 Height;            // 0x10010041
+        S32 Unk07;             // 0x10010045
+        S8  Unk08;             // 0x10010049
+
+        struct
+        {
+            S16 X;      // 0x1001004A
+            S16 Y;      // 0x1001004C
+            S16 Width;  // 0x1001004E
+            S16 Height; // 0x10010050
+        } Window;
+    };
+
+
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
 EXTERN RENDERERSTATECONTAINER RendererState;

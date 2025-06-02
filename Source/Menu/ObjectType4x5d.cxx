@@ -72,7 +72,7 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
 
     for (U32 x = 0; x < 112 /* TODO */; x++)
     {
-        memset(&State.Renderer->Sprites[x], 0x80, sizeof(SPRITE0X50)); // TODO
+        memset(&State.Renderer->Sprites[x], 0x80, sizeof(FOG)); // TODO
     }
 
     self->ArrColFile = NULL;
