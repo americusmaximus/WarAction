@@ -51,7 +51,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.AcquireTextLength                           = AcquireTextLength;
     ModuleState.Actions.FUN_100033c0                                = FUN_100033c0; // TODO
     ModuleState.Actions.FUN_10003360                                = FUN_10003360; // TODO
-    ModuleState.Actions.FUN_10001e90                                = FUN_10001e90; // TODO
+    ModuleState.Actions.CallDrawGameSurfaceRhombsTile               = CallDrawGameSurfaceRhombsTile; // TODO
     ModuleState.Actions.FUN_10001f10                                = FUN_10001f10; // TODO
     ModuleState.Actions.FUN_10004390                                = FUN_10004390; // TODO
     ModuleState.Actions.FUN_100046b6                                = FUN_100046b6; // TODO

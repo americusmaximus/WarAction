@@ -786,11 +786,11 @@ VOID OffsetSurfaces(S32 x, S32 y)
     }
 }
 
-// 0x10001ea0
-VOID FUN_10001ea0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7)
+//0x10001ea0    
+VOID CallDrawGameSurfaceRhombsTile(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, U8* input)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    const S32 stride = (ModuleState.Surface.Width * sizeof(PIXEL));
+    //DrawGameSurfaceRhombsTile(angle_0, angle_1, angle_2, angle_3, tx, ty, stride, input, RendererState.Surfaces.Back);
 }
 
 // 0x10001ee0

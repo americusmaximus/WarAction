@@ -786,11 +786,312 @@ VOID OffsetSurfaces(S32 x, S32 y)
     }
 }
 
-// 0x10001e90
-VOID FUN_10001e90(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7)
+//0x10001e90
+VOID CallDrawGameSurfaceRhombsTile(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, U8* input)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    const S32 stride = (ModuleState.Surface.Width * sizeof(PIXEL));
+    DrawGameSurfaceRhombsTile(angle_0, angle_1, angle_2, angle_3, tx, ty, stride, input, RendererState.Surfaces.Back);
+}
+
+//0x10003420  
+//  0    1
+//   +--+
+//   |  |
+//   +--+
+//  3    2
+
+void DrawGameSurfaceRhombsTile(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, U8* input, PIXEL* output)
+{
+    S32 overage; 
+    S32 overflow;
+
+    S32 delta2;
+    S32 TileStartDrawLength;
+
+
+    bool draw;
+    S16 uVar4;
+    S32 iVar6;
+    U16 uVar5;
+    //LPVOID content = &input->Pixels;
+
+    /*char debugMsg[256];
+    sprintf(debugMsg, "[%s] unk01=%d, unk02=%d, unk03=%d, unk04=%d, tx=%d, ty=%d, Y=%d, delta=%d\n", __FUNCTION__, unk01, unk02, unk03, unk04, tx, ty, ModuleState.Window.Y, ModuleState.Window.Y - ty);
+    OutputDebugStringA(debugMsg);*/
+
+    const ADDR offset = (ADDR)tx - (ADDR)output;
+    RendererState.Tile.Stencil = (PIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset);
+
+    RendererState.Tile.Window.X = ModuleState.Window.X + 0x21;        //0 + 33
+    RendererState.Tile.Window.Y = ModuleState.Window.Y;                //0
+    RendererState.Tile.Window.Width = ModuleState.Window.Width + 0x21;     //1023 + 33
+    RendererState.Tile.Window.Height = ModuleState.Window.Height;           //767
+    RendererState.Tile.Unk02 = 0;
+
+
+    if ((((tx <= (RendererState.Tile.Window.Width + 1)) && ((RendererState.Tile.Window.X - 64) <= tx)) && (ty <= (RendererState.Tile.Window.Height + 1))) && ((ModuleState.Window.Y - 32) <= ty))
+    {
+        U8* src;
+        U8* src1;
+        PIXEL* dst = (PIXEL*)((ADDR)output + (ADDR)(ModuleState.Surface.Offset + stride * ty + tx * sizeof(PIXEL) - 2));
+        PIXEL* dst1;
+        PIXEL* dst2;
+        PIXEL* dst3;
+
+        S32 TileOffsetTX = tx + 32;
+        S32 lerp = (angle_1 - angle_0) * 4;
+
+        if (ty < (ModuleState.Window.Y - 16)) 
+        {
+            RendererState.Tile.Lerp = (angle_3 - angle_0) * 16;
+            TileOffsetTX = angle_0 * 256 + RendererState.Tile.Lerp;
+
+            dst2 = (PIXEL*)((ADDR)dst + (ADDR)(stride * 8 - 29 * sizeof(PIXEL)));
+            tx += 3; 
+            TileStartDrawLength = 61; 
+            input = input + 528;
+            ty += 16;
+
+            RendererState.Tile.Height = (ModuleState.Window.Height + 1) - ty;
+            if (15 < RendererState.Tile.Height)
+            {
+                RendererState.Tile.Height = 16;
+            }
+            overage = ModuleState.Window.Y - ty;
+            if (ty <= ModuleState.Window.Y && overage != 0)
+            {
+                ty = ty + overage;
+                RendererState.Tile.Height = RendererState.Tile.Height - overage;
+                for (S32 y = 0; y < overage; y++)
+                {
+                    input = (U8*)((ADDR)input + (ADDR)TileStartDrawLength);
+                    TileOffsetTX = TileOffsetTX + RendererState.Tile.Lerp;
+                    TileStartDrawLength -= 4;
+                    dst2 = (PIXEL*)((ADDR)dst2 + (ADDR)(stride + 2 * sizeof(PIXEL)));
+                    tx += 2;
+                }
+            }
+        }
+        else
+        {
+            RendererState.Tile.Lerp = (angle_0 - angle_2) * 16;
+            overage = angle_2 * 256 + RendererState.Tile.Lerp + lerp;
+            RendererState.Tile.Height = (ModuleState.Window.Height + 1) - ty;
+            if (15 < RendererState.Tile.Height)
+            {
+                RendererState.Tile.Height = 16;
+            }
+            TileStartDrawLength = 3;
+            delta2 = ModuleState.Window.Y - ty; 
+            tx = TileOffsetTX;
+            if (ty <= ModuleState.Window.Y && delta2 != 0)
+            {
+                RendererState.Tile.Height -= delta2;
+                ty = ty + delta2;
+                for (S32 y = 0; y < delta2; y++)
+                {
+                    input = (U8*)((ADDR)(input)+(ADDR)(TileStartDrawLength));
+                    overage = overage + RendererState.Tile.Lerp;
+                    TileStartDrawLength += 4;
+                    tx -= 2;
+                    dst = (PIXEL*)((ADDR)dst + (ADDR)(stride - 2 * sizeof(PIXEL)));
+                }
+            }
+            RendererState.Tile.Unk07 = RendererState.Tile.Height;
+            if (0 < RendererState.Tile.Height)
+            {
+                ty = RendererState.Tile.Height + ty;
+                overflow = ty - ModuleState.Surface.Y;
+                if (ty < ModuleState.Surface.Y)
+                {
+                    overflow = 0;
+                }
+                draw = RendererState.Tile.Height < overflow;
+                RendererState.Tile.Height = RendererState.Tile.Height - overflow;
+                dst2 = (PIXEL*)dst;
+                if (draw || RendererState.Tile.Height == 0) //goto
+                {
+                    RendererState.Tile.Height = RendererState.Tile.Unk07;
+                    ++RendererState.Tile.Unk02;
+                    draw = RendererState.Tile.Unk07 != 0;
+                    RendererState.Tile.Unk07 = 0;
+                    dst2 = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    overflow = RendererState.Tile.Unk07;
+                }
+                do
+                {
+                    for (U16 yy = 0; yy < RendererState.Tile.Height; yy++)
+                    {
+                        RendererState.Tile.Unk07 = overflow;
+                        uVar4 = overage;
+                        TileOffsetTX = (RendererState.Tile.Window.Width + 1) - tx; //767+1
+                        if (TileOffsetTX != 0 && tx <= (RendererState.Tile.Window.Width + 1)) //767+1
+                        {
+                            delta2 = TileStartDrawLength;
+                            if (TileOffsetTX < TileStartDrawLength)
+                            {
+                                delta2 = TileOffsetTX;
+                            }
+                            TileOffsetTX = RendererState.Tile.Window.X - tx;
+                            src = input;
+                            dst3 = (PIXEL*)dst2;
+                            if (TileOffsetTX != 0 && tx <= RendererState.Tile.Window.X)
+                            {
+                                if (delta2 <= TileOffsetTX)//goto
+                                {
+                                    input = (U8*)((ADDR)input + (ADDR)TileStartDrawLength);
+                                    TileStartDrawLength += 4;
+                                    overage = overage + RendererState.Tile.Lerp;
+                                    dst = (PIXEL*)((ADDR)dst2 + (ADDR)(stride - 2 * sizeof(PIXEL)));
+                                    tx -= 2;
+                                    dst2 = (PIXEL*)dst;
+                                    overflow = RendererState.Tile.Unk07;
+                                }
+                                src = (U8*)((ADDR)input + (ADDR)TileOffsetTX);
+                                dst3 = (PIXEL*)((ADDR)dst2 + (ADDR)TileOffsetTX * sizeof(PIXEL));
+                                delta2 = delta2 - TileOffsetTX;
+                                iVar6 = overage;
+                                for (S32 y = 0; y < TileOffsetTX; y++)
+                                {
+                                    iVar6 = iVar6 + lerp;
+                                    uVar4 = iVar6;
+                                }
+                            }
+                            //if (RendererState.Tile.Stencil <= dst3)
+                            //{
+                            //    dst3 = (PIXEL*)((ADDR)dst3 - (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
+                            //}
+                            if (dst3 < output)
+                            {
+                                dst3 = (PIXEL*)((ADDR)dst3 + (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            }
+                            uVar5 = ((U16)((S8)((U16)uVar4 >> 8) ^ RendererState.Tile.Unk08) << 8) | (uVar4 & 0xFF);
+                            RendererState.Tile.Unk08 = RendererState.Tile.Unk08 ^ 32;
+                            for (S32 y = 0; y < delta2; y++)
+                            {
+                                dst3[y] = ModuleState.RhombsPalette[((uVar5 >> 8) << 8) | src[y]];
+                                uVar5 = (uVar5 + (U16)(lerp)) ^ 0x2000;
+                            }
+                        }
+                        //goto
+                        input = (U8*)((S32)input + TileStartDrawLength);
+                        TileStartDrawLength += 4;
+                        overage = overage + RendererState.Tile.Lerp;
+                        dst = (PIXEL*)((ADDR)dst2 + (ADDR)(stride - 2 * sizeof(PIXEL)));
+                        tx -= 2;
+                        dst2 = (PIXEL*)dst;
+                        overflow = RendererState.Tile.Unk07;
+                    }
+                    //goto
+                    RendererState.Tile.Height = RendererState.Tile.Unk07;
+                    ++RendererState.Tile.Unk02;
+                    draw = RendererState.Tile.Unk07 != 0;
+                    RendererState.Tile.Unk07 = 0;
+                    dst2 = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    overflow = RendererState.Tile.Unk07;
+                } while (draw);
+            }
+            RendererState.Tile.Unk08 = RendererState.Tile.Unk08 ^ 32;
+            TileStartDrawLength -= (ADDR)(3 * sizeof(PIXEL));                   
+            dst2 = (PIXEL*)((ADDR)dst + (ADDR)(3 * sizeof(PIXEL)));             
+            tx += 3;
+            overage = (RendererState.Tile.Window.Height + 1) - ty;
+            if ((RendererState.Tile.Window.Height + 1) < ty)
+            {
+                return;
+            }
+            if (15 < overage)
+            {
+                overage = 16;
+            }
+            RendererState.Tile.Lerp = (angle_3 - angle_0) * 16;
+            TileOffsetTX = angle_0 * 256 + RendererState.Tile.Lerp;
+            RendererState.Tile.Height = overage;
+        }
+        if (0 < RendererState.Tile.Height)
+        {
+            overflow = RendererState.Tile.Unk07;
+            if (RendererState.Tile.Unk02 < 2)
+            {
+                RendererState.Tile.Unk07 = RendererState.Tile.Height;
+                overflow = (RendererState.Tile.Height + ty) - ModuleState.Surface.Y;
+                if ((RendererState.Tile.Height + ty) < ModuleState.Surface.Y)
+                {
+                    overflow = 0;
+                }
+                draw = RendererState.Tile.Height < overflow;
+                RendererState.Tile.Height = RendererState.Tile.Height - overflow;
+                if (draw || RendererState.Tile.Height == 0)//goto
+                {
+                    dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Tile.Height = RendererState.Tile.Unk07;
+                    draw = RendererState.Tile.Unk07 != 0;
+                    RendererState.Tile.Unk07 = 0;
+                    overflow = RendererState.Tile.Unk07;
+                }
+            }
+            do
+            {
+                for (U16 yy = 0; yy < RendererState.Tile.Height; yy++)
+                {
+                    RendererState.Tile.Unk07 = overflow;
+                    uVar4 = TileOffsetTX;
+                    overage = (RendererState.Tile.Window.Width + 1) - tx;
+                    if (overage != 0 && tx <= (RendererState.Tile.Window.Width + 1))
+                    {
+                        delta2 = TileStartDrawLength;
+                        if (overage < TileStartDrawLength)
+                        {
+                            delta2 = overage;
+                        }
+                        overage = RendererState.Tile.Window.X - tx;
+                        src1 = input;///?????? dst3
+                        dst1 = dst2;
+                        if (overage != 0 && tx <= RendererState.Tile.Window.X)
+                        {
+                            if (delta2 <= overage)
+                            {
+                                input = (U8*)((ADDR)input + (ADDR)TileStartDrawLength);//goto
+                                TileStartDrawLength -= 4;
+                                TileOffsetTX = TileOffsetTX + RendererState.Tile.Lerp;
+                                dst2 = (PIXEL*)((ADDR)dst2 + (ADDR)(stride + 2 * sizeof(PIXEL)));
+                                tx += 2;
+                                overflow = RendererState.Tile.Unk07;
+                            }
+                            src1 = (U8*)((ADDR)input + overage);
+                            dst1 = (PIXEL*)((ADDR)dst2 + (ADDR)(overage * sizeof(PIXEL)));
+                            delta2 = delta2 - overage;
+                            iVar6 = TileOffsetTX;
+                            for (S32 y = 0; y < overage; y++)
+                            {
+                                iVar6 = iVar6 + lerp;
+                                uVar4 = iVar6;
+                            }
+                        }
+                        U16 uVar5 = ((U16)((S8)((U16)uVar4 >> 8) ^ RendererState.Tile.Unk08) << 8) | (uVar4 & 0xFF);
+                        RendererState.Tile.Unk08 = RendererState.Tile.Unk08 ^ 0x20;
+                        for (S32 y = 0; y < delta2; y++)
+                        {
+                            dst1[y] = ModuleState.RhombsPalette[((uVar5 >> 8) << 8) | src1[y]];
+                            uVar5 = (uVar5 + (U16)(lerp)) ^ 0x2000;
+                        }
+
+                    }
+                    input = (U8*)((ADDR)input + (ADDR)TileStartDrawLength);
+                    TileStartDrawLength -= 4;
+                    TileOffsetTX = TileOffsetTX + RendererState.Tile.Lerp;
+                    dst2 = (PIXEL*)((ADDR)dst2 + (ADDR)(stride + 2 * sizeof(PIXEL)));
+                    tx += 2;
+                    overflow = RendererState.Tile.Unk07;
+                }
+                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                RendererState.Tile.Height = RendererState.Tile.Unk07;
+                draw = RendererState.Tile.Unk07 != 0;
+                RendererState.Tile.Unk07 = 0;
+                overflow = RendererState.Tile.Unk07;
+            } while (draw);
+        }
+    }
 }
 
 // 0x10001ed0
