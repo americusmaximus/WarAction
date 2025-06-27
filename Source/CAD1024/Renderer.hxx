@@ -39,6 +39,12 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
 } OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
 
+typedef enum TileSize
+{
+    TILE_SIZE_HEIGHT = 32,
+    TILE_SIZE_WIDTH = 63
+}TILESIZE, * TILESIZEPTR;
+
 typedef struct RendererStateContainer
 {
     BOOL IsTrueColor;
@@ -85,22 +91,22 @@ typedef struct RendererStateContainer
 
     struct
     {
-        S32 Unk01;             // 0x10010030
-        S32 Unk02;             // 0x10010034
-        PIXEL* Stencil;        // 0x10010038
-        S8  Unk04;             // 0x1001003c
+        S32     unk01;               // 0x10010030
+        S32     displayedHalfs;      // 0x10010034
+        PIXEL*  Stencil;             // 0x10010038
+        S8      unk04;               // 0x1001003c
 
-        S32 Lerp;              // 0x1001003d
-        S32 Height;            // 0x10010041
-        S32 Unk07;             // 0x10010045
-        S8  Unk08;             // 0x10010049
+        S32     diff;                // 0x1001003d
+        S32     tileHeight;          // 0x10010041
+        S32     tempTileHeight;      // 0x10010045
+        S8      unk08;               // 0x10010049
 
         struct
         {
-            S16 X;      // 0x1001004A
-            S16 Y;      // 0x1001004C
-            S16 Width;  // 0x1001004E
-            S16 Height; // 0x10010050
+            S16 X;             // 0x1001004A
+            S16 Y;             // 0x1001004C
+            S16 Width;         // 0x1001004E
+            S16 Height;        // 0x10010050
         } Window;
     } Tile;
 
@@ -132,10 +138,8 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
-
-VOID CallDrawGameSurfaceRhombsTile(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, U8* input); // TODO
-VOID DrawGameSurfaceRhombsTile(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, U8* input, PIXEL* output); // TODO отрисовка ландшафта
-
+VOID CallDrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
+VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output); // TODO
 VOID FUN_10001ed0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_10001f10(S32 param_1, S32 param_2, S32 param_3); // TODO
 VOID FUN_10001f40(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO

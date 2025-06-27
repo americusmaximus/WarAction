@@ -787,10 +787,10 @@ VOID OffsetSurfaces(S32 x, S32 y)
 }
 
 //0x10001e90
-VOID CallDrawGameSurfaceRhombsTile(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, U8* input)
+VOID CallDrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input)
 {
-    const S32 stride = (ModuleState.Surface.Width * sizeof(PIXEL));
-    //DrawGameSurfaceRhombsTile(angle_0, angle_1, angle_2, angle_3, tx, ty, stride, input, RendererState.Surfaces.Back);
+    //const S32 stride = (ModuleState.Surface.Width * sizeof(PIXEL));
+    //DrawBackSurfaceRhomb(angle_0, angle_1, angle_2, angle_3, tx, ty, stride, input, RendererState.Surfaces.Back);
 }
 
 // 0x10001ed0

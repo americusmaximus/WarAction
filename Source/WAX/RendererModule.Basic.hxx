@@ -60,7 +60,7 @@ typedef VOID(*DRAWMAINSURFACEPALETTESPRITEACTION)(S32 x, S32 y, PIXEL* palette, 
 typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, IMAGESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWSTENCILSURFACEWINDOWRECTANGLEACTION)(VOID);
-typedef VOID(*CALLDRAWGAMESURFACERHOMBSTILEACTION)(S32 tx, S32 ty, S32 param_3, S32 param_4, S32 param_5, S32 param_6, U8* input); // TODO
+typedef VOID(*CALLDRAWBACKSURFACERHOMBSACTION)(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
 typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_10001F10ACTION)(S32 param_1, S32 param_2, S32 param_3); // TODO
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
@@ -113,7 +113,7 @@ typedef struct RendererActions
     ACQUIRETEXTLENGTHACTION                         AcquireTextLength;
     FUN_100033C0ACTION FUN_100033c0; // TODO
     FUN_10003360ACTION FUN_10003360; // TODO
-    CALLDRAWGAMESURFACERHOMBSTILEACTION             CallDrawGameSurfaceRhombsTile; // TODO
+    CALLDRAWBACKSURFACERHOMBSACTION                 CallDrawBackSurfaceRhomb; // TODO
     FUN_10001F10ACTION FUN_10001f10; // TODO
     FUN_10004390ACTION FUN_10004390; // TODO
     FUN_100046B6ACTION FUN_100046b6; // TODO
@@ -192,6 +192,11 @@ typedef struct Fog // TODO Name - arrays fog of war
     U8    Unk[0x50]; // TODO
 } FOG, * FOGPTR; // TODO Name
 
+typedef struct RhombsPalette
+{
+    PIXEL     palette[256 * 67];
+}RHOMBSPALETTE, * RHOMBSPALETTEPTR;
+
 typedef struct Renderer
 {
     RECTANGLE                   Window;
@@ -224,7 +229,7 @@ typedef struct Renderer
     DOUBLEPIXEL                 BackSurfaceShadePixel;
     FOG                         Sprites[112]; // TODO
 
-    U8                          RhombsPalette[34304]; // TODO 10014e5c arrays palette (rhomb.pl)
+    RhombsPalette               RhombsPalette; // TODO 10014e5c arrays palette (rhomb.pl)
 
     HWND                        HWND;
     BOOL                        IsFullScreen;
