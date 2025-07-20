@@ -27,7 +27,11 @@ SOFTWARE.
 #include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
 #include "DrawBackSurfacePaletteShadeSprite.hxx"
-#include "DrawMainSurfaceAnimationSprite.hxx"
+#include "DrawBackSurfaceText.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion1.hxx" // TODO
+#include "DrawMainSurfaceAnimationSpriteVersion2.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion3.hxx" // TODO
+#include "DrawMainSurfaceAnimationSpriteVersion4.hxx" // TODO
 #include "DrawMainSurfaceColorBox.hxx"
 #include "DrawMainSurfaceColorEllipse.hxx"
 #include "DrawMainSurfaceColorOutline.hxx"
@@ -36,6 +40,7 @@ SOFTWARE.
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfacePaletteSprite.hxx"
 #include "DrawMainSurfaceSprite.hxx"
+#include "DrawMainSurfaceText.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
 #include "DrawStencilSurfaceWindowRectangle.hxx"
 #include "MaskStencilSurfaceRectangle.hxx"
@@ -61,7 +66,11 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
     ACTION(DrawBackSurfacePaletteShadeSprite, state, event);
-    ACTION(DrawMainSurfaceAnimationSprite, state, event);
+    ACTION(DrawBackSurfaceText, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion1, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion2, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion3, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteVersion4, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);
     ACTION(DrawMainSurfaceColorEllipse, state, event);
     ACTION(DrawMainSurfaceColorOutline, state, event);
@@ -70,6 +79,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfacePaletteSprite, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);
+    ACTION(DrawMainSurfaceText, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
     ACTION(DrawStencilSurfaceWindowRectangle, state, event);
     ACTION(MaskStencilSurfaceRectangle, state, event);

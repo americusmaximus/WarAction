@@ -21,70 +21,66 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
-#include "DrawMainSurfaceSprite.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion2.hxx"
 #include "File.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
 
 #include <stdio.h>
 
-static IMAGEPALETTESPRITEPTR AcquireSprite(LPVOID content, CONST U32 indx)
-{
-    return (IMAGEPALETTESPRITEPTR)((ADDR)content + (ADDR)(((U32*)content)[indx + 1]));
-}
-
 static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 ox, S32 oy, S32 wx, S32 wy, LPCSTR name, U32 indx)
 {
     Initialize(state);
 
-    LPVOID image = NULL;
-    CHAR path[MAX_PATH];
-    sprintf_s(path, MAX_PATH, "..\\..\\..\\..\\Content\\%s.fnt", name);
+    LPVOID animation = NULL;
+    LPVOID palette = NULL;
 
-    if (!AcquireFile(path, &image)) { event->Result = FALSE; return; }
+    {
+        CHAR path[MAX_PATH];
+        sprintf_s(path, MAX_PATH, "..\\..\\..\\..\\Content\\%s.ani", name);
+
+        if (!AcquireFile(path, &animation)) { event->Result = FALSE; return; }
+    }
+
+    {
+        CHAR path[MAX_PATH];
+        sprintf_s(path, MAX_PATH, "..\\..\\..\\..\\Content\\%s.col", name);
+
+        if (!AcquireFile(path, &palette)) { free(animation); event->Result = FALSE; return; }
+    }
 
     state->Window.X = wx;
     state->Window.Y = wy;
 
-    PIXEL palette[256];
-
-    for (U32 x = 0; x < 256; x++)
     {
-        palette[x] = x * 0xFF;
-    }
+        ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)animation;
 
-    U32 dx = 0;
-    U32 dy = 0;
-    for (U32 x = 0; x < 256; x++)
-    {
-        dx += 15;
-
-        if (dx >= 512)
+        for (U32 xx = 0; xx < header->Count; xx++)
         {
-            dx = 0;
-            dy = dy + 30;
+            IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
+
+            state->Actions.DrawMainSurfaceAnimationSpriteVersion2(x + xx * 25, y, 100, palette, sprite);
         }
-
-        IMAGEPALETTESPRITEPTR sprite = AcquireSprite(image, x);
-
-        state->Actions.DrawMainSurfacePaletteSprite(dx + 10, y + dy, palette, sprite);
     }
 
-    //SavePixels(MakeFileName("DrawMainSurfacePaletteSprite", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion2_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion2_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion2_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
-    free(image);
+    free(animation);
+    free(palette);
 
     event->Result = TRUE;
 }
 
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawMainSurfacePaletteSprite(RENDERERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceAnimationSpriteVersion2(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {
         state->Actions.OffsetSurfaces(0, 0);
 
-        EXECUTE("X: 0 Y: 0 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 0, 0, 0, 0, 0, 0, "font", 0);
+        EXECUTE("X: 100 Y: 100 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 100, 100, 0, 0, 0, 0, "cursor", 0);
     }
 }

@@ -27,9 +27,9 @@ SOFTWARE.
 
 #define MAX_TEXT_LENGTH 128
 
-static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, BINASSETCOLLECTIONCONTENTPTR asset, LPSTR text, U32 width)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, BINASSETCONTENTPTR asset, LPSTR text, U32 width)
 {
-    event->Result = state->Actions.AcquireTextLength(text, asset) == width;
+    event->Result =  state->Actions.AcquireTextLength(text, asset) == width;
 }
 
 #define EXECUTE(A, S, E, F, T, W) { E->Action = A; Execute(S, E, F, T, W); if (!E->Result) { return; } }
@@ -37,25 +37,25 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, BINASSETCOLLECTIONC
 VOID AcquireTextLength(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
-    BINASSETCOLLECTIONCONTENTPTR font = NULL;
+    BINASSETCONTENTPTR font = NULL;
     if (!AcquireFile("..\\..\\..\\..\\Content\\TXTA.PCK", (LPVOID*)&font)) { event->Result = FALSE; return; }
 
     {
         CHAR message[MAX_TEXT_LENGTH];
         strcpy_s(message, MAX_TEXT_LENGTH, "A");
-        EXECUTE("A", state, event, font, message, 7);
+        EXECUTE("A", state, event, font, message, 6);
     }
 
     {
         CHAR message[MAX_TEXT_LENGTH];
         strcpy_s(message, MAX_TEXT_LENGTH, "Hello!");
-        EXECUTE("Hello!", state, event, font, message, 37);
+        EXECUTE("Hello!", state, event, font, message, 26);
     }
 
     {
         CHAR message[MAX_TEXT_LENGTH];
         strcpy_s(message, MAX_TEXT_LENGTH, "Hello, World!");
-        EXECUTE("Hello, World!", state, event, font, message, 82);
+        EXECUTE("Hello, World!", state, event, font, message, 59);
     }
 
     // Finalize.

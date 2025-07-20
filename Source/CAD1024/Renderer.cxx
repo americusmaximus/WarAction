@@ -1939,47 +1939,45 @@ VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x10003320
-S32 AcquireTextLength(LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset)
+S32 AcquireTextLength(LPCSTR text, BINASSETCONTENTPTR asset)
 {
     S32 result = 0;
 
     for (U32 xx = 0; text[xx] != NULL; xx++)
     {
-        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Items[text[xx]]);
-
-        result = result + DEFAULT_FONT_ASSET_SPACING + image->Width;
+        result = result + DEFAULT_FONT_ASSET_SPACING + ACQUIRETEXTWIDTH(asset, text[xx]);
     }
 
     return result;
 }
 
 // 0x10003360
-VOID FUN_10003360(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette) // TODO name
+VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette)
 {
     U32 offset = 0;
 
     for (U32 xx = 0; text[xx] != NULL; xx++)
     {
-        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Items[text[xx]]);
+        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Offset[text[xx]]);
 
         DrawMainSurfacePaletteSprite(x + offset, y, palette, image);
 
-        offset = offset + DEFAULT_FONT_ASSET_SPACING + image->Width;
+        offset = offset + DEFAULT_FONT_ASSET_SPACING + ACQUIRETEXTWIDTH(asset, text[xx]);
     }
 }
 
 // 0x100033c0
-VOID FUN_100033c0(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette) // TODO name
+VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette)
 {
     U32 offset = 0;
 
     for (U32 xx = 0; text[xx] != NULL; xx++)
     {
-        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Items[text[xx]]);
+        CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Offset[text[xx]]);
 
         DrawBackSurfacePaletteShadeSprite(x + offset, y, y, palette, image);
 
-        offset = offset + DEFAULT_FONT_ASSET_SPACING + image->Width;
+        offset = offset + DEFAULT_FONT_ASSET_SPACING + ACQUIRETEXTWIDTH(asset, text[xx]);
     }
 }
 
@@ -2005,7 +2003,7 @@ VOID FUN_100049e6(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4)
 }
 
 // 0x10004db0
-VOID FUN_10004db0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5)
+VOID DrawMainSurfaceAnimationSpriteVersion0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -2113,7 +2111,7 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
 
                 while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                 {
-                    CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+                    CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                     if (count == 0)
                     {
@@ -2302,7 +2300,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
 
                 while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                 {
-                    CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+                    CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                     if (count == 0)
                     {
@@ -2499,7 +2497,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
 
                 while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                 {
-                    CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+                    CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                     if (count == 0)
                     {
@@ -2566,9 +2564,12 @@ VOID FUN_100067ad(S32 x, S32 y, S32 param_3, LPVOID param_4)
 }
 
 // 0x10006b21
-VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
 {
-    RendererState.Sprite.ColorMask = (ModuleState.ActualGreenMask << 16) | ModuleState.ActualRedMask | ModuleState.ActualBlueMask;
+    ANIMATIONPIXEL* palette = (ANIMATIONPIXEL*)pal;
+
+    RendererState.Sprite.ColorMask =
+        (((U32)ModuleState.ActualGreenMask) << 16) | ModuleState.ActualRedMask | ModuleState.ActualBlueMask;
     RendererState.Sprite.AdjustedColorMask = (RendererState.Sprite.ColorMask << 1) | RendererState.Sprite.ColorMask;
 
     RendererState.Sprite.Window.X = ModuleState.Window.X;
@@ -2780,28 +2781,29 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* pal
 }
 
 // 0x10006ef8
-VOID FUN_10006ef8(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5)
+VOID DrawMainSurfaceAnimationSpriteVersion1A(S32 x, S32 y, U16 level, LPVOID param_4, LPVOID param_5)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
 }
 
 // 0x10007292
-VOID FUN_10007292(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5)
+VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 level, S32 param_4, LPVOID param_5)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
 }
 
 // 0x10007662
-VOID FUN_10007662(S32 x, S32 y, S32 param_3, LPVOID param_4)
+VOID DrawMainSurfaceAnimationSpriteVersion3(S32 x, S32 y, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
+    // TODO Use of 3rd data type is weird!
 }
 
 // 0x10007928
-VOID FUN_10007928(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4)
+VOID FUN_10007928(S32 x, S32 y, S32 level, LPVOID sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -2815,10 +2817,11 @@ VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4)
 }
 
 // 0x10007fbc
-VOID FUN_10007fbc(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5)
+VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
+    // TODO Use of 3rd data type is weird!
 }
 
 // 0x10008ecd

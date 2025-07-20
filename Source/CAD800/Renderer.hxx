@@ -32,6 +32,8 @@ SOFTWARE.
 #define MAX_TILE_SIZE_HEIGHT        32
 #define MAX_TILE_SIZE_WIDTH         64
 
+#define ACQUIRETEXTWIDTH(A, X) (S32)(*(U8*)((ADDR)A + (ADDR)(X * 2 + 0x404)))
+
 typedef enum OutlineSkipOptions
 {
     OUTLINESKIPOPTIONS_NONE         = 0,
@@ -95,12 +97,16 @@ BOOL InitializeWindow(S32 width, S32 height);
 BOOL LockRendererSurface(VOID);
 BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
-S32 AcquireTextLength(LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset);
+S32 AcquireTextLength(LPCSTR text, BINASSETCONTENTPTR asset);
 VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
 VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
+VOID DrawMainSurfaceAnimationSpriteVersion0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion3(S32 x, S32 y, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
@@ -110,6 +116,7 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel);
 VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
+VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
 VOID DrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
@@ -118,23 +125,18 @@ VOID FUN_10001ee0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 VOID FUN_10001f20(S32 param_1, S32 param_2, S32 param_3); // TODO
 VOID FUN_10001f50(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 VOID FUN_10002fc0(S32 x, S32 y, S32 width, S32 height); // TODO
-VOID FUN_10003370(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette); // TODO
-VOID FUN_100033d0(S32 x, S32 y, LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette); // TODO
 VOID FUN_100043a0(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100046c6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100049f6(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10004dc0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_100053d3(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_100057ac(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10005ad6(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_1000619d(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_100067bd(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
-VOID FUN_10006f08(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID FUN_100072a2(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID FUN_10007672(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion1A(S32 x, S32 y, U16 param_3, LPVOID param_4, LPVOID param_5); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10007938(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10007bf8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10007fcc(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10008edd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10009ec3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_1000a503(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO

@@ -102,6 +102,23 @@ typedef struct ImagePaletteSprite
 } IMAGEPALETTESPRITE, * IMAGEPALETTESPRITEPTR;
 #pragma pack(pop)
 
+#define ANIMATION_VERSION_0             0
+#define ANIMATION_VERSION_1             1
+#define ANIMATION_VERSION_2             2
+#define ANIMATION_VERSION_3             3
+#define ANIMATION_VERSION_4             4
+#define ANIMATION_VERSION_5             5 /* Bright Animation*/
+#define ANIMATION_VERSION_6             6 /* 16 BPP Animation*/
+#define ANIMATION_VERSION_7             7
+
+#define ANIMATION_HEADER_MAGIC_MASK     0xFF000000
+#define ANIMATION_HEADER_MAGIC_VALUE    0xCA000000
+
+#define IS_ANIMATION(x)                 ((x & ANIMATION_HEADER_MAGIC_MASK) == ANIMATION_HEADER_MAGIC_VALUE)
+#define IS_NOT_ANIMATION(x)             ((x & ANIMATION_HEADER_MAGIC_MASK) != ANIMATION_HEADER_MAGIC_VALUE)
+
+#define IS_ANIMATION_HEADER_FORMAT(x)   (x & 0xFF)
+
 #pragma pack(push, 1)
 typedef struct AnimationSpriteHeader
 {

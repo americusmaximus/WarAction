@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 - 2025 Americus Maximus
+Copyright (c) 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,19 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
-#include "DrawBackSurfacePaletteShadeSprite.hxx"
+#include "DrawMainSurfaceAnimationSpriteVersion3.hxx"
 #include "File.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
-#include "SetPixelColorMasks.hxx"
 
 #include <stdio.h>
-
-static IMAGESPRITEPTR AcquireSprite(LPVOID content, CONST U32 indx)
-{
-    return (IMAGESPRITEPTR)((ADDR)content + (ADDR)(((U32*)content)[indx]));
-}
 
 static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 ox, S32 oy, S32 wx, S32 wy, LPCSTR name, U32 indx)
 {
     Initialize(state);
+
+    state->ShadeColorMask = 0xDDDD;
+    state->BackSurfaceShadePixel = 0xACAC;
 
     LPVOID animation = NULL;
     LPVOID palette = NULL;
@@ -60,35 +57,36 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
 
     {
         ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)animation;
-        IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[0]);
 
-        state->Actions.DrawBackSurfacePaletteShadeSprite(x, y, 100, (PIXEL*)palette, sprite);
+        for (U32 xx = 0; xx < header->Count; xx++)
+        {
+            IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
+
+            state->Actions.DrawMainSurfaceAnimationSpriteVersion3(x + xx * 50, y + xx * 50, palette, sprite);
+        }
     }
 
-    //SavePixels(MakeFileName("DrawBackSurfacePaletteShadeSprite", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    //SavePixels(MakeFileName("DrawBackSurfacePaletteShadeSprite", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion3_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion3_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion3_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);
+
+    state->ShadeColorMask = 0;
+    state->BackSurfaceShadePixel = 0;
 
     event->Result = TRUE;
 }
 
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawBackSurfacePaletteShadeSprite(RENDERERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceAnimationSpriteVersion3(RENDERERPTR state, MODULEEVENTPTR event)
 {
-    // Initialize.
-    InitializePixelMasks(state);
-    state->Actions.SetPixelColorMasks(0xF800, 0x7E0, 0x1F);
-
     // Offset to 0:0
     {
         state->Actions.OffsetSurfaces(0, 0);
 
-        EXECUTE("X: 0 Y: 0 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 0, 0, 0, 0, 0, 0, "brief", 0);
+        EXECUTE("X: 100 Y: 100 OX: 0 OY: 0 WX: 0 WY: 0", state, event, 100, 100, 0, 0, 0, 0, "d_shadow", 0);
     }
-    
-    // Finalize.
-    InitializePixelMasks(state);
 }
