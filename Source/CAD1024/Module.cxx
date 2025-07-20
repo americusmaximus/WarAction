@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.AcquireTextLength                           = AcquireTextLength;
     ModuleState.Actions.FUN_100033c0                                = FUN_100033c0; // TODO
     ModuleState.Actions.FUN_10003360                                = FUN_10003360; // TODO
-    ModuleState.Actions.CallDrawBackSurfaceRhomb                    = CallDrawBackSurfaceRhomb; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhomb                        = DrawBackSurfaceRhomb;
     ModuleState.Actions.FUN_10001f10                                = FUN_10001f10; // TODO
     ModuleState.Actions.FUN_10004390                                = FUN_10004390; // TODO
     ModuleState.Actions.FUN_100046b6                                = FUN_100046b6; // TODO

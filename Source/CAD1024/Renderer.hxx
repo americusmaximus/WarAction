@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,9 @@ SOFTWARE.
 #define MAX_RENDERER_WIDTH  GRAPHICS_RESOLUTION_1024
 #define MAX_RENDERER_HEIGHT GRAPHICS_RESOLUTION_768
 
+#define MAX_TILE_SIZE_HEIGHT        32
+#define MAX_TILE_SIZE_WIDTH         64
+
 typedef enum OutlineSkipOptions
 {
     OUTLINESKIPOPTIONS_NONE         = 0,
@@ -38,12 +41,6 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_RIGHT        = 8,
     OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
 } OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
-
-typedef enum TileSize
-{
-    TILE_SIZE_HEIGHT = 32,
-    TILE_SIZE_WIDTH = 63
-}TILESIZE, * TILESIZEPTR;
 
 typedef struct RendererStateContainer
 {
@@ -126,6 +123,8 @@ VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
 VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output);
+VOID DrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
 VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
@@ -138,8 +137,6 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
-VOID CallDrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
-VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output); // TODO
 VOID FUN_10001ed0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_10001f10(S32 param_1, S32 param_2, S32 param_3); // TODO
 VOID FUN_10001f40(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO

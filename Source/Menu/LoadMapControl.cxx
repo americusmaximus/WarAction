@@ -95,18 +95,6 @@ VOID CLASSCALL InitializeLoadMapControl(LOADMAPCONTROLPTR self)
     SelectListControlItem(self->List, 0);
 }
 
-// 0x1000F7B0
-VOID CLASSCALL InitializeLoadMultiMapControl(LOADMAPCONTROLPTR self) // TODO
-{
-    //self->Unk10 = 0; 
-
-    InitializeScrollControlArea(self->Scroll, 7, -13, 3);
-    InitializePanelControl((PANELCONTROLPTR)self);
-    //sub_10002430(0);
-    InitializeMultiMapsLoadMapControl(self);
-    SelectListControlItem(self->List, 0);
-}
-
 // 0x10015d60
 VOID CLASSCALL DisableLoadMapControl(LOADMAPCONTROLPTR self)
 {
@@ -156,13 +144,18 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
         if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_SELECT)
         {
             action = CONTROLACTION_SINGLE4_LOAD;
-            goto LAB_10015ba5; // TODO
+
+            if (self->List->Index == INVALID_LIST_CONTROL_INDEX) { return CONTROLACTION_NONE; }
+
+            MenuSaveState.Save.Unk1A4 = 0; // TODO
+            self->Items->Self->AcquireValue(self->Items, self->List->Index, State.Map.Name);
+
+            return action;
         }
     }
 
     if (action != CONTROLACTION_SINGLE4_LOAD) { return action; }
 
-LAB_10015ba5: // TODO
     if (self->List->Index == INVALID_LIST_CONTROL_INDEX) { return CONTROLACTION_NONE; }
 
     MenuSaveState.Save.Unk1A4 = 0; // TODO
@@ -266,10 +259,4 @@ VOID CLASSCALL InitializeMapsLoadMapControl(LOADMAPCONTROLPTR self)
 
     AdjustScrollControlListControl(self->List);
     InitializeMapMapControl(self->Map, NULL);
-}
-
-// 0x1000F340
-VOID CLASSCALL InitializeMultiMapsLoadMapControl(LOADMAPCONTROLPTR self)
-{
-   
 }

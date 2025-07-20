@@ -705,61 +705,54 @@ VOID OffsetSurfaces(S32 x, S32 y)
     // Normalize offset so it is within the expected range.
     if (offset < 0)
     {
-        while (offset < 0)
-        {
-            offset = offset + (MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT);
-        }
+        while (offset < 0) { offset = offset + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT; }
     }
     else
     {
         while (offset >= MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT)
         {
-            offset = offset - (MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT);
+            offset = offset - MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT;
         }
     }
 
-    S32 length = ModuleState.Surface.Offset & (0x80000000 | (MAX_RENDERER_WIDTH - 1));
-
-    if (length < 0) { length = ((length - 1) | (-MAX_RENDERER_WIDTH)) + 1; }
+    CONST S32 length = ModuleState.Surface.Offset % MAX_RENDERER_WIDTH;
 
     if (length + x < 0)
     {
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x] = ModuleState.Surface.Back[x];
+            ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Back[xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x] = ModuleState.Surface.Main[x];
+            ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Main[xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x] = ModuleState.Surface.Stencil[x];
+            ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Stencil[xx];
         }
     }
     else if (MAX_RENDERER_WIDTH <= length + x)
     {
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Back[x] = ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x];
+            ModuleState.Surface.Back[xx] = ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Main[x] = ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x];
+            ModuleState.Surface.Main[xx] = ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Stencil[x] = ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x];
+            ModuleState.Surface.Stencil[xx] = ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
         }
     }
 
-    CONST S32 lines = (offset + ((offset >> 0x1f) & (MAX_RENDERER_WIDTH - 1))) / MAX_RENDERER_WIDTH;
-
-    ModuleState.Surface.Y = MAX_RENDERER_HEIGHT - lines;
+    ModuleState.Surface.Y = MAX_RENDERER_HEIGHT - offset / MAX_RENDERER_WIDTH;
     ModuleState.Surface.Offset = offset;
 
     if (y < 1)
@@ -787,7 +780,7 @@ VOID OffsetSurfaces(S32 x, S32 y)
 }
 
 //0x10001ea0    
-VOID CallDrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input)
+VOID DrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input)
 {
     //const S32 stride = (ModuleState.Surface.Width * sizeof(PIXEL));
     //DrawBackSurfaceRhomb(angle_0, angle_1, angle_2, angle_3, tx, ty, stride, input, RendererState.Surfaces.Back);

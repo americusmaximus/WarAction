@@ -29,21 +29,21 @@ SOFTWARE.
 // 0x10017e00
 MAPPTR CLASSCALL ActivateMap(MAPPTR self)
 {
-    self->Map_Header1.Unk00 = 0; // TODO
-    self->Map_Header1.Unk01 = 0; // TODO
-    self->Map_Header1.Unk02 = 0; // TODO
-    self->Map_Header1.Unk03 = 0; // TODO
+    self->Header.Unk00 = 0; // TODO
+    self->Header.Unk01 = 0; // TODO
+    self->Header.Unk02 = 0; // TODO
+    self->Header.Unk03 = 0; // TODO
 
-    self->Map_Header2.Actors.Min_Players = 0;
-    self->Map_Header2.Actors.Max_Players = 0;
-    self->Map_Header2.Actors.Unk02 = 0; // TODO
-    self->Map_Header2.Actors.Unk03 = 0; // TODO
+    self->Descriptor.Actors.Min_Players = 0;
+    self->Descriptor.Actors.Max_Players = 0;
+    self->Descriptor.Actors.Unk02 = 0; // TODO
+    self->Descriptor.Actors.Unk03 = 0; // TODO
 
-    self->Map_Header2.TypeAndSize.Type = 0; // TODO
-    self->Map_Header2.TypeAndSize.Width = 0;
-    self->Map_Header2.TypeAndSize.Height = 0;
+    self->Descriptor.Details.Type = MAPTYPE_SUMMER;
+    self->Descriptor.Details.Width = 0;
+    self->Descriptor.Details.Height = 0;
 
-    self->Mis_Desc = NULL;
+    self->Description = NULL;
     self->Pixels = NULL;
     self->MissionDescription = NULL;
 
@@ -53,11 +53,11 @@ MAPPTR CLASSCALL ActivateMap(MAPPTR self)
 // 0x10017e50
 VOID CLASSCALL DisposeMap(MAPPTR self)
 {
-    if (self->Mis_Desc != NULL)
+    if (self->Description != NULL)
     {
-        free(self->Mis_Desc);
+        free(self->Description);
 
-        self->Mis_Desc = NULL;
+        self->Description = NULL;
     }
 
     if (self->MissionDescription != NULL)
@@ -109,13 +109,13 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
         }
     }
 
-    ReadZipFile(&zip, &map->Map_Header1, sizeof(MAPHEADER));
-    ReadZipFile(&zip, &map->Map_Header2, sizeof(MAPSTRUCT2));
+    ReadZipFile(&zip, &map->Header, sizeof(MAPHEADER));
+    ReadZipFile(&zip, &map->Descriptor, sizeof(MAPDESCRIPTOR));
 
-    map->Map_Header2.Actors.Min_Players = 1;
-    map->Map_Header2.Actors.Max_Players = 1;
-    map->Map_Header2.Actors.Unk02 = 1; // TODO
-    map->Map_Header2.Actors.Unk03 = 1; // TODO
+    map->Descriptor.Actors.Min_Players = 1;
+    map->Descriptor.Actors.Max_Players = 1;
+    map->Descriptor.Actors.Unk02 = 1; // TODO
+    map->Descriptor.Actors.Unk03 = 1; // TODO
 
     {
         U32 length = 0;
@@ -126,13 +126,13 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
 
         ReadZipFile(&zip, description, length);
 
-        map->Mis_Desc = AcquireCleanUnicodeString(description, TRUE);
+        map->Description = AcquireCleanUnicodeString(description, TRUE);
     }
 
-    if (map->Mis_Desc[0] == '$')
+    if (map->Description[0] == '$')
     {
         U32 x = 0;
-        LPSTR description = map->Mis_Desc;
+        LPSTR description = map->Description;
 
         while (description[x] != '\n' && description[x] != '\r') { x++; }
 
@@ -140,11 +140,11 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
 
         do { do { x++; } while (description[x] == '\n'); } while (description[x] == '\r');
 
-        map->Mis_Desc = (LPSTR)malloc(strlen(&description[x]) + 1);
+        map->Description = (LPSTR)malloc(strlen(&description[x]) + 1);
 
-        strcpy(map->Mis_Desc, &description[x]);
+        strcpy(map->Description, &description[x]);
 
-        map->MissionDescription = (LPSTR)malloc(strlen(description));
+        map->MissionDescription = (LPSTR)malloc(strlen(description) + 1);
 
         strcpy(map->MissionDescription, description);
 
@@ -152,15 +152,15 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
     }
     else { map->MissionDescription = NULL; }
 
-    for (U32 x = 0; map->Mis_Desc[x] != NULL; x++)
+    for (U32 x = 0; map->Description[x] != NULL; x++)
     {
-        if (map->Mis_Desc[x] == '#') { map->Mis_Desc[x] = NULL; break; }
+        if (map->Description[x] == '#') { map->Description[x] = NULL; break; }
     }
 
     {
-        CONST U32 size = map->Map_Header2.TypeAndSize.Width <= MAX_MAP_SIZE && map->Map_Header2.TypeAndSize.Height <= MAX_MAP_SIZE
-            ? map->Map_Header2.TypeAndSize.Height * map->Map_Header2.TypeAndSize.Width * sizeof(PIXEL)
-            : map->Map_Header2.TypeAndSize.Height * map->Map_Header2.TypeAndSize.Width / 2;
+        CONST U32 size = map->Descriptor.Details.Width <= MAX_MAP_SIZE && map->Descriptor.Details.Height <= MAX_MAP_SIZE
+            ? map->Descriptor.Details.Height * map->Descriptor.Details.Width * sizeof(PIXEL)
+            : map->Descriptor.Details.Height * map->Descriptor.Details.Width / 2;
 
         map->Pixels = (PIXEL*)malloc(size);
         ReadZipFile(&zip, map->Pixels, size);
@@ -204,29 +204,30 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
         }
     }
 
-    ReadZipFile(&zip, &map->Map_Header1, sizeof(MAPHEADER));
-    ReadZipFile(&zip, &map->Map_Header2.Actors, sizeof(MAPMINMAX));
+    ReadZipFile(&zip, &map->Header, sizeof(MAPHEADER));
+    ReadZipFile(&zip, &map->Descriptor.Actors, sizeof(MAPMINMAX));
 
-    ReadZipFile(&zip, &map->Mis_objects.Unk00, MAX_MAP_STRUCT3_COUNT * sizeof(MAPSTRUCT3));
+    ReadZipFile(&zip, &map->Objects.Unk00, MAX_MAP_STRUCT3_COUNT * sizeof(MAPSTRUCT3));
 
     for (U32 x = 0; x < MAX_MAP_STRUCT3_COUNT; x++)
     {
-        if (map->Mis_objects.Unk00[x].Unk00 < 0 || map->Mis_objects.Unk00[x].Unk01 < 0
-            || map->Map_Header2.TypeAndSize.Width <= map->Mis_objects.Unk00[x].Unk00 || map->Map_Header2.TypeAndSize.Height <= map->Mis_objects.Unk00[x].Unk01
-            || map->Mis_objects.Unk00[x].Unk02 < 0 || (MAX_MAP_SIZE - 1) < map->Mis_objects.Unk00[x].Unk02)
+        if (map->Objects.Unk00[x].Unk00 < 0 || map->Objects.Unk00[x].Unk01 < 0
+            || map->Descriptor.Details.Width <= map->Objects.Unk00[x].Unk00
+            || map->Descriptor.Details.Height <= map->Objects.Unk00[x].Unk01
+            || map->Objects.Unk00[x].Unk02 < 0 || (MAX_MAP_SIZE - 1) < map->Objects.Unk00[x].Unk02)
         {
-            map->Mis_objects.Unk00[x].Unk00 = 0;
-            map->Mis_objects.Unk00[x].Unk02 = 0;
-            map->Mis_objects.Unk00[x].Unk01 = 0;
+            map->Objects.Unk00[x].Unk00 = 0;
+            map->Objects.Unk00[x].Unk02 = 0;
+            map->Objects.Unk00[x].Unk01 = 0;
         }
     }
 
-    ReadZipFile(&zip, &map->Map_Header2.TypeAndSize, sizeof(MAPTYPESIZE));
+    ReadZipFile(&zip, &map->Descriptor.Details, sizeof(MAPDETAILS));
 
     for (U32 x = 0; x < MAX_MAP_STRUCT4_COUNT; x++)
     {
-        ReadZipFile(&zip, &map->Mis_objects.Unk01[x], sizeof(U32));
-        map->Mis_objects.Unk01[x].Unk01 = 0xffff; // TODO
+        ReadZipFile(&zip, &map->Objects.Unk01[x], sizeof(U32));
+        map->Objects.Unk01[x].Unk01 = 0xffff; // TODO
     }
 
     {
@@ -245,13 +246,13 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
 
         ReadZipFile(&zip, description, length);
 
-        map->Mis_Desc = AcquireCleanUnicodeString(description, TRUE);
+        map->Description = AcquireCleanUnicodeString(description, TRUE);
     }
 
-    if (map->Mis_Desc[0] == '$')
+    if (map->Description[0] == '$')
     {
         U32 x = 0;
-        LPSTR description = map->Mis_Desc;
+        LPSTR description = map->Description;
 
         while (description[x] != '\n' && description[x] != '\r') { x++; }
 
@@ -259,11 +260,11 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
 
         do { do { x++; } while (description[x] == '\n'); } while (description[x] == '\r');
 
-        map->Mis_Desc = (LPSTR)malloc(strlen(&description[x]) + 1);
+        map->Description = (LPSTR)malloc(strlen(&description[x]) + 1);
 
-        strcpy(map->Mis_Desc, &description[x]);
+        strcpy(map->Description, &description[x]);
 
-        map->MissionDescription = (LPSTR)malloc(strlen(description));
+        map->MissionDescription = (LPSTR)malloc(strlen(description) + 1);
 
         strcpy(map->MissionDescription, description);
 
@@ -271,15 +272,15 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
     }
     else { map->MissionDescription = NULL; }
 
-    for (U32 x = 0; map->Mis_Desc[x] != NULL; x++)
+    for (U32 x = 0; map->Description[x] != NULL; x++)
     {
-        if (map->Mis_Desc[x] == '#') { map->Mis_Desc[x] = NULL; break; }
+        if (map->Description[x] == '#') { map->Description[x] = NULL; break; }
     }
 
     {
-        CONST U32 size = map->Map_Header2.TypeAndSize.Width <= MAX_MAP_SIZE && map->Map_Header2.TypeAndSize.Height <= MAX_MAP_SIZE
-            ? map->Map_Header2.TypeAndSize.Height * map->Map_Header2.TypeAndSize.Width * sizeof(PIXEL)
-            : map->Map_Header2.TypeAndSize.Height * map->Map_Header2.TypeAndSize.Width / 2; // TODO
+        CONST U32 size = map->Descriptor.Details.Width <= MAX_MAP_SIZE && map->Descriptor.Details.Height <= MAX_MAP_SIZE
+            ? map->Descriptor.Details.Height * map->Descriptor.Details.Width * sizeof(PIXEL)
+            : map->Descriptor.Details.Height * map->Descriptor.Details.Width / 2; // TODO
 
         map->Pixels = (PIXEL*)malloc(size);
         ReadZipFile(&zip, map->Pixels, size);

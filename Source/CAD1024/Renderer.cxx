@@ -705,61 +705,54 @@ VOID OffsetSurfaces(S32 x, S32 y)
     // Normalize offset so it is within the expected range.
     if (offset < 0)
     {
-        while (offset < 0)
-        {
-            offset = offset + (MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT);
-        }
+        while (offset < 0) { offset = offset + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT; }
     }
     else
     {
         while (offset >= MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT)
         {
-            offset = offset - (MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT);
+            offset = offset - MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT;
         }
     }
 
-    S32 length = ModuleState.Surface.Offset & (0x80000000 | (MAX_RENDERER_WIDTH - 1));
-
-    if (length < 0) { length = ((length - 1) | (-MAX_RENDERER_WIDTH)) + 1; }
+    CONST S32 length = ModuleState.Surface.Offset % MAX_RENDERER_WIDTH;
 
     if (length + x < 0)
     {
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x] = ModuleState.Surface.Back[x];
+            ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Back[xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x] = ModuleState.Surface.Main[x];
+            ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Main[xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x] = ModuleState.Surface.Stencil[x];
+            ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Stencil[xx];
         }
     }
     else if (MAX_RENDERER_WIDTH <= length + x)
     {
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Back[x] = ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x];
+            ModuleState.Surface.Back[xx] = ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Main[x] = ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x];
+            ModuleState.Surface.Main[xx] = ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
         }
 
         for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
         {
-            ModuleState.Surface.Stencil[x] = ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + x];
+            ModuleState.Surface.Stencil[xx] = ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
         }
     }
 
-    CONST S32 lines = (offset + ((offset >> 0x1f) & (MAX_RENDERER_WIDTH - 1))) / MAX_RENDERER_WIDTH;
-
-    ModuleState.Surface.Y = MAX_RENDERER_HEIGHT - lines;
+    ModuleState.Surface.Y = MAX_RENDERER_HEIGHT - offset / MAX_RENDERER_WIDTH;
     ModuleState.Surface.Offset = offset;
 
     if (y < 1)
@@ -786,61 +779,65 @@ VOID OffsetSurfaces(S32 x, S32 y)
     }
 }
 
-//0x10001e90
-VOID CallDrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input)
+// 0x10001e90
+VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input)
 {
-    CONST S32 stride = (ModuleState.Surface.Width * sizeof(PIXEL));
-    DrawBackSurfaceRhomb(angle_0, angle_1, angle_2, angle_3, tx, ty, stride, input, RendererState.Surfaces.Back);
+    DrawBackSurfaceRhomb(angle_0, angle_1, angle_2, angle_3, x, y,
+        ModuleState.Surface.Width * sizeof(PIXEL), input, RendererState.Surfaces.Back);
 }
 
-//0x10003420  
+// 0x10003420
+// 
 //  0    1
 //   +--+
 //   |  |
 //   +--+
 //  3    2
-
-VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output)
+//
+VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* pixels)
 {
-// Tile height: 32
-// Tile width: 63
+    RendererState.Tile.Stencil = (PIXEL*)((ADDR)pixels
+        + (ADDR)(ModuleState.Surface.Offset % MAX_RENDERER_WIDTH + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT) * sizeof(PIXEL));
 
-    RendererState.Tile.Stencil = (PIXEL*)((ADDR)output + (ModuleState.Surface.Offset % (MAX_RENDERER_WIDTH + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT)) * sizeof(PIXEL));
-    RendererState.Tile.Window.X = ModuleState.Window.X + TILE_SIZE_HEIGHT + 1;
+    RendererState.Tile.Window.X = ModuleState.Window.X + MAX_TILE_SIZE_HEIGHT + 1;
     RendererState.Tile.Window.Y = ModuleState.Window.Y;
-    RendererState.Tile.Window.Width = ModuleState.Window.Width + TILE_SIZE_HEIGHT + 1;
+
+    RendererState.Tile.Window.Width = ModuleState.Window.Width + MAX_TILE_SIZE_HEIGHT + 1;
     RendererState.Tile.Window.Height = ModuleState.Window.Height;
+
     RendererState.Tile.displayedHalfs = 0;
 
     if (tx > RendererState.Tile.Window.Width + 1
-        || tx < RendererState.Tile.Window.X - TILE_SIZE_WIDTH - 1
+        || tx < RendererState.Tile.Window.X - MAX_TILE_SIZE_WIDTH
         || ty > RendererState.Tile.Window.Height + 1
-        || ty < RendererState.Tile.Window.Y - TILE_SIZE_HEIGHT)
+        || ty < RendererState.Tile.Window.Y - MAX_TILE_SIZE_HEIGHT)
+    {
         return;
+    }
 
-    S32 tileStartDrawLength;
+    S32 tileStartDrawLength = 0;
 
     U8* srcInput = input->pixels;
-    PIXEL* dst = (PIXEL*)((ADDR)output + (ModuleState.Surface.Offset * sizeof(PIXEL)) + stride * ty + tx * sizeof(PIXEL) - 2);
-    PIXEL* dst2;
-    S32 txDelta = tx + TILE_SIZE_HEIGHT;
-    S32 diff = (angle_1 - angle_0) << 2;
-    BOOL isUpperPart = (ty > (ModuleState.Window.Y - 16)) ? TRUE : FALSE;
+    PIXEL* dst = (PIXEL*)((ADDR)pixels + ModuleState.Surface.Offset + ty * stride + (tx - 1) * sizeof(PIXEL));
+    PIXEL* dst2 = NULL;
+    S32 txDelta = tx + MAX_TILE_SIZE_HEIGHT;
+    S32 diff = (angle_1 - angle_0) * 4;
 
-    if (!isUpperPart)
+    if (ty < ModuleState.Window.Y - 16) // Lower part
     {
-        RendererState.Tile.diff = (angle_3 - angle_0) << 4;
+        RendererState.Tile.diff = (angle_3 - angle_0) * 16;
         txDelta = (angle_0 << 8) + RendererState.Tile.diff;
-        dst2 = (PIXEL*)((ADDR)dst + (ADDR)(16 * stride - 29 * sizeof(PIXEL)));
-        tx += 3;
+        dst2 = (PIXEL*)((ADDR)dst + (ADDR)(stride * 8 - 29) * sizeof(PIXEL));
 
-        tileStartDrawLength = 61;
+        tx += 3;
+        tileStartDrawLength = MAX_TILE_SIZE_WIDTH;
         srcInput += 528;
         ty += 16;
 
         RendererState.Tile.tileHeight = Mathematics::Min((ModuleState.Window.Height + 1) - ty, 16);
 
-        const S32 overage = ModuleState.Window.Y - ty;
+        CONST S32 overage = ModuleState.Window.Y - ty;
+
         if (overage >= 0)
         {
             ty = RendererState.Tile.Window.Y;
@@ -856,7 +853,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
             }
         }
     }
-    else
+    else // Upper part
     {
         tileStartDrawLength = 3;
         tx = txDelta;
@@ -910,9 +907,10 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                     S32 totalTxOffset = txDelta;
 
-                    const S32 delta = (RendererState.Tile.Window.Width + 1) - tx;
+                    CONST S32 delta = RendererState.Tile.Window.Width + 1 - tx;
                     S32 delta2 = Mathematics::Min(delta, tileStartDrawLength);
-                    const S32 delta3 = RendererState.Tile.Window.X - tx;
+                    CONST S32 delta3 = RendererState.Tile.Window.X - tx;
+
                     if (delta > 0 && delta2 > delta3)
                     {
                         U8* srcTemp = srcInput;
@@ -931,7 +929,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
                         {
                             dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
                         }
-                        if (dstTemp < output)
+                        if (dstTemp < pixels)
                         {
                             dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
                         }
@@ -966,8 +964,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
             }
         }
 
-        if (ty > RendererState.Tile.Window.Height + 1)
-            return;
+        if (ty > RendererState.Tile.Window.Height + 1) { return; }
 
         RendererState.Tile.unk08 ^= 0x20;
         tileStartDrawLength -= 6;
@@ -1012,7 +1009,8 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                 S32 delta = (RendererState.Tile.Window.Width + 1) - tx;
                 S32 delta2 = Mathematics::Min(delta, tileStartDrawLength);
-                const S32 delta3 = RendererState.Tile.Window.X - tx;
+                CONST S32 delta3 = RendererState.Tile.Window.X - tx;
+
                 if (delta > 0 && delta2 > delta3)
                 {
                     U8* srcTemp = srcInput;
@@ -1052,7 +1050,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
             overflow = RendererState.Tile.tempTileHeight;
 
-            dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
+            dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
         };
     }
 }
@@ -1081,8 +1079,10 @@ VOID FUN_10001f40(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 // 0x10001f80
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 {
-    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Back + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((ADDR)RendererState.Surfaces.Main + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Back
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     if (y < ModuleState.Surface.Y)
     {
@@ -1501,7 +1501,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 VOID DrawStencilSurfaceWindowRectangle()
 {
     PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Stencil +
-        (ADDR)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * (ADDR)sizeof(PIXEL));
+        (ADDR)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * sizeof(PIXEL));
 
     CONST S32 height = ModuleState.Window.Height - ModuleState.Window.Y + 1;
     CONST S32 width = ModuleState.Window.Width - ModuleState.Window.X + 1;
@@ -1925,6 +1925,9 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
 // 0x10002b90
 BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
 {
+    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
+    // TODO NOT IMPLEMENTED
+
     return TRUE;
 }
 

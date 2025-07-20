@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,9 @@ typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 wi
 typedef S32(*ACQUIRETEXTLENGTHACTION)(LPSTR text, BINASSETCOLLECTIONCONTENTPTR asset);
 typedef VOID(*CONVERTALLCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*CONVERTVISIBLECOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
-typedef VOID(*DRAWBACKSURFACEPALETTESHADESPRITEACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
+typedef VOID(*DRAWBACKSURFACEPALETTESHADESPRITEACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+typedef VOID(*DRAWBACKSURFACERHOMBSACTION)(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
 typedef VOID(*DRAWMAINSURFACEANIMATIONSPRITEACTION)(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACECOLORBOXACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACECOLORELLIPSEACTION)(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
@@ -60,7 +61,6 @@ typedef VOID(*DRAWMAINSURFACEPALETTESPRITEACTION)(S32 x, S32 y, PIXEL* palette, 
 typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, IMAGESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWSTENCILSURFACEWINDOWRECTANGLEACTION)(VOID);
-typedef VOID(*CALLDRAWBACKSURFACERHOMBSACTION)(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
 typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_10001F10ACTION)(S32 param_1, S32 param_2, S32 param_3); // TODO
 typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
@@ -113,7 +113,7 @@ typedef struct RendererActions
     ACQUIRETEXTLENGTHACTION                         AcquireTextLength;
     FUN_100033C0ACTION FUN_100033c0; // TODO
     FUN_10003360ACTION FUN_10003360; // TODO
-    CALLDRAWBACKSURFACERHOMBSACTION                 CallDrawBackSurfaceRhomb; // TODO
+    DRAWBACKSURFACERHOMBSACTION                     DrawBackSurfaceRhomb;
     FUN_10001F10ACTION FUN_10001f10; // TODO
     FUN_10004390ACTION FUN_10004390; // TODO
     FUN_100046B6ACTION FUN_100046b6; // TODO
@@ -181,7 +181,7 @@ typedef struct RendererSurface // TODO Refactor the struct out.
 
     PIXEL*  Main;       // Holds the final frame image, excluding UI.
     PIXEL*  Back;       // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
-    PIXEL*  Stencil;    // Holds a stencil buffer of the frame. THis includes buildings, fences, power poles.
+    PIXEL*  Stencil;    // Holds a stencil buffer of the frame. This includes buildings, fences, power poles.
 
     LPVOID  Renderer;   // The DirectDraw surface.
 } RENDERERSURFACE, * RENDERERSURFACEPTR;
