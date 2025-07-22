@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ SOFTWARE.
 #include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
 #include "DrawBackSurfacePaletteShadeSprite.hxx"
+#include "DrawBackSurfaceRhomb.hxx"
 #include "DrawBackSurfaceText.hxx"
 #include "DrawMainSurfaceAnimationSpriteVersion1.hxx" // TODO
 #include "DrawMainSurfaceAnimationSpriteVersion2.hxx"
@@ -66,6 +67,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
     ACTION(DrawBackSurfacePaletteShadeSprite, state, event);
+    ACTION(DrawBackSurfaceRhomb, state, event);
     ACTION(DrawBackSurfaceText, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion1, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion2, state, event);

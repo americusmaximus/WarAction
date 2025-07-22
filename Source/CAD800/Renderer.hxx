@@ -29,6 +29,9 @@ SOFTWARE.
 #define MAX_RENDERER_WIDTH  GRAPHICS_RESOLUTION_800
 #define MAX_RENDERER_HEIGHT GRAPHICS_RESOLUTION_600
 
+#define MAX_TILE_SIZE_HEIGHT        32
+#define MAX_TILE_SIZE_WIDTH         64
+
 #define ACQUIRETEXTWIDTH(A, X) (S32)(*(U8*)((ADDR)A + (ADDR)(X * 2 + 0x404)))
 
 typedef enum OutlineSkipOptions
@@ -84,6 +87,27 @@ typedef struct RendererStateContainer
         S32     Height;             // 0x1001009a
         S32     Overage;            // 0x1001009e
     } Sprite;
+
+    struct
+    {
+        S32     unk01;               // 0x10010030
+        S32     displayedHalfs;      // 0x10010034
+        PIXEL*  Stencil;             // 0x10010038
+        S8      unk04;               // 0x1001003c
+
+        S32     diff;                // 0x1001003d
+        S32     tileHeight;          // 0x10010041
+        S32     tempTileHeight;      // 0x10010045
+        S8      unk08;               // 0x10010049
+
+        struct
+        {
+            S16 X;             // 0x1001004a
+            S16 Y;             // 0x1001004c
+            S16 Width;         // 0x1001004e
+            S16 Height;        // 0x10010068
+        } Window;
+    } Tile;
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
 EXTERN RENDERERSTATECONTAINER RendererState;
@@ -116,7 +140,8 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
-VOID FUN_10001ea0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
+VOID DrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
+VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output); // TODO
 VOID FUN_10001ee0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_10001f20(S32 param_1, S32 param_2, S32 param_3); // TODO
 VOID FUN_10001f50(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO

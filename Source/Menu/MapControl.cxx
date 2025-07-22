@@ -71,8 +71,8 @@ VOID CLASSCALL InitializeMapControl(MAPCONTROLPTR self)
 {
     self->Description->Self->Initialize(self->Description);
 
-    self->Map.Descriptor.Height = 0;
-    self->Map.Descriptor.Width = 0;
+    self->Map.Descriptor.Details.Height = 0;
+    self->Map.Descriptor.Details.Width = 0;
 
     self->IsHover = FALSE;
 
@@ -97,13 +97,13 @@ VOID CLASSCALL TickMapControl(MAPCONTROLPTR self)
 {
     self->Description->Self->Tick(self->Description);
 
-    if (self->Map.Descriptor.Width != 0 && self->X != 0)
+    if (self->Map.Descriptor.Details.Width != 0 && self->X != 0)
     {
         CONST BOOL normal =
-            self->Map.Descriptor.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Height <= MAX_MAP_SIZE;
+            self->Map.Descriptor.Details.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Details.Height <= MAX_MAP_SIZE;
 
-        CONST S32 height = normal ? self->Map.Descriptor.Height : self->Map.Descriptor.Height / 2;
-        CONST S32 width = normal ? self->Map.Descriptor.Width : self->Map.Descriptor.Width / 2;
+        CONST S32 height = normal ? self->Map.Descriptor.Details.Height : self->Map.Descriptor.Details.Height / 2;
+        CONST S32 width = normal ? self->Map.Descriptor.Details.Width : self->Map.Descriptor.Details.Width / 2;
 
         for (S32 x = 0; x < height; x = x + 2)
         {
@@ -211,29 +211,29 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
 
                 if (self->Size != NULL)
                 {
-                    wsprintfA(message, "%dx%d", self->Map.Descriptor.Width, self->Map.Descriptor.Height);
+                    wsprintfA(message, "%dx%d", self->Map.Descriptor.Details.Width, self->Map.Descriptor.Details.Height);
                     SlectLabelControlText(self->Size, message);
                 }
 
                 if (self->Actors != NULL)
                 {
-                    if (self->Map.Descriptor.Actors.Min == self->Map.Descriptor.Actors.Max)
+                    if (self->Map.Descriptor.Actors.Min_Players == self->Map.Descriptor.Actors.Max_Players)
                     {
-                        wsprintfA(message, "%d", self->Map.Descriptor.Actors.Min);
+                        wsprintfA(message, "%d", self->Map.Descriptor.Actors.Min_Players);
                     }
                     else
                     {
-                        wsprintfA(message, "%d-%d", self->Map.Descriptor.Actors.Min, self->Map.Descriptor.Actors.Max);
+                        wsprintfA(message, "%d-%d", self->Map.Descriptor.Actors.Min_Players, self->Map.Descriptor.Actors.Max_Players);
                     }
 
                     SlectLabelControlText(self->Actors, message);
                 }
 
                 CONST BOOL normal =
-                    self->Map.Descriptor.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Height <= MAX_MAP_SIZE;
+                    self->Map.Descriptor.Details.Width <= MAX_MAP_SIZE && self->Map.Descriptor.Details.Height <= MAX_MAP_SIZE;
 
-                CONST U32 height = normal ? self->Map.Descriptor.Height : self->Map.Descriptor.Height / 2;
-                CONST U32 width = normal ? self->Map.Descriptor.Width : self->Map.Descriptor.Width / 2;
+                CONST U32 height = normal ? self->Map.Descriptor.Details.Height : self->Map.Descriptor.Details.Height / 2;
+                CONST U32 width = normal ? self->Map.Descriptor.Details.Width : self->Map.Descriptor.Details.Width / 2;
 
                 for (U32 x = 0; x < height; x++)
                 {
@@ -248,10 +248,10 @@ VOID CLASSCALL InitializeMapMapControl(MAPCONTROLPTR self, LPCSTR name)
         }
     }
 
-    self->Map.Descriptor.Height = 0;
-    self->Map.Descriptor.Width = 0;
+    self->Map.Descriptor.Details.Height = 0;
+    self->Map.Descriptor.Details.Width = 0;
 
-    self->Map.Descriptor.Actors.Max = 0;
+    self->Map.Descriptor.Actors.Max_Players = 0;
 
     self->Description->Self->Disable(self->Description);
 

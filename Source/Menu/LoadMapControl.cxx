@@ -144,13 +144,18 @@ U32 CLASSCALL ActionLoadMapControl(LOADMAPCONTROLPTR self)
         if (command->Action == CONTROLACTION_LIST_SELECT && command->Parameter1 == CONTROLACTION_UI_SELECT)
         {
             action = CONTROLACTION_SINGLE4_LOAD;
-            goto LAB_10015ba5; // TODO
+
+            if (self->List->Index == INVALID_LIST_CONTROL_INDEX) { return CONTROLACTION_NONE; }
+
+            MenuSaveState.Save.Unk1A4 = 0; // TODO
+            self->Items->Self->AcquireValue(self->Items, self->List->Index, State.Map.Name);
+
+            return action;
         }
     }
 
     if (action != CONTROLACTION_SINGLE4_LOAD) { return action; }
 
-LAB_10015ba5: // TODO
     if (self->List->Index == INVALID_LIST_CONTROL_INDEX) { return CONTROLACTION_NONE; }
 
     MenuSaveState.Save.Unk1A4 = 0; // TODO

@@ -42,7 +42,10 @@ typedef struct MapFileInfo
 MAPPTR CLASSCALL ActivateMap(MAPPTR self);
 VOID CLASSCALL DisposeMap(MAPPTR self);
 
-BOOL InitializeSingleMap(LPCSTR name, MAPPTR map);
 BOOL InitializeMultiMap(LPCSTR name, MAPPTR map);
-BOOL FUN_10017f60(MAPPTR map, ZIPFILEPTR file); // TODO
+BOOL InitializeSingleMap(LPCSTR name, MAPPTR map);
+BOOL ParseMapScripts(MAPPTR map, ZIPFILEPTR file);
+BOOL ValidateMultiMapFile(LPCSTR name);
 BOOL ValidateSingleMapFile(LPCSTR name);
+VOID ParseMapScriptCommands(MAPPTR map, S32* commands);
+VOID FUN_100181f0(MAPPTR map, S32 value); // TODO name

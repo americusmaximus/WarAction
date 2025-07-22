@@ -83,6 +83,13 @@ typedef struct ImagePaletteSpritePixel
 #pragma pack(pop)
 
 #pragma pack(push, 1)
+typedef struct  ImagePaletteTile
+{
+    U8 pixels[1];
+} IMAGEPALETTETILE, * IMAGEPALETTETILEPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
 typedef struct ImagePaletteSprite
 {
     S16                     X;

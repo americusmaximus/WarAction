@@ -51,7 +51,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.AcquireTextLength                           = AcquireTextLength;
     ModuleState.Actions.DrawBackSurfaceText                         = DrawBackSurfaceText;
     ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
-    ModuleState.Actions.FUN_10001e90                                = FUN_10001e90; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhomb                        = DrawBackSurfaceRhomb;
     ModuleState.Actions.FUN_10001f10                                = FUN_10001f10; // TODO
     ModuleState.Actions.FUN_10004390                                = FUN_10004390; // TODO
     ModuleState.Actions.FUN_100046b6                                = FUN_100046b6; // TODO

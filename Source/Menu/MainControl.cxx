@@ -573,6 +573,8 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         ShowMessageControl(&MessageControlState,
             AcquireAssetMessage(ASSET_MESSAGE_WAITING_FOR_OTHERS_TO_RESPOND), MESSAGE_MODE_WAIT);
 
+        // TODO: Triggered when starting single player game from a map selector
+
         // TODO NOT IMPLEMENTED
         /*
         puVar17 = auStack_2f4;

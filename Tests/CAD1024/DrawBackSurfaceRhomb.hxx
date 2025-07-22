@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,6 @@ SOFTWARE.
 
 #pragma once
 
-#include "Basic.hxx"
+#include "Module.hxx"
 
-#ifdef _WIN64
-#define ACTIVATE_MODERN_GRAPHICS_MODE       TRUE
-#endif
-
-#define ACTIVE_TRUE_COLOR_MODE              TRUE
-
-#define DEFAULT_SCREEN_COLOR_MASK           0xFFFF
-
-#define BLACK_PIXEL                         0x0000
-#define MAGENTA_PIXEL                       0xF81F
-#define WHITE_PIXEL                         0xFFFF
-
-#define MAX_RHOMB_COUNT                     64
-#define MAX_PALETTE_SIZE                    256
-
-#define MAX_FOG_SPRITE_COUNT                112
-
-#define RGB565_TO_RGB888(value)             \
-  ((((value & 0xF800) << 8) & 0xFF0000)     \
-   | (((value & 0x07E0) << 5) & 0x00FF00)   \
-   | (((value & 0x001F) << 3) & 0x0000FF))
-
-#define SHADEPIXEL(pixel, mask) ((pixel & mask) >> 1)
-
-typedef U16 PIXEL;
-typedef U32 DOUBLEPIXEL;
-typedef U32 ANIMATIONPIXEL;
+VOID DrawBackSurfaceRhomb(RENDERERPTR state, MODULEEVENTPTR event);
