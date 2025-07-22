@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,10 +29,10 @@ SOFTWARE.
 typedef struct Cursor
 {
     ANIMATIONSPRITEHEADERPTR    Animation;
-    LPVOID                      Palette; // TODO Type?
+    PIXEL*                      Palette;
     U32                         Width;
     U32                         Height;
-    LPVOID                      Pixels; // TODO Type?
+    PIXEL*                      Pixels;
 } CURSOR, * CURSORPTR;
 
 typedef struct CursorStateModuleContainer
@@ -58,7 +58,7 @@ VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32
 VOID CursorMessageHandler(CONST U32 action);
 
 VOID CLASSCALL CursorUnknown1(CURSORPTR self); // TODO name
-VOID CLASSCALL CursorUnknown2(CURSORPTR self); // TODO name
+VOID CLASSCALL DrawCursor(CURSORPTR self);
 VOID CLASSCALL CursorUnknown3(CURSORPTR self); // TODO name
 
 VOID FUN_10003610(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 sw, CONST S32 sh, CONST S32 ox, CONST S32 oy, CONST S32 x, CONST S32 y, CONST S32 w, CONST S32 h); // TODO name
