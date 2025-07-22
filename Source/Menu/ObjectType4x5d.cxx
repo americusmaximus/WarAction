@@ -70,9 +70,9 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
     self->SeqFileStart = 1; // TODO
     self->Ticks = GetTickCount() - 1000;
 
-    for (U32 x = 0; x < 112 /* TODO */; x++)
+    for (U32 x = 0; x < MAX_FOG_SPRITE_COUNT; x++)
     {
-        memset(&State.Renderer->Sprites[x], 0x80, sizeof(FOG)); // TODO
+        memset(&State.Renderer->Fog[x], 0x80, sizeof(FOGSPRITE)); // TODO
     }
 
     self->ArrColFile = NULL;

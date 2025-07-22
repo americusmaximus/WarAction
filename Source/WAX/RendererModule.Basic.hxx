@@ -187,11 +187,10 @@ typedef struct RendererSurface // TODO Refactor the struct out.
     LPVOID  Renderer;   // The DirectDraw surface.
 } RENDERERSURFACE, * RENDERERSURFACEPTR;
 
-
-typedef struct Fog // TODO Name - arrays fog of war
+typedef struct FogSprite
 {
     U8    Unk[0x50]; // TODO
-} FOG, * FOGPTR; // TODO Name
+} FOGSPRITE, * FOGSPRITEPTR;
 
 typedef struct Renderer
 {
@@ -224,7 +223,7 @@ typedef struct Renderer
     U32                         Pitch;
     DOUBLEPIXEL                 BackSurfaceShadePixel;
 
-    FOG                         Sprites[112]; // TODO
+    FOGSPRITE                   Fog[MAX_FOG_SPRITE_COUNT];
 
     PIXEL                       Rhombs[MAX_PALETTE_SIZE * MAX_RHOMB_COUNT]; // Rhombs palette from RHOMB.PL (16,348 colors).
     

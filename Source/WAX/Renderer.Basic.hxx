@@ -39,6 +39,8 @@ SOFTWARE.
 #define MAX_RHOMB_COUNT                     64
 #define MAX_PALETTE_SIZE                    256
 
+#define MAX_FOG_SPRITE_COUNT                112
+
 #define RGB565_TO_RGB888(value)             \
   ((((value & 0xF800) << 8) & 0xFF0000)     \
    | (((value & 0x07E0) << 5) & 0x00FF00)   \
