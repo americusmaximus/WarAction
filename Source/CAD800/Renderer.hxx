@@ -158,7 +158,7 @@ VOID DrawMainSurfaceAnimationSpriteVersion1A(S32 x, S32 y, U16 param_3, LPVOID p
 VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10007938(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10007bf8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10008edd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
+VOID DrawGameUI(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input);
 VOID FUN_10009ec3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_1000a503(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 VOID Initialize(VOID);

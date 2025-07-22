@@ -83,7 +83,7 @@ typedef VOID(*FUN_1000618DACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); //
 typedef VOID(*FUN_100067ADACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007928ACTION)(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007BE8ACTION)(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-typedef VOID(*FUN_10008ECDACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
+typedef VOID(*DRAWGAMEUIACTION)(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input);
 typedef VOID(*FUN_10009EB3ACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_1000A4F3ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 typedef VOID(*INITIALIZEACTION)(VOID);
@@ -156,7 +156,7 @@ typedef struct RendererActions
     DRAWSTENCILSURFACEWINDOWRECTANGLEACTION         DrawStencilSurfaceWindowRectangle;
     WRITERENDERERSURFACESURFACERECTANGLEACTION      WriteRendererSurfaceSurfaceRectangle;
     WRITESURFACESURFACERECTANGLEACTION              WriteSurfaceSurfaceRectangle;
-    FUN_10008ECDACTION FUN_10008ecd; // TODO
+    DRAWGAMEUIACTION                                DrawGameUI;
     FUN_1000A4F3ACTION FUN_1000a4f3; // TODO
     FUN_10009EB3ACTION FUN_10009eb3; // TODO
     RELEASEDIRECTXACTION                            ReleaseDirectX;

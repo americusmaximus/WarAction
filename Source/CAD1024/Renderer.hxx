@@ -44,6 +44,14 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
 } OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
 
+typedef enum TypeGraphics
+{
+    STATIC_SPRITE = 0xA1,
+    DYNAMIC_SPRITE = 0xA2,
+    ALPHA_CHANNEL = 0xA3,
+    ANIMATION_SPRITE = 0xA9,
+} TYPEGRAPHICS, * TYPEGRAPHICSPTR;
+
 typedef struct RendererStateContainer
 {
     BOOL IsTrueColor;
@@ -108,6 +116,24 @@ typedef struct RendererStateContainer
             S16 Height;        // 0x10010050
         } Window;
     } Tile;
+
+    struct
+    {
+        ADDR Offset;                        // 0x100100b6
+        U32 Stride;                         // 0x100100ba
+
+        struct                              // 0x100100be
+        {
+            S16 X;
+            S16 Y;
+            S16 Width;
+            S16 Height;
+        } Window;
+
+        U32 Type;                           // 0x100100ñe
+        ImagePaletteSprite* ImageSprite;    // 0x100100d2
+    } GameUI;
+
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
 EXTERN RENDERERSTATECONTAINER RendererState;
@@ -159,7 +185,7 @@ VOID FUN_100067ad(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10007928(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10008ecd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
+VOID DrawGameUI(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input);
 VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 VOID Initialize(VOID);

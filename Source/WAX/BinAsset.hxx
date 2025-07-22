@@ -68,7 +68,7 @@ typedef struct ImageSprite
     S16                 Y;
     S16                 Width;
     S16                 Height;
-    U8                  Unk04; // TODO
+    U8                  TypeGraphics;
     U16                 Next;
     IMAGESPRITEPIXEL    Pixels[1];
 } IMAGESPRITE, * IMAGESPRITEPTR;
@@ -96,10 +96,22 @@ typedef struct ImagePaletteSprite
     S16                     Y;
     S16                     Width;
     S16                     Height;
-    U8                      Unk04; // TODO
+    U8                      TypeGraphics;
     U16                     Next;
     IMAGEPALETTESPRITEPIXEL Pixels[1];
 } IMAGEPALETTESPRITE, * IMAGEPALETTESPRITEPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct ImageSpriteUI
+{
+    ADDR                Offset;
+    U32                 Stride;
+    S32                 X;
+    S32                 Y;
+    S32                 Width;
+    S32                 Height;
+} IMAGESPRITEUI, * IMAGESPRITEUIPTR;
 #pragma pack(pop)
 
 #define ANIMATION_VERSION_0             0

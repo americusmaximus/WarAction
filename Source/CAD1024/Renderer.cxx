@@ -2825,10 +2825,43 @@ VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID pal,
 }
 
 // 0x10008ecd
-VOID FUN_10008ecd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5)
+VOID DrawGameUI(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    RendererState.GameUI.Offset = input->Offset;
+    RendererState.GameUI.Stride = input->Stride * 2;
+    RendererState.GameUI.Window.X = input->X;
+    RendererState.GameUI.Window.Y = input->Y;
+    RendererState.GameUI.Window.Width = input->Width;
+    RendererState.GameUI.Window.Height = input->Height;
+
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
+
+    switch (sprite->TypeGraphics)
+    {
+        case STATIC_SPRITE:
+        {
+            PIXEL* palette = (PIXEL*)pal;
+
+            break;
+        }
+        case DYNAMIC_SPRITE:
+        {
+            // no work in SSF
+            break;
+        }
+        case ALPHA_CHANNEL:
+        {
+            // no work in SSF
+            break;
+        }
+        case ANIMATION_SPRITE:
+        {
+            ANIMATIONPIXEL* palette = (ANIMATIONPIXEL*)pal;
+
+            break;
+        }
+    }
 }
 
 // 0x10009eb3
