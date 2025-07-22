@@ -47,14 +47,14 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 a
     {
         for (U32 xxx = 0; xxx < 20; xxx++)
         {
-            CONST U32 h = x + xx * MAX_HORIZONTAL_OFFSET + xxx * MAX_HORIZONTAL_OFFSET;
-            CONST u32 v = y + xxx * MAX_VERTICAL_OFFSET;
+            CONST S32 h = x + xx * MAX_HORIZONTAL_OFFSET + xxx * MAX_HORIZONTAL_OFFSET;
+            CONST S32 v = y + xxx * MAX_VERTICAL_OFFSET;
 
             state->Actions.DrawBackSurfaceRhomb(h, v, a1, a2, a3, a4, (IMAGEPALETTETILEPTR)(sprite[xxx]));
         }
     }
 
-    SavePixels(MakeFileName("DrawBackSurfaceRhomb", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawBackSurfaceRhomb", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     event->Result = TRUE;
 }
@@ -127,7 +127,25 @@ VOID DrawBackSurfaceRhomb(RENDERERPTR state, MODULEEVENTPTR event)
         state->Actions.OffsetSurfaces(0, 0);
 
         EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 0 A4: 0", state, event, 0, 0, 0, 0, 0, 0, sprites);
-        EXECUTE("X: 0 Y: 0 A1: 0 A2: 45 A3: 0 A4: 45", state, event, 0, 0, 0, 45, 0, 45, sprites);
+
+        EXECUTE("X: 0 Y: 0 A1: 45 A2: 0 A3: 0 A4: 0", state, event, 0, 0, 45, 0, 0, 0, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 90 A2: 0 A3: 0 A4: 0", state, event, 0, 0, 90, 0, 0, 0, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 180 A2: 0 A3: 0 A4: 0", state, event, 0, 0, 180, 0, 0, 0, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 210 A2: 0 A3: 0 A4: 0", state, event, 0, 0, 210, 0, 0, 0, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 270 A2: 0 A3: 0 A4: 0", state, event, 0, 0, 270, 0, 0, 0, sprites);
+
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 45 A3: 0 A4: 0", state, event, 0, 0, 0, 45, 0, 0, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 45 A4: 0", state, event, 0, 0, 0, 0, 45, 0, sprites);
+
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 0 A4: 45", state, event, 0, 0, 0, 0, 0, 45, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 0 A4: 90", state, event, 0, 0, 0, 0, 0, 90, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 0 A4: 180", state, event, 0, 0, 0, 0, 0, 180, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 0 A4: 210", state, event, 0, 0, 0, 0, 0, 210, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 0 A2: 0 A3: 0 A4: 270", state, event, 0, 0, 0, 0, 0, 270, sprites);
+
+
+        EXECUTE("X: 0 Y: 0 A1: 45 A2: 45 A3: 45 A4: 45", state, event, 0, 0, 45, 45, 45, 45, sprites);
+        EXECUTE("X: 0 Y: 0 A1: 45 A2: 90 A3: 45 A4: 90", state, event, 0, 0, 45, 90, 45, 90, sprites);
     }
 
     {

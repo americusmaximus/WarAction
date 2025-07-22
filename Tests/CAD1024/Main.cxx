@@ -67,6 +67,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
     ACTION(DrawBackSurfacePaletteShadeSprite, state, event);
+    ACTION(DrawBackSurfaceRhomb, state, event);
     ACTION(DrawBackSurfaceText, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion1, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion2, state, event);
@@ -91,7 +92,6 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
     ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);
     ACTION(WriteSurfaceSurfaceRectangle, state, event);
-    ACTION(DrawBackSurfaceRhomb, state, event);
 
     // TODO
 }

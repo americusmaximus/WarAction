@@ -102,14 +102,12 @@ typedef struct RendererStateContainer
 
         struct
         {
-            S16 X;             // 0x1001004A
-            S16 Y;             // 0x1001004C
-            S16 Width;         // 0x1001004E
+            S16 X;             // 0x1001004a
+            S16 Y;             // 0x1001004c
+            S16 Width;         // 0x1001004e
             S16 Height;        // 0x10010050
         } Window;
     } Tile;
-
-
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
 EXTERN RENDERERSTATECONTAINER RendererState;

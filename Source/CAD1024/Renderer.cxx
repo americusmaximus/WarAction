@@ -896,7 +896,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                 overflow = 0;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
+                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
             }
 
             while (RendererState.Tile.tileHeight > 0)
@@ -927,11 +927,11 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                         if (RendererState.Tile.Stencil <= dstTemp)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
                         }
                         if (dstTemp < pixels)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
                         }
 
                         U16 uVar5 = ((U16)((totalTxOffset >> 8) ^ RendererState.Tile.unk08) << 8) | (totalTxOffset & 0xFF);
@@ -995,7 +995,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                 overflow = RendererState.Tile.tempTileHeight;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL));
+                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
             }
         }
 
@@ -1051,7 +1051,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
             overflow = RendererState.Tile.tempTileHeight;
 
             dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-        };
+        }
     }
 }
 
