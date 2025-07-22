@@ -161,6 +161,7 @@
     <ClCompile Include="ConvertVisibleColors.cxx" />
     <ClCompile Include="DrawBackSurfaceColorPoint.cxx" />
     <ClCompile Include="DrawBackSurfacePaletteShadeSprite.cxx" />
+    <ClCompile Include="DrawBackSurfaceRhomb.cxx" />
     <ClCompile Include="DrawBackSurfaceText.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion2.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion3.cxx" />
@@ -197,6 +198,7 @@
     <ClInclude Include="ConvertVisibleColors.hxx" />
     <ClInclude Include="DrawBackSurfaceColorPoint.hxx" />
     <ClInclude Include="DrawBackSurfacePaletteShadeSprite.hxx" />
+    <ClInclude Include="DrawBackSurfaceRhomb.hxx" />
     <ClInclude Include="DrawBackSurfaceText.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion2.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion3.hxx" />

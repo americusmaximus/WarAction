@@ -193,11 +193,6 @@ typedef struct Fog // TODO Name - arrays fog of war
     U8    Unk[0x50]; // TODO
 } FOG, * FOGPTR; // TODO Name
 
-typedef struct RhombsPalette
-{
-    PIXEL     palette[256 * 67];
-}RHOMBSPALETTE, * RHOMBSPALETTEPTR;
-
 typedef struct Renderer
 {
     RECTANGLE                   Window;
@@ -228,12 +223,15 @@ typedef struct Renderer
     U32                         Unk27; // TODO
     U32                         Pitch;
     DOUBLEPIXEL                 BackSurfaceShadePixel;
+
     FOG                         Sprites[112]; // TODO
 
-    RhombsPalette               RhombsPalette; // TODO 10014e5c arrays palette (rhomb.pl)
+    PIXEL                       Rhombs[MAX_PALETTE_SIZE * MAX_RHOMB_COUNT]; // Rhombs palette from RHOMB.PL (16,348 colors).
+    
+    U8                          Unknown[1536]; // TODO
 
     HWND                        HWND;
     BOOL                        IsFullScreen;
-    DIRECTX  DirectX;
+    DIRECTX                     DirectX;
     RENDERERACTIONS             Actions;
 } RENDERER, * RENDERERPTR;

@@ -65,7 +65,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         {
             IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
 
-            state->Actions.DrawMainSurfaceAnimationSpriteVersion1(x + xx * 25, y, 100, (ANIMATIONPIXEL*)palette, sprite);
+            // TODO state->Actions.DrawMainSurfaceAnimationSpriteVersion1(x + xx * 25, y, 100, (ANIMATIONPIXEL*)palette, sprite);
         }
     }
 

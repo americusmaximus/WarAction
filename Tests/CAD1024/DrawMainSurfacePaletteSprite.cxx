@@ -46,9 +46,9 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
     state->Window.X = wx;
     state->Window.Y = wy;
 
-    PIXEL palette[256];
+    PIXEL palette[MAX_PALETTE_SIZE];
 
-    for (U32 x = 0; x < 256; x++)
+    for (U32 x = 0; x < MAX_PALETTE_SIZE; x++)
     {
         palette[x] = x * 0xFF;
     }

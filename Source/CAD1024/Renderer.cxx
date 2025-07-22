@@ -818,7 +818,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
     S32 tileStartDrawLength = 0;
 
     U8* srcInput = input->pixels;
-    PIXEL* dst = (PIXEL*)((ADDR)pixels + ModuleState.Surface.Offset + ty * stride + (tx - 1) * sizeof(PIXEL));
+    PIXEL* dst = (PIXEL*)((ADDR)pixels + (ADDR)(ModuleState.Surface.Offset + ty * stride + (tx - 1) * sizeof(PIXEL)));
     PIXEL* dst2 = NULL;
     S32 txDelta = tx + MAX_TILE_SIZE_HEIGHT;
     S32 diff = (angle_1 - angle_0) * 4;
@@ -939,7 +939,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                         for (S32 y = 0; y < delta2; ++y)
                         {
-                            dstTemp[y] = ModuleState.RhombsPalette.palette[(uVar5 & 0xFF00) | srcTemp[y]];
+                            dstTemp[y] = ModuleState.Rhombs[(uVar5 & 0xFF00) | srcTemp[y]];
                             uVar5 = uVar5 + (U16)(diff) ^ 0x2000;
                         }
                     }
@@ -1029,7 +1029,7 @@ VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S3
 
                     for (S32 y = 0; y < delta2; y++)
                     {
-                        dstTemp[y] = ModuleState.RhombsPalette.palette[(uVar5 & 0xFF00) | srcTemp[y]];
+                        dstTemp[y] = ModuleState.Rhombs[(uVar5 & 0xFF00) | srcTemp[y]];
                         uVar5 = uVar5 + (U16)(diff) ^ 0x2000;
                     }
 
