@@ -235,7 +235,7 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
         ReadZipFile(&zip, buffer, 272); // TODO
     }
 
-    ScriptParser(map, &zip);
+    ParseMapScripts(map, &zip);
 
     {
         U32 length = 0;
@@ -292,24 +292,25 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
 }
 
 // 0x10017f60
-BOOL ScriptParser(MAPPTR map, ZIPFILEPTR file) // TODO
+BOOL ParseMapScripts(MAPPTR map, ZIPFILEPTR file)
 {
-    U32 script_num = 0;
-    ReadZipFile(file, &script_num, sizeof(U32));
+    U32 count = 0;
+    ReadZipFile(file, &count, sizeof(U32));
 
-    for (U32 x = 0; x < script_num; x++)
+    for (U32 x = 0; x < count; x++)
     {
-        U32 script_length = 0;
-        ReadZipFile(file, &script_length, sizeof(U32));
+        U32 length = 0;
+        ReadZipFile(file, &length, sizeof(U32));
 
-        if (script_length != 0)
+        if (length != 0)
         {
-            LPVOID scripts = malloc(script_length); // TODO
-            ReadZipFile(file, scripts, script_length);
-            ScriptCommandPerser(map, scripts); // TODO Decoding script commands
+            S32* scripts = (S32*)malloc(length);
+            ReadZipFile(file, scripts, length);
+            ParseMapScriptCommands(map, scripts);
             free(scripts);
         }
     }
+
     return TRUE;
 }
 
@@ -379,169 +380,167 @@ BOOL ValidateMultiMapFile(LPCSTR name)
     return TRUE;
 }
 
-//Decoding script commands
-void ScriptCommandPerser(MAPPTR map, LPVOID value)
-{
-    S32 v7; // [esp+4h] [ebp-1004h]
-    S8 v8; // [esp+8h] [ebp-1000h] BYREF
+#define GETCOMMAND(X) (*X)
+#define INCREMENT(X, V) (X = X + V)
 
-    S32* result = (S32*)value;
-    S32* position = (S32*)value;
-    if (*(S32*)value != SCRIPT_END)
+// 0x10017fe0
+VOID ParseMapScriptCommands(MAPPTR map, S32* commands)
+{
+    S32 stack[MAX_SCRIPTS_COUNT];
+    
+    S32* ptr = stack;
+    stack[MAX_SCRIPTS_COUNT - 1] = 0x10017fea; // TODO
+
+    S32 value = 0;
+
+    if (GETCOMMAND(commands) != SCRIPTSCOMMAND_SCRIPT_END)
     {
-        S32 v4 = v7;
-        S32* Stack_for_num_scripts = (S32*)&v8;
         do
         {
-            S32 scripts = *position;
-            if (*position >= 0) // Filter conditions and parameters for these conditions
+            if (GETCOMMAND(commands) >= SCRIPTSCOMMAND_NONE)
             {
-                switch (scripts)
+                switch (GETCOMMAND(commands))
                 {
-                case AND:
-                case OR:
-                case IF_COUNT_DOWN:
-                case IF_TIME_FROM_MISSION_START:
-                case IF_GROUP_BEHAVIOUR:
-                case IF_GROUP_BEHAVIOUR_ZONE1:
-                case IF_GROUP_BEHAVIOUR_ZONE2:
-                case IF_GROUP_BEHAVIOUR_GROUP1:
-                case IF_GROUP_BEHAVIOUR_GROUP2:
-                    v4 = *(Stack_for_num_scripts - 2);
-                    --Stack_for_num_scripts;
-                    break;
-                case IF_GROUP_UNIT_COUNT_OF_TYPE:
-                case IF_PLAYER_UNIT_COUNT_OF_TYPE:
-                case IF_ZONE_UNIT_COUNT_FOR_GROUP:
-                case IF_ZONE_UNIT_COUNT_FOR_PLAYER:
-                case IF_PLANES_FOR_PLAYER_COUNT:
-                case IF_PLANES_FOR_PLAYER_MISSIONS_COUNT:
-                case IF_ZONE_UNIT_COUNT_PERCENT_FOR_GROUP:
-                case IF_ZONE_UNIT_COUNT_PERCENT_FOR_PLAYER:
-                    v4 = *(Stack_for_num_scripts - 4);
-                    Stack_for_num_scripts -= 3;
-                    break;
-                case RETURN_IF_FALSE:
-                case TIMER_STOP:
-                case ZONE_POINT_TO:
-                case PHRASE_SHOW:
-                case COUNT_DOWN_START:
-                case CAMPAIGN_SET_NEXT_MISSION:
-                case MISSION_COMPLETE:
-                case PLANES_ROUTE_ADD_OBJECT:
-                case PLANES_ROUTE_ADD_OBJECT_AS_DROP:
-                    --Stack_for_num_scripts;
-                    v4 = *Stack_for_num_scripts;
-                    break;
-                case PLANES_FOR_PLAYER_SEND_TO_ZONE_AND_LAND:
-                case PLANES_FOR_PLAYER_SEND_TO_OBJECT_AND_LAND:
-                case MULTI_REINFORCEMENT_START:
-                    Stack_for_num_scripts -= 4;
-                    v4 = *Stack_for_num_scripts;
-                    break;
-                case TIMER_START:
-                case GROUP_BEHAVIOUR_SET:
-                case GROUP_BEHAVIOUR_ZONE_1SET:
-                case GROUP_BEHAVIOUR_ZONE_2SET:
-                case GROUP_BEHAVIOUR_GROUP_1SET:
-                case GROUP_BEHAVIOUR_GROUP_2SET:
-                case VARIABLE_SET:
-                case PHRASE_SHOW_AND_POINT_TO_MARKER:
-                case GROUP_GIVE_TO_PLAYER:
-                case GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_ZONE:
-                case GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_OBJECT:
-                    Stack_for_num_scripts -= 2;
-                    v4 = *Stack_for_num_scripts;
-                    break;
-                case PLANES_ADD_TO_PLAYER:
-                case PLANES_MISSIONS_ADD_TO_PLAYER:
-                case PLANES_ROUTE_SEND_AND_LAND_FOR_PLAYER:
-                case VARIABLE_MODIFY:
-                    Stack_for_num_scripts -= 3;
-                    v4 = *Stack_for_num_scripts;
-                    break;
-                case NEGATE:
-                case IF_TIMER_COMPLETE:
-                case IF_OBJECT_IS_DESTROYED:
-                    v4 = *(Stack_for_num_scripts - 1);
-                    break;
-                case IF_GROUP_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_GROUP:
-                    v4 = *(Stack_for_num_scripts - 6);
-                    Stack_for_num_scripts -= 5;
-                    break;
-                case IF_PLAYER_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_PLAYER:
-                    v4 = *(Stack_for_num_scripts - 5);
-                    Stack_for_num_scripts -= 4;
-                    break;
-                case GROUP_RESURRECT_THROUGH_FLAG_WITH_PARAMS:
-                    Stack_for_num_scripts -= 7;
-                    v4 = *Stack_for_num_scripts;
-                    break;
-                case REINFORCEMENT_SEND:
-                    Stack_for_num_scripts -= 5;
-                    break; // 50/50
-                case IF_GROUP_WAS_ATTACKED_TIME_AGO:
-                case IF_VARIABLE_VALUE:
-                    v4 = *(Stack_for_num_scripts - 3);
-                    Stack_for_num_scripts -= 2;
-                    break;
-                case IF_MiISSION_START:
-                    *Stack_for_num_scripts = v4;
-                    Stack_for_num_scripts++;
-                    break;
-                case MULTI_REINFORCEMENT_FOR_FLAGS:
-                    v4 = *(Stack_for_num_scripts - 5);
-                    Stack_for_num_scripts -= 5;
-                    //CommandParser(map, v4);
-                    break;
-                case MULTI_PLANES_FOR_FLAGS:
-                case MULTI_PLANES_MISSIONS_FOR_FLAGS:
-                    v4 = *(Stack_for_num_scripts - 3);
-                    Stack_for_num_scripts -= 3;
-                    //CommandParser(map, v4);
-                    break;
-                case MULTI_PHRASE_FOR_FLAGS:
-                    v4 = *(Stack_for_num_scripts - 2);
-                    Stack_for_num_scripts -= 2;
-                    //CommandParser(map, v4);
-                    break;
-                default:
-                    break;
+                case SCRIPTSCOMMAND_AND:
+                case SCRIPTSCOMMAND_OR:
+                case SCRIPTSCOMMAND_IF_COUNT_DOWN:
+                case SCRIPTSCOMMAND_IF_TIME_FROM_MISSION_START:
+                case SCRIPTSCOMMAND_IF_GROUP_BEHAVIOUR:
+                case SCRIPTSCOMMAND_IF_GROUP_BEHAVIOUR_ZONE1:
+                case SCRIPTSCOMMAND_IF_GROUP_BEHAVIOUR_ZONE2:
+                case SCRIPTSCOMMAND_IF_GROUP_BEHAVIOUR_GROUP1:
+                case SCRIPTSCOMMAND_IF_GROUP_BEHAVIOUR_GROUP2:
+                {
+                    value = ptr[-2];
+                    INCREMENT(ptr, -1); break;
+                }
+                case SCRIPTSCOMMAND_IF_GROUP_UNIT_COUNT_OF_TYPE:
+                case SCRIPTSCOMMAND_IF_PLAYER_UNIT_COUNT_OF_TYPE:
+                case SCRIPTSCOMMAND_IF_ZONE_UNIT_COUNT_FOR_GROUP:
+                case SCRIPTSCOMMAND_IF_ZONE_UNIT_COUNT_FOR_PLAYER:
+                case SCRIPTSCOMMAND_IF_PLANES_FOR_PLAYER_COUNT:
+                case SCRIPTSCOMMAND_IF_PLANES_FOR_PLAYER_MISSIONS_COUNT:
+                case SCRIPTSCOMMAND_IF_ZONE_UNIT_COUNT_PERCENT_FOR_GROUP:
+                case SCRIPTSCOMMAND_IF_ZONE_UNIT_COUNT_PERCENT_FOR_PLAYER:
+                {
+                    value = ptr[-4];
+                    INCREMENT(ptr, -3); break;
+                }
+                case SCRIPTSCOMMAND_RETURN_IF_FALSE:
+                case SCRIPTSCOMMAND_TIMER_STOP:
+                case SCRIPTSCOMMAND_ZONE_POINT_TO:
+                case SCRIPTSCOMMAND_PHRASE_SHOW:
+                case SCRIPTSCOMMAND_COUNT_DOWN_START:
+                case SCRIPTSCOMMAND_CAMPAIGN_SET_NEXT_MISSION:
+                case SCRIPTSCOMMAND_MISSION_COMPLETE:
+                case SCRIPTSCOMMAND_PLANES_ROUTE_ADD_OBJECT:
+                case SCRIPTSCOMMAND_PLANES_ROUTE_ADD_OBJECT_AS_DROP:
+                {
+                    value = ptr[-1];
+                    INCREMENT(ptr, -1); break;
+                }
+                case SCRIPTSCOMMAND_PLANES_FOR_PLAYER_SEND_TO_ZONE_AND_LAND:
+                case SCRIPTSCOMMAND_PLANES_FOR_PLAYER_SEND_TO_OBJECT_AND_LAND:
+                case SCRIPTSCOMMAND_MULTI_REINFORCEMENT_START:
+                {
+                    value = ptr[-4];
+                    INCREMENT(ptr, -4); break;
+                }
+                case SCRIPTSCOMMAND_TIMER_START:
+                case SCRIPTSCOMMAND_GROUP_BEHAVIOUR_SET:
+                case SCRIPTSCOMMAND_GROUP_BEHAVIOUR_ZONE_1SET:
+                case SCRIPTSCOMMAND_GROUP_BEHAVIOUR_ZONE_2SET:
+                case SCRIPTSCOMMAND_GROUP_BEHAVIOUR_GROUP_1SET:
+                case SCRIPTSCOMMAND_GROUP_BEHAVIOUR_GROUP_2SET:
+                case SCRIPTSCOMMAND_VARIABLE_SET:
+                case SCRIPTSCOMMAND_PHRASE_SHOW_AND_POINT_TO_MARKER:
+                case SCRIPTSCOMMAND_GROUP_GIVE_TO_PLAYER:
+                case SCRIPTSCOMMAND_GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_ZONE:
+                case SCRIPTSCOMMAND_GROUP_SHOT_ONE_ROCKET_ARTILLERY_TO_OBJECT:
+                {
+                    value = ptr[-2];
+                    INCREMENT(ptr, -2); break;
+                }
+                case  SCRIPTSCOMMAND_PLANES_ADD_TO_PLAYER:
+                case  SCRIPTSCOMMAND_PLANES_MISSIONS_ADD_TO_PLAYER:
+                case  SCRIPTSCOMMAND_PLANES_ROUTE_SEND_AND_LAND_FOR_PLAYER:
+                case  SCRIPTSCOMMAND_VARIABLE_MODIFY:
+                {
+                    value = ptr[-3];
+                    INCREMENT(ptr, -2); break;
+                }
+                case SCRIPTSCOMMAND_NEGATE:
+                case SCRIPTSCOMMAND_IF_TIMER_COMPLETE:
+                case SCRIPTSCOMMAND_IF_OBJECT_IS_DESTROYED:
+                {
+                    value = ptr[-1]; break;
+                }
+                case SCRIPTSCOMMAND_IF_GROUP_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_GROUP:
+                {
+                    value = ptr[-6];
+                    INCREMENT(ptr, -5); break;
+                }
+                case SCRIPTSCOMMAND_IF_PLAYER_UNIT_COUNT_PERCENT_OF_TYPE_RELATIVE_TO_PLAYER:
+                {
+                    value = ptr[-5];
+                    INCREMENT(ptr, -4); break;
+                }
+                case SCRIPTSCOMMAND_GROUP_RESURRECT_THROUGH_FLAG_WITH_PARAMS:
+                {
+                    value = ptr[-7];
+                    INCREMENT(ptr, -7); break;
+                }
+                case SCRIPTSCOMMAND_REINFORCEMENT_SEND:
+                {
+                    value = ptr[-5];
+                    INCREMENT(ptr, -5); break;
+                }
+                case SCRIPTSCOMMAND_IF_GROUP_WAS_ATTACKED_TIME_AGO:
+                case SCRIPTSCOMMAND_IF_VARIABLE_VALUE:
+                {
+                    value = ptr[-3];
+                    INCREMENT(ptr, -2); break;
+                }
+                case SCRIPTSCOMMAND_IF_MISSION_START:
+                {
+                    *ptr = value;
+                    INCREMENT(ptr, 1); break;
+                }
+                case SCRIPTSCOMMAND_MULTI_REINFORCEMENT_FOR_FLAGS:
+                {
+                    value = ptr[-5];
+                    INCREMENT(ptr, -5);
+                    FUN_100181f0(map, value); break;
+                }
+                case SCRIPTSCOMMAND_MULTI_PLANES_FOR_FLAGS:
+                case SCRIPTSCOMMAND_MULTI_PLANES_MISSIONS_FOR_FLAGS:
+                {
+                    value = ptr[-3];
+                    INCREMENT(ptr, -3);
+                    FUN_100181f0(map, value); break;
+                }
+                case SCRIPTSCOMMAND_MULTI_PHRASE_FOR_FLAGS:
+                {
+                    value = ptr[-2];
+                    INCREMENT(ptr, -2);
+                    FUN_100181f0(map, value); break;
+                }
                 }
             }
             else
             {
-                *Stack_for_num_scripts = scripts & 0x7FFFFFFF; //remove the negative value from the parameter
-                ++Stack_for_num_scripts;
+                *ptr = GETCOMMAND(commands) & SCRIPTSCOMMAND_SCRIPT_END;
+                INCREMENT(ptr, 1);
             }
-            result = (S32*)position[1];
-            ++position;
-        } while (result != (S32*)SCRIPT_END);
+
+            INCREMENT(commands, 1);
+
+        } while (GETCOMMAND(commands) != SCRIPTSCOMMAND_SCRIPT_END);
     }
-    //return (S32)result;
-    //return 0;
 }
 
-//S16* CommandParser(MAPPTR map, int a2)
-//{
-//    S32 v2 = -1;
-//    S16* v3 = (S16*)(map + 144);
-//    map->Mis_Scripts.Unk00;
-//    S32 v4 = 32;
-//    do
-//    {
-//        if (*v3 > v2)
-//            v2 = *v3;
-//        v3 += 3;
-//        --v4;
-//    } while (v4);
-//    S16 v5 = v2 + 1;
-//    S16* result = (S16*)(map + 144);
-//    for (S32 i = 0; i < 32; ++i)
-//    {
-//        if (((1 << i) & a2) != 0)
-//            *result = v5;
-//        result += 3;
-//    }
-//    return result;
-//}
+// 0x100181f0
+VOID FUN_100181f0(MAPPTR map, S32 value)
+{
+    // TODO
+}

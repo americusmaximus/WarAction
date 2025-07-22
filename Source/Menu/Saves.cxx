@@ -379,8 +379,6 @@ BOOL LoadGameState(BINFILEPTR save)
     {
         OpenBinFile(&file, "XCHNG\\STATE\\map_info", BINFILEOPENTYPE_READ);
 
-        // TODO: The file is missing when starting a new single player game with selected map
-
         U32 length = AcquireBinFileSize(&file);
 
         WriteBinFile(save, &length, sizeof(U32));
