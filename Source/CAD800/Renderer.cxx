@@ -779,7 +779,7 @@ VOID OffsetSurfaces(S32 x, S32 y)
     }
 }
 
-// 0x10001ea0    
+// 0x10001ea0
 VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input)
 {
     DrawBackSurfaceRhomb(angle_0, angle_1, angle_2, angle_3, x, y,
@@ -1079,8 +1079,10 @@ VOID FUN_10001f50(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_
 // 0x10001f90
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
 {
-    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Back + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((ADDR)RendererState.Surfaces.Main + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Back
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* dst = (PIXEL*)((ADDR)RendererState.Surfaces.Main
+        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
 
     if (y < ModuleState.Surface.Y)
     {
@@ -1499,7 +1501,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 VOID DrawStencilSurfaceWindowRectangle()
 {
     PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Stencil +
-        (ADDR)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * (ADDR)sizeof(PIXEL));
+        (ADDR)(ModuleState.Surface.Offset + ModuleState.Window.Y * MAX_RENDERER_WIDTH + ModuleState.Window.X) * sizeof(PIXEL));
 
     CONST S32 height = ModuleState.Window.Height - ModuleState.Window.Y + 1;
     CONST S32 width = ModuleState.Window.Width - ModuleState.Window.X + 1;
@@ -1923,6 +1925,7 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
 // 0x10002ba0
 BOOL FUN_10002ba0(S32 x, S32 y, S32 width, S32 height)
 {
+    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
 
     return TRUE;

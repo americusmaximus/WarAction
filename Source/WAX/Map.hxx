@@ -62,9 +62,9 @@ typedef enum MapType
 
 typedef struct MapDetails
 {
-    MAPTYPE Type;
-    S32		Width;
-    S32		Height;
+    MAPTYPE     Type;
+    S32		    Width;
+    S32		    Height;
 } MAPDETAILS, * MAPDETAILSPTR;
 
 typedef struct MapDescriptor

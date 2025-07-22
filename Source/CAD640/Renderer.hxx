@@ -34,7 +34,6 @@ SOFTWARE.
 
 #define ACQUIRETEXTWIDTH(A, X) (S32)(*(U8*)((ADDR)A + (ADDR)(X * 2 + 0x404)))
 
-
 typedef enum OutlineSkipOptions
 {
     OUTLINESKIPOPTIONS_NONE         = 0,
