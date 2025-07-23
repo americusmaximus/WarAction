@@ -188,7 +188,7 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
 
             State.Renderer->Actions.DrawBackSurfacePaletteShadeSprite(0, 0, 12 /* TODO */,
                 (PIXEL*)self->BkgColFile,
-                IMAGEPALETTESPRITEPTR((ADDR)self->BkgPckFile + (ADDR)((IMAGEPALETTESPRITEPTR)self->BkgPckFile)->Unk04)); // TODO
+                IMAGEPALETTESPRITEPTR((ADDR)self->BkgPckFile + (ADDR)((IMAGEPALETTESPRITEPTR)self->BkgPckFile)->TypeGraphics)); // TODO
 
             ReleaseSoundStateTracks(&SoundState.State, TRUE);
 

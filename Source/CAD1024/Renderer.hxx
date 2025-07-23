@@ -44,6 +44,14 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
 } OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
 
+typedef enum TypeGraphics
+{
+    STATIC_SPRITE       = 0xA1,
+    DYNAMIC_SPRITE      = 0xA2,
+    ALPHA_CHANNEL       = 0xA3,
+    ANIMATION_SPRITE    = 0xA9,
+} TYPEGRAPHICS, * TYPEGRAPHICSPTR;
+
 typedef struct RendererStateContainer
 {
     BOOL IsTrueColor;
@@ -108,6 +116,23 @@ typedef struct RendererStateContainer
             S16 Height;        // 0x10010050
         } Window;
     } Tile;
+
+    struct
+    {
+        ADDR    Offset;                         // 0x100100b6
+        U32     Stride;                         // 0x100100ba
+
+        struct
+        {
+            S16 X;                              // 0x100100be
+            S16 Y;                              // 0x100100c2
+            S16 Width;                          // 0x100100c6
+            S16 Height;                         // 0x100100ca
+        } Window;
+
+        LPVOID                  Palette;        // 0x100100ce
+        IMAGEPALETTESPRITEPTR   Sprite;         // 0x100100d2
+    } UI;
 } RENDERERSTATECONTAINER, * RENDERERSTATECONTAINERPTR;
 
 EXTERN RENDERERSTATECONTAINER RendererState;
@@ -125,10 +150,10 @@ VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output);
 VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
-VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceAnimationSpriteVersion0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion1A(S32 x, S32 y, U16 level, LPVOID param_4, LPVOID param_5); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion3(S32 x, S32 y, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
@@ -143,6 +168,7 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
+VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
 VOID FUN_10001ed0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_10001f10(S32 param_1, S32 param_2, S32 param_3); // TODO
@@ -156,10 +182,8 @@ VOID FUN_1000579c(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TOD
 VOID FUN_10005ac6(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_1000618d(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_100067ad(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
-VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10007928(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10008ecd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 VOID Initialize(VOID);

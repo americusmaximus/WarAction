@@ -2825,10 +2825,211 @@ VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID pal,
 }
 
 // 0x10008ecd
-VOID FUN_10008ecd(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, LPVOID param_5)
+VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    RendererState.UI.Offset = input->Offset;
+    RendererState.UI.Stride = input->Stride * sizeof(PIXEL);
+
+    RendererState.UI.Window.X = input->X;
+    RendererState.UI.Window.Y = input->Y;
+    RendererState.UI.Window.Width = input->Width;
+    RendererState.UI.Window.Height = input->Height;
+
+    RendererState.UI.Palette = pal;
+    RendererState.UI.Sprite = sprite;
+
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
+
+    switch (sprite->TypeGraphics)
+    {
+        case STATIC_SPRITE:
+        {
+            PIXEL* palette = (PIXEL*)pal;
+            RendererState.Sprite.Window.X = RendererState.UI.Window.X;
+            RendererState.Sprite.Window.Y = RendererState.UI.Window.Y;
+            RendererState.Sprite.Window.Width = RendererState.UI.Window.Width;
+            RendererState.Sprite.Window.Height = RendererState.UI.Window.Height;
+
+            y += sprite->Y;
+            x += sprite->X;
+
+            RendererState.Sprite.Height = (U16)sprite->Height;
+            RendererState.Sprite.Width = (U16)sprite->Width + 1;
+
+            if (y < RendererState.UI.Window.Y)
+            {
+                RendererState.Sprite.Height = RendererState.Sprite.Height - (RendererState.UI.Window.Y - y);
+
+                if (RendererState.Sprite.Height <= 0) { return; }
+
+                for (S32 i = 0; i < RendererState.UI.Window.Y - y; i++)
+                {
+                    content = (void*)((ADDR)next + (ADDR)sizeof(U16));
+                    next = (U32*)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
+                }
+
+                y = RendererState.UI.Window.Y;
+            }
+
+            CONST S32 overflow = y + RendererState.Sprite.Height - (ModuleState.Window.Height + 1);
+            BOOL draw = overflow <= 0;
+
+            if (!draw)
+            {
+                draw = !(RendererState.Sprite.Height <= overflow);
+                RendererState.Sprite.Height -= overflow;
+            }
+
+            if (draw)
+            {
+                U32 offset = RendererState.UI.Offset;
+                CONST ADDR linesStride = (ADDR)(RendererState.UI.Stride * y);
+
+                RendererState.Sprite.X = (PIXEL*)((ADDR)offset + linesStride + (ADDR)(x * sizeof(PIXEL)));
+                RendererState.Sprite.MinX = (PIXEL*)((ADDR)offset + linesStride + (ADDR)(RendererState.Sprite.Window.X * sizeof(PIXEL)));
+                RendererState.Sprite.MaxX = (PIXEL*)((ADDR)offset + linesStride + (ADDR)((RendererState.Sprite.Window.Width + 1) * sizeof(PIXEL)));
+
+                CONST S32 overage = y + RendererState.Sprite.Height < MAX_RENDERER_HEIGHT ? 0 : y + RendererState.Sprite.Height - MAX_RENDERER_HEIGHT;
+                RendererState.Sprite.Overage = RendererState.Sprite.Height;
+                RendererState.Sprite.Height -= overage;
+
+                if (RendererState.Sprite.Height < 0)
+                {
+                    RendererState.Sprite.Height = RendererState.Sprite.Overage;
+                    RendererState.Sprite.Overage = 0;
+
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                }
+                else { RendererState.Sprite.Overage = overage; }
+
+                while (RendererState.Sprite.Height > 0)
+                {
+                    while (RendererState.Sprite.Height > 0)
+                    {
+                        U32 skip = 0;
+                        IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
+                        PIXEL* sx = RendererState.Sprite.X;
+
+                        while (sx < RendererState.Sprite.MinX)
+                        {
+                            CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
+                            CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+
+                            if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                            {
+                                if (count <= need)
+                                {
+                                    pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
+                                }
+                            }
+                            else
+                            {
+                                if (count <= need)
+                                {
+                                    pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + (count - 1) * sizeof(U8) + sizeof(IMAGEPALETTESPRITEPIXEL));
+                                }
+                            }
+
+                            skip = count == need ? 0 : Mathematics::Min(count, need);
+                            sx = (PIXEL*)((ADDR)sx + (ADDR)(Mathematics::Min(count, need) * sizeof(PIXEL)));
+                        }
+
+                        while (sx < RendererState.Sprite.MaxX)
+                        {
+                            CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+
+                            if (count == 0)
+                            {
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + (ADDR)sizeof(IMAGEPALETTESPRITEPIXEL));
+                            }
+                            else if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                            {
+                                CONST U8 indx = pixels->Pixels[0];
+
+                                if (indx != 0)
+                                {
+                                    CONST PIXEL pixel = palette[indx];
+
+                                    for (U32 i = 0; i < count - skip; i++)
+                                    {
+                                        if (((ADDR)sx + (ADDR)(i * sizeof(PIXEL))) < (ADDR)RendererState.Sprite.MaxX) { sx[i] = pixel; }
+                                    }
+                                }
+
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + (ADDR)sizeof(IMAGEPALETTESPRITEPIXEL));
+                            }
+                            else
+                            {
+                                for (U32 i = 0; i < count - skip; i++)
+                                {
+                                    const U8 indx = pixels->Pixels[skip + i];
+
+                                    if (indx != 0)
+                                    {
+                                        if (((ADDR)sx + (ADDR)(i * sizeof(PIXEL))) < (ADDR)RendererState.Sprite.MaxX)
+                                        {
+                                            sx[i] = palette[indx];
+                                        }
+                                    }
+                                }
+
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + (ADDR)((count - 1) * sizeof(U8) + sizeof(IMAGEPALETTESPRITEPIXEL)));
+                            }
+
+                            sx = (PIXEL*)((ADDR)sx + (ADDR)((count - skip) * sizeof(PIXEL)));
+
+                            skip = 0;
+                        }
+
+                        content = (LPVOID)((ADDR)next + (ADDR)sizeof(U16));
+                        next = (U32*)((ADDR)next + (ADDR)(((U16*)next)[0] + sizeof(U16)));
+
+                        RendererState.Sprite.Height--;
+
+                        RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X + (ADDR)RendererState.UI.Stride);
+                        RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX + (ADDR)RendererState.UI.Stride);
+                        RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX + (ADDR)RendererState.UI.Stride);
+                    }
+
+                    RendererState.Sprite.Height = RendererState.Sprite.Overage;
+                    RendererState.Sprite.Overage = 0;
+
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                }
+            }
+
+            break;
+        }
+        case DYNAMIC_SPRITE:
+        {
+            // TODO
+            
+            // No work in SSF
+
+            break;
+        }
+        case ALPHA_CHANNEL:
+        {
+            // TODO
+
+            // No work in SSF
+            
+            break;
+        }
+        case ANIMATION_SPRITE:
+        {
+            ANIMATIONPIXEL* palette = (ANIMATIONPIXEL*)pal;
+
+            // TODO
+
+            break;
+        }
+    }
 }
 
 // 0x10009eb3
