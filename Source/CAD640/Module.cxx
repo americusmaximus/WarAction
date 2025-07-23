@@ -91,7 +91,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawStencilSurfaceWindowRectangle           = DrawStencilSurfaceWindowRectangle;
     ModuleState.Actions.WriteRendererSurfaceSurfaceRectangle        = WriteRendererSurfaceSurfaceRectangle;
     ModuleState.Actions.WriteSurfaceSurfaceRectangle                = WriteSurfaceSurfaceRectangle;
-    ModuleState.Actions.DrawGameUI                                  = DrawGameUI;
+    ModuleState.Actions.DrawSprite                                  = DrawSprite;
     ModuleState.Actions.FUN_1000a4f3                                = FUN_1000a4f3; // TODO
     ModuleState.Actions.FUN_10009eb3                                = FUN_10009eb3; // TODO
     ModuleState.Actions.ReleaseDirectX                              = ReleaseDirectX;
