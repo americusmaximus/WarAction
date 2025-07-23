@@ -420,7 +420,7 @@ BOOL ExecuteModuleAction(VOID)
             }
 
             CursorUnknown1(&CursorState.Cursor);
-            CursorUnknown2(&CursorState.Cursor);
+            DrawCursor(&CursorState.Cursor);
 
             State.Renderer->Actions.WriteMainSurfaceRendererSurfaceRectangle(0, 0,
                 GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480);
