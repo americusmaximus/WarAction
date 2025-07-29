@@ -98,22 +98,22 @@ typedef struct RendererStateContainer
 
     struct
     {
-        S32     unk01;               // 0x10010030
-        S32     displayedHalfs;      // 0x10010034
-        PIXEL*  Stencil;             // 0x10010038
-        S8      unk04;               // 0x1001003c
+        U32     ColorMask;          // 0x10010030
+        S32     displayedHalfs;     // 0x10010034
+        PIXEL*  Stencil;            // 0x10010038
+        S8      unk04;              // 0x1001003c
 
-        S32     diff;                // 0x1001003d
-        S32     tileHeight;          // 0x10010041
-        S32     tempTileHeight;      // 0x10010045
-        S8      unk08;               // 0x10010049
+        S32     diff;               // 0x1001003d
+        S32     tileHeight;         // 0x10010041
+        S32     tempTileHeight;     // 0x10010045
+        S8      unk08;              // 0x10010049
 
         struct
         {
             S16 X;             // 0x1001004a
             S16 Y;             // 0x1001004c
             S16 Width;         // 0x1001004e
-            S16 Height;        // 0x10010068
+            S16 Height;        // 0x10010050
         } Window;
     } Tile;
 
@@ -144,15 +144,15 @@ BOOL LockRendererSurface(VOID);
 BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 S32 AcquireTextLength(LPCSTR text, BINASSETCONTENTPTR asset);
+VOID CleanMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR tile);
 VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
 VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawBackSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* output); // TODO
-VOID DrawBackSurfaceRhomb(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input); // TODO
+VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
 VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceAnimationSpriteVersion0(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID DrawMainSurfaceAnimationSpriteVersion1A(S32 x, S32 y, U16 param_3, LPVOID param_4, LPVOID param_5); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion1A(S32 x, S32 y, U16 level, LPVOID param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion1B(S32 x, S32 y, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
 VOID DrawMainSurfaceAnimationSpriteVersion3(S32 x, S32 y, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
@@ -164,15 +164,14 @@ VOID DrawMainSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel);
+VOID DrawMainSurfaceMaskRhomb(S32 x, S32 y, S32 color);
 VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
-VOID FUN_10001ee0(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
-VOID FUN_10001f20(S32 param_1, S32 param_2, S32 param_3); // TODO
-VOID FUN_10001f50(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
+VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* pixels);
 VOID FUN_10002fc0(S32 x, S32 y, S32 width, S32 height); // TODO
 VOID FUN_100043a0(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100046c6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
@@ -194,6 +193,7 @@ VOID ReleaseDirectX(VOID);
 VOID ReleaseRendererSurface(VOID);
 VOID RestoreDisplayMode(VOID);
 VOID SetPixelColorMasks(U32 r, U32 g, U32 b);
+VOID ShadeMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3);
 VOID UnlockRendererSurface(VOID);
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID WriteSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);

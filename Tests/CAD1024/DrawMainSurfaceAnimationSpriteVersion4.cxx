@@ -63,9 +63,9 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         }
     }
 
-    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion4_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion4_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion4_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion4_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion4_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion4_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);

@@ -40,13 +40,13 @@ VOID InitializePixelMasks(RENDERERPTR state)
     state->GreenOffset = 0;
     state->BlueOffset = 0;
 
-    state->Unk18 = 0;
-    state->ShadeColorMask = 0;
-    state->Unk22 = 0;
-    state->Unk23 = 0;
-    state->Unk24 = 0;
-    state->Unk25 = 0;
-    state->Unk27 = 0;
+    state->ActualColorBitsCopy = 0;
+    state->ShadeColorMaskCopy = 0;
+    state->InvertedActualColorMask = 0;
+    state->InvertedActualColorMaskCopy = 0;
+    state->InvertedActualColorMaskCopy = 0;
+    state->InitialRGBMask = 0;
+    state->ActualRGBMask = 0;
     state->BackSurfaceShadePixel = 0;
 }
 
@@ -68,13 +68,13 @@ BOOL Check(RENDERERPTR state, COLORMASKRESULTPTR result)
     value &= state->GreenOffset == result->GreenOffset;
     value &= state->BlueOffset == result->BlueOffset;
 
-    value &= state->Unk18 == result->Unk18;
+    value &= state->ActualColorBitsCopy == result->ActualColorBitsCopy;
     value &= state->ShadeColorMask == result->ShadeColorMask;
-    value &= state->Unk22 == result->Unk22;
-    value &= state->Unk23 == result->Unk23;
-    value &= state->Unk24 == result->Unk24;
-    value &= state->Unk25 == result->Unk25;
-    value &= state->Unk27 == result->Unk27;
+    value &= state->ShadeColorMaskCopy == result->ShadeColorMaskCopy;
+    value &= state->InvertedActualColorMask == result->InvertedActualColorMask;
+    value &= state->InvertedActualColorMaskCopy == result->InvertedActualColorMaskCopy;
+    value &= state->InitialRGBMask == result->InitialRGBMask;
+    value &= state->ActualRGBMask == result->ActualRGBMask;
     value &= state->BackSurfaceShadePixel == result->BackSurfaceShadePixel;
 
     return value;

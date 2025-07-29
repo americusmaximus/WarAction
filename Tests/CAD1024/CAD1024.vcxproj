@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="AcquireTextLength.cxx" />
     <ClCompile Include="BitMap.cxx" />
+    <ClCompile Include="CleanMainSurfaceRhomb.cxx" />
     <ClCompile Include="ConvertAllColors.cxx" />
     <ClCompile Include="ConvertVisibleColors.cxx" />
     <ClCompile Include="DrawBackSurfaceColorPoint.cxx" />
@@ -187,6 +188,7 @@
     <ClCompile Include="OffsetSurfaces.cxx" />
     <ClCompile Include="ReadMainSurfaceSurfaceRectangle.cxx" />
     <ClCompile Include="SetPixelColorMasks.cxx" />
+    <ClCompile Include="ShadeMainSurfaceRhomb.cxx" />
     <ClCompile Include="WriteBackSurfaceMainSurfaceRectangle.cxx" />
     <ClCompile Include="WriteMainSurfaceRendererSurfaceRectangle.cxx" />
     <ClCompile Include="WriteRendererSurfaceSurfaceRectangle.cxx" />
@@ -195,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="AcquireTextLength.hxx" />
     <ClInclude Include="BitMap.hxx" />
+    <ClInclude Include="CleanMainSurfaceRhomb.hxx" />
     <ClInclude Include="ConvertAllColors.hxx" />
     <ClInclude Include="ConvertVisibleColors.hxx" />
     <ClInclude Include="DrawBackSurfaceColorPoint.hxx" />
@@ -225,6 +228,7 @@
     <ClInclude Include="OffsetSurfaces.hxx" />
     <ClInclude Include="ReadMainSurfaceSurfaceRectangle.hxx" />
     <ClInclude Include="SetPixelColorMasks.hxx" />
+    <ClInclude Include="ShadeMainSurfaceRhomb.hxx" />
     <ClInclude Include="WriteBackSurfaceMainSurfaceRectangle.hxx" />
     <ClInclude Include="WriteMainSurfaceRendererSurfaceRectangle.hxx" />
     <ClInclude Include="WriteRendererSurfaceSurfaceRectangle.hxx" />

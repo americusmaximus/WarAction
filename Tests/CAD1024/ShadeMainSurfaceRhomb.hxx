@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,31 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-typedef struct ColorMaskResult
-{
-    U16 ActualColorMask;
-    U16 ActualRedMask;
-    U16 ActualGreenMask;
-    U16 ActualBlueMask;
-
-    U16 InitialColorMask;
-    U16 InitialRedMask;
-    U16 InitialGreenMask;
-    U16 InitialBlueMask;
-
-    U16 RedOffset;
-    U16 GreenOffset;
-    U16 BlueOffset;
-
-    U16 ActualColorBitsCopy;
-    U16 ShadeColorMask;
-    U16 ShadeColorMaskCopy;
-    U16 InvertedActualColorMask;
-    U32 InvertedActualColorMaskCopy;
-    U32 InitialRGBMask;
-    U32 ActualRGBMask;
-    DOUBLEPIXEL BackSurfaceShadePixel;
-} COLORMASKRESULT, * COLORMASKRESULTPTR;
-
-VOID InitializePixelMasks(RENDERERPTR state);
-VOID SetPixelColorMasks(RENDERERPTR state, MODULEEVENTPTR event);
+VOID ShadeMainSurfaceRhomb(RENDERERPTR state, MODULEEVENTPTR event);

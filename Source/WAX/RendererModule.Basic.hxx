@@ -44,6 +44,7 @@ typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 h
 typedef BOOL(*WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 typedef S32(*ACQUIRETEXTLENGTHACTION)(LPCSTR text, BINASSETCONTENTPTR asset);
+typedef VOID(*CLEANMAINSURFACERHOMBACTION)(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR tile);
 typedef VOID(*CONVERTALLCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*CONVERTVISIBLECOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
@@ -64,15 +65,13 @@ typedef VOID(*DRAWMAINSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACECOLORRECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACECOLORSHADERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 typedef VOID(*DRAWMAINSURFACEHORIZONTALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
+typedef VOID(*DRAWMAINSURFACEMASKRHOMBACTION)(S32 x, S32 y, S32 color);
 typedef VOID(*DRAWMAINSURFACEPALETTESPRITEACTION)(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, IMAGESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette); // TODO
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWSPRITEACTION)(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR input);
 typedef VOID(*DRAWSTENCILSURFACEWINDOWRECTANGLEACTION)(VOID);
-typedef VOID(*FUN_10001ED0ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
-typedef VOID(*FUN_10001F10ACTION)(S32 param_1, S32 param_2, S32 param_3); // TODO
-typedef VOID(*FUN_10001F40ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, S32 param_5, S32 param_6, S32 param_7); // TODO
 typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
 typedef VOID(*FUN_10004390ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 typedef VOID(*FUN_100046B6ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
@@ -94,6 +93,7 @@ typedef VOID(*RELEASEDIRECTXACTION)(VOID);
 typedef VOID(*RELEASERENDERERSURFACEACTION)(VOID);
 typedef VOID(*RESTOREDISPLAYMODEACTION)(VOID);
 typedef VOID(*SETPIXELCOLORMASKSACTION)(U32 r, U32 g, U32 b);
+typedef VOID(*SHADEMAINSURFACERHOMBACTION)(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3);
 typedef VOID(*UNLOCKRENDERERSURFACEACTION)(VOID);
 typedef VOID(*WRITEBACKSURFACEMAINSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
@@ -115,7 +115,7 @@ typedef struct RendererActions
     DRAWBACKSURFACETEXTACTION                       DrawBackSurfaceText;
     DRAWMAINSURFACETEXTACTION                       DrawMainSurfaceText;
     DRAWBACKSURFACERHOMBSACTION                     DrawBackSurfaceRhomb;
-    FUN_10001F10ACTION FUN_10001f10; // TODO
+    DRAWMAINSURFACEMASKRHOMBACTION                  DrawMainSurfaceMaskRhomb;
     FUN_10004390ACTION FUN_10004390; // TODO
     FUN_100046B6ACTION FUN_100046b6; // TODO
     FUN_100049E6ACTION FUN_100049e6; // TODO
@@ -125,8 +125,8 @@ typedef struct RendererActions
     FUN_10007928ACTION FUN_10007928; // TODO
     WRITEBACKSURFACEMAINSURFACERECTANGLEACTION      WriteBackSurfaceMainSurfaceRectangle;
     DRAWBACKSURFACECOLORPOINTACTION                 DrawBackSurfaceColorPoint;
-    FUN_10001ED0ACTION FUN_10001ed0; // TODO
-    FUN_10001F40ACTION FUN_10001f40; // TODO
+    SHADEMAINSURFACERHOMBACTION                     ShadeMainSurfaceRhomb;
+    CLEANMAINSURFACERHOMBACTION                     CleanMainSurfaceRhomb;
     FUN_10002FB0ACTION FUN_10002fb0_0; // TODO
     DRAWMAINSURFACEPALETTESPRITEACTION              DrawMainSurfacePaletteSprite;
     DRAWMAINSURFACESPRITEACTION                     DrawMainSurfaceSprite;
@@ -208,24 +208,25 @@ typedef struct Renderer
     U16                         GreenOffset;
     U16                         BlueOffset;
 
-    U16                         Unk16; // TODO
+    U16                         Unk16; // UNUSED
     U16                         ActualColorBits;
-    U16                         Unk18; // TODO
+    U16                         ActualColorBitsCopy;
     U16                         ActualColorMask;
     U16                         InitialColorMask;
     U16                         ShadeColorMask;
-    U16                         Unk22; // TODO
-    U16                         Unk23; // TODO
-    U16                         Unk24; // TODO
-    U32                         Unk25; // TODO
-    U32                         Unk26; // TODO
-    U32                         Unk27; // TODO
+    U16                         ShadeColorMaskCopy;
+    U16                         InvertedActualColorMask;
+    U16                         InvertedActualColorMaskCopy;
+    U32                         InitialRGBMask;
+    U32                         Unk26; // UNUSED
+    U32                         ActualRGBMask;
     U32                         Pitch;
     DOUBLEPIXEL                 BackSurfaceShadePixel;
 
     FOGSPRITE                   Fog[MAX_FOG_SPRITE_COUNT];
 
-    PIXEL                       Rhombs[MAX_PALETTE_SIZE * MAX_RHOMB_COUNT]; // Rhombs palette from RHOMB.PL (16,348 colors).
+    // Rhombs palette from RHOMB.PL (16,348 colors).
+    PIXEL                       Rhombs[MAX_PALETTE_SIZE * MAX_RHOMB_COUNT];
     
     U8                          Unknown[1536]; // TODO
 

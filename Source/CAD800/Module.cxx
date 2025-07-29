@@ -52,7 +52,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawBackSurfaceText                         = DrawBackSurfaceText;
     ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
     ModuleState.Actions.DrawBackSurfaceRhomb                        = DrawBackSurfaceRhomb;
-    ModuleState.Actions.FUN_10001f10                                = FUN_10001f20; // TODO
+    ModuleState.Actions.DrawMainSurfaceMaskRhomb                    = DrawMainSurfaceMaskRhomb;
     ModuleState.Actions.FUN_10004390                                = FUN_100043a0; // TODO
     ModuleState.Actions.FUN_100046b6                                = FUN_100046c6; // TODO
     ModuleState.Actions.FUN_100049e6                                = FUN_100049f6; // TODO
@@ -62,8 +62,8 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.FUN_10007928                                = FUN_10007938; // TODO
     ModuleState.Actions.WriteBackSurfaceMainSurfaceRectangle        = WriteBackSurfaceMainSurfaceRectangle;
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
-    ModuleState.Actions.FUN_10001ed0                                = FUN_10001ee0; // TODO
-    ModuleState.Actions.FUN_10001f40                                = FUN_10001f50; // TODO
+    ModuleState.Actions.ShadeMainSurfaceRhomb                       = ShadeMainSurfaceRhomb;
+    ModuleState.Actions.CleanMainSurfaceRhomb                       = CleanMainSurfaceRhomb;
     ModuleState.Actions.DrawMainSurfacePaletteSprite                = DrawMainSurfacePaletteSprite;
     ModuleState.Actions.DrawMainSurfaceSprite                       = DrawMainSurfaceSprite;
     ModuleState.Actions.FUN_1000618d                                = FUN_1000619d; // TODO
