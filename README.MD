@@ -55,6 +55,7 @@ The game module is responsible for the actual gameplay, associated resource mana
 ## Thanks
 1. [Hifi](https://github.com/hifi-unmaintained/ogg-winmm) for the original implementation of WinMM.dll with the Ogg Vorbis support. Even though the game's version is very customized, access to the original code was very useful.
 3. [elwray](https://github.com/elwray/N2CadX) for the initial research of the rendering modules.
+4. [IvanishinV](https://github.com/IvanishinV/MultiCAD) for completing reverse engineering of the CAD1024 renderer code.
 
 ## Legal
 1. This is not a complete game. Please purchase software you like!
