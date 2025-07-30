@@ -188,7 +188,7 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
 
             State.Renderer->Actions.DrawBackSurfacePaletteShadeSprite(0, 0, 12 /* TODO */,
                 (PIXEL*)self->BkgColFile,
-                IMAGEPALETTESPRITEPTR((ADDR)self->BkgPckFile + (ADDR)((IMAGEPALETTESPRITEPTR)self->BkgPckFile)->TypeGraphics)); // TODO
+                IMAGEPALETTESPRITEPTR((ADDR)self->BkgPckFile + (ADDR)((IMAGEPALETTESPRITEPTR)self->BkgPckFile)->Type));
 
             ReleaseSoundStateTracks(&SoundState.State, TRUE);
 
@@ -258,15 +258,15 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
         }
         else
         {
-            State.Renderer->Actions.DrawMainSurfaceAnimationSpriteVersion2(0, 0, 0x10 /* TODO */,
-                self->ArrColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->AniFile + offset)); // TODO
+            State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
+                self->ArrColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->AniFile + offset));
         }
     }
 
     if (self->Unk17 != 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
-        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteVersion2(0, 0, 0x10 /* TODO */,
-            self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8)); // TODO
+        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
+            self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
     }
 
     State.Renderer->Actions.DrawMainSurfaceSprite(0, 0,
@@ -274,8 +274,8 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
 
     if (self->Unk17 == 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
-        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteVersion2(0, 0, 0x10 /* TODO */,
-            self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8)); // TODO
+        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
+            self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
     }
 
     TickPanelControl((PANELCONTROLPTR)self);

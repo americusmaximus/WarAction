@@ -3864,7 +3864,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                             sx = (PIXEL*)((ADDR)sx + (ADDR)(Mathematics::Min(count, need) * sizeof(PIXEL)));
                         }
 
-                        while (sx < RendererState.Sprite.MaxX)
+                        while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
 
@@ -4027,7 +4027,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                             sx = (PIXEL*)((ADDR)sx + (ADDR)(Mathematics::Min(count, need) * sizeof(PIXEL)));
                         }
 
-                        while (sx < RendererState.Sprite.MaxX)
+                        while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
 
@@ -4206,7 +4206,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                             sx = (PIXEL*)((ADDR)sx + (ADDR)(Mathematics::Min(count, need) * sizeof(PIXEL)));
                         }
 
-                        while (sx < RendererState.Sprite.MaxX)
+                        while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
 
@@ -4362,7 +4362,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                             sx = (PIXEL*)((ADDR)sx + (ADDR)(Mathematics::Min(count, need) * sizeof(PIXEL)));
                         }
 
-                        while (sx < RendererState.Sprite.MaxX)
+                        while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
 

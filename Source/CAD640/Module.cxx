@@ -66,11 +66,11 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.CleanMainSurfaceRhomb                       = CleanMainSurfaceRhomb;
     ModuleState.Actions.DrawMainSurfacePaletteSprite                = DrawMainSurfacePaletteSprite;
     ModuleState.Actions.DrawMainSurfaceSprite                       = DrawMainSurfaceSprite;
-    ModuleState.Actions.FUN_1000618d                                = FUN_1000618d; // TODO
+    ModuleState.Actions.DrawMainSurfacePaletteBlendSprite           = DrawMainSurfacePaletteBlendSprite;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion0      = DrawMainSurfaceAnimationSpriteVersion0;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion1A     = DrawMainSurfaceAnimationSpriteVersion1A;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion1B     = DrawMainSurfaceAnimationSpriteVersion1B;
-    ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion2      = DrawMainSurfaceAnimationSpriteVersion2;
+    ModuleState.Actions.DrawMainSurfaceAnimationSpriteStencil       = DrawMainSurfaceAnimationSpriteStencil;
     ModuleState.Actions.FUN_100067ad                                = FUN_100067ad; // TODO
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion3      = DrawMainSurfaceAnimationSpriteVersion3;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion4      = DrawMainSurfaceAnimationSpriteVersion4;
