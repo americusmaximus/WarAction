@@ -2851,7 +2851,7 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
                 // in case the sprite starts to the left of allowed drawing rectangle.
                 PIXEL* sx = RendererState.Sprite.X;
 
-                while (sx < RendererState.Sprite.MinX)
+                while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
                     CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                     CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -3040,7 +3040,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                 // in case the sprite starts to the left of allowed drawing rectangle.
                 PIXEL* sx = RendererState.Sprite.X;
 
-                while (sx < RendererState.Sprite.MinX)
+                while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
                     CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                     CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -3230,7 +3230,7 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
                 // in case the sprite starts to the left of allowed drawing rectangle.
                 PIXEL* sx = RendererState.Sprite.X;
 
-                while (sx < RendererState.Sprite.MinX)
+                while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
                     CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                     CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -3415,7 +3415,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
                 // in case the sprite starts to the left of allowed drawing rectangle.
                 PIXEL* sx = RendererState.Sprite.X;
 
-                while (sx < RendererState.Sprite.MinX)
+                while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
                     CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                     CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -3502,7 +3502,7 @@ VOID FUN_100067ad(S32 x, S32 y, S32 param_3, LPVOID param_4)
 }
 
 // 0x10006b21
-VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
 {
     ANIMATIONPIXEL* palette = (ANIMATIONPIXEL*)pal;
 
@@ -3592,7 +3592,7 @@ VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID pal,
                 // in case the sprite starts to the left of allowed drawing rectangle.
                 PIXEL* sx = RendererState.Sprite.X;
 
-                while (sx < RendererState.Sprite.MinX)
+                while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
                     CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                     CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -3620,41 +3620,29 @@ VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID pal,
                     }
                     else if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
-                        // Skip pixels that are below required stencil value.
+                        CONST U8 indx = pixels->Pixels[0];
+                        CONST ANIMATIONPIXEL pixel = palette[indx];
+
+                        CONST DOUBLEPIXEL pix = pixel >> 19;
+
+                        if ((pix & 0xFF) != 0x1F)
                         {
-                            CONST ADDR offset = (ADDR)sx - (ADDR)RendererState.Surfaces.Main;
-                            while (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset + (ADDR)(x + skip) * (ADDR)sizeof(PIXEL)))
+                            for (U32 x = 0; x < count - skip; x++)
                             {
-                                count = count - 1;
-                                skip = skip + 1;
-
-                                if (count == 0) { break; }
-                            }
-                        }
-
-                        // Blend and draw pixels.
-                        if (count != 0)
-                        {
-                            {
-                                // TODO: Breaks the renderer if skip > count;
-                                if (count < skip) { count = skip; }
-                                // END TODO
-                            }
-
-                            CONST U8 indx = pixels->Pixels[0];
-                            CONST ANIMATIONPIXEL pixel = palette[indx];
-
-                            CONST DOUBLEPIXEL pix = pixel >> 19;
-
-                            if ((pix & 0xFF) != 0x1F)
-                            {
-                                for (U32 x = 0; x < count - skip; x++)
                                 {
-                                    CONST DOUBLEPIXEL value =
-                                        (pix * (((sx[x] << 16) | sx[x]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
+                                    CONST ADDR offset = (ADDR)sx - (ADDR)RendererState.Surfaces.Main;
 
-                                    sx[x] = (PIXEL)((value >> 16) | value) + (PIXEL)pixel;
+                                    if (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + (ADDR)(offset + x * sizeof(PIXEL))))
+                                    {
+                                        continue;
+                                    }
+
                                 }
+
+                                CONST DOUBLEPIXEL value =
+                                    (pix * (((sx[x] << 16) | sx[x]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
+
+                                sx[x] = (PIXEL)((value >> 16) | value) + (PIXEL)pixel;
                             }
                         }
 
@@ -3662,41 +3650,29 @@ VOID DrawMainSurfaceAnimationSpriteVersion2(S32 x, S32 y, U16 level, LPVOID pal,
                     }
                     else
                     {
-                        // Skip pixels that are below required stencil value.
+                        for (U32 x = 0; x < count - skip; x++)
                         {
-                            CONST ADDR offset = (ADDR)sx - (ADDR)RendererState.Surfaces.Main;
-                            while (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + offset + (ADDR)(x + skip) * (ADDR)sizeof(PIXEL)))
+                            CONST U8 indx = pixels->Pixels[skip + x];
+                            CONST ANIMATIONPIXEL pixel = palette[indx];
+
+                            CONST DOUBLEPIXEL pix = pixel >> 19;
+
+                            if ((pix & 0xFF) != 0x1F)
                             {
-                                count = count - 1;
-                                skip = skip + 1;
-
-                                if (count == 0) { break; }
-                            }
-                        }
-
-                        // Blend and draw pixels.
-                        if (count != 0)
-                        {
-                            {
-                                // TODO: Breaks the renderer if skip > count;
-                                if (count < skip) { count = skip; }
-                                // END TODO
-                            }
-
-                            for (U32 x = 0; x < count - skip; x++)
-                            {
-                                CONST U8 indx = pixels->Pixels[skip + x];
-                                CONST ANIMATIONPIXEL pixel = palette[indx];
-
-                                CONST DOUBLEPIXEL pix = pixel >> 19;
-
-                                if ((pix & 0xFF) != 0x1F)
                                 {
-                                    CONST DOUBLEPIXEL value =
-                                        (pix * (((sx[x] << 16) | sx[x]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
+                                    CONST ADDR offset = (ADDR)sx - (ADDR)RendererState.Surfaces.Main;
 
-                                    sx[x] = (PIXEL)((value >> 16) | value) + (PIXEL)pixel;
+                                    if (stencil <= *(DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Stencil + (ADDR)(offset + x * sizeof(PIXEL))))
+                                    {
+                                        continue;
+                                    }
+
                                 }
+
+                                CONST DOUBLEPIXEL value =
+                                    (pix * (((sx[x] << 16) | sx[x]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
+
+                                sx[x] = (PIXEL)((value >> 16) | value) + (PIXEL)pixel;
                             }
                         }
 
@@ -3864,7 +3840,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                         IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
                         PIXEL* sx = RendererState.Sprite.X;
 
-                        while (sx < RendererState.Sprite.MinX)
+                        while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                             CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -4027,7 +4003,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                         IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
                         PIXEL* sx = RendererState.Sprite.X;
 
-                        while (sx < RendererState.Sprite.MinX)
+                        while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                             CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -4206,7 +4182,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                         IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
                         PIXEL* sx = RendererState.Sprite.X;
 
-                        while (sx < RendererState.Sprite.MinX)
+                        while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                             CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
@@ -4355,7 +4331,7 @@ VOID DrawSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPR
                         IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
                         PIXEL* sx = RendererState.Sprite.X;
 
-                        while (sx < RendererState.Sprite.MinX)
+                        while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                         {
                             CONST U32 need = (U32)((ADDR)RendererState.Sprite.MinX - (ADDR)sx) / sizeof(PIXEL);
                             CONST U32 count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;

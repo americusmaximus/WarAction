@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceAnimationSpriteVersion2(RENDERERPTR state, MODULEEVENTPTR event);
+VOID DrawMainSurfaceAnimationSpriteStencil(RENDERERPTR state, MODULEEVENTPTR event);

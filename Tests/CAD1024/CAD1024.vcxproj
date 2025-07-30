@@ -165,7 +165,7 @@
     <ClCompile Include="DrawBackSurfaceRhomb.cxx" />
     <ClCompile Include="DrawBackSurfaceText.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion1B.cxx" />
-    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion2.cxx" />
+    <ClCompile Include="DrawMainSurfaceAnimationSpriteStencil.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion3.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion4.cxx" />
     <ClCompile Include="DrawMainSurfaceColorBox.cxx" />
@@ -206,7 +206,7 @@
     <ClInclude Include="DrawBackSurfaceRhomb.hxx" />
     <ClInclude Include="DrawBackSurfaceText.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion1B.hxx" />
-    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion2.hxx" />
+    <ClInclude Include="DrawMainSurfaceAnimationSpriteStencil.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion3.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion4.hxx" />
     <ClInclude Include="DrawMainSurfaceColorBox.hxx" />

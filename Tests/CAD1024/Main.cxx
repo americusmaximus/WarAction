@@ -30,9 +30,9 @@ SOFTWARE.
 #include "DrawBackSurfacePaletteShadeSprite.hxx"
 #include "DrawBackSurfaceRhomb.hxx"
 #include "DrawBackSurfaceText.hxx"
+#include "DrawMainSurfaceAnimationSpriteStencil.hxx"
 #include "DrawMainSurfaceAnimationSpriteVersion1A.hxx"
 #include "DrawMainSurfaceAnimationSpriteVersion1B.hxx"
-#include "DrawMainSurfaceAnimationSpriteVersion2.hxx"
 #include "DrawMainSurfaceAnimationSpriteVersion3.hxx" // TODO
 #include "DrawMainSurfaceAnimationSpriteVersion4.hxx" // TODO
 #include "DrawMainSurfaceColorBox.hxx"
@@ -74,9 +74,9 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawBackSurfacePaletteShadeSprite, state, event);
     ACTION(DrawBackSurfaceRhomb, state, event);
     ACTION(DrawBackSurfaceText, state, event);
+    ACTION(DrawMainSurfaceAnimationSpriteStencil, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion1A, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion1B, state, event);
-    ACTION(DrawMainSurfaceAnimationSpriteVersion2, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion3, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteVersion4, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);

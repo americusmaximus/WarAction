@@ -21,7 +21,7 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
-#include "DrawMainSurfaceAnimationSpriteVersion2.hxx"
+#include "DrawMainSurfaceAnimationSpriteStencil.hxx"
 #include "File.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
@@ -59,13 +59,13 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         {
             IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
 
-            state->Actions.DrawMainSurfaceAnimationSpriteVersion2(x + xx * 25, y, 100, palette, sprite);
+            state->Actions.DrawMainSurfaceAnimationSpriteStencil(x + xx * 25, y, 100, palette, sprite);
         }
     }
 
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion2_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion2_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion2_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteStencil_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteStencil_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteStencil_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);
@@ -75,7 +75,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
 
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceAnimationSpriteVersion2(RENDERERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceAnimationSpriteStencil(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

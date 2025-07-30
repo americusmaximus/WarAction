@@ -65,7 +65,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         state->Actions.DrawMainSurfacePaletteBlendSprite(x, y, (PIXEL*)palette, sprite);
     }
 
-    SavePixels(MakeFileName("DrawMainSurfacePaletteBlendSprite", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfacePaletteBlendSprite", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);

@@ -54,7 +54,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 a
         }
     }
 
-    SavePixels(MakeFileName("CleanMainSurfaceRhomb", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("CleanMainSurfaceRhomb", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     event->Result = TRUE;
 }
