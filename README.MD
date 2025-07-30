@@ -41,7 +41,7 @@ The launcher module is the game's executable. Its purpose is to do initial setup
 ### Renderer
 The game ships with 3 renderer modules. The renderers have, essentially, the same codebase, the only difference is the size of the game screen supported. Available options are: 640x480, 800x600, and 1024x768.
 
-I suggest exploring renderer project [MultiCaD](https://github.com/IvanishinV/MultiCAD) that aims to bring comfortable high resolution game rendering.
+I suggest exploring renderer project [MultiCAD](https://github.com/IvanishinV/MultiCAD) that aims to bring comfortable high resolution game rendering.
 
 ### Menu
 The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
