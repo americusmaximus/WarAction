@@ -25,12 +25,12 @@ SOFTWARE.
 #include "Native.Basic.hxx"
 #include "Renderer.Basic.hxx"
 
-#define IMAGESPRITE_ITEM_SMALL_PIXEL_MASK 0x1F
-#define IMAGESPRITE_ITEM_SHORT_COUNT_MASK 0x3F
+#define IMAGESPRITE_ITEM_SMALL_PIXEL_MASK   0x1F
+#define IMAGESPRITE_ITEM_SHORT_COUNT_MASK   0x3F
 #define IMAGESPRITE_ITEM_SHORT_COMPACT_MASK 0x40
-#define IMAGESPRITE_ITEM_COUNT_MASK     0x7F
-#define IMAGESPRITE_ITEM_COMPACT_MASK   0x80
-#define IMAGESPRITE_ITEM_EXTENDED_MASK  0xC0
+#define IMAGESPRITE_ITEM_COUNT_MASK         0x7F
+#define IMAGESPRITE_ITEM_COMPACT_MASK       0x80
+#define IMAGESPRITE_ITEM_EXTENDED_MASK      0xC0
 
 typedef struct BinAssetContent
 {
@@ -100,7 +100,7 @@ typedef struct ImagePaletteSprite
     S16                     Y;
     S16                     Width;
     S16                     Height;
-    U8                      TypeGraphics;
+    U8                      Type;
     U16                     Next;
     IMAGEPALETTESPRITEPIXEL Pixels[1];
 } IMAGEPALETTESPRITE, * IMAGEPALETTESPRITEPTR;

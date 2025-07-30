@@ -168,9 +168,9 @@ VOID ReadMainSurfaceSurfaceRectangle(RENDERERPTR state, MODULEEVENTPTR event)
             state, event, 105, 99, 431, 117, 63, 49, 1561, 431 * 117, 1, &rect);
     }
 
-    // Offset back to 0:0 (-120, -550)
+    // Offset back to 0:0 (-251, -453)
     {
-        state->Actions.OffsetSurfaces(-120, -550);
+        state->Actions.OffsetSurfaces(-251, -453);
     }
 
     // Finalize.

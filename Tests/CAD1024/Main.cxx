@@ -23,6 +23,7 @@ SOFTWARE.
 #include "Initialize.hxx"
 
 #include "AcquireTextLength.hxx"
+#include "CleanMainSurfaceRhomb.hxx"
 #include "ConvertAllColors.hxx"
 #include "ConvertVisibleColors.hxx"
 #include "DrawBackSurfaceColorPoint.hxx"
@@ -40,6 +41,7 @@ SOFTWARE.
 #include "DrawMainSurfaceColorRectangle.hxx"
 #include "DrawMainSurfaceColorShadeRectangle.hxx"
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
+#include "DrawMainSurfacePaletteBlendSprite.hxx"
 #include "DrawMainSurfacePaletteSprite.hxx"
 #include "DrawMainSurfaceSprite.hxx"
 #include "DrawMainSurfaceText.hxx"
@@ -49,6 +51,7 @@ SOFTWARE.
 #include "OffsetSurfaces.hxx"
 #include "ReadMainSurfaceSurfaceRectangle.hxx"
 #include "SetPixelColorMasks.hxx"
+#include "ShadeMainSurfaceRhomb.hxx"
 #include "WriteBackSurfaceMainSurfaceRectangle.hxx"
 #include "WriteMainSurfaceRendererSurfaceRectangle.hxx"
 #include "WriteRendererSurfaceSurfaceRectangle.hxx"
@@ -64,6 +67,7 @@ SOFTWARE.
 static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
 {
     ACTION(AcquireTextLength, state, event);
+    ACTION(CleanMainSurfaceRhomb, state, event);
     ACTION(ConvertAllColors, state, event);
     ACTION(ConvertVisibleColors, state, event);
     ACTION(DrawBackSurfaceColorPoint, state, event);
@@ -81,6 +85,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawMainSurfaceColorRectangle, state, event);
     ACTION(DrawMainSurfaceColorShadeRectangle, state, event);
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
+    ACTION(DrawMainSurfacePaletteBlendSprite, state, event);
     ACTION(DrawMainSurfacePaletteSprite, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);
     ACTION(DrawMainSurfaceText, state, event);
@@ -90,6 +95,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(OffsetSurfaces, state, event);
     ACTION(ReadMainSurfaceSurfaceRectangle, state, event);
     ACTION(SetPixelColorMasks, state, event);
+    ACTION(ShadeMainSurfaceRhomb, state, event);
     ACTION(WriteBackSurfaceMainSurfaceRectangle, state, event);
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
     ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);

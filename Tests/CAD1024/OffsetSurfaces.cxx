@@ -73,7 +73,7 @@ VOID OffsetSurfaces(RENDERERPTR state, MODULEEVENTPTR event)
 
     // Move from -99:-89 to 0:0 (99:89)
     {
-        state->Actions.OffsetSurfaces(-225, -173);
+        state->Actions.OffsetSurfaces(99, 89);
 
         EXECUTE("X: 0 Y: 0", state, event);
     }

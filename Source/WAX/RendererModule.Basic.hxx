@@ -79,7 +79,7 @@ typedef VOID(*FUN_100049E6ACTION)(S32 param_1, S32 param_2, U16 param_3, LPVOID 
 typedef VOID(*FUN_100053C3ACTION)(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_1000579CACTION)(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10005AC6ACTION)(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-typedef VOID(*FUN_1000618DACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
+typedef VOID(*DRAWMAINSURFACEPALETTEBLENDSPRITEACTION)(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*FUN_100067ADACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007928ACTION)(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007BE8ACTION)(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
@@ -130,7 +130,7 @@ typedef struct RendererActions
     FUN_10002FB0ACTION FUN_10002fb0_0; // TODO
     DRAWMAINSURFACEPALETTESPRITEACTION              DrawMainSurfacePaletteSprite;
     DRAWMAINSURFACESPRITEACTION                     DrawMainSurfaceSprite;
-    FUN_1000618DACTION FUN_1000618d; // TODO
+    DRAWMAINSURFACEPALETTEBLENDSPRITEACTION         DrawMainSurfacePaletteBlendSprite;
     DRAWMAINSURFACEANIMATIONSPRITEVERSION0ACTION    DrawMainSurfaceAnimationSpriteVersion0;
     DRAWMAINSURFACEANIMATIONSPRITEVERSION1AACTION   DrawMainSurfaceAnimationSpriteVersion1A;
     DRAWMAINSURFACEANIMATIONSPRITEVERSION1BACTION   DrawMainSurfaceAnimationSpriteVersion1B;
