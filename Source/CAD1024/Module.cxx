@@ -59,7 +59,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
     ModuleState.Actions.FUN_10005ac6                                = FUN_10005ac6; // TODO
     ModuleState.Actions.FUN_1000579c                                = FUN_1000579c; // TODO
-    ModuleState.Actions.FUN_10007928                                = FUN_10007928; // TODO
+    ModuleState.Actions.DrawBackSurfaceShadowSprite                 = DrawBackSurfaceShadowSprite;
     ModuleState.Actions.WriteBackSurfaceMainSurfaceRectangle        = WriteBackSurfaceMainSurfaceRectangle;
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
     ModuleState.Actions.ShadeMainSurfaceRhomb                       = ShadeMainSurfaceRhomb;
@@ -72,8 +72,8 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfacePaletteSpriteBackStencil     = DrawMainSurfacePaletteSpriteBackStencil;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteStencil       = DrawMainSurfaceAnimationSpriteStencil;
     ModuleState.Actions.FUN_100067ad                                = FUN_100067ad; // TODO
-    ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion3      = DrawMainSurfaceAnimationSpriteVersion3;
-    ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion4      = DrawMainSurfaceAnimationSpriteVersion4;
+    ModuleState.Actions.DrawMainSurfaceShadowSprite                 = DrawMainSurfaceShadowSprite;
+    ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion4      = DrawMainSurfaceAnimationSpriteVersion4; // TODO
     ModuleState.Actions.FUN_10007be8                                = FUN_10007be8; // TODO
     ModuleState.Actions.FUN_100053c3                                = FUN_100053c3; // TODO
     ModuleState.Actions.DrawMainSurfaceColorPoint                   = DrawMainSurfaceColorPoint;
@@ -91,7 +91,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawStencilSurfaceWindowRectangle           = DrawStencilSurfaceWindowRectangle;
     ModuleState.Actions.WriteRendererSurfaceSurfaceRectangle        = WriteRendererSurfaceSurfaceRectangle;
     ModuleState.Actions.WriteSurfaceSurfaceRectangle                = WriteSurfaceSurfaceRectangle;
-    ModuleState.Actions.DrawSprite                                  = DrawSprite;
+    ModuleState.Actions.DrawUISprite                                = DrawUISprite;
     ModuleState.Actions.FUN_1000a4f3                                = FUN_1000a4f3; // TODO
     ModuleState.Actions.FUN_10009eb3                                = FUN_10009eb3; // TODO
     ModuleState.Actions.ReleaseDirectX                              = ReleaseDirectX;

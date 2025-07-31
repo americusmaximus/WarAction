@@ -21,7 +21,7 @@ SOFTWARE.
 */
 
 #include "BitMap.hxx"
-#include "DrawMainSurfaceAnimationSpriteVersion3.hxx"
+#include "DrawMainSurfaceShadowSprite.hxx"
 #include "File.hxx"
 #include "FilePath.hxx"
 #include "Initialize.hxx"
@@ -62,13 +62,13 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         {
             IMAGEPALETTESPRITEPTR sprite = (IMAGEPALETTESPRITEPTR)((ADDR)animation + (ADDR)header->Offsets[xx]);
 
-            state->Actions.DrawMainSurfaceAnimationSpriteVersion3(x + xx * 50, y + xx * 50, palette, sprite);
+            state->Actions.DrawMainSurfaceShadowSprite(x + xx * 50, y + xx * 50, xx, sprite);
         }
     }
 
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion3_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion3_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    //SavePixels(MakeFileName("DrawMainSurfaceAnimationSpriteVersion3_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceShadowSprite_Back", "bmp", event->Action), state->Surface.Back, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceShadowSprite_Main", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfaceShadowSprite_Stencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);
@@ -81,7 +81,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
 
 #define EXECUTE(A, S, E, X, Y, OX, OY, WX, WY, NAME, INDX) { E->Action = A; Execute(S, E, X, Y, OX, OY, WX, WY, NAME, INDX); if (!E->Result) { return; } }
 
-VOID DrawMainSurfaceAnimationSpriteVersion3(RENDERERPTR state, MODULEEVENTPTR event)
+VOID DrawMainSurfaceShadowSprite(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Offset to 0:0
     {

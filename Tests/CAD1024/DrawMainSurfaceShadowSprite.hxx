@@ -24,4 +24,4 @@ SOFTWARE.
 
 #include "Module.hxx"
 
-VOID DrawMainSurfaceAnimationSpriteVersion3(RENDERERPTR state, MODULEEVENTPTR event);
+VOID DrawMainSurfaceShadowSprite(RENDERERPTR state, MODULEEVENTPTR event);
