@@ -65,8 +65,8 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         state->Actions.DrawBackSurfacePaletteShadeSprite(x, y, 100, (PIXEL*)palette, sprite);
     }
 
-    SavePixels(MakeFileName("DrawMainSurfacePaletteSpriteStencilMain", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
-    SavePixels(MakeFileName("DrawMainSurfacePaletteSpriteStencilStencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfacePaletteSpriteStencilMain", "bmp", event->Action), state->Surface.Main, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
+    //SavePixels(MakeFileName("DrawMainSurfacePaletteSpriteStencilStencil", "bmp", event->Action), state->Surface.Stencil, MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT);
 
     free(animation);
     free(palette);

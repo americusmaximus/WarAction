@@ -164,7 +164,7 @@
     <ClCompile Include="DrawBackSurfacePaletteShadeSprite.cxx" />
     <ClCompile Include="DrawBackSurfaceRhomb.cxx" />
     <ClCompile Include="DrawBackSurfaceText.cxx" />
-    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion1B.cxx" />
+    <ClCompile Include="DrawMainSurfacePaletteSpriteBackStencil.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteStencil.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion3.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion4.cxx" />
@@ -183,7 +183,7 @@
     <ClCompile Include="DrawStencilSurfaceWindowRectangle.cxx" />
     <ClCompile Include="File.cxx" />
     <ClCompile Include="FilePath.cxx" />
-    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion1A.cxx" />
+    <ClCompile Include="DrawMainSurfacePaletteSpriteFrontStencil.cxx" />
     <ClCompile Include="Initialize.cxx" />
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="MaskStencilSurfaceRectangle.cxx" />
@@ -206,7 +206,7 @@
     <ClInclude Include="DrawBackSurfacePaletteShadeSprite.hxx" />
     <ClInclude Include="DrawBackSurfaceRhomb.hxx" />
     <ClInclude Include="DrawBackSurfaceText.hxx" />
-    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion1B.hxx" />
+    <ClInclude Include="DrawMainSurfacePaletteSpriteBackStencil.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteStencil.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion3.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion4.hxx" />
@@ -225,7 +225,7 @@
     <ClInclude Include="DrawStencilSurfaceWindowRectangle.hxx" />
     <ClInclude Include="File.hxx" />
     <ClInclude Include="FilePath.hxx" />
-    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion1A.hxx" />
+    <ClInclude Include="DrawMainSurfacePaletteSpriteFrontStencil.hxx" />
     <ClInclude Include="Initialize.hxx" />
     <ClInclude Include="MaskStencilSurfaceRectangle.hxx" />
     <ClInclude Include="Module.hxx" />
