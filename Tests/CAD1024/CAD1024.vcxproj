@@ -176,6 +176,7 @@
     <ClCompile Include="DrawMainSurfaceHorizontalColorLine.cxx" />
     <ClCompile Include="DrawMainSurfacePaletteBlendSprite.cxx" />
     <ClCompile Include="DrawMainSurfacePaletteSprite.cxx" />
+    <ClCompile Include="DrawMainSurfacePaletteSpriteStencil.cxx" />
     <ClCompile Include="DrawMainSurfaceSprite.cxx" />
     <ClCompile Include="DrawMainSurfaceText.cxx" />
     <ClCompile Include="DrawMainSurfaceVerticalColorLine.cxx" />
@@ -217,6 +218,7 @@
     <ClInclude Include="DrawMainSurfaceHorizontalColorLine.hxx" />
     <ClInclude Include="DrawMainSurfacePaletteBlendSprite.hxx" />
     <ClInclude Include="DrawMainSurfacePaletteSprite.hxx" />
+    <ClInclude Include="DrawMainSurfacePaletteSpriteStencil.hxx" />
     <ClInclude Include="DrawMainSurfaceSprite.hxx" />
     <ClInclude Include="DrawMainSurfaceText.hxx" />
     <ClInclude Include="DrawMainSurfaceVerticalColorLine.hxx" />

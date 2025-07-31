@@ -43,6 +43,7 @@ SOFTWARE.
 #include "DrawMainSurfaceHorizontalColorLine.hxx"
 #include "DrawMainSurfacePaletteBlendSprite.hxx"
 #include "DrawMainSurfacePaletteSprite.hxx"
+#include "DrawMainSurfacePaletteSpriteStencil.hxx"
 #include "DrawMainSurfaceSprite.hxx"
 #include "DrawMainSurfaceText.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
@@ -87,6 +88,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawMainSurfaceHorizontalColorLine, state, event);
     ACTION(DrawMainSurfacePaletteBlendSprite, state, event);
     ACTION(DrawMainSurfacePaletteSprite, state, event);
+    ACTION(DrawMainSurfacePaletteSpriteStencil, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);
     ACTION(DrawMainSurfaceText, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
