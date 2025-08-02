@@ -29,6 +29,9 @@ SOFTWARE.
 #define MAX_RENDERER_WIDTH  GRAPHICS_RESOLUTION_1024
 #define MAX_RENDERER_HEIGHT GRAPHICS_RESOLUTION_768
 
+#define SCREEN_SIZE_IN_PIXELS       (MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT)
+#define SCREEN_SIZE_IN_BYTES        (SCREEN_SIZE_IN_PIXELS * sizeof(PIXEL))
+
 #define MAX_TILE_SIZE_HEIGHT        32
 #define MAX_TILE_SIZE_WIDTH         64
 
@@ -203,3 +206,4 @@ VOID ShadeMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, 
 VOID UnlockRendererSurface(VOID);
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID WriteSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
+VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset);

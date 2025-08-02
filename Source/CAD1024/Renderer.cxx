@@ -32,16 +32,9 @@ SOFTWARE.
 #define STENCIL_PIXEL_COLOR_VALUE       32
 #define STENCIL_PIXEL_MASK_VALUE        0xFFFB
 
-// NOTE: The original game copies values as if they were 32-bit long, while they are 16-bit long.
-// Because of this, it ignores the last odd pixel (if any), due to left shift operation (width >> 1) == (width / 2).
-// The macro is used to reach the same buggy result as in the original game.
-#define ACQUIREWIDTH(x) (2 * (x / 2))
-
-RENDERERSTATECONTAINER RendererState;
-
 using namespace Mathematics;
 
-VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset);
+RENDERERSTATECONTAINER RendererState;
 
 // 0x10001000
 VOID Initialize()
@@ -208,12 +201,13 @@ VOID SetPixelColorMasks(U32 r, U32 g, U32 b)
     ModuleState.InvertedActualColorMaskCopy = ~ModuleState.ActualColorMask;
 
     ModuleState.ActualColorBitsCopy = ModuleState.ActualColorBits;
+
     ModuleState.ShadeColorMask = ~ModuleState.ActualColorBits;
     ModuleState.ShadeColorMaskCopy = ~ModuleState.ActualColorBits;
 
-    ModuleState.BackSurfaceShadePixel =
+    ModuleState.ShadePixel =
         ((5 << (11 - ModuleState.BlueOffset)) + (2 << (11 - ModuleState.GreenOffset))) & DEFAULT_SCREEN_COLOR_MASK;
-    ModuleState.BackSurfaceShadePixel = (ModuleState.BackSurfaceShadePixel << 16) | ModuleState.BackSurfaceShadePixel;
+    ModuleState.ShadePixel = (ModuleState.ShadePixel << 16) | ModuleState.ShadePixel;
 
     if (ModuleState.GreenOffset < ModuleState.RedOffset)
     {
@@ -333,24 +327,26 @@ BOOL InitializeWindow(S32 width, S32 height)
 // 0x10001420
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
 {
-    S32 max = x + length - 1;
+    S32 max_x = x + length - 1;
+    S32 new_x = x;
 
-    if ((ModuleState.Window.Y <= y) && (y <= ModuleState.Window.Height))
+    if (y >= ModuleState.Window.Y && y <= ModuleState.Window.Height)
     {
-        if (x < ModuleState.Window.X) { x = ModuleState.Window.X; }
-        if (ModuleState.Window.Width < max) { max = ModuleState.Window.Width; }
+        if (new_x < ModuleState.Window.X)
+            new_x = ModuleState.Window.X;
 
-        if (x <= max)
+        if (ModuleState.Window.Width < max_x)
+            max_x = ModuleState.Window.Width;
+
+        if (new_x <= max_x)
         {
             PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
-                + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+                + ModuleState.Surface.Offset + (y * MAX_RENDERER_WIDTH + new_x) * sizeof(PIXEL));
 
             if (ModuleState.Surface.Y <= y)
-            {
-                pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            }
+                pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-            for (S32 xx = 0; xx < max - x + 1; xx++) { pixels[xx] = pixel; }
+            for (S32 xx = 0; xx < max_x - new_x + 1; xx++) { pixels[xx] = pixel; }
         }
     }
 }
@@ -358,28 +354,33 @@ VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel)
 // 0x100014b0
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel)
 {
-    S32 max = height + y - 1;
+    S32 max_y = height + y - 1;
+    S32 new_y = y;
 
-    if (x < ModuleState.Window.X) { return; }
-    if (ModuleState.Window.Width < x) { return; }
+    if (x < ModuleState.Window.X || ModuleState.Window.Width < x)
+        return;
 
-    if (y < ModuleState.Window.Y) { y = ModuleState.Window.Y; }
-    if (ModuleState.Window.Height < max) { max = ModuleState.Window.Height; }
+    if (y < ModuleState.Window.Y)
+        new_y = ModuleState.Window.Y;
 
-    max = max + 1 - y;
+    if (max_y > ModuleState.Window.Height)
+        max_y = ModuleState.Window.Height;
 
-    if (max < 1) { return; }
+    max_y += 1 - new_y;
+
+    if (max_y < 1)
+        return;
 
     PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
-        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+        + ModuleState.Surface.Offset + (ADDR)(new_y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL));
 
     if (y < ModuleState.Surface.Y)
     {
-        CONST S32 delta = y + max - ModuleState.Surface.Y;
+        CONST S32 delta = new_y + max_y - ModuleState.Surface.Y;
 
         if (delta < 1)
         {
-            for (S32 xx = 0; xx < max; xx++)
+            for (S32 xx = 0; xx < max_y; ++xx)
             {
                 pixels[0] = pixel;
 
@@ -388,16 +389,16 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel)
         }
         else
         {
-            for (S32 xx = 0; xx < max - delta; xx++)
+            for (S32 xx = 0; xx < max_y - delta; ++xx)
             {
                 pixels[0] = pixel;
 
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-            for (S32 xx = 0; xx < delta; xx++)
+            for (S32 xx = 0; xx < delta; ++xx)
             {
                 pixels[0] = pixel;
 
@@ -407,9 +408,9 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel)
     }
     else
     {
-        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-        for (S32 xx = 0; xx < max; xx++)
+        for (S32 xx = 0; xx < max_y; ++xx)
         {
             pixels[0] = pixel;
 
@@ -432,38 +433,34 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
 {
     if (x < ModuleState.Window.X)
     {
-        width = width + x - ModuleState.Window.X;
+        width += x - ModuleState.Window.X;
         x = ModuleState.Window.X;
     }
 
     if (y < ModuleState.Window.Y)
     {
-        height = height + y - ModuleState.Window.Y;
+        height += y - ModuleState.Window.Y;
         y = ModuleState.Window.Y;
     }
 
-    if (ModuleState.Window.Width < (x + width - 1))
-    {
+    if ((width + x - 1) > ModuleState.Window.Width)
         width = ModuleState.Window.Width - x + 1;
-    }
 
-    if (ModuleState.Window.Height < (y + height - 1))
-    {
+    if ((height + y - 1) > ModuleState.Window.Height)
         height = ModuleState.Window.Height - y + 1;
-    }
 
-    if (width < 1 || height < 1) { return; }
+    if (width < 1 || height < 1)
+        return;
 
-    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
-        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main + ModuleState.Surface.Offset + (ADDR)(y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL));
 
     if (y < ModuleState.Surface.Y)
     {
         CONST S32 delta = y + height - ModuleState.Surface.Y;
 
-        if ((y + height) < ModuleState.Surface.Y || delta == 0)
+        if (y + height < ModuleState.Surface.Y || delta == 0)
         {
-            for (S32 yy = 0; yy < height; yy++)
+            for (S32 yy = 0; yy < height; ++yy)
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
@@ -472,16 +469,16 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
         }
         else
         {
-            for (S32 yy = 0; yy < height - delta; yy++)
+            for (S32 yy = 0; yy < height - delta; ++yy)
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-            for (S32 yy = 0; yy < delta; yy++)
+            for (S32 yy = 0; yy < delta; ++yy)
             {
                 for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
@@ -491,9 +488,9 @@ VOID DrawMainSurfaceColorRectangle(S32 x, S32 y, S32 width, S32 height, PIXEL pi
     }
     else
     {
-        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-        for (S32 yy = 0; yy < height; yy++)
+        for (S32 yy = 0; yy < height; ++yy)
         {
             for (S32 xx = 0; xx < width; xx++) { pixels[xx] = pixel; }
 
@@ -510,7 +507,8 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
         width = width + x - ModuleState.Window.X;
         x = ModuleState.Window.X;
 
-        if (width < 1) { return; }
+        if (width < 1)
+            return;
     }
 
     if (y < ModuleState.Window.Y)
@@ -518,23 +516,20 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
         height = height + y - ModuleState.Window.Y;
         y = ModuleState.Window.Y;
 
-        if (height < 1) { return; }
+        if (height < 1)
+            return;
     }
 
-    if (ModuleState.Window.Width < (x + width - 1))
-    {
+    if ((width + x - 1) > ModuleState.Window.Width)
         width = ModuleState.Window.Width - x + 1;
-    }
 
-    if (ModuleState.Window.Height < (y + height - 1))
-    {
+    if ((height + y - 1) > ModuleState.Window.Height)
         height = ModuleState.Window.Height - y + 1;
-    }
 
-    if (width < 1 || height < 1) { return; }
+    if (width < 1 || height < 1)
+        return;
 
-    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main
-        + (ADDR)((ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
+    PIXEL* pixels = (PIXEL*)((ADDR)RendererState.Surfaces.Main + ModuleState.Surface.Offset + (ADDR)(y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL));
 
     CONST PIXEL color = SHADEPIXEL(pixel, ModuleState.ShadeColorMask);
 
@@ -544,27 +539,36 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
 
         if ((y + height) < ModuleState.Surface.Y || delta == 0)
         {
-            for (S32 yy = 0; yy < height; yy++)
+            for (S32 yy = 0; yy < height; ++yy)
             {
-                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+                for (S32 xx = 0; xx < width; ++xx)
+                {
+                    pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color;
+                }
 
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
         }
         else
         {
-            for (S32 yy = 0; yy < height - delta; yy++)
+            for (S32 yy = 0; yy < height - delta; ++yy)
             {
-                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+                for (S32 xx = 0; xx < width; ++xx)
+                {
+                    pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color;
+                }
 
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-            for (S32 yy = 0; yy < delta; yy++)
+            for (S32 yy = 0; yy < delta; ++yy)
             {
-                for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+                for (S32 xx = 0; xx < width; ++xx)
+                {
+                    pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color;
+                }
 
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
@@ -572,11 +576,14 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
     }
     else
     {
-        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
-        for (S32 yy = 0; yy < height; yy++)
+        for (S32 yy = 0; yy < height; ++yy)
         {
-            for (S32 xx = 0; xx < width; xx++) { pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color; }
+            for (S32 xx = 0; xx < width; ++xx)
+            {
+                pixels[xx] = SHADEPIXEL(pixels[xx], ModuleState.ShadeColorMask) + color;
+            }
 
             pixels = (PIXEL*)((ADDR)pixels + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
         }
@@ -586,45 +593,50 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
 // 0x100017e0
 VOID DrawMainSurfaceColorPoint(S32 x, S32 y, PIXEL pixel)
 {
-    if (ModuleState.Window.X <= x && ModuleState.Window.Y <= y
-        && x <= ModuleState.Window.Width && y <= ModuleState.Window.Height)
+    if (x > ModuleState.Window.X
+        && y > ModuleState.Window.Y
+        && x <= ModuleState.Window.Width
+        && y <= ModuleState.Window.Height)
     {
-        S32 indx = ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x;
+        S32 offset = ModuleState.Surface.Offset / sizeof(PIXEL) + y * MAX_RENDERER_WIDTH + x;
 
-        if (ModuleState.Surface.Y <= y) { indx = indx - MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT; }
+        if (ModuleState.Surface.Y <= y)
+            offset -= SCREEN_SIZE_IN_PIXELS;
 
-        RendererState.Surfaces.Main[indx] = pixel;
+        RendererState.Surfaces.Main[offset] = pixel;
     }
 }
 
 // 0x10001840
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel)
 {
-    if (ModuleState.Window.X <= x && ModuleState.Window.Y <= y
-        && x <= ModuleState.Window.Width && y <= ModuleState.Window.Height)
+    if (x > ModuleState.Window.X
+        && y > ModuleState.Window.Y
+        && x <= ModuleState.Window.Width
+        && y <= ModuleState.Window.Height)
     {
-        S32 indx = ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x;
+        S32 offset = ModuleState.Surface.Offset / sizeof(PIXEL) + y * MAX_RENDERER_WIDTH + x;
 
-        if (ModuleState.Surface.Y <= y) { indx = indx - MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT; }
+        if (ModuleState.Surface.Y <= y)
+            offset -= SCREEN_SIZE_IN_PIXELS;
 
-        RendererState.Surfaces.Back[indx] = pixel;
+        RendererState.Surfaces.Back[offset] = pixel;
     }
 }
 
 // 0x100018a0
 VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* surface)
 {
-    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main
-        + (ADDR)((ModuleState.Surface.Offset + (sy * MAX_RENDERER_WIDTH + sx)) * sizeof(PIXEL)));
-    PIXEL* dst = (PIXEL*)((ADDR)surface + (ADDR)((stride * dy + dx) * sizeof(PIXEL)));
+    PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main + ModuleState.Surface.Offset + (sy * MAX_RENDERER_WIDTH + sx) * sizeof(PIXEL));
+    PIXEL* dst = (PIXEL*)((ADDR)surface + (stride * dy + dx) * sizeof(PIXEL));
 
     if (sy < ModuleState.Surface.Y)
     {
-        CONST S32 delta = sy + height - ModuleState.Surface.Y;
+        const S32 delta = sy + height - ModuleState.Surface.Y;
 
-        if ((sy + height) < ModuleState.Surface.Y || delta == 0)
+        if (delta <= 0)
         {
-            for (S32 yy = 0; yy < height; yy++)
+            for (S32 yy = 0; yy < height; ++yy)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
@@ -634,7 +646,7 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
         }
         else
         {
-            for (S32 yy = 0; yy < height - delta; yy++)
+            for (S32 yy = 0; yy < height - delta; ++yy)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
@@ -642,9 +654,9 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
                 dst = (PIXEL*)((ADDR)dst + (ADDR)(stride * sizeof(PIXEL)));
             }
 
-            src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
 
-            for (S32 yy = 0; yy < delta; yy++)
+            for (S32 yy = 0; yy < delta; ++yy)
             {
                 for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
 
@@ -655,12 +667,11 @@ VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 
     }
     else
     {
-        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
 
-        for (S32 yy = 0; yy < height; yy++)
+        for (S32 yy = 0; yy < height; ++yy)
         {
             for (S32 xx = 0; xx < width; xx++) { dst[xx] = src[xx]; }
-
             src = (PIXEL*)((ADDR)src + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             dst = (PIXEL*)((ADDR)dst + (ADDR)(stride * sizeof(PIXEL)));
         }
@@ -702,93 +713,86 @@ VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count)
 // 0x10001d00
 VOID OffsetSurfaces(S32 x, S32 y)
 {
-    S32 offset = ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x;
+    PIXEL* src;
+    PIXEL* dst;
 
-    // Normalize offset so it is within the expected range.
+    S32 offset = ModuleState.Surface.Offset / sizeof(PIXEL) + dy * MAX_RENDERER_WIDTH + dx;
     if (offset < 0)
     {
-        while (offset < 0) { offset = offset + MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT; }
+        do
+        {
+            offset += SCREEN_SIZE_IN_PIXELS;
+        } while (offset < 0);
     }
     else
     {
-        while (offset >= MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT)
-        {
-            offset = offset - MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT;
-        }
+        while (offset >= SCREEN_SIZE_IN_PIXELS)
+            offset -= SCREEN_SIZE_IN_PIXELS;
     }
 
-    CONST S32 length = ModuleState.Surface.Offset % MAX_RENDERER_WIDTH;
-
-    if (length + x < 0)
+    S32 x_max = dx + (ModuleState.Surface.Offset / sizeof(PIXEL)) % MAX_RENDERER_WIDTH;
+    do
     {
-        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
+        if (x_max >= 0)
         {
-            ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Back[xx];
+            if (x_max < MAX_RENDERER_WIDTH)
+                break;
+
+            src = ModuleState.Surface.Back + SCREEN_SIZE_IN_PIXELS;
+            dst = ModuleState.Surface.Back;
+
+            for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++) { dst[xx] = src[xx]; }
+
+            src = ModuleState.Surface.Main + SCREEN_SIZE_IN_PIXELS;
+            dst = ModuleState.Surface.Main;
+
+            for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++) { dst[xx] = src[xx]; }
+
+            src = ModuleState.Surface.Stencil + SCREEN_SIZE_IN_PIXELS;
+            dst = ModuleState.Surface.Stencil;
+        }
+        else
+        {
+            src = ModuleState.Surface.Back;
+            dst = ModuleState.Surface.Back + SCREEN_SIZE_IN_PIXELS;
+
+            for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++) { dst[xx] = src[xx]; }
+
+            src = ModuleState.Surface.Main;
+            dst = ModuleState.Surface.Main + SCREEN_SIZE_IN_PIXELS;
+
+            for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++) { dst[xx] = src[xx]; }
+
+            src = ModuleState.Surface.Stencil;
+            dst = ModuleState.Surface.Stencil + SCREEN_SIZE_IN_PIXELS;
         }
 
-        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
-        {
-            ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Main[xx];
-        }
+        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++) { dst[xx] = src[xx]; }
+    } while (FALSE);
 
-        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
-        {
-            ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx] = ModuleState.Surface.Stencil[xx];
-        }
-    }
-    else if (MAX_RENDERER_WIDTH <= length + x)
-    {
-        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
-        {
-            ModuleState.Surface.Back[xx] = ModuleState.Surface.Back[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
-        }
-
-        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
-        {
-            ModuleState.Surface.Main[xx] = ModuleState.Surface.Main[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
-        }
-
-        for (U32 xx = 0; xx < MAX_RENDERER_WIDTH; xx++)
-        {
-            ModuleState.Surface.Stencil[xx] = ModuleState.Surface.Stencil[MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT + xx];
-        }
-    }
-
+    ModuleState.Surface.Offset = offset * sizeof(PIXEL);
     ModuleState.Surface.Y = MAX_RENDERER_HEIGHT - offset / MAX_RENDERER_WIDTH;
-    ModuleState.Surface.Offset = offset;
 
-    if (y < 1)
+    if (dy <= 0)
     {
-        if (y < 0) // Negative Y.
+        if (dy < 0)
         {
-            if (0 < x) // Positive X, Negative Y.
-            {
-                MoveStencilSurface(0, -y, MAX_RENDERER_WIDTH - x, y + MAX_RENDERER_HEIGHT, -y);
-            }
-            else // Negative X, Negative Y.
-            {
-                MoveStencilSurface(-x, -y, x + MAX_RENDERER_WIDTH, y + MAX_RENDERER_HEIGHT, -y);
-            }
+            if (dx <= 0)
+                MoveStencilSurface(-dx, -dy, dx + MAX_RENDERER_WIDTH, dy + MAX_RENDERER_HEIGHT, -dy);
+            else
+                MoveStencilSurface(0, -dy, MAX_RENDERER_WIDTH - dx, dy + MAX_RENDERER_HEIGHT, -dy);
         }
     }
-    else if (x < 1) // Negative X, Positive Y.
+    else
     {
-        MoveStencilSurface(-x, 0, x + MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT - y, -y);
-    }
-    else // Positive X. Positive Y.
-    {
-        MoveStencilSurface(0, 0, MAX_RENDERER_WIDTH - x, MAX_RENDERER_HEIGHT - y, -y);
+        if (dx <= 0)
+            MoveStencilSurface(-dx, 0, dx + MAX_RENDERER_WIDTH, MAX_RENDERER_HEIGHT - dy, -dy);
+        else
+            MoveStencilSurface(0, 0, MAX_RENDERER_WIDTH - dx, MAX_RENDERER_HEIGHT - dy, -dy);
     }
 }
 
 // 0x10003420
-// 
-//  0    1
-//   +--+
-//   |  |
-//   +--+
-//  3    2
-//
 VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* pixels)
 {
     RendererState.Tile.Stencil = (PIXEL*)((ADDR)pixels
@@ -895,7 +899,7 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
 
                 overflow = 0;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
 
             while (RendererState.Tile.tileHeight > 0)
@@ -926,12 +930,12 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
 
                         if (RendererState.Tile.Stencil <= dstTemp)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp - SCREEN_SIZE_IN_BYTES);
                         }
 
                         if (dstTemp < pixels)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp + SCREEN_SIZE_IN_BYTES);
                         }
 
                         U16 uVar5 = ((U16)((totalTxOffset >> 8) ^ RendererState.Tile.unk08) << 8) | (totalTxOffset & 0xFF);
@@ -997,7 +1001,7 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
 
                 overflow = RendererState.Tile.tempTileHeight;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
         }
 
@@ -1054,7 +1058,7 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
 
             overflow = RendererState.Tile.tempTileHeight;
 
-            dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -1169,7 +1173,7 @@ VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
                 overflow = 0;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
 
             while (RendererState.Tile.tileHeight > 0)
@@ -1198,12 +1202,12 @@ VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
                         if (RendererState.Tile.Stencil <= dstTemp)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp - SCREEN_SIZE_IN_BYTES);
                         }
 
                         if (dstTemp < pixels)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp + SCREEN_SIZE_IN_BYTES);
                         }
 
                         for (S32 j = 0; j < delta2; ++j)
@@ -1278,7 +1282,7 @@ VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
                 overflow = RendererState.Tile.tempTileHeight;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
         }
 
@@ -1342,7 +1346,7 @@ VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
             overflow = RendererState.Tile.tempTileHeight;
 
-            dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -1449,7 +1453,7 @@ VOID DrawSurfaceMaskRhomb(S32 tx, S32 ty, S32 stride, S32 mask, PIXEL* pixels)
 
                 overflow = 0;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
 
             while (RendererState.Tile.tileHeight > 0)
@@ -1475,12 +1479,12 @@ VOID DrawSurfaceMaskRhomb(S32 tx, S32 ty, S32 stride, S32 mask, PIXEL* pixels)
 
                         if (RendererState.Tile.Stencil <= dstTemp)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp - SCREEN_SIZE_IN_BYTES);
                         }
 
                         if (dstTemp < pixels)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp + SCREEN_SIZE_IN_BYTES);
                         }
 
                         for (S32 j = 0; j < delta2; ++j)
@@ -1535,7 +1539,7 @@ VOID DrawSurfaceMaskRhomb(S32 tx, S32 ty, S32 stride, S32 mask, PIXEL* pixels)
 
                 overflow = RendererState.Tile.tempTileHeight;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
         }
 
@@ -1580,7 +1584,7 @@ VOID DrawSurfaceMaskRhomb(S32 tx, S32 ty, S32 stride, S32 mask, PIXEL* pixels)
 
             overflow = RendererState.Tile.tempTileHeight;
 
-            dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -1687,7 +1691,7 @@ VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
                 overflow = 0;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
 
             while (RendererState.Tile.tileHeight > 0)
@@ -1715,12 +1719,12 @@ VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
                         if (RendererState.Tile.Stencil <= dstTemp)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp - SCREEN_SIZE_IN_BYTES);
                         }
 
                         if (dstTemp < pixels)
                         {
-                            dstTemp = (PIXEL*)((ADDR)dstTemp + (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                            dstTemp = (PIXEL*)((ADDR)dstTemp + SCREEN_SIZE_IN_BYTES);
                         }
 
                         for (S32 y = 0; y < delta2; ++y)
@@ -1776,7 +1780,7 @@ VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
                 overflow = RendererState.Tile.tempTileHeight;
 
-                dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
             }
         }
 
@@ -1824,7 +1828,7 @@ VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
             overflow = RendererState.Tile.tempTileHeight;
 
-            dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            dst2 = (PIXEL*)((ADDR)dst2 - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -1868,8 +1872,8 @@ VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
                 dst = (PIXEL*)((ADDR)dst + (ADDR)(MAX_RENDERER_WIDTH * sizeof(PIXEL)));
             }
 
-            src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
+            dst = (PIXEL*)((ADDR)dst - SCREEN_SIZE_IN_BYTES);
 
             for (S32 yy = 0; yy < delta; yy++)
             {
@@ -1882,8 +1886,8 @@ VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
     }
     else
     {
-        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-        dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
+        dst = (PIXEL*)((ADDR)dst - SCREEN_SIZE_IN_BYTES);
 
         for (S32 yy = 0; yy < height; yy++)
         {
@@ -2203,7 +2207,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
         PIXEL* pixels = dst;
 
-        if (src <= dst) { pixels = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+        if (src <= dst) { pixels = (PIXEL*)((ADDR)dst - SCREEN_SIZE_IN_BYTES); }
 
         for (S32 xx = 0; xx < width; xx++)
         {
@@ -2222,7 +2226,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
         for (S32 yy = 0; yy < height - 1; yy++)
         {
-            if (src <= pixels) { pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+            if (src <= pixels) { pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES); }
 
             pixels[0] = pixel;
 
@@ -2234,7 +2238,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
     {
         for (S32 yy = 0; yy < height - 1; yy++)
         {
-            if (src <= dst) { dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+            if (src <= dst) { dst = (PIXEL*)((ADDR)dst - SCREEN_SIZE_IN_BYTES); }
 
             dst[0] = pixel;
 
@@ -2248,7 +2252,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
     if (height != 0 && (RendererState.Outline.Options & OUTLINESKIPOPTIONS_BOTTOM) == OUTLINESKIPOPTIONS_NONE)
     {
-        if (src <= dst) { dst = (PIXEL*)((ADDR)dst - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL))); }
+        if (src <= dst) { dst = (PIXEL*)((ADDR)dst - SCREEN_SIZE_IN_BYTES); }
 
         for (S32 xx = 0; xx < width; xx++)
         {
@@ -2295,7 +2299,7 @@ VOID DrawStencilSurfaceWindowRectangle()
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(width * sizeof(PIXEL) + stride));
             }
 
-            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
             for (S32 yy = 0; yy < delta; yy++)
             {
@@ -2309,7 +2313,7 @@ VOID DrawStencilSurfaceWindowRectangle()
     }
     else
     {
-        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
         for (S32 yy = 0; yy < height; yy++)
         {
@@ -2356,7 +2360,7 @@ VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
                 pixels = (PIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
             }
 
-            pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
             for (S32 yy = 0; yy < delta; yy++)
             {
@@ -2368,7 +2372,7 @@ VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height)
     }
     else
     {
-        pixels = (PIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        pixels = (PIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
         for (S32 yy = 0; yy < height; yy++)
         {
@@ -2416,7 +2420,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                     pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
 
-                pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                pixels = (DOUBLEPIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
                 for (S32 yy = 0; yy < delta; yy++)
                 {
@@ -2428,7 +2432,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
         }
         else
         {
-            pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (DOUBLEPIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
             for (S32 yy = 0; yy < height; yy++)
             {
@@ -2465,7 +2469,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
                     pixels = (DOUBLEPIXEL*)((ADDR)pixels + (ADDR)(length * sizeof(PIXEL) + stride));
                 }
 
-                pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                pixels = (DOUBLEPIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
                 for (S32 yy = 0; yy < delta; yy++)
                 {
@@ -2477,7 +2481,7 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
         }
         else
         {
-            pixels = (DOUBLEPIXEL*)((ADDR)pixels - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            pixels = (DOUBLEPIXEL*)((ADDR)pixels - SCREEN_SIZE_IN_BYTES);
 
             for (S32 yy = 0; yy < height; yy++)
             {
@@ -2645,7 +2649,7 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
                 dst = (LPVOID)((ADDR)dst + (ADDR)ModuleState.Pitch);
             }
 
-            src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            src = (PIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
 
             for (S32 yy = 0; yy < delta; yy++)
             {
@@ -2662,7 +2666,7 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
     }
     else
     {
-        src = (PIXEL*)((ADDR)src - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+        src = (PIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
 
         for (S32 yy = 0; yy < height; yy++)
         {
@@ -2831,9 +2835,9 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -2931,9 +2935,9 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -3004,9 +3008,9 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -3098,9 +3102,9 @@ VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRI
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -3194,9 +3198,9 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -3254,7 +3258,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                                 stencil[x] = (spix & 3) | level;
 
                                 sx[x] = (spix & 2)
-                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.BackSurfaceShadePixel) : pixel;
+                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.ShadePixel) : pixel;
                             }
                         }
 
@@ -3277,7 +3281,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                                 stencil[x] = (spix & 3) | level;
 
                                 sx[x] = (spix & 2)
-                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.BackSurfaceShadePixel) : pixel;
+                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.ShadePixel) : pixel;
                             }
                         }
 
@@ -3304,9 +3308,9 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -3377,9 +3381,9 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -3490,9 +3494,9 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -3563,9 +3567,9 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -3652,9 +3656,9 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -3741,9 +3745,9 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID pal, 
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -3859,9 +3863,9 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID pal, 
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -3939,9 +3943,9 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -4066,9 +4070,9 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -4150,9 +4154,9 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -4282,9 +4286,9 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -4359,9 +4363,9 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -4408,7 +4412,7 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
                             {
                                 spx[0] = spx[0] | color;
 
-                                sx[x] = (PIXEL)(ModuleState.BackSurfaceShadePixel
+                                sx[x] = (PIXEL)(ModuleState.ShadePixel
                                     + SHADEPIXEL(sx[x], *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
                             }
                         }
@@ -4436,9 +4440,9 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -4513,9 +4517,9 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
 
         while (RendererState.Sprite.Height > 0)
@@ -4562,7 +4566,7 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
                             {
                                 spx[0] = spx[0] | color;
 
-                                sx[x] = (PIXEL)(ModuleState.BackSurfaceShadePixel
+                                sx[x] = (PIXEL)(ModuleState.ShadePixel
                                     + SHADEPIXEL(sx[x], *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
                             }
                         }
@@ -4590,9 +4594,9 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
             RendererState.Sprite.Height = RendererState.Sprite.Overage;
             RendererState.Sprite.Overage = 0;
 
-            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
         }
     }
 }
@@ -4688,9 +4692,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
                 else { RendererState.Sprite.Overage = overage; }
 
@@ -4787,9 +4791,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
             }
 
@@ -4852,9 +4856,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
                 else { RendererState.Sprite.Overage = overage; }
 
@@ -4967,9 +4971,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
             }
 
@@ -5032,9 +5036,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
                 else { RendererState.Sprite.Overage = overage; }
 
@@ -5084,7 +5088,7 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                                 {
                                     if ((sx[i] & 0x8007) == 0)
                                     {
-                                        CONST PIXEL pixel = (PIXEL)(ModuleState.BackSurfaceShadePixel
+                                        CONST PIXEL pixel = (PIXEL)(ModuleState.ShadePixel
                                             + SHADEPIXEL(*(DOUBLEPIXEL*)&sx[i], *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
 
                                         sx[i] = pixel;
@@ -5112,9 +5116,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
             }
 
@@ -5181,9 +5185,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
                 else { RendererState.Sprite.Overage = overage; }
 
@@ -5291,9 +5295,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                     RendererState.Sprite.Height = RendererState.Sprite.Overage;
                     RendererState.Sprite.Overage = 0;
 
-                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
-                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)(MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT * sizeof(PIXEL)));
+                    RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - SCREEN_SIZE_IN_BYTES);
+                    RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - SCREEN_SIZE_IN_BYTES);
                 }
             }
 
