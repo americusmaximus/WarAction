@@ -87,7 +87,7 @@ typedef VOID(*FUN_10009EB3ACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 
 typedef VOID(*FUN_1000A4F3ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 typedef VOID(*INITIALIZEACTION)(VOID);
 typedef VOID(*MASKSTENCILSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
-typedef VOID(*OFFSETSURFACESACTION)(S32 x, S32 y);
+typedef VOID(*OFFSETSURFACESACTION)(S32 dx, S32 dy);
 typedef VOID(*READMAINSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* surface);
 typedef VOID(*RELEASEDIRECTXACTION)(VOID);
 typedef VOID(*RELEASERENDERERSURFACEACTION)(VOID);
@@ -221,7 +221,7 @@ typedef struct Renderer
     U32                         Unk26; // UNUSED
     U32                         ActualRGBMask;
     U32                         Pitch;
-    DOUBLEPIXEL                 BackSurfaceShadePixel; // TODO Name
+    DOUBLEPIXEL                 ShadePixel;
 
     FOGSPRITE                   Fog[MAX_FOG_SPRITE_COUNT];
 

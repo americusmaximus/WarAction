@@ -41,17 +41,23 @@ SOFTWARE.
 #define SMALL_TILE_X_STEP           2
 #define LARGE_TILE_X_STEP           3
 
+// TODO
+// Remove these two variables in favor of the variables above
+#define TILE_SIZE_HEIGHT            32
+#define TILE_SIZE_WIDTH             63
+// END TODO
+
 #define ACQUIRETEXTWIDTH(A, X) (S32)(*(U8*)((ADDR)A + (ADDR)(X * 2 + 0x404)))
 
-typedef enum OutlineSkipOptions
+typedef enum OutlintDrawOption
 {
-    OUTLINESKIPOPTIONS_NONE         = 0,
-    OUTLINESKIPOPTIONS_TOP          = 1,
-    OUTLINESKIPOPTIONS_BOTTOM       = 2,
-    OUTLINESKIPOPTIONS_LEFT         = 4,
-    OUTLINESKIPOPTIONS_RIGHT        = 8,
-    OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
-} OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
+    OUTLINEDRAWOPTION_NONE          = 0,
+    OUTLINEDRAWOPTION_TOP           = 1,
+    OUTLINEDRAWOPTION_BOTTOM        = 2,
+    OUTLINEDRAWOPTION_LEFT          = 4,
+    OUTLINEDRAWOPTION_RIGHT         = 8,
+    OUTLINEDRAWOPTION_FORCE_DWORD   = 0x7FFFFFFF
+} OUTLINEDRAWOPTION, * OUTLINEDRAWOPTIONPTR;
 
 typedef enum SpriteType
 {
@@ -74,10 +80,10 @@ typedef struct RendererStateContainer
 
     struct
     {
-        OUTLINESKIPOPTIONS  Options;                // 0x1001d55c
-        S32                 HorizontalDirection;    // 0x1001d560
+        OUTLINEDRAWOPTION   Options;                // 0x1001d55c
+        S32                 HorizontalStride;       // 0x1001d560
         S32                 Stride;                 // 0x1001d564
-        S32                 VerticalDirection;      // 0x1001d568
+        S32                 VerticalStride;         // 0x1001d568
         S32                 Height;                 // 0x1001d56c
         S32                 Width;                  // 0x1001d570
     } Outline;
@@ -108,14 +114,14 @@ typedef struct RendererStateContainer
     struct
     {
         U32     ColorMask;          // 0x10010030
-        S32     displayedHalfs;     // 0x10010034 // TODO name Count
+        S32     DisplayedHalfs;     // 0x10010034
         PIXEL*  Stencil;            // 0x10010038
-        S8      unk04;              // 0x1001003c // TODO Name
+        S8      Unk04;              // 0x1001003c
 
-        S32     diff;               // 0x1001003d // TODO Name Delta
-        S32     tileHeight;         // 0x10010041 // TODO Name
-        S32     tempTileHeight;     // 0x10010045 // TODO Name
-        S8      unk08;              // 0x10010049 // TODO Name
+        S32     Diff;               // 0x1001003d
+        S32     Height;             // 0x10010041
+        S32     TempHeight;         // 0x10010045
+        S8      Unk08;              // 0x10010049
 
         struct
         {
@@ -146,7 +152,7 @@ typedef struct RendererStateContainer
 
 EXTERN RENDERERSTATECONTAINER RendererState;
 
-BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height); // TODO
+BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height);
 BOOL InitializeDirectX(HWND hwnd, BOOL fullscreen);
 BOOL InitializeWindow(S32 width, S32 height);
 BOOL LockRendererSurface(VOID);
@@ -162,7 +168,7 @@ VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S
 VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
+VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
@@ -181,7 +187,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
-VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* pixels);
+VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR tile, PIXEL* output);
 VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR output);
 VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height); // TODO
 VOID FUN_10004390(S32 param_1, S32 param_2, LPVOID param_3); // TODO
@@ -196,7 +202,8 @@ VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 par
 VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 VOID Initialize(VOID);
 VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
-VOID OffsetSurfaces(S32 x, S32 y);
+VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset);
+VOID OffsetSurfaces(S32 dx, S32 dy);
 VOID ReadMainSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* surface);
 VOID ReleaseDirectX(VOID);
 VOID ReleaseRendererSurface(VOID);
@@ -206,4 +213,3 @@ VOID ShadeMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, 
 VOID UnlockRendererSurface(VOID);
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID WriteSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
-VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset);

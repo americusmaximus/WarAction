@@ -211,9 +211,9 @@ VOID SetPixelColorMasks(U32 r, U32 g, U32 b)
     ModuleState.ShadeColorMask = ~ModuleState.ActualColorBits;
     ModuleState.ShadeColorMaskCopy = ~ModuleState.ActualColorBits;
 
-    ModuleState.BackSurfaceShadePixel =
+    ModuleState.ShadePixel =
         ((5 << (11 - ModuleState.BlueOffset)) + (2 << (11 - ModuleState.GreenOffset))) & DEFAULT_SCREEN_COLOR_MASK;
-    ModuleState.BackSurfaceShadePixel = (ModuleState.BackSurfaceShadePixel << 16) | ModuleState.BackSurfaceShadePixel;
+    ModuleState.ShadePixel = (ModuleState.ShadePixel << 16) | ModuleState.ShadePixel;
 
     if (ModuleState.GreenOffset < ModuleState.RedOffset)
     {
@@ -3254,7 +3254,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                                 stencil[x] = (spix & 3) | level;
 
                                 sx[x] = (spix & 2)
-                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.BackSurfaceShadePixel) : pixel;
+                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.ShadePixel) : pixel;
                             }
                         }
 
@@ -3277,7 +3277,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                                 stencil[x] = (spix & 3) | level;
 
                                 sx[x] = (spix & 2)
-                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.BackSurfaceShadePixel) : pixel;
+                                    ? (SHADEPIXEL(pixel, *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask) + ModuleState.ShadePixel) : pixel;
                             }
                         }
 
@@ -4408,7 +4408,7 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
                             {
                                 spx[0] = spx[0] | color;
 
-                                sx[x] = (PIXEL)(ModuleState.BackSurfaceShadePixel
+                                sx[x] = (PIXEL)(ModuleState.ShadePixel
                                     + SHADEPIXEL(sx[x], *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
                             }
                         }
@@ -4562,7 +4562,7 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
                             {
                                 spx[0] = spx[0] | color;
 
-                                sx[x] = (PIXEL)(ModuleState.BackSurfaceShadePixel
+                                sx[x] = (PIXEL)(ModuleState.ShadePixel
                                     + SHADEPIXEL(sx[x], *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
                             }
                         }
@@ -5084,7 +5084,7 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                                 {
                                     if ((sx[i] & 0x8007) == 0)
                                     {
-                                        CONST PIXEL pixel = (PIXEL)(ModuleState.BackSurfaceShadePixel
+                                        CONST PIXEL pixel = (PIXEL)(ModuleState.ShadePixel
                                             + SHADEPIXEL(*(DOUBLEPIXEL*)&sx[i], *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
 
                                         sx[i] = pixel;
