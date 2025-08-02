@@ -2101,7 +2101,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         if (height < 1) { RendererState.Outline.Options = OUTLINESKIPOPTIONS_NONE; return; }
 
         y = 0;
-        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_TOP);
+        RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_TOP);
     }
 
     if (RendererState.Outline.Height <= y)
@@ -2112,7 +2112,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
         if (-1 < height) { return; }
 
-        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_TOP);
+        RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_TOP);
     }
 
     {
@@ -2121,7 +2121,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         if (y + 1 + height <= 0 != max < 0)
         {
             height = height - max - 1;
-            RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_BOTTOM);
+            RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_BOTTOM);
         }
     }
 
@@ -2131,7 +2131,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         if (RendererState.Outline.Height <= max)
         {
             height = height + RendererState.Outline.Height - max;
-            RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_BOTTOM);
+            RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_BOTTOM);
         }
     }
 
@@ -2144,7 +2144,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         x = 1;
         width = width - 1;
 
-        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_LEFT);
+        RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_LEFT);
     }
 
     if (RendererState.Outline.Width + 2 <= x)
@@ -2154,14 +2154,14 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
 
         if (-1 < width) { return; }
 
-        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_LEFT);
+        RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_LEFT);
     }
 
     if (x + width <= 0 != x + width < 0)
     {
         width = width - x - width;
 
-        RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_RIGHT);
+        RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_RIGHT);
     }
 
     {
@@ -2171,7 +2171,7 @@ VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixe
         {
             width = width + RendererState.Outline.Width - max;
 
-            RendererState.Outline.Options = (OUTLINESKIPOPTIONS)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_RIGHT);
+            RendererState.Outline.Options = (OUTLINEDRAWOPTION)(RendererState.Outline.Options | OUTLINESKIPOPTIONS_RIGHT);
         }
     }
 
@@ -2683,7 +2683,7 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
 }
 
 // 0x10002b90
-BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
+BOOL WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 x, S32 y, S32 width, S32 height)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -2692,7 +2692,7 @@ BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height)
 }
 
 // 0x10002fb0
-VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height)
+VOID BlendMainSurfaceWithFogOfWar(S32 x, S32 y, S32 width, S32 height)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED

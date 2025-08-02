@@ -35,8 +35,8 @@ RENDERERPTR InitializeModule()
 
     Initialize();
 
-    ModuleState.Actions.FUN_10002fb0_0                              = FUN_10002fb0; // TODO
-    ModuleState.Actions.FUN_10002fb0_1                              = FUN_10002fb0; // TODO
+    ModuleState.Actions.FUN_10002fb0_0                              = BlendMainSurfaceWithFogOfWar; // TODO
+    ModuleState.Actions.FUN_10002fb0_1                              = BlendMainSurfaceWithFogOfWar; // TODO
     ModuleState.Actions.Initialize                                  = Initialize;
     ModuleState.Actions.InitializeDirectX                           = InitializeDirectX;
     ModuleState.Actions.RestoreDisplayMode                          = RestoreDisplayMode;
@@ -84,7 +84,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceColorShadeRectangle          = DrawMainSurfaceColorShadeRectangle;
     ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.DrawMainSurfaceColorEllipse                 = DrawMainSurfaceColorEllipse;
-    ModuleState.Actions.FUN_10002b90                                = FUN_10002b90; // TODO
+    ModuleState.Actions.FUN_10002b90                                = WriteMainSurfaceRendererSurfaceWithFogOfWar; // TODO
     ModuleState.Actions.WriteMainSurfaceRendererSurfaceRectangle    = WriteMainSurfaceRendererSurfaceRectangle;
     ModuleState.Actions.ReadMainSurfaceSurfaceRectangle             = ReadMainSurfaceSurfaceRectangle;
     ModuleState.Actions.MaskStencilSurfaceRectangle                 = MaskStencilSurfaceRectangle;

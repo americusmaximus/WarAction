@@ -48,7 +48,7 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_LEFT         = 4,
     OUTLINESKIPOPTIONS_RIGHT        = 8,
     OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
-} OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
+} OUTLINEDRAWOPTION, * OUTLINEDRAWOPTIONPTR;
 
 typedef enum SpriteType
 {
@@ -71,7 +71,7 @@ typedef struct RendererStateContainer
 
     struct
     {
-        OUTLINESKIPOPTIONS  Options;                // 0x1001d55c
+        OUTLINEDRAWOPTION  Options;                // 0x1001d55c
         S32                 HorizontalDirection;    // 0x1001d560
         S32                 Stride;                 // 0x1001d564
         S32                 VerticalDirection;      // 0x1001d568
@@ -143,7 +143,7 @@ typedef struct RendererStateContainer
 
 EXTERN RENDERERSTATECONTAINER RendererState;
 
-BOOL FUN_10002b90(S32 x, S32 y, S32 width, S32 height); // TODO
+BOOL WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 x, S32 y, S32 width, S32 height); // TODO
 BOOL InitializeDirectX(HWND hwnd, BOOL fullscreen);
 BOOL InitializeWindow(S32 width, S32 height);
 BOOL LockRendererSurface(VOID);
@@ -180,7 +180,7 @@ VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
 VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* pixels);
 VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR output);
-VOID FUN_10002fb0(S32 x, S32 y, S32 width, S32 height); // TODO
+VOID BlendMainSurfaceWithFogOfWar(S32 x, S32 y, S32 width, S32 height); // TODO
 VOID FUN_10004390(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100046b6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100049e6(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO

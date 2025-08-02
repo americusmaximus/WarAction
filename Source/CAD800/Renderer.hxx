@@ -48,7 +48,7 @@ typedef enum OutlineSkipOptions
     OUTLINESKIPOPTIONS_LEFT         = 4,
     OUTLINESKIPOPTIONS_RIGHT        = 8,
     OUTLINESKIPOPTIONS_FORCE_DWORD  = 0x7FFFFFFF
-} OUTLINESKIPOPTIONS, * OUTLINESKIPOPTIONSPTR;
+} OUTLINEDRAWOPTION, * OUTLINEDRAWOPTIONPTR;
 
 typedef enum SpriteType
 {
@@ -71,7 +71,7 @@ typedef struct RendererStateContainer
 
     struct
     {
-        OUTLINESKIPOPTIONS  Options;                // 0x1001d55c
+        OUTLINEDRAWOPTION  Options;                // 0x1001d55c
         S32                 HorizontalDirection;    // 0x1001d560
         S32                 Stride;                 // 0x1001d564
         S32                 VerticalDirection;      // 0x1001d568
