@@ -181,9 +181,9 @@ VOID DrawStencilSurfaceWindowRectangle(VOID);
 VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR input, PIXEL* pixels);
 VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR output);
 VOID BlendMainSurfaceWithFogOfWar(S32 x, S32 y, S32 width, S32 height); // TODO
-VOID FUN_10004390(S32 param_1, S32 param_2, LPVOID param_3); // TODO
+VOID DrawBackSurfaceRhombsPaletteSprite(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID FUN_100046b6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
-VOID FUN_100049e6(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
+VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
 VOID FUN_100053c3(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID FUN_1000579c(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10005ac6(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO

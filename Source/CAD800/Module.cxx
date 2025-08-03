@@ -35,8 +35,8 @@ RENDERERPTR InitializeModule()
 
     Initialize();
 
-    ModuleState.Actions.FUN_10002fb0_0                              = FUN_10002fc0; // TODO
-    ModuleState.Actions.FUN_10002fb0_1                              = FUN_10002fc0; // TODO
+    ModuleState.Actions.BlendMainSurfaceWithFogOfWarA                              = FUN_10002fc0; // TODO
+    ModuleState.Actions.BlendMainSurfaceWithFogOfWarB                              = FUN_10002fc0; // TODO
     ModuleState.Actions.Initialize                                  = Initialize;
     ModuleState.Actions.InitializeDirectX                           = InitializeDirectX;
     ModuleState.Actions.RestoreDisplayMode                          = RestoreDisplayMode;
@@ -53,9 +53,9 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
     ModuleState.Actions.DrawBackSurfaceRhomb                        = DrawBackSurfaceRhomb;
     ModuleState.Actions.DrawMainSurfaceMaskRhomb                    = DrawMainSurfaceMaskRhomb;
-    ModuleState.Actions.FUN_10004390                                = FUN_100043a0; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSprite                                = FUN_100043a0; // TODO
     ModuleState.Actions.FUN_100046b6                                = FUN_100046c6; // TODO
-    ModuleState.Actions.FUN_100049e6                                = FUN_100049f6; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteShadedSprite                                = FUN_100049f6; // TODO
     ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
     ModuleState.Actions.FUN_10005ac6                                = FUN_10005ad6; // TODO
     ModuleState.Actions.FUN_1000579c                                = FUN_100057ac; // TODO
@@ -84,7 +84,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceColorShadeRectangle          = DrawMainSurfaceColorShadeRectangle;
     ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.DrawMainSurfaceColorEllipse                 = DrawMainSurfaceColorEllipse;
-    ModuleState.Actions.FUN_10002b90                                = FUN_10002ba0; // TODO
+    ModuleState.Actions.WriteMainSurfaceRendererSurfaceWithFogOfWar                                = FUN_10002ba0; // TODO
     ModuleState.Actions.WriteMainSurfaceRendererSurfaceRectangle    = WriteMainSurfaceRendererSurfaceRectangle;
     ModuleState.Actions.ReadMainSurfaceSurfaceRectangle             = ReadMainSurfaceSurfaceRectangle;
     ModuleState.Actions.MaskStencilSurfaceRectangle                 = MaskStencilSurfaceRectangle;

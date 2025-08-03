@@ -40,18 +40,20 @@ typedef struct DirectX
 typedef BOOL(*INITIALIZEDIRECTXACTION)(HWND hwnd, BOOL fullscreen);
 typedef BOOL(*INITIALIZEWINDOWACTION)(S32 width, S32 height);
 typedef BOOL(*LOCKRENDERERSURFACEACTION)(VOID);
-typedef BOOL(*READRENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
 typedef BOOL(*WRITERENDERERSURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
-typedef S32(*ACQUIRETEXTLENGTHACTION)(LPCSTR text, BINASSETCONTENTPTR asset);
+typedef S32(*ACQUIRETEXTLENGTHACTION)(LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset);
+typedef VOID(*BLENDMAINSURFACEWITHFOGOFWARACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
 typedef VOID(*CLEANMAINSURFACERHOMBACTION)(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR tile);
 typedef VOID(*CONVERTALLCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*CONVERTVISIBLECOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
 typedef VOID(*DRAWBACKSURFACEPALETTESHADESPRITEACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWBACKSURFACERHOMBSACTION)(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
+typedef VOID(*DRAWBACKSURFACERHOMBSPALETTESHADEDSPRITEACTION)(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
+typedef VOID(*DRAWBACKSURFACERHOMBSPALETTESPRITEACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 typedef VOID(*DRAWBACKSURFACESHADOWSPRITEACTION)(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
-typedef VOID(*DRAWBACKSURFACETEXTACTION)(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
+typedef VOID(*DRAWBACKSURFACETEXTACTION)(S32 x, S32 y, LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette);
 typedef VOID(*DRAWMAINSURFACEANIMATIONSPRITEACTION)(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACEANIMATIONSPRITESTENCILACTION)(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACEANIMATIONSPRITEVERSION4ACTION)(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
@@ -70,14 +72,11 @@ typedef VOID(*DRAWMAINSURFACEPALETTESPRITEFRONTSTENCILACTION)(S32 x, S32 y, U16 
 typedef VOID(*DRAWMAINSURFACEPALETTESPRITESTENCILACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACESHADOWSPRITEACTION)(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWMAINSURFACESPRITEACTION)(S32 x, S32 y, IMAGESPRITEPTR sprite);
-typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette); // TODO
+typedef VOID(*DRAWMAINSURFACETEXTACTION)(S32 x, S32 y, LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette);
 typedef VOID(*DRAWMAINSURFACEVERTICALCOLORLINEACTION)(S32 x, S32 y, S32 length, PIXEL pixel);
 typedef VOID(*DRAWSTENCILSURFACEWINDOWRECTANGLEACTION)(VOID);
 typedef VOID(*DRAWUISPRITEACTION)(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR output);
-typedef VOID(*FUN_10002FB0ACTION)(S32 x, S32 y, S32 width, S32 height); // TODO
-typedef VOID(*FUN_10004390ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 typedef VOID(*FUN_100046B6ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // TODO
-typedef VOID(*FUN_100049E6ACTION)(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_100053C3ACTION)(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*FUN_1000579CACTION)(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10005AC6ACTION)(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
@@ -96,70 +95,71 @@ typedef VOID(*SETPIXELCOLORMASKSACTION)(U32 r, U32 g, U32 b);
 typedef VOID(*SHADEMAINSURFACERHOMBACTION)(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3);
 typedef VOID(*UNLOCKRENDERERSURFACEACTION)(VOID);
 typedef VOID(*WRITEBACKSURFACEMAINSURFACERECTANGLEACTION)(S32 x, S32 y, S32 width, S32 height);
+typedef VOID(*WRITEMAINSURFACERENDERERSURFACEWITHFOGOFWARACTION)(S32 sx, S32 sy, S32 ex, S32 ey);
 typedef VOID(*WRITESURFACESURFACERECTANGLEACTION)(S32 sx, S32 sy, S32 sstr, PIXEL* input, S32 dx, S32 dy, S32 dstr, PIXEL* output, S32 width, S32 height);
 
 typedef struct RendererActions
 {
-    INITIALIZEACTION                                Initialize; // CADraw_Reset
-    INITIALIZEDIRECTXACTION                         InitializeDirectX;
-    RESTOREDISPLAYMODEACTION                        RestoreDisplayMode;
-    INITIALIZEWINDOWACTION                          InitializeWindow; // CADraw_Set
-    SETPIXELCOLORMASKSACTION                        SetPixelColorMasks;
-    RELEASERENDERERSURFACEACTION                    ReleaseRendererSurface;
-    LOCKRENDERERSURFACEACTION                       LockRendererSurface;
-    UNLOCKRENDERERSURFACEACTION                     UnlockRendererSurface;
-    OFFSETSURFACESACTION                            OffsetSurfaces;
-    CONVERTVISIBLECOLORSACTION                      ConvertVisibleColors;
-    CONVERTALLCOLORSACTION                          ConvertAllColors;
-    ACQUIRETEXTLENGTHACTION                         AcquireTextLength;
-    DRAWBACKSURFACETEXTACTION                       DrawBackSurfaceText;
-    DRAWMAINSURFACETEXTACTION                       DrawMainSurfaceText;
-    DRAWBACKSURFACERHOMBSACTION                     DrawBackSurfaceRhomb;
-    DRAWMAINSURFACEMASKRHOMBACTION                  DrawMainSurfaceMaskRhomb;
-    FUN_10004390ACTION FUN_10004390; // TODO
+    INITIALIZEACTION                                    Initialize; // CADraw_Reset
+    INITIALIZEDIRECTXACTION                             InitializeDirectX;
+    RESTOREDISPLAYMODEACTION                            RestoreDisplayMode;
+    INITIALIZEWINDOWACTION                              InitializeWindow; // CADraw_Set
+    SETPIXELCOLORMASKSACTION                            SetPixelColorMasks;
+    RELEASERENDERERSURFACEACTION                        ReleaseRendererSurface;
+    LOCKRENDERERSURFACEACTION                           LockRendererSurface;
+    UNLOCKRENDERERSURFACEACTION                         UnlockRendererSurface;
+    OFFSETSURFACESACTION                                OffsetSurfaces;
+    CONVERTVISIBLECOLORSACTION                          ConvertVisibleColors;
+    CONVERTALLCOLORSACTION                              ConvertAllColors;
+    ACQUIRETEXTLENGTHACTION                             AcquireTextLength;
+    DRAWBACKSURFACETEXTACTION                           DrawBackSurfaceText;
+    DRAWMAINSURFACETEXTACTION                           DrawMainSurfaceText;
+    DRAWBACKSURFACERHOMBSACTION                         DrawBackSurfaceRhomb;
+    DRAWMAINSURFACEMASKRHOMBACTION                      DrawMainSurfaceMaskRhomb;
+    DRAWBACKSURFACERHOMBSPALETTESPRITEACTION            DrawBackSurfaceRhombsPaletteSprite;
     FUN_100046B6ACTION FUN_100046b6; // TODO
-    FUN_100049E6ACTION FUN_100049e6; // TODO
-    DRAWBACKSURFACEPALETTESHADESPRITEACTION         DrawBackSurfacePaletteShadeSprite;
+    DRAWBACKSURFACERHOMBSPALETTESHADEDSPRITEACTION      DrawBackSurfaceRhombsPaletteShadedSprite;
+    DRAWBACKSURFACEPALETTESHADESPRITEACTION             DrawBackSurfacePaletteShadeSprite;
     FUN_10005AC6ACTION FUN_10005ac6; // TODO
     FUN_1000579CACTION FUN_1000579c; // TODO
-    DRAWBACKSURFACESHADOWSPRITEACTION               DrawBackSurfaceShadowSprite;
-    WRITEBACKSURFACEMAINSURFACERECTANGLEACTION      WriteBackSurfaceMainSurfaceRectangle;
-    DRAWBACKSURFACECOLORPOINTACTION                 DrawBackSurfaceColorPoint;
-    SHADEMAINSURFACERHOMBACTION                     ShadeMainSurfaceRhomb;
-    CLEANMAINSURFACERHOMBACTION                     CleanMainSurfaceRhomb;
-    FUN_10002FB0ACTION FUN_10002fb0_0; // TODO
-    DRAWMAINSURFACEPALETTESPRITEACTION              DrawMainSurfacePaletteSprite;
-    DRAWMAINSURFACESPRITEACTION                     DrawMainSurfaceSprite;
-    DRAWMAINSURFACEPALETTEBLENDSPRITEACTION         DrawMainSurfacePaletteBlendSprite;
-    DRAWMAINSURFACEPALETTESPRITESTENCILACTION       DrawMainSurfacePaletteSpriteStencil;
-    DRAWMAINSURFACEPALETTESPRITEFRONTSTENCILACTION  DrawMainSurfacePaletteSpriteFrontStencil;
-    DRAWMAINSURFACEPALETTESPRITEBACKSTENCILACTION   DrawMainSurfacePaletteSpriteBackStencil;
-    DRAWMAINSURFACEANIMATIONSPRITESTENCILACTION     DrawMainSurfaceAnimationSpriteStencil;
+    DRAWBACKSURFACESHADOWSPRITEACTION                   DrawBackSurfaceShadowSprite;
+    WRITEBACKSURFACEMAINSURFACERECTANGLEACTION          WriteBackSurfaceMainSurfaceRectangle;
+    DRAWBACKSURFACECOLORPOINTACTION                     DrawBackSurfaceColorPoint;
+    SHADEMAINSURFACERHOMBACTION                         ShadeMainSurfaceRhomb;
+    CLEANMAINSURFACERHOMBACTION                         CleanMainSurfaceRhomb;
+    BLENDMAINSURFACEWITHFOGOFWARACTION                  BlendMainSurfaceWithFogOfWarA;
+    DRAWMAINSURFACEPALETTESPRITEACTION                  DrawMainSurfacePaletteSprite;
+    DRAWMAINSURFACESPRITEACTION                         DrawMainSurfaceSprite;
+    DRAWMAINSURFACEPALETTEBLENDSPRITEACTION             DrawMainSurfacePaletteBlendSprite;
+    DRAWMAINSURFACEPALETTESPRITESTENCILACTION           DrawMainSurfacePaletteSpriteStencil;
+    DRAWMAINSURFACEPALETTESPRITEFRONTSTENCILACTION      DrawMainSurfacePaletteSpriteFrontStencil;
+    DRAWMAINSURFACEPALETTESPRITEBACKSTENCILACTION       DrawMainSurfacePaletteSpriteBackStencil;
+    DRAWMAINSURFACEANIMATIONSPRITESTENCILACTION         DrawMainSurfaceAnimationSpriteStencil;
     FUN_100067ADACTION FUN_100067ad; // TODO
-    DRAWMAINSURFACESHADOWSPRITEACTION               DrawMainSurfaceShadowSprite;
-    DRAWMAINSURFACEANIMATIONSPRITEVERSION4ACTION    DrawMainSurfaceAnimationSpriteVersion4;
+    DRAWMAINSURFACESHADOWSPRITEACTION                   DrawMainSurfaceShadowSprite;
+    DRAWMAINSURFACEANIMATIONSPRITEVERSION4ACTION        DrawMainSurfaceAnimationSpriteVersion4;
     FUN_10007BE8ACTION FUN_10007be8; // TODO
     FUN_100053C3ACTION FUN_100053c3; // TODO
-    DRAWMAINSURFACECOLORPOINTACTION                 DrawMainSurfaceColorPoint;
-    DRAWMAINSURFACECOLORRECTANGLEACTION             DrawMainSurfaceColorRectangle;
-    DRAWMAINSURFACECOLORBOXACTION                   DrawMainSurfaceColorBox;
-    DRAWMAINSURFACEHORIZONTALCOLORLINEACTION        DrawMainSurfaceHorizontalColorLine;
-    DRAWMAINSURFACEVERTICALCOLORLINEACTION          DrawMainSurfaceVerticalColorLine;
-    DRAWMAINSURFACECOLORSHADERECTANGLEACTION        DrawMainSurfaceColorShadeRectangle;
-    DRAWMAINSURFACECOLOROUTLINEACTION               DrawMainSurfaceColorOutline;
-    DRAWMAINSURFACECOLORELLIPSEACTION               DrawMainSurfaceColorEllipse;
-    READRENDERERSURFACERECTANGLEACTION              FUN_10002b90; // TODO
-    WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION  WriteMainSurfaceRendererSurfaceRectangle;
-    FUN_10002FB0ACTION FUN_10002fb0_1; // TODO
-    READMAINSURFACESURFACERECTANGLEACTION           ReadMainSurfaceSurfaceRectangle;
-    MASKSTENCILSURFACERECTANGLEACTION               MaskStencilSurfaceRectangle;
-    DRAWSTENCILSURFACEWINDOWRECTANGLEACTION         DrawStencilSurfaceWindowRectangle;
-    WRITERENDERERSURFACESURFACERECTANGLEACTION      WriteRendererSurfaceSurfaceRectangle;
-    WRITESURFACESURFACERECTANGLEACTION              WriteSurfaceSurfaceRectangle;
-    DRAWUISPRITEACTION                              DrawUISprite;
+    DRAWMAINSURFACECOLORPOINTACTION                     DrawMainSurfaceColorPoint;
+    DRAWMAINSURFACECOLORRECTANGLEACTION                 DrawMainSurfaceColorRectangle;
+    DRAWMAINSURFACECOLORBOXACTION                       DrawMainSurfaceColorBox;
+    DRAWMAINSURFACEHORIZONTALCOLORLINEACTION            DrawMainSurfaceHorizontalColorLine;
+    DRAWMAINSURFACEVERTICALCOLORLINEACTION              DrawMainSurfaceVerticalColorLine;
+    DRAWMAINSURFACECOLORSHADERECTANGLEACTION            DrawMainSurfaceColorShadeRectangle;
+    DRAWMAINSURFACECOLOROUTLINEACTION                   DrawMainSurfaceColorOutline;
+    DRAWMAINSURFACECOLORELLIPSEACTION                   DrawMainSurfaceColorEllipse;
+    WRITEMAINSURFACERENDERERSURFACEWITHFOGOFWARACTION   WriteMainSurfaceRendererSurfaceWithFogOfWar;
+    WRITEMAINSURFACERENDERERSURFACERECTANGLEACTION      WriteMainSurfaceRendererSurfaceRectangle;
+    BLENDMAINSURFACEWITHFOGOFWARACTION                  BlendMainSurfaceWithFogOfWarB;
+    READMAINSURFACESURFACERECTANGLEACTION               ReadMainSurfaceSurfaceRectangle;
+    MASKSTENCILSURFACERECTANGLEACTION                   MaskStencilSurfaceRectangle;
+    DRAWSTENCILSURFACEWINDOWRECTANGLEACTION             DrawStencilSurfaceWindowRectangle;
+    WRITERENDERERSURFACESURFACERECTANGLEACTION          WriteRendererSurfaceSurfaceRectangle;
+    WRITESURFACESURFACERECTANGLEACTION                  WriteSurfaceSurfaceRectangle;
+    DRAWUISPRITEACTION                                  DrawUISprite;
     FUN_1000A4F3ACTION FUN_1000a4f3; // TODO
     FUN_10009EB3ACTION FUN_10009eb3; // TODO
-    RELEASEDIRECTXACTION                            ReleaseDirectX;
+    RELEASEDIRECTXACTION                                ReleaseDirectX;
 } RENDERERACTIONS, * RENDERERACTIONSPTR;
 
 typedef struct Rectangle

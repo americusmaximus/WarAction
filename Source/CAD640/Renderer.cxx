@@ -2742,7 +2742,7 @@ VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PI
 }
 
 // 0x10004390
-VOID FUN_10004390(S32 param_1, S32 param_2, LPVOID param_3)
+VOID DrawBackSurfaceRhombsPaletteSprite(S32 param_1, S32 param_2, LPVOID param_3)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -2756,7 +2756,7 @@ VOID FUN_100046b6(S32 param_1, S32 param_2, LPVOID param_3)
 }
 
 // 0x100049e6
-VOID FUN_100049e6(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4)
+VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
