@@ -1806,7 +1806,7 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
                             v30 = (v30 & 0xFFFF'FF00) | fogPixelLowByte;
 
                             S32 v31 = 4 * v30;
-                            RendererState.FogBlockParams2.Unk01 = v31;
+                            RendererState.FogBlockParams2.Unk02 = v31;
 
                             U32 fogOffset = ((S32)fogPixelHighByte + 0x7F) << 5;
 
@@ -2246,7 +2246,7 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
                 srcInput += tileStartDrawLength;
                 txDelta += RendererState.Tile.Diff;
                 tileStartDrawLength -= 4; // For stepped rendering for each of the following pyramid -4 from it's apex
-                dst2 = (PIXEL*)((ADDR)dst2 + (ADDR)(stride + 2 * sizeof(PIXEL)));   // 4 is likely to be 2 pixels + and offset for stepped operations
+                dst2 = (PIXEL*)((ADDR)dst2 + (ADDR)(stride + 2 * sizeof(PIXEL))); // 4 is likely to be 2 pixels + and offset for stepped operations
                 tx += 2;
             }
         }
@@ -2457,7 +2457,7 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
 }
 
 // 0x1000381e
-VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, u32 stride, PIXEL* output)
+VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, PIXEL* output)
 {
     CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
     RendererState.Tile.Stencil = (PIXEL*)((ADDR)output + ModuleState.Surface.Offset % (MAX_RENDERER_WIDTH * sizeof(PIXEL)) + SCREEN_SIZE_IN_BYTES);
@@ -4105,7 +4105,7 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
     RendererState.Sprite.VanishOffset = vanishOffset;
     RendererState.Sprite.ColorMask = colorMask;
     RendererState.Sprite.AdjustedColorMask = colorMask | (colorMask << 1);
-    
+
     RendererState.Sprite.Height = sprite->Height;
 
     x += sprite->X;

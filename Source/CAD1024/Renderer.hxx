@@ -32,6 +32,7 @@ SOFTWARE.
 #define SCREEN_SIZE_IN_PIXELS       (MAX_RENDERER_WIDTH * MAX_RENDERER_HEIGHT)
 #define SCREEN_SIZE_IN_BYTES        (SCREEN_SIZE_IN_PIXELS * sizeof(PIXEL))
 
+// ##################
 #define MAX_TILE_SIZE_HEIGHT        32
 #define MAX_TILE_SIZE_WIDTH         64
 
@@ -41,11 +42,12 @@ SOFTWARE.
 #define SMALL_TILE_X_STEP           2
 #define LARGE_TILE_X_STEP           3
 
-// TODO
-// Remove these two variables in favor of the variables above
+// ------------------
+
 #define TILE_SIZE_HEIGHT            32
 #define TILE_SIZE_WIDTH             63
-// END TODO
+
+// ##################
 
 typedef enum OutlintDrawOption
 {
@@ -234,7 +236,7 @@ VOID ReleaseRendererSurface(VOID);
 VOID RestoreDisplayMode(VOID);
 VOID SetPixelColorMasks(U32 r, U32 g, U32 b);
 VOID ShadeMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3);
-VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, u32 stride, PIXEL* output);
+VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, PIXEL* output);
 VOID UnlockRendererSurface(VOID);
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey);
