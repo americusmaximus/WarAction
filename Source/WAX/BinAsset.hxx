@@ -89,7 +89,7 @@ typedef struct ImagePaletteSpritePixel
 #pragma pack(push, 1)
 typedef struct  ImagePaletteTile
 {
-    U8 pixels[1];
+    U8 Pixels[1];
 } IMAGEPALETTETILE, * IMAGEPALETTETILEPTR;
 #pragma pack(pop)
 

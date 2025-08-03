@@ -812,7 +812,7 @@ VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx
 
     S32 tileStartDrawLength = 0;
 
-    U8* srcInput = input->pixels;
+    U8* srcInput = input->Pixels;
     PIXEL* dst = (PIXEL*)((ADDR)pixels + (ADDR)(ModuleState.Surface.Offset + ty * stride + (tx - 1) * sizeof(PIXEL)));
     PIXEL* dst2 = NULL;
     S32 txDelta = tx + HALF_TILE_SIZE_WIDTH;
@@ -1615,7 +1615,7 @@ VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
 
     S32 tileStartDrawLength = 0;
 
-    CONST U8* srcInput = tile->pixels;
+    CONST U8* srcInput = tile->Pixels;
     PIXEL* dst = (PIXEL*)((ADDR)pixels + (ADDR)(ModuleState.Surface.Offset + ty * stride + (tx - 1) * sizeof(PIXEL)));
     PIXEL* dst2 = NULL;
 
@@ -2720,7 +2720,7 @@ VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PI
     {
         CONST IMAGEPALETTESPRITEPTR image = (IMAGEPALETTESPRITEPTR)((ADDR)asset + (ADDR)asset->Offset[text[xx]]);
 
-        DrawMainSurfacePaletteSprite(x + offset, y, palette, image);
+        DrawMainSurfacePaletteSpriteCompact(x + offset, y, palette, image);
 
         offset = offset + DEFAULT_FONT_ASSET_SPACING + ACQUIRETEXTWIDTH(asset, text[xx]);
     }
@@ -2939,7 +2939,7 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
 }
 
 // 0x100050ef
-VOID DrawMainSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
 {
     RendererState.Sprite.Window.X = ModuleState.Window.X;
     RendererState.Sprite.Window.Y = ModuleState.Window.Y;

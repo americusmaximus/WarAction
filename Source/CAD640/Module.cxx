@@ -58,13 +58,13 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawBackSurfaceRhombsPaletteShadedSprite                                = DrawBackSurfaceRhombsPaletteShadedSprite; // TODO
     ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
     ModuleState.Actions.FUN_10005ac6                                = FUN_10005ac6; // TODO
-    ModuleState.Actions.FUN_1000579c                                = FUN_1000579c; // TODO
+    ModuleState.Actions.DrawBackSurfacePalletteSprite                                = DrawBackSurfacePalletteSprite; // TODO
     ModuleState.Actions.DrawBackSurfaceShadowSprite                 = DrawBackSurfaceShadowSprite;
     ModuleState.Actions.WriteBackSurfaceMainSurfaceRectangle        = WriteBackSurfaceMainSurfaceRectangle;
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
     ModuleState.Actions.ShadeMainSurfaceRhomb                       = ShadeMainSurfaceRhomb;
     ModuleState.Actions.CleanMainSurfaceRhomb                       = CleanMainSurfaceRhomb;
-    ModuleState.Actions.DrawMainSurfacePaletteSprite                = DrawMainSurfacePaletteSprite;
+    ModuleState.Actions.DrawMainSurfacePaletteSprite                = DrawMainSurfacePaletteSpriteCompact;
     ModuleState.Actions.DrawMainSurfaceSprite                       = DrawMainSurfaceSprite;
     ModuleState.Actions.DrawMainSurfacePaletteBlendSprite           = DrawMainSurfacePaletteBlendSprite;
     ModuleState.Actions.DrawMainSurfacePaletteSpriteStencil         = DrawMainSurfacePaletteSpriteStencil;
@@ -75,7 +75,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceShadowSprite                 = DrawMainSurfaceShadowSprite;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion4      = DrawMainSurfaceAnimationSpriteVersion4; // TODO
     ModuleState.Actions.FUN_10007be8                                = FUN_10007be8; // TODO
-    ModuleState.Actions.FUN_100053c3                                = FUN_100053c3; // TODO
+    ModuleState.Actions.DrawMainSurfaceVanishingPaletteSprite                                = DrawMainSurfaceVanishingPaletteSprite; // TODO
     ModuleState.Actions.DrawMainSurfaceColorPoint                   = DrawMainSurfaceColorPoint;
     ModuleState.Actions.DrawMainSurfaceColorRectangle               = DrawMainSurfaceColorRectangle;
     ModuleState.Actions.DrawMainSurfaceColorBox                     = DrawMainSurfaceColorBox;
