@@ -4605,7 +4605,7 @@ VOID FUN_10007bf8(S32 x, S32 y, U16 param_3, LPVOID param_4)
 }
 
 // 0x10007fbc
-VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED

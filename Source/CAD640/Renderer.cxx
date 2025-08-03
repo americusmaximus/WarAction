@@ -3660,7 +3660,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
 }
 
 // 0x100067ad
-VOID FUN_100067ad(S32 x, S32 y, S32 param_3, LPVOID param_4)
+VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, S32 param_3, LPVOID param_4)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED
@@ -4605,7 +4605,7 @@ VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4)
 }
 
 // 0x10007fbc
-VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, LPVOID pal, IMAGEPALETTESPRITEPTR sprite)
 {
     OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
     // TODO NOT IMPLEMENTED

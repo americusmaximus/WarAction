@@ -159,7 +159,7 @@ VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S
 VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
+VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite); // TODO
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);

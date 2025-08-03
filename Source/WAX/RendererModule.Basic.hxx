@@ -80,7 +80,7 @@ typedef VOID(*FUN_100046B6ACTION)(S32 param_1, S32 param_2, LPVOID param_3); // 
 typedef VOID(*DRAWMAINSURFACEVANISHINGPALETTESPRITEACTION)(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 typedef VOID(*DRAWBACKSURFACEPALLETTESPRITEACTION)(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10005AC6ACTION)(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-typedef VOID(*FUN_100067ADACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
+typedef VOID(*DRAWMAINSURFACEANIMATIONSPRITEACTION)(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10007BE8ACTION)(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
 typedef VOID(*FUN_10009EB3ACTION)(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 typedef VOID(*FUN_1000A4F3ACTION)(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
@@ -135,7 +135,7 @@ typedef struct RendererActions
     DRAWMAINSURFACEPALETTESPRITEFRONTSTENCILACTION      DrawMainSurfacePaletteSpriteFrontStencil;
     DRAWMAINSURFACEPALETTESPRITEBACKSTENCILACTION       DrawMainSurfacePaletteSpriteBackStencil;
     DRAWMAINSURFACEANIMATIONSPRITESTENCILACTION         DrawMainSurfaceAnimationSpriteStencil;
-    FUN_100067ADACTION FUN_100067ad; // TODO
+    DRAWMAINSURFACEANIMATIONSPRITEACTION                DrawMainSurfaceAnimationSprite;
     DRAWMAINSURFACESHADOWSPRITEACTION                   DrawMainSurfaceShadowSprite;
     DRAWMAINSURFACEANIMATIONSPRITEVERSION4ACTION        DrawMainSurfaceAnimationSpriteVersion4;
     FUN_10007BE8ACTION FUN_10007be8; // TODO

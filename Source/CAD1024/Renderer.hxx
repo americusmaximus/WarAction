@@ -61,7 +61,7 @@ typedef enum SpriteType
 {
     SPRITETYPE_STATIC           = 0xA1,
     SPRITETYPE_DYNAMIC          = 0xA2,
-    SPRITETYPE_ALPHA_CHANNEL    = 0xA3,
+    SPRITETYPE_ALPHA            = 0xA3,
     SPRITETYPE_ANIMATION        = 0xA9,
 } SPRITETYPE, * SPRITETYPEPTR;
 
@@ -190,7 +190,7 @@ VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S
 VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette);
 VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawMainSurfaceAnimationSpriteVersion4(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
@@ -218,7 +218,7 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 param_1, S32 param_2, U16 para
 VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawBackSurfacePalletteSprite(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10005ac6(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID FUN_100067ad(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
+VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
 VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
 VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
 VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
