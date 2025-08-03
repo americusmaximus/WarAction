@@ -186,11 +186,11 @@ VOID FUN_100046b6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
 VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
 VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawBackSurfacePalletteSprite(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
-VOID FUN_10005ac6(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
+VOID DrawBackSurfacePaletteSpriteAndStencil(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
 VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
-VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
-VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
+VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
+VOID MarkUISprite(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
+VOID DrawVanishingUISprite(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
 VOID Initialize(VOID);
 VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID OffsetSurfaces(S32 x, S32 y);

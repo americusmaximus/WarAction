@@ -33,8 +33,6 @@ SOFTWARE.
 #define STENCIL_PIXEL_OFFSET            0x440
 #define STENCIL_PIXEL_MASK_VALUE        0xFFFB
 
-using namespace Mathematics;
-
 RENDERERSTATECONTAINER RendererState;
 
 // 0x10001000
@@ -2945,7 +2943,7 @@ VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 t
             overflow = RendererState.Tile.TempHeight;
 
             dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)SCREEN_SIZE_IN_BYTES);
-        };
+        }
     }
 }
 
@@ -3153,12 +3151,12 @@ VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels)
             overflow = RendererState.Tile.TempHeight;
 
             dst2 = (PIXEL*)((ADDR)dst2 - (ADDR)SCREEN_SIZE_IN_BYTES);
-        };
+        }
     }
 }
 
 // 0x10004390
-VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawBackSurfaceRhombsPaletteSpriteA(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite)
 {
     RendererState.Sprite.Height = sprite->Height;
 
@@ -3228,8 +3226,9 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -3245,17 +3244,17 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -3270,7 +3269,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -3279,7 +3278,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -3292,7 +3291,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -3306,7 +3305,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -3319,7 +3318,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -3350,7 +3349,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR spri
 }
 
 // 0x100046b6
-VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawBackSurfaceRhombsPaletteSpriteB(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite)
 {
     RendererState.Sprite.Height = sprite->Height;
 
@@ -3420,8 +3419,9 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -3437,17 +3437,17 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -3462,7 +3462,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -3471,7 +3471,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -3484,7 +3484,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -3498,7 +3498,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -3511,7 +3511,7 @@ VOID DrawBackSurfaceRhombsPaletteSprite2(S32 x, S32 y, IMAGEPALETTESPRITEPTR spr
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -3614,8 +3614,9 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -3631,17 +3632,17 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -3656,7 +3657,7 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -3668,7 +3669,7 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -3686,7 +3687,7 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -3705,7 +3706,7 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -3723,7 +3724,7 @@ VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALE
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -3827,8 +3828,9 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -3844,12 +3846,12 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -3864,7 +3866,7 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -3887,7 +3889,7 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -3902,7 +3904,7 @@ VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -4002,8 +4004,9 @@ VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALE
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 PIXEL* sx = RendererState.Sprite.X;
                 while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
@@ -4016,11 +4019,11 @@ VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALE
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -4035,7 +4038,7 @@ VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALE
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -4056,7 +4059,7 @@ VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALE
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -4067,7 +4070,7 @@ VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALE
                             sx[i] = palette[indx];
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -4169,8 +4172,9 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 PIXEL* sx = RendererState.Sprite.X;
                 while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
@@ -4183,11 +4187,11 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -4202,7 +4206,7 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -4229,7 +4233,7 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -4249,7 +4253,7 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
                             sx[i] = (U16)(tempDoublePixel2 + tempDoublePixel5);
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -4352,8 +4356,9 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -4369,17 +4374,17 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -4394,7 +4399,7 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -4403,7 +4408,7 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -4420,7 +4425,7 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -4433,7 +4438,7 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
                             sx[i] = (sx[i] + pixel - (ModuleState.ActualColorBits & (sx[i] ^ pixel))) >> 1;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -4446,7 +4451,7 @@ VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPR
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -4549,8 +4554,9 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -4566,17 +4572,17 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -4591,7 +4597,7 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -4601,7 +4607,7 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -4615,7 +4621,7 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
                             stencil[i] = level;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -4629,7 +4635,7 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
                             stencil[i] = level;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -4643,7 +4649,7 @@ VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* pale
                             stencil[i] = level;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -4750,8 +4756,9 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -4766,11 +4773,11 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                     {
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -4785,7 +4792,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -4813,7 +4820,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -4831,7 +4838,7 @@ VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, 
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -4932,8 +4939,9 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -4949,17 +4957,17 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -4973,7 +4981,7 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
 
                     if (count == 0)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -4982,7 +4990,7 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -4995,7 +5003,7 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -5007,7 +5015,7 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
                             sx[i] = (sx[i] + pixel - (ModuleState.ActualColorBits & (sx[i] ^ pixel))) >> 1;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -5019,7 +5027,7 @@ VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETT
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -5118,7 +5126,8 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
                 ImageSpritePixel* pixels = (ImageSpritePixel*)content;
 
                 PIXEL* sx = RendererState.Sprite.X;
@@ -5284,8 +5293,9 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, ANIMATIONPIXEL* palette, IMAGE
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -5301,12 +5311,12 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, ANIMATIONPIXEL* palette, IMAGE
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -5320,7 +5330,7 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, ANIMATIONPIXEL* palette, IMAGE
 
                     if (count == 0)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         continue;
                     }
 
@@ -5362,7 +5372,7 @@ VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, ANIMATIONPIXEL* palette, IMAGE
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + ((count - 1) * sizeof(U8) + sizeof(ImagePaletteSpritePixel)));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + ((count - 1) * sizeof(U8) + sizeof(IMAGEPALETTESPRITEPIXEL)));
                     }
 
                     sx += availCount;
@@ -5470,8 +5480,9 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, ANIMATIONPIX
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -5489,11 +5500,11 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, ANIMATIONPIX
                     {
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -5508,7 +5519,7 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, ANIMATIONPIX
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -5536,7 +5547,7 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, ANIMATIONPIX
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + (ADDR)sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + (ADDR)sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -5559,7 +5570,7 @@ VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, ANIMATIONPIX
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + (ADDR)((count - 1) * sizeof(U8) + sizeof(ImagePaletteSpritePixel)));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + (ADDR)((count - 1) * sizeof(U8) + sizeof(IMAGEPALETTESPRITEPIXEL)));
                     }
 
                     sx += availCount;
@@ -5667,8 +5678,9 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -5684,17 +5696,17 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -5709,7 +5721,7 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -5719,7 +5731,7 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -5735,7 +5747,7 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -5751,7 +5763,7 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -5767,7 +5779,7 @@ VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* pa
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -5880,8 +5892,9 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
             while (RendererState.Sprite.Height > 0)
             {
                 chessPixel ^= 1;
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -5897,17 +5910,17 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -5922,7 +5935,7 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -5932,7 +5945,7 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -5949,7 +5962,7 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                     {
@@ -5966,7 +5979,7 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                     {
@@ -5982,7 +5995,7 @@ VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* pal
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -6087,8 +6100,9 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -6102,7 +6116,7 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
 
                     if (count <= need)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
 
                     skip = count == need ? 0 : Mathematics::Min(count, need);
@@ -6115,7 +6129,7 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
 
                     if (count == 0)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -6137,7 +6151,7 @@ VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
                         }
                     }
 
-                    pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                    pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     sx += availCount;
 
                     skip = 0;
@@ -6240,8 +6254,9 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -6255,7 +6270,7 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
 
                     if (count <= need)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
 
                     skip = count == need ? 0 : Mathematics::Min(count, need);
@@ -6268,7 +6283,7 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
 
                     if (count == 0)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -6290,7 +6305,7 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
                         }
                     }
 
-                    pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                    pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     sx += availCount;
 
                     skip = 0;
@@ -6321,17 +6336,17 @@ VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESP
 // 0x10007be8
 VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPTR sprite)
 {
-    const U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
+    CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
     RendererState.Sprite.ColorMask = colorMask;
     RendererState.Sprite.AdjustedColorMask = colorMask | (colorMask << 1);
 
     level = (level + STENCIL_PIXEL_OFFSET) * STENCIL_PIXEL_COLOR_VALUE;
-    const DOUBLEPIXEL stencilLevel = (level << 16) | level;
+    CONST DOUBLEPIXEL stencilLevel = (level << 16) | level;
 
     RendererState.Sprite.Height = sprite->Height;
 
-    void* content = &sprite->Pixels;
-    void* next = (void*)((ADDR)content + (ADDR)sprite->Next);
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
 
     x += sprite->X;
     y += sprite->Y;
@@ -6348,14 +6363,14 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
 
         for (S32 i = 0; i < ModuleState.Window.Y - y; ++i)
         {
-            content = (void*)((ADDR)next + sizeof(U16));
-            next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+            content = (LPVOID)((ADDR)next + sizeof(U16));
+            next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
         }
 
         y = ModuleState.Window.Y;
     }
 
-    const S32 overflow = y + RendererState.Sprite.Height - (ModuleState.Window.Height + 1);
+    CONST S32 overflow = y + RendererState.Sprite.Height - (ModuleState.Window.Height + 1);
     BOOL draw = overflow <= 0;
 
     if (!draw)
@@ -6366,15 +6381,15 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
 
     if (draw)
     {
-        const ADDR linesStride = ModuleState.Surface.Stride * y;
-        const PIXEL* surfaceOffset = RendererState.Surfaces.Main;
+        CONST ADDR linesStride = ModuleState.Surface.Stride * y;
+        CONST PIXEL* surfaceOffset = RendererState.Surfaces.Main;
 
         RendererState.Sprite.X = (PIXEL*)((ADDR)surfaceOffset + ModuleState.Surface.Offset + linesStride + sizeof(PIXEL) * x);
         RendererState.Sprite.MinX = (PIXEL*)((ADDR)surfaceOffset + ModuleState.Surface.Offset + linesStride + sizeof(PIXEL) * ModuleState.Window.X);
         RendererState.Sprite.MaxX = (PIXEL*)((ADDR)surfaceOffset + ModuleState.Surface.Offset + linesStride + sizeof(PIXEL) * (ModuleState.Window.Width + 1));
 
 
-        const S32 overage = y + RendererState.Sprite.Height < ModuleState.Surface.Y
+        CONST S32 overage = y + RendererState.Sprite.Height < ModuleState.Surface.Y
             ? 0 : y + RendererState.Sprite.Height - ModuleState.Surface.Y;
 
         RendererState.Sprite.Overage = RendererState.Sprite.Height;
@@ -6396,8 +6411,9 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -6405,25 +6421,25 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
 
                 while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
-                    const ptrdiff_t need = RendererState.Sprite.MinX - sx;
-                    const ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+                    CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                    CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                     if (count <= need)
                     {
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -6438,17 +6454,17 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
-                    const ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
-                    PIXEL* const stencil = RendererState.Surfaces.Stencil + (sx - RendererState.Surfaces.Main);
+                    CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+                    PIXEL* CONST stencil = RendererState.Surfaces.Stencil + (sx - RendererState.Surfaces.Main);
 
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
@@ -6466,7 +6482,7 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -6483,7 +6499,7 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -6491,8 +6507,8 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
                     skip = 0;
                 }
 
-                content = (void*)((ADDR)next + sizeof(U16));
-                next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+                content = (LPVOID)((ADDR)next + sizeof(U16));
+                next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
 
                 --RendererState.Sprite.Height;
 
@@ -6516,17 +6532,17 @@ VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPT
 // 0x10007fbc
 VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
 {
-    const U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
+    CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
     RendererState.Sprite.ColorMask = colorMask;
     RendererState.Sprite.AdjustedColorMask = colorMask | (colorMask << 1);
 
     level = (level + STENCIL_PIXEL_OFFSET) * STENCIL_PIXEL_COLOR_VALUE;
-    const DOUBLEPIXEL stencilLevel = (level << 16) | level;
+    CONST DOUBLEPIXEL stencilLevel = (level << 16) | level;
 
     RendererState.Sprite.Height = sprite->Height;
 
-    void* content = &sprite->Pixels;
-    void* next = (void*)((ADDR)content + (ADDR)sprite->Next);
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
 
     x += sprite->X;
     y += sprite->Y;
@@ -6543,14 +6559,14 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
 
         for (S32 i = 0; i < ModuleState.Window.Y - y; ++i)
         {
-            content = (void*)((ADDR)next + sizeof(U16));
-            next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+            content = (LPVOID)((ADDR)next + sizeof(U16));
+            next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
         }
 
         y = ModuleState.Window.Y;
     }
 
-    const S32 overflow = y + RendererState.Sprite.Height - (ModuleState.Window.Height + 1);
+    CONST S32 overflow = y + RendererState.Sprite.Height - (ModuleState.Window.Height + 1);
     BOOL draw = overflow <= 0;
 
     if (!draw)
@@ -6561,15 +6577,15 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
 
     if (draw)
     {
-        const ADDR linesStride = ModuleState.Surface.Stride * y;
-        const PIXEL* surfaceOffset = RendererState.Surfaces.Main;
+        CONST ADDR linesStride = ModuleState.Surface.Stride * y;
+        CONST PIXEL* surfaceOffset = RendererState.Surfaces.Main;
 
         RendererState.Sprite.X = (PIXEL*)((ADDR)surfaceOffset + ModuleState.Surface.Offset + linesStride + sizeof(PIXEL) * x);
         RendererState.Sprite.MinX = (PIXEL*)((ADDR)surfaceOffset + ModuleState.Surface.Offset + linesStride + sizeof(PIXEL) * ModuleState.Window.X);
         RendererState.Sprite.MaxX = (PIXEL*)((ADDR)surfaceOffset + ModuleState.Surface.Offset + linesStride + sizeof(PIXEL) * (ModuleState.Window.Width + 1));
 
 
-        const S32 overage = y + RendererState.Sprite.Height < ModuleState.Surface.Y
+        CONST S32 overage = y + RendererState.Sprite.Height < ModuleState.Surface.Y
             ? 0 : y + RendererState.Sprite.Height - ModuleState.Surface.Y;
 
         RendererState.Sprite.Overage = RendererState.Sprite.Height;
@@ -6591,8 +6607,9 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
         {
             while (RendererState.Sprite.Height > 0)
             {
-                ptrdiff_t skip{ 0 };       // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                ptrdiff_t skip = 0;
+                // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                 // Skip the pixels to the left of the sprite drawing area
                 // in case the sprite starts to the left of allowed drawing rectangle.
@@ -6600,25 +6617,25 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
 
                 while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                 {
-                    const ptrdiff_t need = RendererState.Sprite.MinX - sx;
-                    const ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+                    CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                    CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                     if (count <= need)
                     {
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> only count
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> count and one pixel
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             // Mask 0x40 and 0x00 -> count and few pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                         }
                     }
 
@@ -6632,30 +6649,30 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
 
                     if (count == 0)
                     {
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         continue;
                     }
 
-                    const ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
-                    PIXEL* const stencil = RendererState.Surfaces.Stencil + (sx - RendererState.Surfaces.Main);
+                    CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+                    PIXEL* CONST stencil = RendererState.Surfaces.Stencil + (sx - RendererState.Surfaces.Main);
 
                     if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                     {
                         // Mask 0xC0 -> skip pixels
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                     }
                     else if ((pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
                         // Mask 0x80 -> repeat one pixel
-                        const U8 indx = pixels->Pixels[0];
-                        const PIXEL pixel = palette[indx];
+                        CONST U8 indx = pixels->Pixels[0];
+                        CONST PIXEL pixel = palette[indx];
 
                         for (ptrdiff_t i = 0; i < availCount; ++i)
                         {
                             if (*(DOUBLEPIXEL*)(stencil + i - 1) < stencilLevel)
                             {
-                                const PIXEL summ = pixel + sx[i];
-                                const PIXEL colorPixel = ModuleState.ActualColorMask & ((summ ^ pixel ^ sx[i]) >> 1);
+                                CONST PIXEL summ = pixel + sx[i];
+                                CONST PIXEL colorPixel = ModuleState.ActualColorMask & ((summ ^ pixel ^ sx[i]) >> 1);
                                 PIXEL out = summ - colorPixel;
                                 if (colorPixel & ModuleState.ActualRedMask)
                                     out |= ModuleState.ActualRedMask;
@@ -6667,7 +6684,7 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                     }
                     else
                     {
@@ -6675,11 +6692,11 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
                         {
                             if (*(DOUBLEPIXEL*)(stencil + i - 1) < stencilLevel)
                             {
-                                const U8 indx = pixels->Pixels[skip + i];
-                                const PIXEL pixel = palette[indx];
+                                CONST U8 indx = pixels->Pixels[skip + i];
+                                CONST PIXEL pixel = palette[indx];
 
-                                const PIXEL summ = pixel + sx[i];
-                                const PIXEL colorPixel = ModuleState.ActualColorMask & ((summ ^ pixel ^ sx[i]) >> 1);
+                                CONST PIXEL summ = pixel + sx[i];
+                                CONST PIXEL colorPixel = ModuleState.ActualColorMask & ((summ ^ pixel ^ sx[i]) >> 1);
                                 PIXEL out = summ - colorPixel;
                                 if (colorPixel & ModuleState.ActualRedMask)
                                     out |= ModuleState.ActualRedMask;
@@ -6691,7 +6708,7 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
                             }
                         }
 
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
                     }
 
                     sx += availCount;
@@ -6699,8 +6716,8 @@ VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEP
                     skip = 0;
                 }
 
-                content = (void*)((ADDR)next + sizeof(U16));
-                next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+                content = (LPVOID)((ADDR)next + sizeof(U16));
+                next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
 
                 --RendererState.Sprite.Height;
 
@@ -6743,8 +6760,8 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
     RendererState.UI.Window.Width = output->Width;
     RendererState.UI.Window.Height = output->Height;
 
-    const void* content = &sprite->Pixels;
-    void* next = (void*)((ADDR)content + (ADDR)sprite->Next);
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
 
     y += sprite->Y;
     x += sprite->X;
@@ -6762,14 +6779,14 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 
         for (S32 i = 0; i < RendererState.UI.Window.Y - y; ++i)
         {
-            content = (void*)((ADDR)next + sizeof(U16));
-            next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+            content = (LPVOID)((ADDR)next + sizeof(U16));
+            next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
         }
 
         y = RendererState.UI.Window.Y;
     }
 
-    const S32 overflow = y + RendererState.Sprite.Height - (RendererState.UI.Window.Height + 1);
+    CONST S32 overflow = y + RendererState.Sprite.Height - (RendererState.UI.Window.Height + 1);
     BOOL draw = overflow <= 0;
 
     if (!draw)
@@ -6781,13 +6798,13 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
     if (draw)
     {
         ADDR offset = RendererState.UI.Offset;
-        const ADDR linesStride = RendererState.UI.Stride * y;
+        CONST ADDR linesStride = RendererState.UI.Stride * y;
 
         RendererState.Sprite.X = (PIXEL*)(offset + linesStride + x * sizeof(PIXEL));
         RendererState.Sprite.MinX = (PIXEL*)(offset + linesStride + RendererState.UI.Window.X * sizeof(PIXEL));
         RendererState.Sprite.MaxX = (PIXEL*)(offset + linesStride + (RendererState.UI.Window.Width + 1) * sizeof(PIXEL));
 
-        const S32 overage = y + RendererState.Sprite.Height < MAX_RENDERER_HEIGHT ? 0 : y + RendererState.Sprite.Height - MAX_RENDERER_HEIGHT;
+        CONST S32 overage = y + RendererState.Sprite.Height < MAX_RENDERER_HEIGHT ? 0 : y + RendererState.Sprite.Height - MAX_RENDERER_HEIGHT;
 
         RendererState.Sprite.Overage = RendererState.Sprite.Height;
         RendererState.Sprite.Height -= overage;
@@ -6814,26 +6831,27 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
             {
                 while (RendererState.Sprite.Height > 0)
                 {
-                    ptrdiff_t skip{ 0 };
-                    ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                    ptrdiff_t skip = 0;
+                    // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                    IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                     PIXEL* sx = RendererState.Sprite.X;
                     while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t need = RendererState.Sprite.MinX - sx;
-                        const ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+                        CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                        CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                         if (count <= need)
                         {
                             if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                             {
                                 // Mask 0x80 -> count and one pixel
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                             }
                             else
                             {
                                 // Mask 0x40 and 0x00 -> count and few pixels
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                             }
                         }
 
@@ -6843,25 +6861,25 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 
                     while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+                        CONST ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
 
                         if (count == 0)
                         {
                             // Count 0 -> no pixels to process
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                             return;
                         }
 
-                        const ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+                        CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
 
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> repeat one pixel
-                            const U8 indx = pixels->Pixels[0];
+                            CONST U8 indx = pixels->Pixels[0];
 
                             if (indx != 0)
                             {
-                                const PIXEL pixel = palette[indx];
+                                CONST PIXEL pixel = palette[indx];
 
                                 for (ptrdiff_t i = 0; i < availCount; ++i)
                                 {
@@ -6869,19 +6887,19 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                                 }
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             for (ptrdiff_t i = 0; i < availCount; ++i)
                             {
-                                const U8 indx = pixels->Pixels[skip + i];
-                                const PIXEL pixel = palette[indx];
+                                CONST U8 indx = pixels->Pixels[skip + i];
+                                CONST PIXEL pixel = palette[indx];
 
                                 sx[i] = pixel;
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                         }
 
                         sx += availCount;
@@ -6889,8 +6907,8 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                         skip = 0;
                     }
 
-                    content = (void*)((ADDR)next + sizeof(U16));
-                    next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+                    content = (LPVOID)((ADDR)next + sizeof(U16));
+                    next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
 
                     --RendererState.Sprite.Height;
 
@@ -6919,26 +6937,27 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
             {
                 while (RendererState.Sprite.Height > 0)
                 {
-                    ptrdiff_t skip{ 0 };
-                    ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                    ptrdiff_t skip = 0;
+                    // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                    IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                     PIXEL* sx = RendererState.Sprite.X;
                     while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t need = RendererState.Sprite.MinX - sx;
-                        const ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_SHORT_COUNT_MASK;
+                        CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                        CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_SHORT_COUNT_MASK;
 
                         if (count <= need)
                         {
                             if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                             {
                                 // Mask 0x80 -> count and one pixel
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                             }
                             else
                             {
                                 // Mask 0x40 and 0x00 -> count and few pixels
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                             }
                         }
 
@@ -6948,60 +6967,60 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 
                     while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_SHORT_COUNT_MASK);
+                        CONST ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_SHORT_COUNT_MASK);
 
                         if (count == 0)
                         {
                             // Count 0 -> no pixels to process
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                             continue;
                         }
 
-                        const ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+                        CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
 
                         if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                         {
                             // Mask 0xC0 -> skip pixels
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> repeat one pixel
-                            const U8 indx = pixels->Pixels[0];
-                            const PIXEL pixel = palette[indx];
+                            CONST U8 indx = pixels->Pixels[0];
+                            CONST PIXEL pixel = palette[indx];
 
                             for (ptrdiff_t i = 0; i < availCount; ++i)
                             {
                                 sx[i] = pixel;
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_SHORT_COMPACT_MASK) == IMAGESPRITE_ITEM_SHORT_COMPACT_MASK)
                         {
                             // Mask 0x40 -> repeat and blend pixels
                             for (ptrdiff_t i = 0; i < availCount; ++i)
                             {
-                                const U8 indx = pixels->Pixels[skip + i];
-                                const PIXEL pixel = palette[indx];
+                                CONST U8 indx = pixels->Pixels[skip + i];
+                                CONST PIXEL pixel = palette[indx];
 
                                 sx[i] = (sx[i] + pixel - (ModuleState.ActualColorBits & (sx[i] ^ pixel))) >> 1;
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                         }
                         else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == 0)
                         {
                             // Mask 0x00 -> draw pixels
                             for (ptrdiff_t i = 0; i < availCount; ++i)
                             {
-                                const U8 indx = pixels->Pixels[skip + i];
-                                const PIXEL pixel = palette[indx];
+                                CONST U8 indx = pixels->Pixels[skip + i];
+                                CONST PIXEL pixel = palette[indx];
 
                                 sx[i] = pixel;
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                         }
 
                         sx += availCount;
@@ -7009,8 +7028,8 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                         skip = 0;
                     }
 
-                    content = (void*)((ADDR)next + sizeof(U16));
-                    next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+                    content = (LPVOID)((ADDR)next + sizeof(U16));
+                    next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
 
                     --RendererState.Sprite.Height;
 
@@ -7037,26 +7056,27 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
             {
                 while (RendererState.Sprite.Height > 0)
                 {
-                    ptrdiff_t skip{ 0 };
-                    ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                    ptrdiff_t skip = 0;
+                    // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                    IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                     PIXEL* sx = RendererState.Sprite.X;
                     while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t need = RendererState.Sprite.MinX - sx;
-                        const ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+                        CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                        CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
 
                         if (count <= need)
                         {
                             if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                             {
                                 // Mask 0x80 -> count and one pixel
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                             }
                             else
                             {
                                 // Mask 0x40 and 0x00 -> count and few pixels
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                             }
                         }
 
@@ -7071,11 +7091,11 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                         if (count == 0)
                         {
                             // Count 0 -> no pixels to process
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                             continue;
                         }
 
-                        const ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+                        CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
 
                         if ((pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK) == 0)
                         {
@@ -7083,20 +7103,20 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                             {
                                 if ((sx[i] & 0x8007) == 0)
                                 {
-                                    const PIXEL pixel = (PIXEL)(ModuleState.ShadePixel + SHADEPIXEL(*(DOUBLEPIXEL*)(sx + i), *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
+                                    CONST PIXEL pixel = (PIXEL)(ModuleState.ShadePixel + SHADEPIXEL(*(DOUBLEPIXEL*)(sx + i), *(DOUBLEPIXEL*)&ModuleState.ShadeColorMask));
 
                                     sx[i] = pixel;
                                 }
                             }
                         }
-                        pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         sx += availCount;
 
                         skip = 0;
                     }
 
-                    content = (void*)((ADDR)next + sizeof(U16));
-                    next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+                    content = (LPVOID)((ADDR)next + sizeof(U16));
+                    next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
 
                     --RendererState.Sprite.Height;
 
@@ -7121,7 +7141,7 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
         {
             ANIMATIONPIXEL* palette = (ANIMATIONPIXEL*)pal;
 
-            const U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
+            CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
             RendererState.Sprite.ColorMask = colorMask;
             RendererState.Sprite.AdjustedColorMask = colorMask | (colorMask << 1);
 
@@ -7129,8 +7149,9 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
             {
                 while (RendererState.Sprite.Height > 0)
                 {
-                    ptrdiff_t skip{ 0 };
-                    ImagePaletteSpritePixel* pixels = (ImagePaletteSpritePixel*)content;
+                    ptrdiff_t skip = 0;
+                    // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
+                    IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
 
                     // Skip the pixels to the left of the sprite drawing area
                     // in case the sprite starts to the left of allowed drawing rectangle.
@@ -7138,25 +7159,25 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 
                     while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t need = RendererState.Sprite.MinX - sx;
-                        const ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_SHORT_COUNT_MASK;
+                        CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                        CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_SHORT_COUNT_MASK;
 
                         if (count <= need)
                         {
                             if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_EXTENDED_MASK)
                             {
                                 // Mask 0xC0 -> only count
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(U8));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                             }
                             else if ((pixels->Count & IMAGESPRITE_ITEM_EXTENDED_MASK) == IMAGESPRITE_ITEM_COMPACT_MASK)
                             {
                                 // Mask 0x80 -> count and one pixel
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                             }
                             else
                             {
                                 // Mask 0x40 and 0x00 -> count and few pixels
-                                pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                                pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                             }
                         }
 
@@ -7166,53 +7187,53 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 
                     while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
                     {
-                        const ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+                        CONST ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
 
                         if (count == 0)
                         {
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                             continue;
                         }
 
-                        const ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+                        CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
 
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
                             // Mask 0x80 -> repeat one pixel
-                            const U8 indx = pixels->Pixels[0];
-                            const ANIMATIONPIXEL pixel = palette[indx];
-                            const DOUBLEPIXEL pix = pixel >> 19;
+                            CONST U8 indx = pixels->Pixels[0];
+                            CONST ANIMATIONPIXEL pixel = palette[indx];
+                            CONST DOUBLEPIXEL pix = pixel >> 19;
 
                             if ((pix & 0xFF) != 0x1F)
                             {
                                 for (ptrdiff_t i = 0; i < availCount; ++i)
                                 {
-                                    const DOUBLEPIXEL value =
+                                    CONST DOUBLEPIXEL value =
                                         (pix * (((sx[i] << 16) | sx[i]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
 
                                     sx[i] = (PIXEL)((value >> 16) | value) + (PIXEL)pixel;
                                 }
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
                         }
                         else
                         {
                             for (ptrdiff_t i = 0; i < availCount; ++i)
                             {
-                                const U8 indx = pixels->Pixels[skip + i];
-                                const ANIMATIONPIXEL pixel = palette[indx];
-                                const DOUBLEPIXEL pix = pixel >> 19;
+                                CONST U8 indx = pixels->Pixels[skip + i];
+                                CONST ANIMATIONPIXEL pixel = palette[indx];
+                                CONST DOUBLEPIXEL pix = pixel >> 19;
 
                                 if ((pix & 0xFF) != 0x1F)
                                 {
-                                    const DOUBLEPIXEL value = (pix * (((sx[i] << 16) | sx[i]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
+                                    CONST DOUBLEPIXEL value = (pix * (((sx[i] << 16) | sx[i]) & RendererState.Sprite.ColorMask) >> 5) & RendererState.Sprite.ColorMask;
 
                                     sx[i] = (PIXEL)((value >> 16) | value) + (PIXEL)pixel;
                                 }
                             }
 
-                            pixels = (ImagePaletteSpritePixel*)((ADDR)pixels + sizeof(ImagePaletteSpritePixel) + (count - 1) * sizeof(pixels->Pixels));
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
                         }
 
                         sx += availCount;
@@ -7220,8 +7241,8 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
                         skip = 0;
                     }
 
-                    content = (void*)((ADDR)next + sizeof(U16));
-                    next = (void*)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+                    content = (LPVOID)((ADDR)next + sizeof(U16));
+                    next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
 
                     --RendererState.Sprite.Height;
 
@@ -7247,15 +7268,348 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 }
 
 // 0x10009eb3
-VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6)
+VOID MarkUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, U8 type, IMAGESPRITEUIPTR output, U8* offset)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    RendererState.UI.Stride = output->Stride;
+    RendererState.UI.Window.X = output->X;
+    RendererState.UI.Window.Y = output->Y;
+    RendererState.UI.Window.Width = output->Width;
+    RendererState.UI.Window.Height = output->Height;
+
+    RendererState.Sprite.Height = sprite->Height;
+
+    x += sprite->X;
+    y += sprite->Y;
+
+    LPVOID content = &sprite->Pixels[0];
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
+
+    // Skip the necessary number of rows from the top of the image
+    // in case the sprite starts above the allowed drawing rectangle.
+    if (y < RendererState.UI.Window.Y)
+    {
+        RendererState.Sprite.Height -= (RendererState.UI.Window.Y - y);
+        if (RendererState.Sprite.Height <= 0)
+        {
+            return;
+        }
+
+        for (S32 i = 0; i < RendererState.UI.Window.Y - y; ++i)
+        {
+            content = (LPVOID)((ADDR)next + sizeof(U16));
+            next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+        }
+
+        y = RendererState.UI.Window.Y;
+    }
+
+    CONST S32 overflow = y + RendererState.Sprite.Height - (RendererState.UI.Window.Height + 1);
+    BOOL draw = overflow <= 0;
+
+    if (!draw)
+    {
+        draw = !(RendererState.Sprite.Height <= overflow);
+        RendererState.Sprite.Height -= overflow;
+    }
+
+    if (draw)
+    {
+        CONST ADDR linesStride = (ADDR)(RendererState.UI.Stride * y);
+
+        RendererState.Sprite.X = (PIXEL*)(offset + linesStride + x);
+        RendererState.Sprite.MinX = (PIXEL*)(offset + linesStride + RendererState.UI.Window.X);
+        RendererState.Sprite.MaxX = (PIXEL*)(offset + linesStride + RendererState.UI.Window.Width + 1);
+
+
+        CONST S32 overage = y + RendererState.Sprite.Height < MAX_RENDERER_HEIGHT
+            ? 0 : y + RendererState.Sprite.Height - MAX_RENDERER_HEIGHT;
+
+        RendererState.Sprite.Overage = RendererState.Sprite.Height;
+        RendererState.Sprite.Height -= overage;
+
+        if (RendererState.Sprite.Height <= 0)
+        {
+            RendererState.Sprite.Height = RendererState.Sprite.Overage;
+            RendererState.Sprite.Overage = 0;
+
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)SCREEN_SIZE_IN_PIXELS);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)SCREEN_SIZE_IN_PIXELS);
+        }
+        else
+            RendererState.Sprite.Overage = overage;
+
+        while (RendererState.Sprite.Height > 0)
+        {
+            while (RendererState.Sprite.Height > 0)
+            {
+                ptrdiff_t skip = 0;
+                // How many elements we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
+
+                // Skip the elements to the left of the sprite drawing area
+                // in case the sprite starts to the left of allowed drawing rectangle.
+                U8* sx = (U8*)RendererState.Sprite.X;
+
+                while (sx < (U8*)RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
+                {
+                    CONST ptrdiff_t need = (U8*)RendererState.Sprite.MinX - sx;
+                    CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+
+                    if (count <= need)
+                    {
+                        if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                        {
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
+                        }
+                        else
+                        {
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(U8));
+                        }
+                    }
+
+                    skip = count == need ? 0 : Mathematics::Min(count, need);
+                    sx += Mathematics::Min(count, need);
+                }
+
+                while (sx < (U8*)RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
+                {
+                    CONST ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+
+                    if (count == 0)
+                    {
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
+                        continue;
+                    }
+
+                    CONST ptrdiff_t availCount = Mathematics::Min(count - skip, (U8*)RendererState.Sprite.MaxX - sx);
+
+                    for (ptrdiff_t i = 0; i < availCount; i++)
+                    {
+                        sx[i] = type;
+                    }
+
+                    if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                    {
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
+                    }
+                    else
+                    {
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + ((count - 1) * sizeof(U8) + sizeof(IMAGEPALETTESPRITEPIXEL)));
+                    }
+
+                    sx += availCount;
+
+                    skip = 0;
+                }
+
+                content = (LPVOID)((ADDR)next + sizeof(U16));
+                next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+
+                --RendererState.Sprite.Height;
+
+                RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X + RendererState.UI.Stride);
+                RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX + RendererState.UI.Stride);
+                RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX + RendererState.UI.Stride);
+            }
+
+            // Wrap around vertically, and draw the overage
+            // in case the sprite has more content that can fit into the allowed drawing rectangle.
+            RendererState.Sprite.Height = RendererState.Sprite.Overage;
+            RendererState.Sprite.Overage = 0;
+
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)SCREEN_SIZE_IN_PIXELS);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)SCREEN_SIZE_IN_PIXELS);
+        }
+    }
 }
 
 // 0x1000a4f3
-VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6)
+VOID DrawVanishingUISprite(S32 x, S32 y, S32 vanishLevel, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite, IMAGESPRITEUIPTR output)
 {
-    OutputDebugStringA(__FUNCTION__); OutputDebugStringA("\r\n");
-    // TODO NOT IMPLEMENTED
+    CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
+    RendererState.Sprite.ColorMask = colorMask;
+    RendererState.Sprite.AdjustedColorMask = colorMask | (colorMask << 1);
+
+    RendererState.UI.Offset = output->Offset;
+    RendererState.UI.Stride = output->Stride * sizeof(PIXEL);
+    RendererState.UI.Window.X = output->X;
+    RendererState.UI.Window.Y = output->Y;
+    RendererState.UI.Window.Width = output->Width;
+    RendererState.UI.Window.Height = output->Height;
+
+    RendererState.Sprite.Height = sprite->Height;
+
+
+    x += sprite->X;
+    y += sprite->Y;
+
+    LPVOID content = &sprite->Pixels;
+    LPVOID next = (LPVOID)((ADDR)content + (ADDR)sprite->Next);
+
+    // Skip the necessary number of rows from the top of the image
+    // in case the sprite starts above the allowed drawing rectangle.
+    if (y < RendererState.UI.Window.Y)
+    {
+        RendererState.Sprite.Height -= (RendererState.UI.Window.Y - y);
+        if (RendererState.Sprite.Height <= 0)
+        {
+            return;
+        }
+
+        for (S32 i = 0; i < RendererState.UI.Window.Y - y; ++i)
+        {
+            content = (LPVOID)((ADDR)next + sizeof(U16));
+            next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+        }
+
+        y = RendererState.UI.Window.Y;
+    }
+
+    CONST S32 overflow = y + RendererState.Sprite.Height - (RendererState.UI.Window.Height + 1);
+    BOOL draw = overflow <= 0;
+
+    if (!draw)
+    {
+        draw = !(RendererState.Sprite.Height <= overflow);
+        RendererState.Sprite.Height -= overflow;
+    }
+
+    if (draw)
+    {
+        ADDR offset = RendererState.UI.Offset;
+        CONST ADDR linesStride = (ADDR)(RendererState.UI.Stride * y);
+
+        RendererState.Sprite.X = (PIXEL*)(offset + linesStride + sizeof(PIXEL) * x);
+        RendererState.Sprite.MinX = (PIXEL*)(offset + linesStride + sizeof(PIXEL) * RendererState.UI.Window.X);
+        RendererState.Sprite.MaxX = (PIXEL*)(offset + linesStride + sizeof(PIXEL) * (RendererState.UI.Window.Width + 1));
+
+
+        CONST S32 overage = y + RendererState.Sprite.Height < MAX_RENDERER_HEIGHT
+            ? 0 : y + RendererState.Sprite.Height - MAX_RENDERER_HEIGHT;
+
+        RendererState.Sprite.Overage = RendererState.Sprite.Height;
+        RendererState.Sprite.Height -= overage;
+
+        if (RendererState.Sprite.Height <= 0)
+        {
+            RendererState.Sprite.Height = RendererState.Sprite.Overage;
+            RendererState.Sprite.Overage = 0;
+
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)SCREEN_SIZE_IN_BYTES);
+        }
+        else
+            RendererState.Sprite.Overage = overage;
+
+        while (RendererState.Sprite.Height > 0)
+        {
+            while (RendererState.Sprite.Height > 0)
+            {
+                ptrdiff_t skip = 0;
+                // How many elements we should skip if pixels->count was bigger than diff between minX and sx
+                IMAGEPALETTESPRITEPIXELPTR pixels = (IMAGEPALETTESPRITEPIXELPTR)content;
+
+                // Skip the elements to the left of the sprite drawing area
+                // in case the sprite starts to the left of allowed drawing rectangle.
+                PIXEL* sx = RendererState.Sprite.X;
+
+                while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
+                {
+                    CONST ptrdiff_t need = RendererState.Sprite.MinX - sx;
+                    CONST ptrdiff_t count = pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK;
+
+                    if (count <= need)
+                    {
+                        if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                        {
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
+                        }
+                        else
+                        {
+                            pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
+                        }
+                    }
+
+                    skip = count == need ? 0 : Mathematics::Min(count, need);
+                    sx += Mathematics::Min(count, need);
+                }
+
+                while (sx < RendererState.Sprite.MaxX && (ADDR)pixels < (ADDR)next)
+                {
+                    CONST ptrdiff_t count = (pixels->Count & IMAGESPRITE_ITEM_COUNT_MASK);
+
+                    if (count == 0)
+                    {
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
+                        continue;
+                    }
+
+                    CONST ptrdiff_t availCount = Mathematics::Min(count - skip, RendererState.Sprite.MaxX - sx);
+
+                    if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
+                    {
+                        CONST U8 indx = pixels->Pixels[0];
+                        CONST PIXEL pixel = palette[indx];
+
+                        CONST DOUBLEPIXEL res2 = ((DOUBLEPIXEL)pixel << 16) | pixel;
+                        CONST DOUBLEPIXEL mask2 = RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & res2) * (31 - vanishLevel)) >> 5);
+
+                        for (ptrdiff_t i = 0; i < availCount; ++i)
+                        {
+                            CONST DOUBLEPIXEL res = ((DOUBLEPIXEL)sx[i] << 16) | sx[i];
+                            CONST DOUBLEPIXEL mask = RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & res) * vanishLevel) >> 5);
+
+                            sx[i] = (PIXEL)((mask | (mask >> 16)) + (mask2 | (mask >> 16)));
+                        }
+
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL));
+                    }
+                    else
+                    {
+
+                        for (ptrdiff_t i = 0; i < availCount; ++i)
+                        {
+                            CONST U8 indx = pixels->Pixels[0];
+                            CONST PIXEL pixel = palette[indx];
+
+                            CONST DOUBLEPIXEL res2 = ((DOUBLEPIXEL)pixel << 16) | pixel;
+                            CONST DOUBLEPIXEL mask2 = RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & res2) * (31 - vanishLevel)) >> 5);
+
+                            CONST DOUBLEPIXEL res = ((DOUBLEPIXEL)sx[i] << 16) | sx[i];
+                            CONST DOUBLEPIXEL mask = RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & res) * vanishLevel) >> 5);
+
+                            sx[i] = (PIXEL)((mask | (mask >> 16)) + (mask2 | (mask >> 16)));
+                        }
+
+                        pixels = (IMAGEPALETTESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGEPALETTESPRITEPIXEL) + (count - 1) * sizeof(pixels->Pixels));
+                    }
+
+                    sx += availCount;
+
+                    skip = 0;
+                }
+
+                content = (LPVOID)((ADDR)next + sizeof(U16));
+                next = (LPVOID)((ADDR)next + sizeof(U16) + ((U16*)next)[0]);
+
+                --RendererState.Sprite.Height;
+
+                RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X + RendererState.UI.Stride);
+                RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX + RendererState.UI.Stride);
+                RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX + RendererState.UI.Stride);
+            }
+
+            // Wrap around vertically, and draw the overage
+            // in case the sprite has more content that can fit into the allowed drawing rectangle.
+            RendererState.Sprite.Height = RendererState.Sprite.Overage;
+            RendererState.Sprite.Overage = 0;
+
+            RendererState.Sprite.X = (PIXEL*)((ADDR)RendererState.Sprite.X - (ADDR)SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MinX = (PIXEL*)((ADDR)RendererState.Sprite.MinX - (ADDR)SCREEN_SIZE_IN_BYTES);
+            RendererState.Sprite.MaxX = (PIXEL*)((ADDR)RendererState.Sprite.MaxX - (ADDR)SCREEN_SIZE_IN_BYTES);
+        }
+    }
 }

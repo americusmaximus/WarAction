@@ -181,16 +181,25 @@ BOOL LockRendererSurface(VOID);
 BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 BOOL WriteRendererSurfaceSurfaceRectangle(S32 sx, S32 sy, S32 width, S32 height, S32 dx, S32 dy, S32 stride, PIXEL* pixels);
 S32 AcquireTextLength(LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset);
+VOID BlendMainSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey);
 VOID CleanMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR tile);
+VOID CleanSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, S32 stride, IMAGEPALETTETILEPTR tile, PIXEL* output);
 VOID ConvertAllColors(PIXEL* input, PIXEL* output, S32 count);
 VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
+VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfaceRhombsPaletteSpriteA(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfaceRhombsPaletteSpriteB(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette);
-VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, LPVOID palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawMainSurfaceActualSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawMainSurfaceAdjustedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawMainSurfaceAnimationSpriteStencil(S32 x, S32 y, U16 level, ANIMATIONPIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceColorBox(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
 VOID DrawMainSurfaceColorEllipse(S32 x, S32 y, S32 size, PIXEL pixel, S32 step);
 VOID DrawMainSurfaceColorOutline(S32 x, S32 y, S32 width, S32 height, PIXEL pixel);
@@ -200,29 +209,22 @@ VOID DrawMainSurfaceColorShadeRectangle(S32 x, S32 y, S32 width, S32 height, PIX
 VOID DrawMainSurfaceHorizontalColorLine(S32 x, S32 y, S32 length, PIXEL pixel);
 VOID DrawMainSurfaceMaskRhomb(S32 x, S32 y, S32 color);
 VOID DrawMainSurfacePaletteBlendSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfacePaletteSpriteBackStencil(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfacePaletteSpriteFrontStencil(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfacePaletteSpriteStencil(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceShadowSprite(S32 x, S32 y, DOUBLEPIXEL color, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite);
 VOID DrawMainSurfaceText(S32 x, S32 y, LPCSTR text, BINASSETCOLLECTIONCONTENTPTR asset, PIXEL* palette);
+VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawMainSurfaceVerticalColorLine(S32 x, S32 y, S32 height, PIXEL pixel);
 VOID DrawStencilSurfaceWindowRectangle(VOID);
+VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels);
 VOID DrawSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 x, S32 y, S32 stride, IMAGEPALETTETILEPTR tile, PIXEL* output);
 VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGESPRITEUIPTR output);
-VOID BlendMainSurfaceWithFogOfWar(S32 x, S32 y, S32 width, S32 height); // TODO
-VOID DrawBackSurfaceRhombsPaletteSprite(S32 param_1, S32 param_2, LPVOID param_3); // TODO
-VOID FUN_100046b6(S32 param_1, S32 param_2, LPVOID param_3); // TODO
-VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 param_1, S32 param_2, U16 param_3, LPVOID param_4); // TODO
-VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID DrawBackSurfacePalletteSprite(S32 param_1, S32 param_2, S32 param_3, LPVOID param_4); // TODO
-VOID FUN_10005ac6(S32 param_1, S32 param_2, U16 param_3, S32 param_4, LPVOID param_5); // TODO
-VOID DrawMainSurfaceAnimationSprite(S32 x, S32 y, S32 param_3, LPVOID param_4); // TODO
-VOID FUN_10007be8(S32 x, S32 y, U16 param_3, LPVOID param_4); // TODO
-VOID FUN_10009eb3(S32 param_1, S32 param_2, LPVOID param_3, S32 param_4, S32 param_5, S32 param_6); // TODO
-VOID FUN_1000a4f3(S32 param_1, S32 param_2, S32 param_3, S32 param_4, LPVOID param_5, LPVOID param_6); // TODO
+VOID DrawVanishingUISprite(S32 x, S32 y, S32 vanishLevel, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite, IMAGESPRITEUIPTR output);
 VOID Initialize(VOID);
+VOID MarkUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, U8 type, IMAGESPRITEUIPTR output, U8* offset);
 VOID MaskStencilSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset);
 VOID OffsetSurfaces(S32 dx, S32 dy);
@@ -232,6 +234,7 @@ VOID ReleaseRendererSurface(VOID);
 VOID RestoreDisplayMode(VOID);
 VOID SetPixelColorMasks(U32 r, U32 g, U32 b);
 VOID ShadeMainSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3);
+VOID ShadeSurfaceRhomb(S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, S32 tx, S32 ty, u32 stride, PIXEL* output);
 VOID UnlockRendererSurface(VOID);
 VOID WriteBackSurfaceMainSurfaceRectangle(S32 x, S32 y, S32 width, S32 height);
 VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey);

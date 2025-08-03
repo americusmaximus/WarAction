@@ -53,11 +53,11 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
     ModuleState.Actions.DrawBackSurfaceRhomb                        = DrawBackSurfaceRhomb;
     ModuleState.Actions.DrawMainSurfaceMaskRhomb                    = DrawMainSurfaceMaskRhomb;
-    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSprite                                = FUN_100043a0; // TODO
-    ModuleState.Actions.FUN_100046b6                                = FUN_100046c6; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSpriteA                                = FUN_100043a0; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSpriteB                                = FUN_100046c6; // TODO
     ModuleState.Actions.DrawBackSurfaceRhombsPaletteShadedSprite                                = FUN_100049f6; // TODO
     ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
-    ModuleState.Actions.FUN_10005ac6                                = FUN_10005ad6; // TODO
+    ModuleState.Actions.DrawBackSurfacePaletteSpriteAndStencil                                = FUN_10005ad6; // TODO
     ModuleState.Actions.DrawBackSurfacePalletteSprite                                = FUN_100057ac; // TODO
     ModuleState.Actions.DrawBackSurfaceShadowSprite                 = DrawBackSurfaceShadowSprite;
     ModuleState.Actions.WriteBackSurfaceMainSurfaceRectangle        = WriteBackSurfaceMainSurfaceRectangle;
@@ -73,8 +73,8 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteStencil       = DrawMainSurfaceAnimationSpriteStencil;
     ModuleState.Actions.DrawMainSurfaceAnimationSprite                                = FUN_100067bd; // TODO
     ModuleState.Actions.DrawMainSurfaceShadowSprite                 = DrawMainSurfaceShadowSprite;
-    ModuleState.Actions.DrawMainSurfaceAnimationSpriteVersion4      = DrawMainSurfaceActualSprite; // TODO
-    ModuleState.Actions.FUN_10007be8                                = FUN_10007bf8; // TODO
+    ModuleState.Actions.DrawMainSurfaceActualSprite      = DrawMainSurfaceActualSprite; // TODO
+    ModuleState.Actions.DrawMainSurfaceAdjustedSprite                                = FUN_10007bf8; // TODO
     ModuleState.Actions.DrawMainSurfaceVanishingPaletteSprite                                = FUN_100053d3; // TODO
     ModuleState.Actions.DrawMainSurfaceColorPoint                   = DrawMainSurfaceColorPoint;
     ModuleState.Actions.DrawMainSurfaceColorRectangle               = DrawMainSurfaceColorRectangle;
@@ -92,8 +92,8 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.WriteRendererSurfaceSurfaceRectangle        = WriteRendererSurfaceSurfaceRectangle;
     ModuleState.Actions.WriteSurfaceSurfaceRectangle                = WriteSurfaceSurfaceRectangle;
     ModuleState.Actions.DrawUISprite                                = DrawUISprite;
-    ModuleState.Actions.FUN_1000a4f3                                = FUN_1000a503; // TODO
-    ModuleState.Actions.FUN_10009eb3                                = FUN_10009ec3; // TODO
+    ModuleState.Actions.DrawVanishingUISprite                                = FUN_1000a503; // TODO
+    ModuleState.Actions.MarkUISprite                                = FUN_10009ec3; // TODO
     ModuleState.Actions.ReleaseDirectX                              = ReleaseDirectX;
 
     return &ModuleState;
