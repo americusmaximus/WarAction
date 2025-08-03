@@ -259,14 +259,14 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
         else
         {
             State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-                self->ArrColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->AniFile + offset));
+                (ANIMATIONPIXEL*)self->ArrColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->AniFile + offset));
         }
     }
 
     if (self->Unk17 != 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
         State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-            self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
+            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
     }
 
     State.Renderer->Actions.DrawMainSurfaceSprite(0, 0,
@@ -275,7 +275,7 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
     if (self->Unk17 == 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
         State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-            self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
+            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
     }
 
     TickPanelControl((PANELCONTROLPTR)self);
