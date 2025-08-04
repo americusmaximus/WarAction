@@ -58,10 +58,10 @@ Notes:
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
 
 Notes:
-1. TODO: Add support of windowed mode, properly track and offset cursor position.
+1. TODO: Add support of windowed mode, properly track window location and offset cursor position for clicking and object selection.
 2. TODO: Add support of 32-bit color in cases when the module is directly writes to the renderer surface without calling renderer functions, such as in function at 0x10070f80.
 
-![Sudden Strike](.\Extras\Screenshot.png)
+![Sudden Strike](Extras/Screenshot.png)
 
 ## Similar & Related Projects
 1. [War Storm](https://github.com/americusmaximus/WarStorm)
