@@ -28,11 +28,6 @@ git clone --recurse-submodules https://github.com/americusmaximus/WarAction
 4. The original game used zlib version 1.1.3, which I upgraded to 1.3.1 for proper 64-bit support.
 5. The original game uses RAD Game Tools' binkw32 library version 1.0Q.
 
-### Compatibility, Code Style & Standards
-In order to be able to run the code not only in the modern operating systems, but also in legacy environments, such as Windows XP, the code base has to abstain from usage of modern C++ language features.
-
-Modern Visual Studio makes the binary dependent on modern runtime libraries that are not available in the legacy systems, therefore the game won't work. In order to make the code work on legacy systems please see [detailed instructions on compatibility](COMPATIBILITY.MD).
-
 ## Modules
 
 ### Launcher
@@ -45,16 +40,15 @@ Notes:
 1. Re-engineered code contains additional conditional code using DirectDraw 7 interfaces to render the game. This is enabled on x64 build configuration.
 2. Additionally the code contains support of 32-bit color mode, which is needed in order to run the game in windowed mode on modern systems.
 
-Extra:
-I suggest exploring renderer project [MultiCAD](https://github.com/IvanishinV/MultiCAD) that aims to bring comfortable high resolution game rendering.
-
 ### Menu
+Status: In Progress...
 The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
 
 Notes:
 1. Re-engineered code contains proper support of windowed mode with correct window position tracking and mouse input handling.
 
 ### Game
+Status: In Progress...
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
 
 Notes:
