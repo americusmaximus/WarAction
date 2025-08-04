@@ -1596,7 +1596,7 @@ BOOL WriteMainSurfaceRendererSurfaceRectangle(S32 x, S32 y, S32 width, S32 heigh
     }
 
     PIXEL* src = (PIXEL*)((ADDR)RendererState.Surfaces.Main
-        + (ADDR)(ModuleState.Surface.Offset + y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL));
+        + (ADDR)(ModuleState.Surface.Offset + (y * MAX_RENDERER_WIDTH + x) * sizeof(PIXEL)));
     LPVOID dst = (LPVOID)((ADDR)ModuleState.Surface.Renderer
         + (ADDR)(ModuleState.Pitch * y + x * (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL))));
 
@@ -2992,7 +2992,7 @@ VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels)
         x += TILE_SIZE_HEIGHT - 29;
         y += 16;
         tileStartDrawLength = 61;
-        RendererState.Tile.Height = Mathematics::Min<S32>((ModuleState.Window.Height + 1) - y, 16);
+        RendererState.Tile.Height = Mathematics::Min((ModuleState.Window.Height + 1) - y, 16);
 
         S32 overage = ModuleState.Window.Y - y;
         if (overage > 0)
@@ -3011,7 +3011,7 @@ VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels)
     {
         x += TILE_SIZE_HEIGHT;
         tileStartDrawLength = 3;
-        RendererState.Tile.Height = Mathematics::Min<S32>((ModuleState.Window.Height + 1) - y, 16);
+        RendererState.Tile.Height = Mathematics::Min((ModuleState.Window.Height + 1) - y, 16);
 
         S32 overage = RendererState.Tile.Window.Y - y;
         if (overage > 0)
@@ -3030,7 +3030,7 @@ VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels)
         if (RendererState.Tile.Height > 0)
         {
             y += RendererState.Tile.Height;
-            S32 overflow = Mathematics::Max<S32>(y - ModuleState.Surface.Y, 0);
+            S32 overflow = Mathematics::Max(y - ModuleState.Surface.Y, 0);
 
             RendererState.Tile.TempHeight = RendererState.Tile.Height;
             RendererState.Tile.Height -= overflow;
@@ -3106,7 +3106,7 @@ VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels)
         dst2 = dst + 3;
         x += 3;
 
-        RendererState.Tile.Height = Mathematics::Min<S32>((RendererState.Tile.Window.Height + 1) - y, 16);
+        RendererState.Tile.Height = Mathematics::Min((RendererState.Tile.Window.Height + 1) - y, 16);
     }
 
     if (RendererState.Tile.Height > 0)
@@ -3115,7 +3115,7 @@ VOID DrawSurfaceMaskRhomb(S32 x, S32 y, S32 stride, S32 mask, PIXEL* pixels)
 
         if (RendererState.Tile.DisplayedHalfs < 2)
         {
-            overflow = Mathematics::Max<S32>(RendererState.Tile.Height + y - ModuleState.Surface.Y, 0);
+            overflow = Mathematics::Max(RendererState.Tile.Height + y - ModuleState.Surface.Y, 0);
 
             RendererState.Tile.TempHeight = RendererState.Tile.Height;
             RendererState.Tile.Height -= overflow;
@@ -5147,7 +5147,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
             {
                 ptrdiff_t skip = 0;
                 // How many pixels we should skip if pixels->count was bigger than diff between minX and sx
-                ImageSpritePixel* pixels = (ImageSpritePixel*)content;
+                IMAGESPRITEPIXELPTR pixels = (IMAGESPRITEPIXELPTR)content;
 
                 PIXEL* sx = RendererState.Sprite.X;
                 while (sx < RendererState.Sprite.MinX && (ADDR)pixels < (ADDR)next)
@@ -5159,11 +5159,11 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
                     {
                         if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                         {
-                            pixels = (ImageSpritePixel*)((ADDR)pixels + sizeof(ImageSpritePixel));
+                            pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGESPRITEPIXEL));
                         }
                         else
                         {
-                            pixels = (ImageSpritePixel*)((ADDR)pixels + sizeof(ImageSpritePixel) + (count - 1) * sizeof(PIXEL));
+                            pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGESPRITEPIXEL) + (count - 1) * sizeof(PIXEL));
                         }
                     }
 
@@ -5178,7 +5178,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
                     if (count == 0)
                     {
                         // Count 0 -> no pixels to process
-                        pixels = (ImageSpritePixel*)((ADDR)pixels + sizeof(U8));
+                        pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + sizeof(U8));
                         continue;
                     }
 
@@ -5196,7 +5196,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
                             }
                         }
 
-                        pixels = (ImageSpritePixel*)((ADDR)pixels + sizeof(ImageSpritePixel));
+                        pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGESPRITEPIXEL));
                     }
                     else
                     {
@@ -5207,7 +5207,7 @@ VOID DrawMainSurfaceSprite(S32 x, S32 y, IMAGESPRITEPTR sprite)
                             sx[i] = pixel;
                         }
 
-                        pixels = (ImageSpritePixel*)((ADDR)pixels + sizeof(ImageSpritePixel) + (count - 1) * sizeof(PIXEL));
+                        pixels = (IMAGESPRITEPIXELPTR)((ADDR)pixels + sizeof(IMAGESPRITEPIXEL) + (count - 1) * sizeof(PIXEL));
                     }
 
                     sx += availCount;

@@ -8,7 +8,7 @@ War Action is an open source implementation of Fireglow Games' [Sudden Strike](h
 There are multiple goals this project tries to achieve:
 - [x] Learn how games were made in an era when things had to be done in the code, and not through fancy game engines like today.
 - [ ] Have a fully playable game implemented end-to-end, including resource management, audio, and video rendering, as well as support of large screen resolutions.
-- [ ] Eventually, to support 64-bit compilation for modern systems, and provide an avenue for development of modern renderer implementations such as DirectX or Vulkan, and, eventually, to port to Linux or Mac.
+- [ ] Eventually, to support 64-bit compilation for modern systems.
 
 ## Code
 ```
@@ -41,10 +41,16 @@ The launcher module is the game's executable. Its purpose is to do initial setup
 ### Renderer
 The game ships with 3 renderer modules. The renderers have, essentially, the same codebase, the only difference is the size of the game screen supported. Available options are: 640x480, 800x600, and 1024x768.
 
+Notes:
+1. Re-engineered code contains additional conditional code using DirectDraw 7 interfaces to render the game. This is enabled on x64 compilation configuration.
+
 I suggest exploring renderer project [MultiCAD](https://github.com/IvanishinV/MultiCAD) that aims to bring comfortable high resolution game rendering.
 
 ### Menu
 The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
+
+Notes:
+1. Re-engineered code contains proper support of windowed mode with correct window position tracking and mouse input handling.
 
 ### Game
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
