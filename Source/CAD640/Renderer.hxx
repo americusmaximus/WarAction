@@ -97,10 +97,10 @@ typedef struct RendererStateContainer
 
         struct
         {
-            S16 X;      // 0x10010070
-            S16 Y;      // 0x10010072
-            S16 Width;  // 0x10010074
-            S16 Height; // 0x10010076
+            S16 X;                  // 0x10010070
+            S16 Y;                  // 0x10010072
+            S16 Width;              // 0x10010074
+            S16 Height;             // 0x10010076
         } Window;
 
         PIXEL*  X;                  // 0x1001007c
