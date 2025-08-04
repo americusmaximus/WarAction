@@ -33,7 +33,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
     Initialize(state);
 
     state->ShadeColorMask = 0xDDDD;
-    state->BackSurfaceShadePixel = 0xACAC;
+    state->ShadePixel = 0xACAC;
 
     LPVOID animation = NULL;
     LPVOID palette = NULL;
@@ -73,8 +73,8 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
     free(animation);
     free(palette);
 
-    state->ShadeColorMask = 0;
-    state->BackSurfaceShadePixel = 0;
+    state->ShadeColorMask = BLACK_PIXEL;
+    state->ShadePixel = BLACK_PIXEL;
 
     event->Result = TRUE;
 }

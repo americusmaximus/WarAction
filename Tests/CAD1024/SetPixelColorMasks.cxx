@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ VOID InitializePixelMasks(RENDERERPTR state)
     state->InvertedActualColorMaskCopy = 0;
     state->InitialRGBMask = 0;
     state->ActualRGBMask = 0;
-    state->BackSurfaceShadePixel = 0;
+    state->ShadePixel = 0;
 }
 
 BOOL Check(RENDERERPTR state, COLORMASKRESULTPTR result)
@@ -75,7 +75,7 @@ BOOL Check(RENDERERPTR state, COLORMASKRESULTPTR result)
     value &= state->InvertedActualColorMaskCopy == result->InvertedActualColorMaskCopy;
     value &= state->InitialRGBMask == result->InitialRGBMask;
     value &= state->ActualRGBMask == result->ActualRGBMask;
-    value &= state->BackSurfaceShadePixel == result->BackSurfaceShadePixel;
+    value &= state->ShadePixel == result->ShadePixel;
 
     return value;
 }

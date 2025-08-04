@@ -33,7 +33,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
     Initialize(state);
 
     LPVOID animation = NULL;
-    LPVOID palette = NULL;
+    ANIMATIONPIXEL* palette = NULL;
 
     {
         CHAR path[MAX_PATH];
@@ -46,7 +46,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
         CHAR path[MAX_PATH];
         sprintf_s(path, MAX_PATH, "..\\..\\..\\..\\Content\\%s.col", name);
 
-        if (!AcquireFile(path, &palette)) { free(animation); event->Result = FALSE; return; }
+        if (!AcquireFile(path, (LPVOID*)&palette)) { free(animation); event->Result = FALSE; return; }
     }
 
     state->Window.X = wx;

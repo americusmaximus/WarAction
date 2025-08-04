@@ -31,8 +31,6 @@ SOFTWARE.
 #include "DrawBackSurfaceRhomb.hxx"
 #include "DrawBackSurfaceText.hxx"
 #include "DrawMainSurfaceAnimationSpriteStencil.hxx"
-#include "DrawMainSurfaceShadowSprite.hxx"
-#include "DrawMainSurfaceAnimationSpriteVersion4.hxx" // TODO
 #include "DrawMainSurfaceColorBox.hxx"
 #include "DrawMainSurfaceColorEllipse.hxx"
 #include "DrawMainSurfaceColorOutline.hxx"
@@ -44,6 +42,7 @@ SOFTWARE.
 #include "DrawMainSurfacePaletteSpriteBackStencil.hxx"
 #include "DrawMainSurfacePaletteSpriteFrontStencil.hxx"
 #include "DrawMainSurfacePaletteSpriteStencil.hxx"
+#include "DrawMainSurfaceShadowSprite.hxx"
 #include "DrawMainSurfaceSprite.hxx"
 #include "DrawMainSurfaceText.hxx"
 #include "DrawMainSurfaceVerticalColorLine.hxx"
@@ -67,9 +66,6 @@ SOFTWARE.
     
 static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
 {
-    // TODO
-    // Go over all tests, it looks like one function mixes back and stencil
-
     ACTION(AcquireTextLength, state, event);
     ACTION(CleanMainSurfaceRhomb, state, event);
     ACTION(ConvertAllColors, state, event);
@@ -79,7 +75,6 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawBackSurfaceRhomb, state, event);
     ACTION(DrawBackSurfaceText, state, event);
     ACTION(DrawMainSurfaceAnimationSpriteStencil, state, event);
-    ACTION(DrawMainSurfaceAnimationSpriteVersion4, state, event);
     ACTION(DrawMainSurfaceColorBox, state, event);
     ACTION(DrawMainSurfaceColorEllipse, state, event);
     ACTION(DrawMainSurfaceColorOutline, state, event);
@@ -91,7 +86,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(DrawMainSurfacePaletteSpriteBackStencil, state, event);
     ACTION(DrawMainSurfacePaletteSpriteFrontStencil, state, event);
     ACTION(DrawMainSurfacePaletteSpriteStencil, state, event);
-    ACTION(DrawMainSurfaceShadowSprite, state, event); // TODO back/stencil issue is detected here
+    ACTION(DrawMainSurfaceShadowSprite, state, event);
     ACTION(DrawMainSurfaceSprite, state, event);
     ACTION(DrawMainSurfaceText, state, event);
     ACTION(DrawMainSurfaceVerticalColorLine, state, event);
@@ -105,10 +100,6 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event)
     ACTION(WriteMainSurfaceRendererSurfaceRectangle, state, event);
     ACTION(WriteRendererSurfaceSurfaceRectangle, state, event);
     ACTION(WriteSurfaceSurfaceRectangle, state, event);
-
-    // TODO
-
-    // TODO DrawBackSurfaceShadowSprite
 }
 
 S32 main(S32 argc, CHAR** argv)
