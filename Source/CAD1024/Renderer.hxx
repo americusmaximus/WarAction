@@ -191,7 +191,7 @@ VOID ConvertVisibleColors(PIXEL* input, PIXEL* output, S32 count);
 VOID DrawBackSurfaceColorPoint(S32 x, S32 y, PIXEL pixel);
 VOID DrawBackSurfacePaletteShadeSprite(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfacePaletteSpriteAndStencil(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
-VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+VOID DrawBackSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceRhomb(S32 x, S32 y, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR input);
 VOID DrawBackSurfaceRhombsPaletteShadedSprite(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPTR sprite);
 VOID DrawBackSurfaceRhombsPaletteSpriteA(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite);

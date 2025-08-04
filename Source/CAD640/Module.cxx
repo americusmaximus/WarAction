@@ -58,7 +58,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawBackSurfaceRhombsPaletteShadedSprite                                = DrawBackSurfaceRhombsPaletteShadedSprite; // TODO
     ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
     ModuleState.Actions.DrawBackSurfacePaletteSpriteAndStencil                                = DrawBackSurfacePaletteSpriteAndStencil; // TODO
-    ModuleState.Actions.DrawBackSurfacePalletteSprite                                = DrawBackSurfacePalletteSprite; // TODO
+    ModuleState.Actions.DrawBackSurfacePaletteSprite                                = DrawBackSurfacePalletteSprite; // TODO
     ModuleState.Actions.DrawBackSurfaceShadowSprite                 = DrawBackSurfaceShadowSprite;
     ModuleState.Actions.WriteBackSurfaceMainSurfaceRectangle        = WriteBackSurfaceMainSurfaceRectangle;
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;

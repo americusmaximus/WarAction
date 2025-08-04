@@ -4373,7 +4373,7 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
 }
 
 // 0x1000579c
-VOID DrawBackSurfacePalletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
+VOID DrawBackSurfacePaletteSprite(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
 {
     CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
     RendererState.Sprite.ColorMask = colorMask;

@@ -49,8 +49,8 @@ typedef VOID(*CONVERTALLCOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*CONVERTVISIBLECOLORSACTION)(PIXEL* input, PIXEL* output, S32 count);
 typedef VOID(*DRAWBACKSURFACECOLORPOINTACTION)(S32 x, S32 y, PIXEL pixel);
 typedef VOID(*DRAWBACKSURFACEPALETTESHADESPRITEACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
+typedef VOID(*DRAWBACKSURFACEPALETTESPRITEACTION)(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWBACKSURFACEPALETTESPRITEANDSTENCILACTION)(S32 x, S32 y, U16 level, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
-typedef VOID(*DRAWBACKSURFACEPALLETTESPRITEACTION)(S32 x, S32 y, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWBACKSURFACERHOMBSACTION)(S32 tx, S32 ty, S32 angle_0, S32 angle_1, S32 angle_2, S32 angle_3, IMAGEPALETTETILEPTR tile);
 typedef VOID(*DRAWBACKSURFACERHOMBSPALETTESHADEDSPRITEACTION)(S32 x, S32 y, U16 level, IMAGEPALETTESPRITEPTR sprite);
 typedef VOID(*DRAWBACKSURFACERHOMBSPALETTESPRITEAACTION)(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite);
@@ -120,7 +120,7 @@ typedef struct RendererActions
     DRAWBACKSURFACERHOMBSPALETTESHADEDSPRITEACTION      DrawBackSurfaceRhombsPaletteShadedSprite;
     DRAWBACKSURFACEPALETTESHADESPRITEACTION             DrawBackSurfacePaletteShadeSprite;
     DRAWBACKSURFACEPALETTESPRITEANDSTENCILACTION        DrawBackSurfacePaletteSpriteAndStencil;
-    DRAWBACKSURFACEPALLETTESPRITEACTION                 DrawBackSurfacePalletteSprite;
+    DRAWBACKSURFACEPALETTESPRITEACTION                  DrawBackSurfacePaletteSprite;
     DRAWBACKSURFACESHADOWSPRITEACTION                   DrawBackSurfaceShadowSprite;
     WRITEBACKSURFACEMAINSURFACERECTANGLEACTION          WriteBackSurfaceMainSurfaceRectangle;
     DRAWBACKSURFACECOLORPOINTACTION                     DrawBackSurfaceColorPoint;
@@ -161,31 +161,6 @@ typedef struct RendererActions
     RELEASEDIRECTXACTION                                ReleaseDirectX;
 } RENDERERACTIONS, * RENDERERACTIONSPTR;
 
-typedef struct Rectangle
-{
-    S32 X;
-    S32 Y;
-    S32 Width;
-    S32 Height;
-} RECTANGLE, * RECTANGLEPTR;
-
-typedef struct RendererSurface // TODO Refactor the struct out.
-{
-    S32     Offset;     // Offset within the surface data. Originally in bytes, presently in pixels.
-    S32     Y;          // The surface offset along the "Y" axis in pixels.
-
-    S32     Width;
-    S32     Height;
-
-    S32     Stride;
-
-    PIXEL*  Main;       // Holds the final frame image, excluding UI.
-    PIXEL*  Back;       // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
-    PIXEL*  Stencil;    // Holds a stencil buffer of the frame. This includes buildings, fences, power poles.
-
-    LPVOID  Renderer;   // The DirectDraw surface.
-} RENDERERSURFACE, * RENDERERSURFACEPTR;
-
 typedef struct FogSprite
 {
     U8    Unk[0x50]; // TODO
@@ -193,8 +168,30 @@ typedef struct FogSprite
 
 typedef struct Renderer
 {
-    RECTANGLE                   Window;
-    RENDERERSURFACE             Surface;
+    struct 
+    {
+        S32     X;
+        S32     Y;
+        S32     Width;
+        S32     Height;
+    }                           Window;
+
+    struct
+    {
+        S32     Offset;         // Offset within the surface data. Originally in bytes, presently in pixels.
+        S32     Y;              // The surface offset along the "Y" axis in pixels.
+
+        S32     Width;
+        S32     Height;
+
+        S32     Stride;
+
+        PIXEL*  Main;           // Holds the final frame image, excluding UI.
+        PIXEL*  Back;           // Holds the frame background, this includes ground, buildings, rails, trees, bushes, etc.
+        PIXEL*  Stencil;        // Holds a stencil buffer of the frame. This includes buildings, fences, power poles.
+
+        LPVOID  Renderer;       // The DirectDraw surface.
+    }                           Surface;
 
     U16                         ActualRedMask;
     U16                         InitialRedMask;
