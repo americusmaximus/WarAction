@@ -42,6 +42,7 @@ Notes:
 
 ### Menu
 Status: In Progress...
+
 The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
 
 Notes:
@@ -49,6 +50,7 @@ Notes:
 
 ### Game
 Status: In Progress...
+
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
 
 Notes:
