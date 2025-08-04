@@ -1693,18 +1693,22 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
         locked = TRUE;
     }
 
-    CONST S32 blockSize = 8 * sizeof(DOUBLEPIXEL);  // 32 bytes
     CONST U32 blocksNumber = 8;
+
+    CONST S32 srcBlockSize = 8 * sizeof(DOUBLEPIXEL); // 32 bytes
+    CONST S32 dstBlockSize =
+        RendererState.IsTrueColor ? (2 * 8 * sizeof(DOUBLEPIXEL)) : (8 * sizeof(DOUBLEPIXEL)); // 32 or 64 bytes
 
     S32 delta = (ey + 1) - sy;
     RendererState.FogBlockParams2.Unk04 = 0;
     RendererState.FogRenderParams.ActualRGBMask = ModuleState.InitialRGBMask;
-    RendererState.FogRenderParams.DstRowStride = -8 * ModuleState.Pitch + blockSize;
-    RendererState.FogRenderParams.LineStep = -(S32)MAX_RENDERER_WIDTH * 16 + blockSize;
+    RendererState.FogRenderParams.DstRowStride = -8 * ModuleState.Pitch + dstBlockSize;
+    RendererState.FogRenderParams.LineStep = -(S32)MAX_RENDERER_WIDTH * 16 + srcBlockSize;
 
     U8* fogSrc = &ModuleState.Fog[(sy >> 3) + 8].Unk[(sx >> 4) + 8];
     DOUBLEPIXEL* src = (DOUBLEPIXEL*)((ADDR)RendererState.Surfaces.Main + ModuleState.Surface.Offset + (MAX_RENDERER_WIDTH * sy + sx) * sizeof(PIXEL));
-    DOUBLEPIXEL* dst = (DOUBLEPIXEL*)((ADDR)ModuleState.Surface.Renderer + sx * sizeof(PIXEL) + sy * ModuleState.Pitch);
+    DOUBLEPIXEL* dst = (DOUBLEPIXEL*)((ADDR)ModuleState.Surface.Renderer
+        + sx * (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL)) + sy * ModuleState.Pitch);
 
     if (sy >= ModuleState.Surface.Y)
         src = (DOUBLEPIXEL*)((ADDR)src - SCREEN_SIZE_IN_BYTES);
@@ -1767,18 +1771,46 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
                             {
                                 do
                                 {
-                                    dst[0] = src[0];
-                                    dst[1] = src[1];
-                                    dst[2] = src[2];
-                                    dst[3] = src[3];
-                                    dst[4] = src[4];
-                                    dst[5] = src[5];
-                                    dst[6] = src[6];
-                                    dst[7] = src[7];
+                                    if (RendererState.IsTrueColor)
+                                    {
+                                        dst[0] = RGB565_TO_RGB888((src[0] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[1] = RGB565_TO_RGB888((src[0] >> 16));
+
+                                        dst[2] = RGB565_TO_RGB888((src[1] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[3] = RGB565_TO_RGB888((src[1] >> 16));
+
+                                        dst[4] = RGB565_TO_RGB888((src[2] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[5] = RGB565_TO_RGB888((src[2] >> 16));
+
+                                        dst[6] = RGB565_TO_RGB888((src[3] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[7] = RGB565_TO_RGB888((src[3] >> 16));
+
+                                        dst[8] = RGB565_TO_RGB888((src[4] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[9] = RGB565_TO_RGB888((src[4] >> 16));
+
+                                        dst[10] = RGB565_TO_RGB888((src[5] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[11] = RGB565_TO_RGB888((src[5] >> 16));
+
+                                        dst[12] = RGB565_TO_RGB888((src[6] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[13] = RGB565_TO_RGB888((src[6] >> 16));
+
+                                        dst[14] = RGB565_TO_RGB888((src[7] & DEFAULT_SCREEN_COLOR_MASK));
+                                        dst[15] = RGB565_TO_RGB888((src[7] >> 16));
+                                    }
+                                    else
+                                    {
+                                        dst[0] = src[0];
+                                        dst[1] = src[1];
+                                        dst[2] = src[2];
+                                        dst[3] = src[3];
+                                        dst[4] = src[4];
+                                        dst[5] = src[5];
+                                        dst[6] = src[6];
+                                        dst[7] = src[7];
+                                    }
+
                                     src = (DOUBLEPIXEL*)((ADDR)src + (ADDR)MAX_RENDERER_WIDTH * sizeof(PIXEL));
                                     dst = (DOUBLEPIXEL*)((ADDR)dst + (ADDR)ModuleState.Pitch);
-
-                                    // TODO Add support of IsTrueColor
 
                                     --j;
                                 } while (j & 0xFF);
@@ -1850,10 +1882,17 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
                                             RendererState.FogBlockParams2.Unk04 = mask & v35;
 
                                             v31 = v37 >> 16;
-                                            *(PIXEL*)dst = (PIXEL)(v31 | v37);
 
-                                            dst = (DOUBLEPIXEL*)((ADDR)dst + sizeof(PIXEL));
+                                            if (RendererState.IsTrueColor)
+                                            {
+                                                *(DOUBLEPIXEL*)dst = RGB565_TO_RGB888((PIXEL)(v31 | v37));
+                                            }
+                                            else { *(PIXEL*)dst = (PIXEL)(v31 | v37); }
+
                                             src = (DOUBLEPIXEL*)((ADDR)src + sizeof(PIXEL));
+                                            dst = (DOUBLEPIXEL*)((ADDR)dst
+                                                + (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL)));
+
                                             --k;
                                             if (k == 0)
                                                 break;
@@ -1862,18 +1901,23 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
                                             break;
 
                                         fogOffset += RendererState.FogBlockParams2.Unk01;
-                                        *(PIXEL*)dst = (PIXEL)v31;
 
-                                        dst = (DOUBLEPIXEL*)((ADDR)dst + sizeof(PIXEL));
+                                        if (RendererState.IsTrueColor)
+                                        {
+                                            *(DOUBLEPIXEL*)dst = RGB565_TO_RGB888((PIXEL)v31);
+                                        }
+                                        else { *(PIXEL*)dst = (PIXEL)v31; }
+
                                         src = (DOUBLEPIXEL*)((ADDR)src + sizeof(PIXEL));
+                                        dst = (DOUBLEPIXEL*)((ADDR)dst
+                                            + (RendererState.IsTrueColor ? sizeof(DOUBLEPIXEL) : sizeof(PIXEL)));
+
                                         --k;
                                     } while (k);
 
                                     fogOffset = RendererState.FogBlockParams2.Unk02 + v39;
-                                    src = (DOUBLEPIXEL*)((ADDR)src + MAX_RENDERER_WIDTH * sizeof(PIXEL) - blockSize);
-                                    dst = (DOUBLEPIXEL*)((ADDR)dst + ModuleState.Pitch - blockSize);
-
-                                    // TODO Add support of IsTrueColor
+                                    src = (DOUBLEPIXEL*)((ADDR)src + MAX_RENDERER_WIDTH * sizeof(PIXEL) - srcBlockSize);
+                                    dst = (DOUBLEPIXEL*)((ADDR)dst + ModuleState.Pitch - dstBlockSize);
 
                                     RendererState.FogBlockParams2.Unk01 += RendererState.FogBlockParams.Unk01;
 
@@ -1895,18 +1939,46 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
                         {
                             do
                             {
-                                dst[0] = mask & (src[0] >> 1);
-                                dst[1] = mask & (src[1] >> 1);
-                                dst[2] = mask & (src[2] >> 1);
-                                dst[3] = mask & (src[3] >> 1);
-                                dst[4] = mask & (src[4] >> 1);
-                                dst[5] = mask & (src[5] >> 1);
-                                dst[6] = mask & (src[6] >> 1);
-                                dst[7] = mask & (src[7] >> 1);
+                                if (RendererState.IsTrueColor)
+                                {
+                                    dst[0] = RGB565_TO_RGB888(((mask & (src[0] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[1] = RGB565_TO_RGB888(((mask & (src[0] >> 1)) >> 16));
+
+                                    dst[2] = RGB565_TO_RGB888(((mask & (src[1] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[3] = RGB565_TO_RGB888(((mask & (src[1] >> 1)) >> 16));
+
+                                    dst[4] = RGB565_TO_RGB888(((mask & (src[2] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[5] = RGB565_TO_RGB888(((mask & (src[2] >> 1)) >> 16));
+
+                                    dst[6] = RGB565_TO_RGB888(((mask & (src[3] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[7] = RGB565_TO_RGB888(((mask & (src[3] >> 1)) >> 16));
+
+                                    dst[8] = RGB565_TO_RGB888(((mask & (src[4] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[9] = RGB565_TO_RGB888(((mask & (src[4] >> 1)) >> 16));
+
+                                    dst[10] = RGB565_TO_RGB888(((mask & (src[5] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[11] = RGB565_TO_RGB888(((mask & (src[5] >> 1)) >> 16));
+
+                                    dst[12] = RGB565_TO_RGB888(((mask & (src[6] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[13] = RGB565_TO_RGB888(((mask & (src[6] >> 1)) >> 16));
+
+                                    dst[14] = RGB565_TO_RGB888(((mask & (src[7] >> 1)) & DEFAULT_SCREEN_COLOR_MASK));
+                                    dst[15] = RGB565_TO_RGB888(((mask & (src[7] >> 1)) >> 16));
+                                }
+                                else
+                                {
+                                    dst[0] = mask & (src[0] >> 1);
+                                    dst[1] = mask & (src[1] >> 1);
+                                    dst[2] = mask & (src[2] >> 1);
+                                    dst[3] = mask & (src[3] >> 1);
+                                    dst[4] = mask & (src[4] >> 1);
+                                    dst[5] = mask & (src[5] >> 1);
+                                    dst[6] = mask & (src[6] >> 1);
+                                    dst[7] = mask & (src[7] >> 1);
+                                }
+
                                 src = (DOUBLEPIXEL*)((ADDR)src + (ADDR)MAX_RENDERER_WIDTH * sizeof(PIXEL));
                                 dst = (DOUBLEPIXEL*)((ADDR)dst + (ADDR)ModuleState.Pitch);
-
-                                // TODO Add support of IsTrueColor
 
                                 --j;
                             } while (j & 0xFF);
@@ -1931,12 +2003,12 @@ VOID WriteMainSurfaceRendererSurfaceWithFogOfWar(S32 sx, S32 sy, S32 ex, S32 ey)
                 break;
 
             RendererState.FogRenderParams.BlocksCount = RendererState.FogBlockParams.TempBlocksCount;
-            RendererState.FogRenderParams.LineStep = SCREEN_SIZE_IN_BYTES - MAX_RENDERER_WIDTH * sizeof(PIXEL) * 8 + blockSize;
+            RendererState.FogRenderParams.LineStep = SCREEN_SIZE_IN_BYTES - MAX_RENDERER_WIDTH * sizeof(PIXEL) * 8 + srcBlockSize;
             RendererState.FogBlockParams.ValidRowsBlockCount = 1;
             RendererState.FogBlockParams.TempBlocksCount = 0;
         }
 
-        RendererState.FogRenderParams.LineStep = -(S32)MAX_RENDERER_WIDTH * 16 + blockSize;
+        RendererState.FogRenderParams.LineStep = -(S32)MAX_RENDERER_WIDTH * 16 + srcBlockSize;
         remainingExcessRows = RendererState.FogBlockParams2.ExcessRowsBlockCount;
         RendererState.FogBlockParams.ValidRowsBlockCount = remainingExcessRows;
         RendererState.FogBlockParams2.ExcessRowsBlockCount = 0;

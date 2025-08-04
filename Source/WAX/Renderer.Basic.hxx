@@ -28,9 +28,9 @@ SOFTWARE.
 #define ACTIVATE_MODERN_GRAPHICS_MODE       TRUE
 #endif
 
-// TODO
-// ???
-// 0x10070f80
+// TODO: 32-bit color mode is disabled given that the game module
+// writes directly to renderer surface some parts of the scene in function located at 0x10070f80.
+// This function must account for 32-bit mode support in addition to the code in the renderers.
 #define ACTIVE_TRUE_COLOR_MODE              FALSE
 
 #define DEFAULT_SCREEN_COLOR_MASK           0xFFFF
