@@ -167,7 +167,6 @@
     <ClCompile Include="DrawMainSurfacePaletteSpriteBackStencil.cxx" />
     <ClCompile Include="DrawMainSurfaceAnimationSpriteStencil.cxx" />
     <ClCompile Include="DrawMainSurfaceShadowSprite.cxx" />
-    <ClCompile Include="DrawMainSurfaceAnimationSpriteVersion4.cxx" />
     <ClCompile Include="DrawMainSurfaceColorBox.cxx" />
     <ClCompile Include="DrawMainSurfaceColorEllipse.cxx" />
     <ClCompile Include="DrawMainSurfaceColorOutline.cxx" />
@@ -209,7 +208,6 @@
     <ClInclude Include="DrawMainSurfacePaletteSpriteBackStencil.hxx" />
     <ClInclude Include="DrawMainSurfaceAnimationSpriteStencil.hxx" />
     <ClInclude Include="DrawMainSurfaceShadowSprite.hxx" />
-    <ClInclude Include="DrawMainSurfaceAnimationSpriteVersion4.hxx" />
     <ClInclude Include="DrawMainSurfaceColorBox.hxx" />
     <ClInclude Include="DrawMainSurfaceColorEllipse.hxx" />
     <ClInclude Include="DrawMainSurfaceColorOutline.hxx" />

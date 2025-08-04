@@ -33,7 +33,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, S32 x, S32 y, S32 o
 {
     Initialize(state);
 
-    BINASSETCONTENTPTR font = NULL;
+    BINASSETCOLLECTIONCONTENTPTR font = NULL;
     if (!AcquireFile("..\\..\\..\\..\\Content\\TXTA.PCK", (LPVOID*)&font)) { event->Result = FALSE; return; }
 
     state->Window.X = wx;

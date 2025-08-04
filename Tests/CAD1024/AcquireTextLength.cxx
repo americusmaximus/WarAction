@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ SOFTWARE.
 
 #define MAX_TEXT_LENGTH 128
 
-static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, BINASSETCONTENTPTR asset, LPSTR text, U32 width)
+static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, BINASSETCOLLECTIONCONTENTPTR asset, LPSTR text, U32 width)
 {
     event->Result =  state->Actions.AcquireTextLength(text, asset) == width;
 }
@@ -37,7 +37,7 @@ static VOID Execute(RENDERERPTR state, MODULEEVENTPTR event, BINASSETCONTENTPTR 
 VOID AcquireTextLength(RENDERERPTR state, MODULEEVENTPTR event)
 {
     // Initialize.
-    BINASSETCONTENTPTR font = NULL;
+    BINASSETCOLLECTIONCONTENTPTR font = NULL;
     if (!AcquireFile("..\\..\\..\\..\\Content\\TXTA.PCK", (LPVOID*)&font)) { event->Result = FALSE; return; }
 
     {

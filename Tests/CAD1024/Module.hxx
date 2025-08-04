@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,10 +32,18 @@ SOFTWARE.
 
 typedef struct ModuleEvent
 {
-    LPCSTR Name;
-    LPCSTR Action;
-    BOOL Result;
+    LPCSTR  Name;
+    LPCSTR  Action;
+    BOOL    Result;
 } MODULEEVENT, * MODULEEVENTPTR;
+
+typedef struct Rectangle
+{
+    S32     X;
+    S32     Y;
+    S32     Width;
+    S32     Height;
+} RECTANGLE, * RECTANGLEPTR;
 
 #define MIN(a, b) (a < b ? a : b)
 #define MAX(a, b) (a > b ? a : b)

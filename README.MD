@@ -8,7 +8,7 @@ War Action is an open source implementation of Fireglow Games' [Sudden Strike](h
 There are multiple goals this project tries to achieve:
 - [x] Learn how games were made in an era when things had to be done in the code, and not through fancy game engines like today.
 - [ ] Have a fully playable game implemented end-to-end, including resource management, audio, and video rendering, as well as support of large screen resolutions.
-- [ ] Eventually, to support 64-bit compilation for modern systems, and provide an avenue for development of modern renderer implementations such as DirectX or Vulkan, and, eventually, to port to Linux or Mac.
+- [ ] Eventually, to support 64-bit compilation for modern systems.
 
 ## Code
 ```
@@ -41,13 +41,27 @@ The launcher module is the game's executable. Its purpose is to do initial setup
 ### Renderer
 The game ships with 3 renderer modules. The renderers have, essentially, the same codebase, the only difference is the size of the game screen supported. Available options are: 640x480, 800x600, and 1024x768.
 
+Notes:
+1. Re-engineered code contains additional conditional code using DirectDraw 7 interfaces to render the game. This is enabled on x64 build configuration.
+2. Additionally the code contains support of 32-bit color mode, which is needed in order to run the game in windowed mode on modern systems.
+
+Extra:
 I suggest exploring renderer project [MultiCAD](https://github.com/IvanishinV/MultiCAD) that aims to bring comfortable high resolution game rendering.
 
 ### Menu
 The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
 
+Notes:
+1. Re-engineered code contains proper support of windowed mode with correct window position tracking and mouse input handling.
+
 ### Game
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
+
+Notes:
+1. TODO: Add support of windowed mode, properly track and offset cursor position.
+2. TODO: Add support of 32-bit color in cases when the module is directly writes to the renderer surface without calling renderer functions, such as in function at 0x10070f80.
+
+![Sudden Strike](.\Extras\Screenshot.png)
 
 ## Similar & Related Projects
 1. [War Storm](https://github.com/americusmaximus/WarStorm)
@@ -57,9 +71,9 @@ The game module is responsible for the actual gameplay, associated resource mana
 ## Thanks
 1. [Hifi](https://github.com/hifi-unmaintained/ogg-winmm) for the original implementation of WinMM.dll with the Ogg Vorbis support. Even though the game's version is very customized, access to the original code was very useful.
 3. [elwray](https://github.com/elwray/N2CadX) for the initial research of the rendering modules.
-4. [IvanishinV](https://github.com/IvanishinV/MultiCAD) for completing reverse engineering of the CAD1024 renderer code.
+4. [IvanishinV](https://github.com/IvanishinV/MultiCAD) for completing reverse engineering and re-engineering of CAD1024 renderer.
 
 ## Legal
 1. This is not a complete game. Please purchase software you like!
 2. The source code in this repository is mostly produced by reverse engineering the original binaries. There are a couple of exceptions for reverse engineering under DMCA -- documentation, interoperability, fair use. See goals section for the interoperability and fair use cases. The documentation is needed to support those. Also please see an article about [software preservation](https://en.wikipedia.org/wiki/Digital_preservation).
-3. Sudden Strike, Fireglow Games, CDV, RAD Game Tools, Bink, Ogg Vorbis, DirectX, OpenGL, Vulkan, and others are trademarks of their respective owners.
+3. Sudden Strike, Fireglow Games, CDV, RAD Game Tools, Bink, Ogg Vorbis, DirectDraw, DirectX, and others are trademarks of their respective owners.

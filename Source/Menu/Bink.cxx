@@ -91,10 +91,17 @@ BOOL ShowBinkFrame(VOID)
 
     BinkDoFrame(VideoState.Instance);
 
+#if ACTIVATE_MODERN_GRAPHICS_MODE
+    DDSURFACEDESC2 desc; // 0x10046000
+    ZeroMemory(&desc, sizeof(DDSURFACEDESC2));
+
+    desc.dwSize = sizeof(DDSURFACEDESC2);
+#else
     DDSURFACEDESC desc; // 0x10046000
     ZeroMemory(&desc, sizeof(DDSURFACEDESC));
 
     desc.dwSize = sizeof(DDSURFACEDESC);
+#endif
 
     RECT rect = { 0, 0, GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480 };
 
@@ -115,7 +122,11 @@ BOOL ShowBinkFrame(VOID)
             (GRAPHICS_RESOLUTION_640 - VideoState.Instance->Width) / 2,
             (GRAPHICS_RESOLUTION_480 - VideoState.Instance->Height) / 2, VideoState.Surface);
 
+#if ACTIVATE_MODERN_GRAPHICS_MODE
+        VideoState.Renderer->DirectX.Surface->Unlock(VideoState.Renderer->IsFullScreen ? NULL : &rect);
+#else
         VideoState.Renderer->DirectX.Surface->Unlock(desc.lpSurface);
+#endif
     }
 
     if (VideoState.Instance->FrameNum < VideoState.Instance->Frames

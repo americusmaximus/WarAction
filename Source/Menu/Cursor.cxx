@@ -128,7 +128,7 @@ VOID CLASSCALL DrawCursor(CURSORPTR self)
         (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[indx]);
 
     State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(
-        CursorState.X, CursorState.Y, CURSOR_LEVEL, self->Palette, image);
+        CursorState.X, CursorState.Y, CURSOR_LEVEL, (ANIMATIONPIXEL*)self->Palette, image);
 }
 
 // 0x100037a0
