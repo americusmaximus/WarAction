@@ -28,7 +28,7 @@ SOFTWARE.
 #define ACTIVATE_MODERN_GRAPHICS_MODE       TRUE
 #endif
 
-#define ACTIVE_TRUE_COLOR_MODE              TRUE
+#define ACTIVE_TRUE_COLOR_MODE              FALSE
 
 #define DEFAULT_SCREEN_COLOR_MASK           0xFFFF
 

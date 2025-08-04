@@ -253,7 +253,11 @@ BOOL InitializeWindow(S32 width, S32 height)
     {
         CONST U32 bits = RendererState.IsTrueColor ? GRAPHICS_BITS_PER_PIXEL_32 : GRAPHICS_BITS_PER_PIXEL_16;
 
+#if ACTIVATE_MODERN_GRAPHICS_MODE
+        if (FAILED(ModuleState.DirectX.Instance->SetDisplayMode(width, height, bits, 0, 0))) { return FALSE; }
+#else
         if (FAILED(ModuleState.DirectX.Instance->SetDisplayMode(width, height, bits))) { return FALSE; }
+#endif
 
         SetWindowPos(ModuleState.HWND, NULL, 0, 0, width, height, SWP_NOZORDER | SWP_NOMOVE);
     }
@@ -278,10 +282,18 @@ BOOL InitializeWindow(S32 width, S32 height)
         SetWindowPos(ModuleState.HWND, NULL, (sw - width) / 2, (sh - height) / 2, width, height, SWP_SHOWWINDOW);
     }
 
+#if ACTIVATE_MODERN_GRAPHICS_MODE
+    DDSURFACEDESC2 desc;
+    ZeroMemory(&desc, sizeof(DDSURFACEDESC2));
+
+    desc.dwSize = sizeof(DDSURFACEDESC2);
+#else
     DDSURFACEDESC desc;
     ZeroMemory(&desc, sizeof(DDSURFACEDESC));
 
     desc.dwSize = sizeof(DDSURFACEDESC);
+#endif
+
     desc.dwFlags = DDSD_CAPS;
     desc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 
@@ -1458,10 +1470,17 @@ VOID MoveStencilSurface(S32 x, S32 y, S32 width, S32 height, S32 offset)
 // 0x100028f0
 BOOL LockRendererSurface()
 {
+#if ACTIVATE_MODERN_GRAPHICS_MODE
+    DDSURFACEDESC2 desc;
+    ZeroMemory(&desc, sizeof(DDSURFACEDESC2));
+
+    desc.dwSize = sizeof(DDSURFACEDESC2);
+#else
     DDSURFACEDESC desc;
     ZeroMemory(&desc, sizeof(DDSURFACEDESC));
 
     desc.dwSize = sizeof(DDSURFACEDESC);
+#endif
 
     HRESULT result = ModuleState.DirectX.Surface->Lock(NULL, &desc, DDLOCK_WAIT, NULL);
 
@@ -7384,10 +7403,7 @@ VOID MarkUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, U8 type, IMAGESPRI
 
                     CONST ptrdiff_t availCount = Mathematics::Min(count - skip, (U8*)RendererState.Sprite.MaxX - sx);
 
-                    for (ptrdiff_t i = 0; i < availCount; i++)
-                    {
-                        sx[i] = type;
-                    }
+                    for (ptrdiff_t i = 0; i < availCount; i++) { sx[i] = type; }
 
                     if (pixels->Count & IMAGESPRITE_ITEM_COMPACT_MASK)
                     {
