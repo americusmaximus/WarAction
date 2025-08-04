@@ -6787,7 +6787,6 @@ VOID DrawUISprite(S32 x, S32 y, IMAGEPALETTESPRITEPTR sprite, LPVOID pal, IMAGES
 
     RendererState.Sprite.Height = sprite->Height;
 
-
     if (y < RendererState.UI.Window.Y)
     {
         RendererState.Sprite.Height -= (RendererState.UI.Window.Y - y);
