@@ -35,8 +35,8 @@ RENDERERPTR InitializeModule()
 
     Initialize();
 
-    ModuleState.Actions.BlendMainSurfaceWithFogOfWarA                              = BlendMainSurfaceWithFogOfWar; // TODO
-    ModuleState.Actions.BlendMainSurfaceWithFogOfWarB                              = BlendMainSurfaceWithFogOfWar; // TODO
+    ModuleState.Actions.BlendMainSurfaceWithFogOfWarA               = BlendMainSurfaceWithFogOfWar;
+    ModuleState.Actions.BlendMainSurfaceWithFogOfWarB               = BlendMainSurfaceWithFogOfWar;
     ModuleState.Actions.Initialize                                  = Initialize;
     ModuleState.Actions.InitializeDirectX                           = InitializeDirectX;
     ModuleState.Actions.RestoreDisplayMode                          = RestoreDisplayMode;
@@ -53,12 +53,12 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceText                         = DrawMainSurfaceText;
     ModuleState.Actions.DrawBackSurfaceRhomb                        = DrawBackSurfaceRhomb;
     ModuleState.Actions.DrawMainSurfaceMaskRhomb                    = DrawMainSurfaceMaskRhomb;
-    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSpriteA                                = DrawBackSurfaceRhombsPaletteSprite; // TODO
-    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSpriteB                                = FUN_100046b6; // TODO
-    ModuleState.Actions.DrawBackSurfaceRhombsPaletteShadedSprite                                = DrawBackSurfaceRhombsPaletteShadedSprite; // TODO
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSpriteA         = DrawBackSurfaceRhombsPaletteSpriteA;
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteSpriteB         = DrawBackSurfaceRhombsPaletteSpriteB;
+    ModuleState.Actions.DrawBackSurfaceRhombsPaletteShadedSprite    = DrawBackSurfaceRhombsPaletteShadedSprite;
     ModuleState.Actions.DrawBackSurfacePaletteShadeSprite           = DrawBackSurfacePaletteShadeSprite;
-    ModuleState.Actions.DrawBackSurfacePaletteSpriteAndStencil                                = DrawBackSurfacePaletteSpriteAndStencil; // TODO
-    ModuleState.Actions.DrawBackSurfacePaletteSprite                                = DrawBackSurfacePalletteSprite; // TODO
+    ModuleState.Actions.DrawBackSurfacePaletteSpriteAndStencil      = DrawBackSurfacePaletteSpriteAndStencil;
+    ModuleState.Actions.DrawBackSurfacePaletteSprite                = DrawBackSurfacePaletteSprite;
     ModuleState.Actions.DrawBackSurfaceShadowSprite                 = DrawBackSurfaceShadowSprite;
     ModuleState.Actions.WriteBackSurfaceMainSurfaceRectangle        = WriteBackSurfaceMainSurfaceRectangle;
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
@@ -71,11 +71,11 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfacePaletteSpriteFrontStencil    = DrawMainSurfacePaletteSpriteFrontStencil;
     ModuleState.Actions.DrawMainSurfacePaletteSpriteBackStencil     = DrawMainSurfacePaletteSpriteBackStencil;
     ModuleState.Actions.DrawMainSurfaceAnimationSpriteStencil       = DrawMainSurfaceAnimationSpriteStencil;
-    ModuleState.Actions.DrawMainSurfaceAnimationSprite                                = DrawMainSurfaceAnimationSprite; // TODO
+    ModuleState.Actions.DrawMainSurfaceAnimationSprite              = DrawMainSurfaceAnimationSprite;
     ModuleState.Actions.DrawMainSurfaceShadowSprite                 = DrawMainSurfaceShadowSprite;
-    ModuleState.Actions.DrawMainSurfaceActualSprite      = DrawMainSurfaceActualSprite; // TODO
-    ModuleState.Actions.DrawMainSurfaceAdjustedSprite                                = DrawMainSurfaceAdjustedSprite; // TODO
-    ModuleState.Actions.DrawMainSurfaceVanishingPaletteSprite                                = DrawMainSurfaceVanishingPaletteSprite; // TODO
+    ModuleState.Actions.DrawMainSurfaceActualSprite                 = DrawMainSurfaceActualSprite;
+    ModuleState.Actions.DrawMainSurfaceAdjustedSprite               = DrawMainSurfaceAdjustedSprite;
+    ModuleState.Actions.DrawMainSurfaceVanishingPaletteSprite       = DrawMainSurfaceVanishingPaletteSprite;
     ModuleState.Actions.DrawMainSurfaceColorPoint                   = DrawMainSurfaceColorPoint;
     ModuleState.Actions.DrawMainSurfaceColorRectangle               = DrawMainSurfaceColorRectangle;
     ModuleState.Actions.DrawMainSurfaceColorBox                     = DrawMainSurfaceColorBox;
@@ -84,7 +84,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawMainSurfaceColorShadeRectangle          = DrawMainSurfaceColorShadeRectangle;
     ModuleState.Actions.DrawMainSurfaceColorOutline                 = DrawMainSurfaceColorOutline;
     ModuleState.Actions.DrawMainSurfaceColorEllipse                 = DrawMainSurfaceColorEllipse;
-    ModuleState.Actions.WriteMainSurfaceRendererSurfaceWithFogOfWar                                = WriteMainSurfaceRendererSurfaceWithFogOfWar; // TODO
+    ModuleState.Actions.WriteMainSurfaceRendererSurfaceWithFogOfWar = WriteMainSurfaceRendererSurfaceWithFogOfWar;
     ModuleState.Actions.WriteMainSurfaceRendererSurfaceRectangle    = WriteMainSurfaceRendererSurfaceRectangle;
     ModuleState.Actions.ReadMainSurfaceSurfaceRectangle             = ReadMainSurfaceSurfaceRectangle;
     ModuleState.Actions.MaskStencilSurfaceRectangle                 = MaskStencilSurfaceRectangle;
@@ -92,8 +92,8 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.WriteRendererSurfaceSurfaceRectangle        = WriteRendererSurfaceSurfaceRectangle;
     ModuleState.Actions.WriteSurfaceSurfaceRectangle                = WriteSurfaceSurfaceRectangle;
     ModuleState.Actions.DrawUISprite                                = DrawUISprite;
-    ModuleState.Actions.DrawVanishingUISprite                                = DrawVanishingUISprite; // TODO
-    ModuleState.Actions.MarkUISprite                                = MarkUISprite; // TODO
+    ModuleState.Actions.DrawVanishingUISprite                       = DrawVanishingUISprite;
+    ModuleState.Actions.MarkUISprite                                = MarkUISprite;
     ModuleState.Actions.ReleaseDirectX                              = ReleaseDirectX;
 
     return &ModuleState;

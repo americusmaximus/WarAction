@@ -90,9 +90,9 @@ typedef struct RendererStateContainer
 
     struct
     {
-        PIXEL*  MinX;   // 0x1001005c
-        PIXEL*  MaxX;   // 0x10010060
-        U32     Width;  // 0x10010064
+        PIXEL*  MinX;               // 0x1001005c
+        PIXEL*  MaxX;               // 0x10010060
+        U32     Width;              // 0x10010064
         S32     VanishOffset;       // 0x10010068
 
         struct
