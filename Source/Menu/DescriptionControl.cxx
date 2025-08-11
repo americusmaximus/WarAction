@@ -38,9 +38,9 @@ SOFTWARE.
 
 typedef struct DescriptionControlTick
 {
-    U32     Unk0; // TODO
-    LPSTR   Unk4; // TODO
-    U32     Unk8; // TODO
+    U32     Unk0;
+    LPSTR   Next;
+    BOOL    NewLine;
     S32     Width;
     CHAR    Text[MAX_DESCRIPTION_CONTROL_TICK_TEXT_LENGTH];
 } DESCRIPTIONCONTROLTICK, * DESCRIPTIONCONTROLTICKPTR;
@@ -124,7 +124,7 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
     DESCRIPTIONCONTROLTICKPTR tick =
         (DESCRIPTIONCONTROLTICKPTR)alloca(sizeof(DESCRIPTIONCONTROLTICK));
 
-    tick->Unk4 = 0; // TODO
+    tick->Next = NULL;
 
     self->LineLength = 0;
     self->LineCount = 0;
@@ -136,65 +136,57 @@ VOID CLASSCALL TickDescriptionControl(DESCRIPTIONCONTROLPTR self)
 
     SelectFontAssetColor(self->Font, self->Color);
 
-    BOOL uVar8 = FALSE; // TODO name
+    BOOL complete = FALSE;
     LPSTR text = self->Text;
 
-    while (AcquireUnicode(text) != NULL && !uVar8)
+    while (AcquireUnicode(text) != NULL && !complete)
     {
-        S32 width = 0; // TODO optimize out?
-        LPSTR next = tick->Text;
-
         tick->Width = 0;
-        tick->Unk4 = next;
+        tick->Next = tick->Text;
 
         // Calculate the width of the string in pixels that will fit into the control's width.
-        while (' ' < AcquireUnicode(text) && width < self->Width)
+        while (' ' < AcquireUnicode(text) && tick->Width < self->Width)
         {
             if (AcquireUnicode(text) != '~')
             {
-                CopyMemory(next, text, AcquireAnsiLength(text));
+                CopyMemory(tick->Next, text, AcquireAnsiLength(text));
 
-                width = width + AcquireFontAssetItemWidth(self->Font, AcquireUnicode(text));
-
-                tick->Width = width;
-                next = tick->Unk4;
+                tick->Width = tick->Width + AcquireFontAssetItemWidth(self->Font, AcquireUnicode(text));
             }
 
             if (self->End <= text)
             {
-                next[0] = NULL;
-                uVar8 = TRUE; // TODO
+                tick->Next[0] = NULL;
+                complete = TRUE;
             }
 
-            if (AcquireUnicode(text) != '~')
-            {
-                next = AcquireNextString(next);
-                tick->Unk4 = next;
-            }
+            if (AcquireUnicode(text) != '~') { tick->Next = AcquireNextString(tick->Next); }
 
             text = AcquireNextString(text);
         }
 
         // Draw the text that fits into the width, if any.
-        next[0] = NULL;
+        tick->Next[0] = NULL;
+
         if (tick->Text[0] != NULL)
         {
-            tick->Unk8 = 0; // TODO
-            DrawTextDescriptionControl(self, tick->Text, width);
+            tick->NewLine = FALSE;
+            DrawTextDescriptionControl(self, tick->Text, tick->Width);
         }
 
         UNICHAR item = NULL;
-        uVar8 = uVar8 | (text == self->End); // TODO ???
+        complete = complete | (text == self->End);
 
         // Skip the drawn text, if needed, and draw line termination characters.
-        if (!uVar8 && (item = AcquireUnicode(text)) != NULL)
+        if (!complete && (item = AcquireUnicode(text)) != NULL)
         {
             if (item == '\n')
             {
-                if (tick->Unk8 == 0) { item = ' '; } else { item = '\n'; } // TODO
+                item = tick->NewLine ? '\n' : ' ';
 
                 DrawTextItemDescriptionControl(self, item);
-                tick->Unk8 = 1; // TODO
+
+                tick->NewLine = TRUE;
             }
             else if (item != '\r' && item != '~') { DrawTextItemDescriptionControl(self, item); }
 
@@ -242,6 +234,7 @@ U32 CLASSCALL ActionDescriptionControl(DESCRIPTIONCONTROLPTR self)
             if (self->End[0] == '~')
             {
                 self->Ticks = self->MidDelay + ticks;
+
                 return CONTROLACTION_NONE;
             }
 

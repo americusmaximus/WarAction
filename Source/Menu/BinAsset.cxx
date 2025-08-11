@@ -87,7 +87,7 @@ VOID CLASSCALL AdjustBinAssetImage(BINASSETPTR self)
 // 0x10006130
 VOID CLASSCALL AsStringBinAsset(BINASSETPTR self)
 {
-    CONST U32 count = ((U32*)self->Content)[0]; // TODO
+    CONST U32 count = ((U32*)self->Content)[0];
 
     CopyMemory(self->Content, (LPVOID)((ADDR)self->Content + sizeof(U32)), count * sizeof(U32));
 
@@ -119,7 +119,7 @@ LPVOID CLASSCALL AcquireBinAssetContent(BINASSETPTR self, CONST U32 indx)
     // Non-Counted:
     //      1. An array of offsets into the file
     //      2. Actual data at those offsets
-    return (LPVOID)((ADDR)self->Content + self->Content->Offset[indx]); // TODO types
+    return (LPVOID)((ADDR)self->Content + self->Content->Offset[indx]);
 }
 
 // 0x100060f0
@@ -156,8 +156,6 @@ VOID AdjustBinAssetImage(IMAGESPRITEPTR self, CONST U32 ro, CONST U32 rm, CONST 
     if (ro == 0 && rm == 0xF800 && go == 5 && gm == 0x7E0 && bo == 11 && bm == 0x1F) { return; }
     else if (rm == 0x7C00 && go == 6 && gm == 0x3E0 && bo == 11 && bm == 0x1F)
     {
-        // TODO make the loop pretty
-
         U16* next = &self->Next;
         IMAGESPRITEPIXELPTR pixels = self->Pixels;
 
@@ -172,7 +170,7 @@ VOID AdjustBinAssetImage(IMAGESPRITEPTR self, CONST U32 ro, CONST U32 rm, CONST 
 
                 if (color != MAGENTA_PIXEL)
                 {
-                    pixels->Pixels[xx] = ((color & 0x1F) | (color >> 1)) & 0xFFE0; // TODO
+                    pixels->Pixels[xx] = ((color & 0x1F) | (color >> 1)) & 0xFFE0;
                 }
             }
 
@@ -183,21 +181,12 @@ VOID AdjustBinAssetImage(IMAGESPRITEPTR self, CONST U32 ro, CONST U32 rm, CONST 
     }
     else
     {
-        // TODO offsets
-        S32 DAT_10046090 = go - 5; // TODO Name
-        S32 DAT_100460a0 = bo - 11; // TODO Name
-        S32 DAT_10046098 = 0; // TODO Name
+        S32 ago = go - 5;
+        S32 abo = bo - 11;
+        S32 aro = 0;
 
-        // TODO masks
-        U32 DAT_1004609c = rm; // TODO Name
-        U32 DAT_10046094 = gm; // TODO Name
-        U32 DAT_100460a4 = bm; // TODO Name
-
-        if (DAT_10046090 < 0) { DAT_10046090 = go + 11; }
-
-        if (DAT_100460a0 < 0) { DAT_100460a0 = bo + 5; }
-
-        // TODO make the loop pretty
+        if (ago < 0) { ago = go + 11; }
+        if (abo < 0) { abo = bo + 5; }
 
         U16* next = &self->Next;
         IMAGESPRITEPIXELPTR pixels = self->Pixels;
@@ -212,11 +201,10 @@ VOID AdjustBinAssetImage(IMAGESPRITEPTR self, CONST U32 ro, CONST U32 rm, CONST 
                 CONST PIXEL color = pixels->Pixels[xx];
                 if (color != MAGENTA_PIXEL)
                 {
-                    // TODO
                     pixels->Pixels[xx] =
-                        (color >> ((byte)DAT_10046098 & 0xF) | color << 0x10 - ((byte)DAT_10046098 & 0xF)) & DAT_1004609c
-                        | (color >> ((byte)DAT_10046090 & 0xF) | color << 0x10 - ((byte)DAT_10046090 & 0xF)) & DAT_10046094
-                        | (color >> ((byte)DAT_100460a0 & 0xF) | color << 0x10 - ((byte)DAT_100460a0 & 0xF)) & DAT_100460a4;
+                        (color >> ((byte)aro & 0xF) | color << 0x10 - ((byte)aro & 0xF)) & rm
+                        | (color >> ((byte)ago & 0xF) | color << 0x10 - ((byte)ago & 0xF)) & gm
+                        | (color >> ((byte)abo & 0xF) | color << 0x10 - ((byte)abo & 0xF)) & bm;
                 }
             }
 
