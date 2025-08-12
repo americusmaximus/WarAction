@@ -109,12 +109,12 @@ VOID CursorMessageHandler(CONST U32 action)
 }
 
 // 0x10003740
-VOID CLASSCALL CursorUnknown1(CURSORPTR self) // TODO name
+VOID CLASSCALL SaveCursorPixels(CURSORPTR self)
 {
     IMAGEPALETTESPRITEPTR image =
         (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[0]);
 
-    FUN_10003610(self->Pixels, self->Width, self->Height,
+    CopyCursorPixels(self->Pixels, self->Width, self->Height,
         State.Renderer->Surface.Main, State.Renderer->Surface.Width, State.Renderer->Surface.Height,
         0, 0, image->X + CursorState.X, image->Y + CursorState.Y, image->Width, image->Height);
 }
@@ -132,21 +132,21 @@ VOID CLASSCALL DrawCursor(CURSORPTR self)
 }
 
 // 0x100037a0
-VOID CLASSCALL CursorUnknown3(CURSORPTR self) // TODO name
+VOID CLASSCALL RestoreCursorPixels(CURSORPTR self)
 {
     IMAGEPALETTESPRITEPTR image =
         (IMAGEPALETTESPRITEPTR)((ADDR)self->Animation + self->Animation->Offsets[0]);
 
-    FUN_10003610(State.Renderer->Surface.Main, State.Renderer->Surface.Width, State.Renderer->Surface.Height,
+    CopyCursorPixels(State.Renderer->Surface.Main, State.Renderer->Surface.Width, State.Renderer->Surface.Height,
         self->Pixels, self->Width, self->Height,
         image->X + CursorState.X, image->Y + CursorState.Y, 0, 0, image->Width, image->Height);
 }
 
 // 0x10003610
-VOID FUN_10003610(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 sw, CONST S32 sh, CONST S32 ox, CONST S32 oy, CONST S32 x, CONST S32 y, CONST S32 w, CONST S32 h) // TODO name
+VOID CopyCursorPixels(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 sw, CONST S32 sh, CONST S32 ox, CONST S32 oy, CONST S32 x, CONST S32 y, CONST S32 w, CONST S32 h)
 {
     S32 srcx, srcy, srch, srcw;
-    FUN_10003590(x, y, w, h, sw, sh, &srcx, &srcy, &srch, &srcw);
+    AcquireCursorCoordinates(x, y, w, h, sw, sh, &srcx, &srcy, &srch, &srcw);
 
     CONST S32 offx = ox + srcx;
     CONST S32 offy = oy + srcy;
@@ -155,7 +155,7 @@ VOID FUN_10003610(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 
     CONST S32 ay = y + srcy;
 
     S32 dstx, dsty, dsth, dstw;
-    FUN_10003590(offx, offy, w + srcw, h + srch, dw, dh, &dstx, &dsty, &dsth, &dstw);
+    AcquireCursorCoordinates(offx, offy, w + srcw, h + srch, dw, dh, &dstx, &dsty, &dsth, &dstw);
 
     CONST S32 height = h + srch + dsth;
     CONST S32 width = w + srcw + dstw;
@@ -176,7 +176,7 @@ VOID FUN_10003610(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 
 }
 
 // 0x10003590
-VOID FUN_10003590(CONST S32 minX, CONST S32 minY, CONST S32 maxX, CONST S32 maxY, CONST S32 width, CONST S32 height, S32* outX, S32* outY, S32* outHeight, S32* outWidth) // TODO name
+VOID AcquireCursorCoordinates(CONST S32 minX, CONST S32 minY, CONST S32 maxX, CONST S32 maxY, CONST S32 width, CONST S32 height, S32* outX, S32* outY, S32* outHeight, S32* outWidth)
 {
     CONST S32 x = Mathematics::Max<S32>(0, minX);
     CONST S32 y = Mathematics::Max<S32>(0, minY);

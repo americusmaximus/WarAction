@@ -51,15 +51,14 @@ typedef struct CursorStateModuleContainer
 EXTERN CURSORSTATEMODULECONTAINER CursorState;
 
 CURSORPTR CLASSCALL ActivateCursor(CURSORPTR self);
+
 VOID CLASSCALL DisposeCursor(CURSORPTR self);
-VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name);
-
-VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32 ny);
-VOID CursorMessageHandler(CONST U32 action);
-
-VOID CLASSCALL CursorUnknown1(CURSORPTR self); // TODO name
 VOID CLASSCALL DrawCursor(CURSORPTR self);
-VOID CLASSCALL CursorUnknown3(CURSORPTR self); // TODO name
+VOID CLASSCALL InitializeCursorState(CURSORPTR self, LPCSTR name);
+VOID CLASSCALL RestoreCursorPixels(CURSORPTR self);
+VOID CLASSCALL SaveCursorPixels(CURSORPTR self);
 
-VOID FUN_10003610(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 sw, CONST S32 sh, CONST S32 ox, CONST S32 oy, CONST S32 x, CONST S32 y, CONST S32 w, CONST S32 h); // TODO name
-VOID FUN_10003590(CONST S32 minX, CONST S32 minY, CONST S32 maxX, CONST S32 maxY, CONST S32 width, CONST S32 height, S32* outX, S32* outY, S32* outHeight, S32* outWidth); // TODO name
+VOID AcquireCursorCoordinates(CONST S32 minX, CONST S32 minY, CONST S32 maxX, CONST S32 maxY, CONST S32 width, CONST S32 height, S32* outX, S32* outY, S32* outHeight, S32* outWidth);
+VOID CopyCursorPixels(PIXEL* dst, CONST S32 dw, CONST S32 dh, PIXEL* src, CONST S32 sw, CONST S32 sh, CONST S32 ox, CONST S32 oy, CONST S32 x, CONST S32 y, CONST S32 w, CONST S32 h);
+VOID CursorMessageHandler(CONST U32 action);
+VOID SelectCursorCoordinates(CONST S32 ox, CONST S32 oy, CONST S32 nx, CONST S32 ny);

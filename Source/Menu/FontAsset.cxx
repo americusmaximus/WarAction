@@ -181,29 +181,29 @@ U32 CLASSCALL AcquireFontAssetItemWidth(FONTASSETPTR self, CONST UNICHAR value)
 }
 
 // 0x10023070
-IMAGEPALETTESPRITEPTR AcquireFontAssetItem(LPCVOID asset /* TODO */, CONST U32 indx) // TODO return type
+IMAGEPALETTESPRITEPTR AcquireFontAssetItem(LPCVOID asset, CONST U32 indx)
 {
-    if (indx < 256) // TODO
+    if (indx < MAX_FONT_ASSET_CHARACTER_COUNT)
     {
-        CONST U32 offset = ((U32*)asset)[indx];// *sizeof(U32); // TODO
+        CONST U32 offset = ((U32*)asset)[indx];
 
         return (IMAGEPALETTESPRITEPTR)((ADDR)asset + offset);
     }
 
-    if (indx < 256 * 256) // TODO
+    if (indx < MAX_FONT_ASSET_CHARACTER_COUNT * MAX_FONT_ASSET_CHARACTER_COUNT)
     {
-        U32 offset = ((U32*)asset)[(indx >> 8) + 255];// *sizeof(U32); // TODO
+        U32 offset = ((U32*)asset)[(indx >> 8) + 255];
 
-        offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];// * sizeof(U32);
+        offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];
 
         return (IMAGEPALETTESPRITEPTR)((ADDR)asset + offset);
     }
 
-    U32 offset = ((U32*)asset)[(indx >> 16) + 256 + 255];// * sizeof(U32); // TODO
+    U32 offset = ((U32*)asset)[(indx >> 16) + 256 + 255];
 
-    offset = ((U32*)((ADDR)asset + offset))[(indx >> 8)];// * sizeof(U32); // TODO
+    offset = ((U32*)((ADDR)asset + offset))[(indx >> 8)];
 
-    offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];// * sizeof(U32); // TODO
+    offset = ((U32*)((ADDR)asset + offset))[indx & 0xFF];
 
     return (IMAGEPALETTESPRITEPTR)((ADDR)asset + offset);
 }

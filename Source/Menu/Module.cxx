@@ -419,13 +419,13 @@ BOOL ExecuteModuleAction(VOID)
                 TickMessageControl(&MessageControlState);
             }
 
-            CursorUnknown1(&CursorState.Cursor);
+            SaveCursorPixels(&CursorState.Cursor);
             DrawCursor(&CursorState.Cursor);
 
             State.Renderer->Actions.WriteMainSurfaceRendererSurfaceRectangle(0, 0,
                 GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480);
 
-            CursorUnknown3(&CursorState.Cursor);
+            RestoreCursorPixels(&CursorState.Cursor);
 
             if (MessageControlState.IsVisible) { WriteBackSurfaceMainSurfaceWindowRectangle(); }
         }
