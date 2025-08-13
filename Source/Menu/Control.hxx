@@ -124,8 +124,8 @@ CONTROLTYPE CLASSCALL AcquireControlTypeToggle(LPVOID);
 #define CONTROLACTION_SINGLE0_DELETE                        1013
 #define CONTROLACTION_SINGLE0_ADDON_CAMPAIGNS               1014
 #define CONTROLACTION_SINGLE0_DIFFICULTY                    1015
-#define CONTROLACTION_1016                                  1016 /* TODO Single1?*/
-#define CONTROLACTION_SINGLE2_BRITISH                       1017 /* TODO Single2?*/
+#define CONTROLACTION_SINGLE1                               1016
+#define CONTROLACTION_SINGLE2_BRITISH                       1017
 #define CONTROLACTION_SINGLE2_GERMAN                        1018
 #define CONTROLACTION_SINGLE2_RUSSIAN                       1019
 #define CONTROLACTION_SINGLE2_CANCEL                        1020
@@ -197,10 +197,10 @@ CONTROLTYPE CLASSCALL AcquireControlTypeToggle(LPVOID);
 #define CONTROLACTION_INITIALIZE_NETWORK                    1086
 #define CONTROLACTION_1087                                  1087 /* TODO */
 #define CONTROLACTION_1088                                  1088 /* TODO */
-#define CONTROLACTION_1089                                  1089 /* TODO */
+#define CONTROLACTION_1089                                  1089 /* TODO  Play network game? */
 #define CONTROLACTION_1090                                  1090 /* TODO */
 #define CONTROLACTION_1091                                  1091 /* TODO */
-#define CONTROLACTION_1092                                  1092 /* TODO */
+#define CONTROLACTION_ERROR_GAME_EXPORT                     1092
 #define CONTROLACTION_1093                                  1093 /* TODO */
 #define CONTROLACTION_MSGBOX_OK                             1094
 #define CONTROLACTION_MSGBOX_CANCEL                         1095

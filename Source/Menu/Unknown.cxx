@@ -25,8 +25,6 @@ SOFTWARE.
 
 // TODO rename this file
 
-U32 DAT_1003fba4 = 3; // TODO
-
 U32 DAT_10046f7c; // TODO
 
 U32 DAT_10048ba8; // TODO

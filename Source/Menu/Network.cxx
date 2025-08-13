@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,8 @@ NETWORKCONTAINER NetworkState;
 MULTIPLAYERSETTINGS MultiplayerSettingsState; // TODO Move to networkstate
 
 GUID GUID_10048b94; // TODO
+
+U32 NetworkType = 3; // TODO
 
 STATIC CONST GUID NetworkApplication = { 0xA3CE7402, 0xEB37, 0x11D1, { 0x93, 0x3B, 0x00, 0x40, 0xC7, 0x95, 0x1C, 0xE6 } };
 

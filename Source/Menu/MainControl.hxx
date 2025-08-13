@@ -22,6 +22,7 @@ SOFTWARE.
 
 #pragma once
 
+#include "BriefControl.hxx"
 #include "DialControl.hxx"
 #include "GreetingsControl.hxx"
 #include "LoadMapControl.hxx"
@@ -32,7 +33,6 @@ SOFTWARE.
 #include "MultiResultControl.hxx"
 #include "MultiSelectControl.hxx"
 #include "MultiStartControl.hxx"
-#include "ObjectType4x5d.hxx"
 #include "RatingsControl.hxx"
 #include "SceneControl.hxx"
 #include "SingleControl.hxx"
@@ -75,7 +75,7 @@ typedef struct MainControl
     WELCOMECONTROLPTR               Welcome;
     SCENECONTROLPTR                 Multi;
     SINGLECONTROLPTR                Single;
-    CONTROLTYPE4X5DPTR              ObjectType4x5d; // TODO
+    BRIEFCONTROLPTR                 Briefing;
     SINGLENEWCONTROLPTR             SingleNewAddon;
     SINGLENEWCONTROLPTR             SingleNewClassic;
     MULTISELECTCONTROLPTR           MultiSelect;

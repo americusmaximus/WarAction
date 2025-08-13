@@ -20,33 +20,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "AssetFile.hxx"
 #include "Assets.hxx"
-#include "Cursor.hxx"
+#include "BriefControl.hxx"
 #include "Messages.hxx"
-#include "ObjectType4x5d.hxx"
 #include "Saves.hxx"
 #include "Sound.hxx"
 #include "State.hxx"
 
 #include <stdlib.h>
 
+U32     AnimationIndex; // 0x10046ca8 // TODO Name LineNumber?
+
 // 0x1003a4e4
-CONTROLTYPE4X5DSELF ObjectType4x5dSelfState =
+BRIEFCONTROLSELF BriefControlSelfState =
 {
-    (CONTROLTYPE4X5DTYPEACTION)AcquireControlTypePanel,
-    InitializeObjectType4x5d,
-    DisableObjectType4x5d,
-    TickObjectType4x5d,
-    ActionObjectType4x5d,
-    ReleaseObjectType4x5d,
+    (BRIEFCONTROLTYPEACTION)AcquireControlTypePanel,
+    InitializeBriefControl,
+    DisableBriefControl,
+    TickBriefControl,
+    ActionBriefControl,
+    ReleaseBriefControl,
 };
 
 // 0x1000d0b0
-CONTROLTYPE4X5DPTR CLASSCALL ActivateObjectType4x5d(CONTROLTYPE4X5DPTR self)
+BRIEFCONTROLPTR CLASSCALL ActivateBriefControl(BRIEFCONTROLPTR self)
 {
     ActivateSceneControl((SCENECONTROLPTR)self, NULL, &AssetsState.Assets.BriefBT, CONTROLACTION_BRIEF_OK);
 
-    self->Self = &ObjectType4x5dSelfState;
+    self->Self = &BriefControlSelfState;
 
     self->AniFile = NULL;
     self->ArrColFile = NULL;
@@ -56,23 +58,23 @@ CONTROLTYPE4X5DPTR CLASSCALL ActivateObjectType4x5d(CONTROLTYPE4X5DPTR self)
     self->ColPckFile = NULL;
     self->ColFile = NULL;
 
-    self->Description = ActivateDescriptionControl(ALLOCATE(DESCRIPTIONCONTROL),
-        40, 21, 376, 68, &AssetsState.Fonts.Main, 0, -2);
+    self->Description =
+        ActivateDescriptionControl(ALLOCATE(DESCRIPTIONCONTROL), 40, 21, 376, 68, &AssetsState.Fonts.Main, 0, -2);
 
     return self;
 }
 
 // 0x1000d180
-VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
+VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self)
 {
     InitializePanelControl((PANELCONTROLPTR)self);
 
-    self->SeqFileStart = 1; // TODO
+    self->SeqFileStart = 1;
     self->Ticks = GetTickCount() - 1000;
 
     for (U32 x = 0; x < MAX_FOG_SPRITE_COUNT; x++)
     {
-        memset(&State.Renderer->Fog[x], 0x80, sizeof(FOGSPRITE)); // TODO
+        memset(&State.Renderer->Fog[x], 0x80, sizeof(FOGSPRITE));
     }
 
     self->ArrColFile = NULL;
@@ -80,7 +82,7 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
     CHAR map[MAX_FILE_NAME_LENGTH];
     CHAR mission[MAX_FILE_NAME_LENGTH];
 
-    if (FUN_10018ba0(map, mission))
+    if (AcquireCurrentGameMapMissionNames(map, mission))
     {
         CHAR path[MAX_FILE_NAME_LENGTH];
         wsprintfA(path, "%sb_arr.col", mission);
@@ -184,7 +186,7 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
             }
 
             ZeroMemory(State.Renderer->Surface.Back,
-                State.Renderer->Surface.Height * State.Renderer->Surface.Width * 2); // TODO
+                State.Renderer->Surface.Height * State.Renderer->Surface.Width * sizeof(PIXEL));
 
             State.Renderer->Actions.DrawBackSurfacePaletteShadeSprite(0, 0, 12 /* TODO */,
                 (PIXEL*)self->BkgColFile,
@@ -205,13 +207,13 @@ VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self)
 }
 
 // 0x1000d580
-VOID CLASSCALL DisableObjectType4x5d(CONTROLTYPE4X5DPTR self)
+VOID CLASSCALL DisableBriefControl(BRIEFCONTROLPTR self)
 {
     DisablePanelControl((PANELCONTROLPTR)self);
 
     self->Description->Self->Disable(self->Description);
 
-    if (self->ArrColFile != (void*)0x0)
+    if (self->ArrColFile != NULL)
     {
         free(self->ArrColFile);
         self->ArrColFile = NULL;
@@ -241,7 +243,7 @@ VOID CLASSCALL DisableObjectType4x5d(CONTROLTYPE4X5DPTR self)
 }
 
 // 0x1000d770
-VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
+VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self)
 {
     State.Renderer->Actions.WriteBackSurfaceMainSurfaceRectangle(0, 0, GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480);
 
@@ -266,7 +268,7 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
     if (self->Unk17 != 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
         State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
+            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[AnimationIndex] + 8));
     }
 
     State.Renderer->Actions.DrawMainSurfaceSprite(0, 0,
@@ -275,7 +277,7 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
     if (self->Unk17 == 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
         State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[CursorState.AnimationIndex] + 8));
+            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[AnimationIndex] + 8));
     }
 
     TickPanelControl((PANELCONTROLPTR)self);
@@ -284,7 +286,7 @@ VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self)
 }
 
 // 0x1000d680
-U32 CLASSCALL ActionObjectType4x5d(CONTROLTYPE4X5DPTR self)
+U32 CLASSCALL ActionBriefControl(BRIEFCONTROLPTR self)
 {
     if (self->ArrColFile == NULL) { return CONTROLACTION_BRIEF_OK; }
 
@@ -334,11 +336,10 @@ LAB_1000d70b:
 
         if (self->Unk19 <= self->Unk18)
         {
-            CursorState.AnimationIndex =
-                (CursorState.AnimationIndex + 1) % (*(int*)((int)self->ColPckFile + 4) + -1); // TODO
+            AnimationIndex = (AnimationIndex + 1) % (*(int*)((int)self->ColPckFile + 4) + -1); // TODO
             self->Unk18 = 0;
 
-            if (CursorState.AnimationIndex == 0) { self->Unk20 = self->Unk21; }
+            if (AnimationIndex == 0) { self->Unk20 = self->Unk21; }
         }
     }
 
@@ -346,9 +347,9 @@ LAB_1000d70b:
 }
 
 // 0x1000d160
-CONTROLTYPE4X5DPTR CLASSCALL ReleaseObjectType4x5d(CONTROLTYPE4X5DPTR self, CONST OBJECTRELEASETYPE mode)
+BRIEFCONTROLPTR CLASSCALL ReleaseBriefControl(BRIEFCONTROLPTR self, CONST OBJECTRELEASETYPE mode)
 {
-    DisposeObjectType4x5d(self);
+    DisposeBriefControl(self);
 
     if (mode & OBJECTRELEASETYPE_ALLOCATED) { free(self); }
 
@@ -356,9 +357,9 @@ CONTROLTYPE4X5DPTR CLASSCALL ReleaseObjectType4x5d(CONTROLTYPE4X5DPTR self, CONS
 }
 
 // 0x1000d620
-VOID CLASSCALL DisposeObjectType4x5d(CONTROLTYPE4X5DPTR self)
+VOID CLASSCALL DisposeBriefControl(BRIEFCONTROLPTR self)
 {
-    self->Self = (CONTROLTYPE4X5DSELFPTR)&ObjectType4x5dSelfState;
+    self->Self = (BRIEFCONTROLSELFPTR)&BriefControlSelfState;
 
     if (self->Description != NULL) { self->Description->Self->Release(self->Description, OBJECTRELEASETYPE_ALLOCATED); }
 
@@ -366,7 +367,7 @@ VOID CLASSCALL DisposeObjectType4x5d(CONTROLTYPE4X5DPTR self)
 }
 
 // 0x10018ba0
-BOOL FUN_10018ba0(LPSTR param_1, LPSTR param_2) // TODO name, should it be in Saves?
+BOOL AcquireCurrentGameMapMissionNames(LPSTR mapName, LPSTR missionName)
 {
     CONST S32 map = AcquireCurrentGameMap();
 
@@ -376,8 +377,8 @@ BOOL FUN_10018ba0(LPSTR param_1, LPSTR param_2) // TODO name, should it be in Sa
 
     if (mission == DEFAULT_GAME_MISSION_INDEX) { return FALSE; }
 
-    wsprintfA(param_1, "%03i", map);
-    wsprintfA(param_2, "%03i%03i", map, mission);
+    wsprintfA(mapName, "%03i", map);
+    wsprintfA(missionName, "%03i%03i", map, mission);
 
     return TRUE;
 }
@@ -385,6 +386,17 @@ BOOL FUN_10018ba0(LPSTR param_1, LPSTR param_2) // TODO name, should it be in Sa
 // 0x1000d8d0
 U32 InitializeSprite(LPCSTR name, LPVOID* content) // TODO name, types
 {
+    if (*content != NULL) { return -1; } // TODO
+
+    ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
+    if (!OpenAssetFile(&file, name)) { return 0; } // TODO
+
+    *content = malloc(0x800); // TODO
+    ZeroMemory(*content, 0x800); // TODO
+
+    ReadAssetFile(&file, *content, 8);
+
+
     // TODO NOT IMPLEMENTED
 
     return 0;
@@ -393,7 +405,7 @@ U32 InitializeSprite(LPCSTR name, LPVOID* content) // TODO name, types
 // 0x1000d8a0
 S32 OpenBinaryFile(LPCSTR name, LPVOID* content) // TODO name, types
 {
-    if (*content != NULL) { return -1; } // TodO
+    if (*content != NULL) { return -1; } // TODO
 
     return AcquireAssetContent(name, content, 0);
 }

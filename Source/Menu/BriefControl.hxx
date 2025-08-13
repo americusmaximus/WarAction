@@ -25,48 +25,48 @@ SOFTWARE.
 #include "DescriptionControl.hxx"
 #include "SceneControl.hxx"
 
-struct ControlType4x5d;
+struct BriefControl;
 
-typedef CONTROLTYPE(CLASSCALL* CONTROLTYPE4X5DTYPEACTION)(ControlType4x5d* self);
-typedef VOID(CLASSCALL* CONTROLTYPE4X5DINITIALIZEACTION)(ControlType4x5d* self);
-typedef VOID(CLASSCALL* CONTROLTYPE4X5DDISABLEACTION)(ControlType4x5d* self);
-typedef VOID(CLASSCALL* CONTROLTYPE4X5DTICKACTION)(ControlType4x5d* self);
-typedef U32(CLASSCALL* CONTROLTYPE4X5DACTIONACTION)(ControlType4x5d* self);
-typedef ControlType4x5d* (CLASSCALL* CONTROLTYPE4X5DRELEASEACTION)(ControlType4x5d* self, CONST OBJECTRELEASETYPE mode);
+typedef CONTROLTYPE(CLASSCALL* BRIEFCONTROLTYPEACTION)(BriefControl* self);
+typedef VOID(CLASSCALL* BRIEFCONTROLINITIALIZEACTION)(BriefControl* self);
+typedef VOID(CLASSCALL* BRIEFCONTROLDISABLEACTION)(BriefControl* self);
+typedef VOID(CLASSCALL* BRIEFCONTROLTICKACTION)(BriefControl* self);
+typedef U32(CLASSCALL* BRIEFCONTROLACTIONACTION)(BriefControl* self);
+typedef BriefControl* (CLASSCALL* BRIEFCONTROLRELEASEACTION)(BriefControl* self, CONST OBJECTRELEASETYPE mode);
 
 // INHERITANCE: SceneControlSelf
-typedef struct ControlType4x5dSelf
+typedef struct BriefControlSelf
 {
-    CONTROLTYPE4X5DTYPEACTION Type;
-    CONTROLTYPE4X5DINITIALIZEACTION Initialize;
-    CONTROLTYPE4X5DDISABLEACTION Disable;
-    CONTROLTYPE4X5DTICKACTION Tick;
-    CONTROLTYPE4X5DACTIONACTION Action;
-    CONTROLTYPE4X5DRELEASEACTION Release;
-} CONTROLTYPE4X5DSELF, * CONTROLTYPE4X5DSELFPTR;
+    BRIEFCONTROLTYPEACTION          Type;
+    BRIEFCONTROLINITIALIZEACTION    Initialize;
+    BRIEFCONTROLDISABLEACTION       Disable;
+    BRIEFCONTROLTICKACTION          Tick;
+    BRIEFCONTROLACTIONACTION        Action;
+    BRIEFCONTROLRELEASEACTION       Release;
+} BRIEFCONTROLSELF, * BRIEFCONTROLSELFPTR;
 
-EXTERN CONTROLTYPE4X5DSELF ObjectType4x5dSelfState;
+EXTERN BRIEFCONTROLSELF BriefControlSelfState;
 
 #pragma pack(push, 1)
 // INHERITANCE: SceneControl
-typedef struct ControlType4x5d
+typedef struct BriefControl
 {
-    CONTROLTYPE4X5DSELFPTR  Self;
+    BRIEFCONTROLSELFPTR     Self;
     U8                      IsActive;
     CONTROLNODEPTR          Nodes;
     BINASSETPTR             Background;
     BINASSETPTR             Buttons;
-    LPVOID                  AniFile; // TODO
-    LPVOID                  ArrColFile; // TODO
-    LPVOID                  SeqFile; // TODO
-    LPVOID                  BkgPckFile; // TODO
-    LPVOID                  BkgColFile; // TODO
-    LPVOID                  ColPckFile; // TODO
-    LPVOID                  ColFile; // TODO
+    LPVOID                  AniFile;
+    LPVOID                  ArrColFile;
+    LPVOID                  SeqFile;
+    LPVOID                  BkgPckFile;
+    LPVOID                  BkgColFile;
+    LPVOID                  ColPckFile;
+    LPVOID                  ColFile;
     U32                     SequenceCount; // TODO
     U32                     SeqFileStart; // TODO
     U32                     SpriteType; // TODO
-    U32                     Unk15; // TODO
+    U32                     Unk15; // TODO BackgroundSpriteType
     U32                     Unk16; // TODO
     U32                     Unk17; // TODO
     U32                     Unk18; // TODO
@@ -75,17 +75,17 @@ typedef struct ControlType4x5d
     U32                     Unk21; // TODO
     U32                     Ticks;
     DESCRIPTIONCONTROLPTR   Description;
-} CONTROLTYPE4X5D, * CONTROLTYPE4X5DPTR;
+} BRIEFCONTROL, * BRIEFCONTROLPTR;
 #pragma pack(pop)
 
-CONTROLTYPE4X5DPTR CLASSCALL ActivateObjectType4x5d(CONTROLTYPE4X5DPTR self);
-VOID CLASSCALL InitializeObjectType4x5d(CONTROLTYPE4X5DPTR self);
-VOID CLASSCALL DisableObjectType4x5d(CONTROLTYPE4X5DPTR self);
-VOID CLASSCALL TickObjectType4x5d(CONTROLTYPE4X5DPTR self);
-U32 CLASSCALL ActionObjectType4x5d(CONTROLTYPE4X5DPTR self);
-CONTROLTYPE4X5DPTR CLASSCALL ReleaseObjectType4x5d(CONTROLTYPE4X5DPTR self, CONST OBJECTRELEASETYPE mode);
-VOID CLASSCALL DisposeObjectType4x5d(CONTROLTYPE4X5DPTR self);
+BRIEFCONTROLPTR CLASSCALL ActivateBriefControl(BRIEFCONTROLPTR self);
+VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self);
+VOID CLASSCALL DisableBriefControl(BRIEFCONTROLPTR self);
+VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self);
+U32 CLASSCALL ActionBriefControl(BRIEFCONTROLPTR self);
+BRIEFCONTROLPTR CLASSCALL ReleaseBriefControl(BRIEFCONTROLPTR self, CONST OBJECTRELEASETYPE mode);
+VOID CLASSCALL DisposeBriefControl(BRIEFCONTROLPTR self);
 
-BOOL FUN_10018ba0(LPSTR param_1, LPSTR param_2); // TODO name
+BOOL AcquireCurrentGameMapMissionNames(LPSTR mapName, LPSTR missionName);
 U32 InitializeSprite(LPCSTR name, LPVOID* content); // TODO name, types
 S32 OpenBinaryFile(LPCSTR name, LPVOID* content); // TODO name, types

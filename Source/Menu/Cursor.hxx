@@ -43,9 +43,6 @@ typedef struct CursorStateModuleContainer
     S32     Y;      // 0x10059bc0
     BOOL    IsLeft; // 0x10059bc4
     BOOL    IsRight;// 0x10059bc8
-
-    U32     AnimationIndex; // 0x10046ca8 // TODO Name
-    // TODO ^^ this is briefing related (like line number), nothing related to cursor ^^
 } CURSORSTATEMODULECONTAINER, * CURSORSTATEMODULECONTAINERPTR;
 
 EXTERN CURSORSTATEMODULECONTAINER CursorState;

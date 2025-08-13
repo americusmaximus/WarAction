@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -63,6 +63,8 @@ SOFTWARE.
 #define NETWORK_MESSAGE_VERSION                     0x10015
 
 #define MAX_SESSION_NAME_LENGTH                     256
+
+#define MAX_IP_ADDRESS_STRING_LENGTH                256
 
 typedef struct UnkNetworkID // TODO
 {
@@ -263,6 +265,9 @@ EXTERN MULTIPLAYERSETTINGS MultiplayerSettingsState; // TODO Move to networkstat
 EXTERN GUID GUID_10048b94; // TODO
 
 // TODO better names
+
+// 0x1003fba4
+EXTERN U32 NetworkType; // TODO Better Name
 
 NETWORKSTATEMODULECONTAINERPTR CLASSCALL ActivateNetworkModuleState(NETWORKSTATEMODULECONTAINERPTR self);
 NETWORKSTATEMODULECONTAINERPTR CLASSCALL ReleaseNetworkModuleState(NETWORKSTATEMODULECONTAINERPTR self, CONST OBJECTRELEASETYPE mode);

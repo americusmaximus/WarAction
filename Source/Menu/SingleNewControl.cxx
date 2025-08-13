@@ -43,11 +43,11 @@ SINGLENEWCONTROLSELF SingleNewControlSelfState =
 // 0x10015d80
 SINGLENEWCONTROLPTR CLASSCALL ActivateSingleNewControl(SINGLENEWCONTROLPTR self, CONST BOOL addon)
 {
-    self->Self = &SingleNewControlSelfState;
-
     ActivateSceneControl((SCENECONTROLPTR)self,
         addon ? &AssetsState.Assets.Single2BK : &AssetsState.Assets.SinOld2BK,
         addon ? &AssetsState.Assets.Single2BT : &AssetsState.Assets.SinOld2BT, CONTROLACTION_SINGLE2_BRITISH);
+
+    self->Self = &SingleNewControlSelfState;
 
     self->IsAddon = addon;
     self->Nation = INVALID_GAME_NATION;

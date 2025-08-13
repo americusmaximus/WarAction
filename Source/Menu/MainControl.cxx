@@ -70,7 +70,7 @@ MAINCONTROLPTR CLASSCALL ActivateMainControl(MAINCONTROLPTR self)
     self->LoadMap = ActivateLoadMapControl(ALLOCATE(LOADMAPCONTROL));
     self->SingleResult = ActivateSingleResultControl(ALLOCATE(SINGLERESULTCONTROL));
     self->Dial = ActivateDialControl(ALLOCATE(DIALCONTROL));
-    self->ObjectType4x5d = ActivateObjectType4x5d(ALLOCATE(CONTROLTYPE4X5D));
+    self->Briefing = ActivateBriefControl(ALLOCATE(BRIEFCONTROL));
     self->Greetings = ActivateGreetingsControl(ALLOCATE(GREETINGSCONTROL));
     self->Multi = ActivateSceneControl(ALLOCATE(SCENECONTROL),
         &AssetsState.Assets.Multi1BK, &AssetsState.Assets.Multi1BT, CONTROLACTION_MULTI1_INTERNET);
@@ -113,7 +113,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
                 ReleaseComputer(&computer);
             }
 
-            DAT_1003fba4 = 4; // TODO
+            NetworkType = 4; // TODO
 
             if (!MustCreateNetworkModuleStateSession(&NetworkState.State))
             {
@@ -133,8 +133,8 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
 
         LogMessage("LOBBY: I am NOT lobbied!\n");
 
-        CHAR ip[256]; // TODO
-        if (!AcquireStartArguments("ip", ip, 256)) { self->Action = CONTROLACTION_MAIN_SINGLE; }
+        CHAR ip[MAX_IP_ADDRESS_STRING_LENGTH];
+        if (!AcquireStartArguments("ip", ip, MAX_IP_ADDRESS_STRING_LENGTH)) { self->Action = CONTROLACTION_MAIN_SINGLE; }
         else
         {
             LogMessage("Command line IP specified!\n");
@@ -145,7 +145,7 @@ VOID CLASSCALL InitializeMainControl(MAINCONTROLPTR self)
 
             self->Action = CONTROLACTION_MULTI2_CREATE;
 
-            DAT_1003fba4 = 0; // TODO
+            NetworkType = 0; // TODO
         }
 
         if (!PlayVideoControl(self->Video, "@ShortIntro")) { return; }
@@ -213,7 +213,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_1089:
     case CONTROLACTION_1090:
     case CONTROLACTION_1091:
-    case CONTROLACTION_1092:
+    case CONTROLACTION_ERROR_GAME_EXPORT:
     case CONTROLACTION_PLAY_SHORT_INTRO2:
     case CONTROLACTION_PLAY_SHORT_INTRO3:
     case CONTROLACTION_1119: { self->Active = NULL; action = self->Action; break; }
@@ -224,7 +224,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         case CONTROLACTION_MAIN_SINGLE: { self->Active = (CONTROLPTR)self->Welcome; break; }
         case CONTROLACTION_SINGLE0_NEW: { self->Active = (CONTROLPTR)self->Single; break; }
         case CONTROLACTION_PLAY_COMPLETED: { self->Active = (CONTROLPTR)self->Video; break; }
-        case CONTROLACTION_1016: { self->Active = (CONTROLPTR)self->SingleNewClassic; break; }
+        case CONTROLACTION_SINGLE1: { self->Active = (CONTROLPTR)self->SingleNewClassic; break; }
         case CONTROLACTION_SINGLE2_BRITISH: { self->Active = (CONTROLPTR)self->SingleNewAddon; break; }
         case CONTROLACTION_SINGLE3_LOAD: { self->Active = (CONTROLPTR)self->LoadSave; break; }
         case CONTROLACTION_SINGLE4_LOAD: { self->Active = (CONTROLPTR)self->LoadMap; break; }
@@ -238,7 +238,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         case CONTROLACTION_MULTI4_START: { self->Active = (CONTROLPTR)self->MultiStart; break; }
         case CONTROLACTION_GREETINGS: { self->Active = (CONTROLPTR)self->Greetings; break; }
         case CONTROLACTION_RATING_CAMPAIGN: { self->Active = (CONTROLPTR)self->Ratings; break; }
-        case CONTROLACTION_BRIEF_OK: { self->Active = (CONTROLPTR)self->ObjectType4x5d; break; }
+        case CONTROLACTION_BRIEF_OK: { self->Active = (CONTROLPTR)self->Briefing; break; }
         case CONTROLACTION_MSTAT_DETAIL: { self->Active = (CONTROLPTR)self->MultiResult; break; }
         }
 
@@ -292,7 +292,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         action = CONTROLACTION_GREETINGS; break;
     }
-    case CONTROLACTION_SINGLE0_NEW: { action = CONTROLACTION_1016; break; }
+    case CONTROLACTION_SINGLE0_NEW: { action = CONTROLACTION_SINGLE1; break; }
     case CONTROLACTION_SINGLE0_SINGLEMISSIONS: { action = CONTROLACTION_SINGLE4_LOAD; break; }
     case CONTROLACTION_SINGLE0_LOAD: { action = CONTROLACTION_SINGLE3_LOAD; break; }
     case CONTROLACTION_SINGLE0_CANCEL:
@@ -311,9 +311,9 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_SINGLE2_BRITISH:
     case CONTROLACTION_SINGLE2_GERMAN:
     case CONTROLACTION_SINGLE2_RUSSIAN:
-    case CONTROLACTION_SINGLE2_AMERICAN: { action = SaveSingleNewControlState((SINGLENEWCONTROLPTR)self->Active) ? CONTROLACTION_BRIEF : CONTROLACTION_1092; break; }
+    case CONTROLACTION_SINGLE2_AMERICAN: { action = SaveSingleNewControlState((SINGLENEWCONTROLPTR)self->Active) ? CONTROLACTION_BRIEF : CONTROLACTION_ERROR_GAME_EXPORT; break; }
     case CONTROLACTION_SINGLE3_LOAD: { State.App->InitModule = GAME_MODULE_STATE_INDEX; break; }
-    case CONTROLACTION_SINGLE4_LOAD: { action = InitializeSingleGame() ? CONTROLACTION_BRIEF : CONTROLACTION_1092; break; }
+    case CONTROLACTION_SINGLE4_LOAD: { action = InitializeSingleGame() ? CONTROLACTION_BRIEF : CONTROLACTION_ERROR_GAME_EXPORT; break; }
     case CONTROLACTION_SINGLE5_CONTINUE:
     {
         LogMessage("GECK: curMap=%d, curMis=%d, nextMap=%d, nextMis=%d\n",
@@ -327,13 +327,13 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         action = CONTROLACTION_BRIEF; break;
     }
-    case CONTROLACTION_SINGLE5_REPLAY: { action = RestartModule() ? CONTROLACTION_BRIEF : CONTROLACTION_1092; break; }
+    case CONTROLACTION_SINGLE5_REPLAY: { action = RestartModule() ? CONTROLACTION_BRIEF : CONTROLACTION_ERROR_GAME_EXPORT; break; }
     case CONTROLACTION_SINGLE5_EXIT: { action = CONTROLACTION_MAIN_SINGLE; check1 = TRUE; break; }
     case CONTROLACTION_DIAL_DIAL: { check1 = TRUE; break; }
     case CONTROLACTION_JMULTI1_OK: { action = CONTROLACTION_INITIALIZE_NETWORK; break; }
-    case CONTROLACTION_MULTI1_INTERNET: { DAT_1003fba4 = 0; action = CONTROLACTION_MULTI2_CREATE; break; } // TODO
-    case CONTROLACTION_MULTI1_LAN: { DAT_1003fba4 = 1; action = CONTROLACTION_MULTI2_CREATE; break; } // TODO
-    case CONTROLACTION_MULTI1_MODEM: { DAT_1003fba4 = 2; action = CONTROLACTION_MULTI2_CREATE; break; } // TODO
+    case CONTROLACTION_MULTI1_INTERNET: { NetworkType = 0; action = CONTROLACTION_MULTI2_CREATE; break; } // TODO
+    case CONTROLACTION_MULTI1_LAN: { NetworkType = 1; action = CONTROLACTION_MULTI2_CREATE; break; } // TODO
+    case CONTROLACTION_MULTI1_MODEM: { NetworkType = 2; action = CONTROLACTION_MULTI2_CREATE; break; } // TODO
     case CONTROLACTION_MULTI2_CREATE:
     {
         DAT_10046f7c = 1; // TODO
@@ -353,11 +353,11 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         strcpy(State.Map.Name, "???");
 
         // TODO SWITCH
-        if (DAT_1003fba4 == 0) { action = CONTROLACTION_JMULTI1_OK; } // TODO
+        if (NetworkType == 0) { action = CONTROLACTION_JMULTI1_OK; } // TODO
         else
         {
-            if (DAT_1003fba4 == 1) { action = CONTROLACTION_INITIALIZE_NETWORK; } // TODO
-            if (DAT_1003fba4 == 2) { action = CONTROLACTION_DIAL_DIAL; } // TODO
+            if (NetworkType == 1) { action = CONTROLACTION_INITIALIZE_NETWORK; } // TODO
+            if (NetworkType == 2) { action = CONTROLACTION_DIAL_DIAL; } // TODO
         }
 
         break;
@@ -430,7 +430,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         {
             BOOL BVar7 = FALSE; // TODO
 
-            switch (DAT_1003fba4) // TODO
+            switch (NetworkType) // TODO
             {
             case 0: // TODO
                 if (DAT_10046f7c == 0) // TODO
@@ -469,7 +469,7 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
                 if (InitializeNetworkServer())
                 {
-                    switch (DAT_1003fba4) // TODO
+                    switch (NetworkType) // TODO
                     {
                     case 0: // TODO
                     case 4: // TODO
@@ -758,8 +758,8 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         */
         break;
     }
-    case CONTROLACTION_1091: { if (!InitializeGameState()) { action = CONTROLACTION_1092; check1 = TRUE; } break; }
-    case CONTROLACTION_1092:
+    case CONTROLACTION_1091: { if (!InitializeGameState()) { action = CONTROLACTION_ERROR_GAME_EXPORT; check1 = TRUE; } break; }
+    case CONTROLACTION_ERROR_GAME_EXPORT:
     {
         ShowMessageControl(&MessageControlState,
             AcquireAssetMessage(ASSET_MESSAGE_ERROR_EXPORTING_GAME), MESSAGE_BUTTON_OK);
@@ -869,7 +869,7 @@ VOID CLASSCALL DisposeMainControl(MAINCONTROLPTR self)
     if (self->LoadMap != NULL) { self->LoadMap->Self->Release(self->LoadMap, OBJECTRELEASETYPE_ALLOCATED); }
     if (self->SingleResult != NULL) { self->SingleResult->Self->Release(self->SingleResult, OBJECTRELEASETYPE_ALLOCATED); }
     if (self->Dial != NULL) { self->Dial->Self->Release(self->Dial, OBJECTRELEASETYPE_ALLOCATED); }
-    if (self->ObjectType4x5d != NULL) { self->ObjectType4x5d->Self->Release(self->ObjectType4x5d, OBJECTRELEASETYPE_ALLOCATED); }
+    if (self->Briefing != NULL) { self->Briefing->Self->Release(self->Briefing, OBJECTRELEASETYPE_ALLOCATED); }
     if (self->Greetings != NULL) { self->Greetings->Self->Release(self->Greetings, OBJECTRELEASETYPE_ALLOCATED); }
     if (self->Multi != NULL) { self->Multi->Self->Release(self->Multi, OBJECTRELEASETYPE_ALLOCATED); }
     if (self->MultiSelect != NULL) { self->MultiSelect->Self->Release(self->MultiSelect, OBJECTRELEASETYPE_ALLOCATED); }
