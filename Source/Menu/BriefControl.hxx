@@ -34,6 +34,15 @@ typedef VOID(CLASSCALL* BRIEFCONTROLTICKACTION)(BriefControl* self);
 typedef U32(CLASSCALL* BRIEFCONTROLACTIONACTION)(BriefControl* self);
 typedef BriefControl* (CLASSCALL* BRIEFCONTROLRELEASEACTION)(BriefControl* self, CONST OBJECTRELEASETYPE mode);
 
+typedef enum BRIEFCONTROLSPRITETYPE
+{
+    BRIEFCONTROLSPRITETYPE_INVALID      = 0xFFFFFFFF,
+    BRIEFCONTROLSPRITETYPE_NONE         = 0,
+    BRIEFCONTROLSPRITETYPE_UNKNOWN_1    = 1, // TODO
+    BRIEFCONTROLSPRITETYPE_UNKNOWN_2    = 2, // TODO
+    BRIEFCONTROLSPRITETYPE_FORCE_DWORD = 0x7FFFFFFF
+}BRIEFCONTROLSPRITETYPE, * BRIEFCONTROLSPRITETYPEPTR;
+
 // INHERITANCE: SceneControlSelf
 typedef struct BriefControlSelf
 {
@@ -56,17 +65,17 @@ typedef struct BriefControl
     CONTROLNODEPTR          Nodes;
     BINASSETPTR             Background;
     BINASSETPTR             Buttons;
-    LPVOID                  AniFile;
-    LPVOID                  ArrColFile;
-    LPVOID                  SeqFile;
-    LPVOID                  BkgPckFile;
-    LPVOID                  BkgColFile;
-    LPVOID                  ColPckFile;
-    LPVOID                  ColFile;
-    U32                     SequenceCount; // TODO
-    U32                     SeqFileStart; // TODO
-    U32                     SpriteType; // TODO
-    U32                     Unk15; // TODO BackgroundSpriteType
+    LPVOID                  AnimationSprite;
+    LPVOID                  AnimationColors;
+    U32*                    Sequences;
+    LPVOID                  BkgPckFile; // TODO
+    LPVOID                  BkgColFile; // TODO
+    LPVOID                  ColPckFile; // TODO
+    LPVOID                  ColFile; // TODO
+    U32                     SequenceCount;
+    U32                     SequenceStart;
+    BRIEFCONTROLSPRITETYPE  AnimationSpriteType;
+    BRIEFCONTROLSPRITETYPE  BackgroundSpriteType;
     U32                     Unk16; // TODO
     U32                     Unk17; // TODO
     U32                     Unk18; // TODO
@@ -87,5 +96,5 @@ BRIEFCONTROLPTR CLASSCALL ReleaseBriefControl(BRIEFCONTROLPTR self, CONST OBJECT
 VOID CLASSCALL DisposeBriefControl(BRIEFCONTROLPTR self);
 
 BOOL AcquireCurrentGameMapMissionNames(LPSTR mapName, LPSTR missionName);
-U32 InitializeSprite(LPCSTR name, LPVOID* content); // TODO name, types
-S32 OpenBinaryFile(LPCSTR name, LPVOID* content); // TODO name, types
+BRIEFCONTROLSPRITETYPE InitializeBriefControlSprite(LPCSTR name, LPVOID* content);
+S32 AcquireBriefControlAssetContent(LPCSTR name, LPVOID* content);

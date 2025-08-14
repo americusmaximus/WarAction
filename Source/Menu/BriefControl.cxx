@@ -23,12 +23,22 @@ SOFTWARE.
 #include "AssetFile.hxx"
 #include "Assets.hxx"
 #include "BriefControl.hxx"
+#include "Graphics.hxx"
 #include "Messages.hxx"
 #include "Saves.hxx"
 #include "Sound.hxx"
 #include "State.hxx"
 
 #include <stdlib.h>
+
+#define BRIEF_SPRITE_LEVEL              16
+#define BRIEF_SPRITE_SHADE_LEVEL        12
+
+#define MAX_RGB_COLOR_COUNT             (3 * MAX_PALETTE_SIZE)
+
+#define MAX_BRIEF_CONTENT_SIZE          0x800
+
+#define MAX_BRIEF_CONTROL_MESSAGE_LENTH 256
 
 U32     AnimationIndex; // 0x10046ca8 // TODO Name LineNumber?
 
@@ -50,11 +60,14 @@ BRIEFCONTROLPTR CLASSCALL ActivateBriefControl(BRIEFCONTROLPTR self)
 
     self->Self = &BriefControlSelfState;
 
-    self->AniFile = NULL;
-    self->ArrColFile = NULL;
-    self->SeqFile = NULL;
+    self->AnimationSprite = NULL;
+    self->AnimationColors = NULL;
+
+    self->Sequences = NULL;
+
     self->BkgPckFile = NULL;
     self->BkgColFile = NULL;
+
     self->ColPckFile = NULL;
     self->ColFile = NULL;
 
@@ -69,7 +82,7 @@ VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self)
 {
     InitializePanelControl((PANELCONTROLPTR)self);
 
-    self->SeqFileStart = 1;
+    self->SequenceStart = 1;
     self->Ticks = GetTickCount() - 1000;
 
     for (U32 x = 0; x < MAX_FOG_SPRITE_COUNT; x++)
@@ -77,7 +90,7 @@ VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self)
         memset(&State.Renderer->Fog[x], 0x80, sizeof(FOGSPRITE));
     }
 
-    self->ArrColFile = NULL;
+    self->AnimationColors = NULL;
 
     CHAR map[MAX_FILE_NAME_LENGTH];
     CHAR mission[MAX_FILE_NAME_LENGTH];
@@ -87,31 +100,32 @@ VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self)
         CHAR path[MAX_FILE_NAME_LENGTH];
         wsprintfA(path, "%sb_arr.col", mission);
 
-        self->SpriteType = InitializeSprite(path, &self->ArrColFile);
+        self->AnimationSpriteType = InitializeBriefControlSprite(path, &self->AnimationColors);
 
-        if (self->SpriteType != 0) // TODO
+        if (self->AnimationSpriteType != BRIEFCONTROLSPRITETYPE_NONE)
         {
             wsprintfA(path, "%sb_arr.ani", mission);
-            OpenBinaryFile(path, &self->AniFile);
+            AcquireBriefControlAssetContent(path, &self->AnimationSprite);
 
             wsprintfA(path, "%sb_arr.seq", mission);
-            self->SequenceCount = OpenBinaryFile(path, &self->SeqFile) / 4; // TODO is this correct?
+            self->SequenceCount = AcquireBriefControlAssetContent(path, (LPVOID*)&self->Sequences) / sizeof(U32);
 
             {
                 wsprintfA(path, "%sb_text.txt", mission);
                 SelectAssetsStateIsActive(FALSE);
 
-                LPSTR txt = NULL; // TODO name
-                CONST U32 txtsize = OpenBinaryFile(path, (LPVOID*)&txt); // TODO name
+                LPSTR txt = NULL;
+                CONST U32 length = AcquireBriefControlAssetContent(path, (LPVOID*)&txt);
                 SelectAssetsStateIsActive(TRUE);
 
-                // TODO make this block pretty
                 LPSTR message = NULL;
-
-                if (txtsize == 0) { message = (LPSTR)AcquireAssetMessage(ASSET_MESSAGE_NO_BRIEFING_AVAILABLE); }
+                if (length == 0)
+                {
+                    message = (LPSTR)AcquireAssetMessage(ASSET_MESSAGE_NO_BRIEFING_AVAILABLE);
+                }
                 else
                 {
-                    txt[txtsize - 1] = NULL;
+                    txt[length - 1] = NULL;
                     message = AcquireCleanUnicodeString(txt, TRUE);
                     txt = message;
                 }
@@ -122,52 +136,81 @@ VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self)
             }
 
             wsprintfA(path, "%sb_bkg.col", map);
-            self->Unk15 = InitializeSprite(path, &self->BkgColFile);
+            self->BackgroundSpriteType = InitializeBriefControlSprite(path, &self->BkgColFile);
 
             wsprintfA(path, "%sb_bkg.pck", map);
-            OpenBinaryFile(path, &self->BkgPckFile);
+            AcquireBriefControlAssetContent(path, &self->BkgPckFile);
 
-            self->Unk21 = 0;
-            self->Unk20 = 0;
-            self->Unk19 = 0;
-            self->Unk18 = 0;
+            self->Unk21 = 0; // TODO
+            self->Unk20 = 0; // TODO
+            self->Unk19 = 0; // TODO
+            self->Unk18 = 0; // TODO
 
             TEXTASSET text;
-            LPCSTR pcStack_420 = NULL; // TODO
+            LPCSTR name = NULL; // TODO
 
             {
                 ActivateTextAsset(&text);
                 InitializeTextAsset(&text, "campaign.seq");
 
-                U32 todo = 0; // TODO
-                U32 iVar3 = 0; // TODO
+                /*
+                >AMERICAN CAMPAIGN
+                >
+                >Add-On campaign
+                100000 -		-		-		>   1. Commando
+                100001 -		-		-		>   2. Boomerang
+                100002 -		us_vic		-		>   3. Wounded Beast
+                >
+                >ENGLISH CAMPAIGN
+                >
+                >Add-On campaign
+                012000 -		-		-		>   1. Shield and Sword
+                005000 -		-		-		>   2. Trap
+                005001 -		en_vic		-		>   3. Scorpion
+                */
+
+                // Colums:
+                // 1 - mission id
+                // 2 - start video
+                // 3 - victory video
+                // 4 - defeat video
+                // 5 - mission name
+
+                U32 category = 0;
 
                 for (U32 x = 0; x < text.Count; x++)
                 {
-                    CHAR value[256]; // TODO
-                    AcquireTextAssetStringValue(&text, x, 0, value);
+                    CHAR str[MAX_BRIEF_CONTROL_MESSAGE_LENTH];
+                    AcquireTextAssetStringValue(&text, x, 0, str);
 
-                    if (value[0] == '>' && value[1] != NULL) { todo = todo + 1; }
+                    if (str[0] == '>' && str[1] != NULL) { category = category + 1; }
 
-                    // TODO NOT IMPLEMENTED
-
-                    if (iVar3 == 0) // TODO
+                    if (strncmp(str, mission, strlen(mission)) == 0)
                     {
-                        if (todo == 1) {
-                            pcStack_420 = "b_rufly";
+                        // NOTE. This looks like logic from the past.
+                        // These values does not match with anything in the new file.
+
+                        if (category == 1)
+                        {
+                            name = "b_rufly";
+
+                            self->Unk17 = 0;
                         }
-                        else {
-                            if (todo == 2) {
-                                pcStack_420 = "b_defire";
-                                self->Unk17 = 1;
-                                break;
-                            }
-                            if (todo != 3) break;
-                            pcStack_420 = "b_ussmok";
+                        else if (category == 2)
+                        {
+                            name = "b_defire";
+
+                            self->Unk17 = 1;
+                        }
+                        else if (category == 3)
+                        {
+                            name = "b_ussmok";
+
                             self->Unk19 = 3;
                             self->Unk21 = 400;
+                            self->Unk17 = 0;
                         }
-                        self->Unk17 = 0;
+
                         break;
                     }
                 }
@@ -176,27 +219,32 @@ VOID CLASSCALL InitializeBriefControl(BRIEFCONTROLPTR self)
             InitializeTextAsset(&text, NULL);
             DisposeTextAsset(&text);
 
-            if (pcStack_420 != NULL)
+            if (name != NULL)
             {
-                wsprintfA(path, "%s.col", pcStack_420);
-                InitializeSprite(path, &self->ColFile);
+                wsprintfA(path, "%s.col", name);
+                InitializeBriefControlSprite(path, &self->ColFile);
 
-                wsprintfA(path, "%s.pck", pcStack_420);
-                OpenBinaryFile(path, &self->ColPckFile);
+                wsprintfA(path, "%s.pck", name);
+                AcquireBriefControlAssetContent(path, &self->ColPckFile);
             }
 
             ZeroMemory(State.Renderer->Surface.Back,
                 State.Renderer->Surface.Height * State.Renderer->Surface.Width * sizeof(PIXEL));
 
-            State.Renderer->Actions.DrawBackSurfacePaletteShadeSprite(0, 0, 12 /* TODO */,
-                (PIXEL*)self->BkgColFile,
-                IMAGEPALETTESPRITEPTR((ADDR)self->BkgPckFile + (ADDR)((IMAGEPALETTESPRITEPTR)self->BkgPckFile)->Type));
+            {
+                CONST ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)self->BkgPckFile;
+                IMAGEPALETTESPRITEPTR sprite =
+                    (IMAGEPALETTESPRITEPTR)((ADDR)self->BkgPckFile + (ADDR)header->Offsets[0]);
+
+                State.Renderer->Actions.DrawBackSurfacePaletteShadeSprite(0, 0,
+                    BRIEF_SPRITE_SHADE_LEVEL, (PIXEL*)self->BkgColFile, sprite);
+            }
 
             ReleaseSoundStateTracks(&SoundState.State, TRUE);
 
             {
                 STRINGVALUE setting;
-                STRINGVALUEPTR actual = AcquireStringValue(&setting, "%s.apm", mission + 0x14); // TODO
+                STRINGVALUEPTR actual = AcquireStringValue(&setting, "%s.apm", mission);
                 InitializeSoundStateActionBuffer(&SoundState.State, actual->Value);
                 ReleaseStringValue(actual);
             }
@@ -213,16 +261,16 @@ VOID CLASSCALL DisableBriefControl(BRIEFCONTROLPTR self)
 
     self->Description->Self->Disable(self->Description);
 
-    if (self->ArrColFile != NULL)
+    if (self->AnimationColors != NULL)
     {
-        free(self->ArrColFile);
-        self->ArrColFile = NULL;
+        free(self->AnimationColors);
+        self->AnimationColors = NULL;
 
-        free(self->AniFile);
-        self->AniFile = NULL;
+        free(self->AnimationSprite);
+        self->AnimationSprite = NULL;
 
-        free(self->SeqFile);
-        self->SeqFile = NULL;
+        free(self->Sequences);
+        self->Sequences = NULL;
 
         free(self->BkgColFile);
         self->BkgColFile = NULL;
@@ -247,28 +295,36 @@ VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self)
 {
     State.Renderer->Actions.WriteBackSurfaceMainSurfaceRectangle(0, 0, GRAPHICS_RESOLUTION_640, GRAPHICS_RESOLUTION_480);
 
-    for (U32 x = 0; x < self->SequenceCount; x++)
+    for (U32 x = self->SequenceStart; x < self->SequenceCount; x++)
     {
-        if (0xFFFFF < ((U32*)self->SeqFile)[x]) { break; } // TODO
+        CONST U32 index = self->Sequences[x];
 
-        CONST U32 offset = ((U32*)self->AniFile)[((U32*)self->SeqFile)[x]] + 8; // TODO
+        if (index >= 0xFFFF) { break; } // TODO
 
-        if (self->SpriteType == 1) // TODO
+        CONST ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)self->AnimationSprite;
+        IMAGEPALETTESPRITEPTR sprite =
+            (IMAGEPALETTESPRITEPTR)((ADDR)self->AnimationSprite + (ADDR)header->Offsets[index]);
+
+        if (self->AnimationSpriteType == BRIEFCONTROLSPRITETYPE_UNKNOWN_1)
         {
             State.Renderer->Actions.DrawMainSurfacePaletteSprite(0, 0,
-                (PIXEL*)self->ArrColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->AniFile + offset)); // TODO
+                (PIXEL*)self->AnimationColors, sprite);
         }
         else
         {
-            State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-                (ANIMATIONPIXEL*)self->ArrColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->AniFile + offset));
+            State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0,
+                BRIEF_SPRITE_LEVEL, (ANIMATIONPIXEL*)self->AnimationColors, sprite);
         }
     }
 
     if (self->Unk17 != 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
-        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[AnimationIndex] + 8));
+        CONST ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)self->ColPckFile;
+        IMAGEPALETTESPRITEPTR sprite =
+            (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + (ADDR)header->Offsets[AnimationIndex]);
+
+        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0,
+            BRIEF_SPRITE_LEVEL, (ANIMATIONPIXEL*)self->ColFile, sprite);
     }
 
     State.Renderer->Actions.DrawMainSurfaceSprite(0, 0,
@@ -276,8 +332,12 @@ VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self)
 
     if (self->Unk17 == 0 && self->ColFile != NULL && self->Unk20 == 0) // TODO
     {
-        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0, 0x10 /* TODO */,
-            (ANIMATIONPIXEL*)self->ColFile, (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + ((U32*)self->ColPckFile)[AnimationIndex] + 8));
+        CONST ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)self->ColPckFile;
+        IMAGEPALETTESPRITEPTR sprite =
+            (IMAGEPALETTESPRITEPTR)((ADDR)self->ColPckFile + (ADDR)header->Offsets[AnimationIndex]);
+
+        State.Renderer->Actions.DrawMainSurfaceAnimationSpriteStencil(0, 0,
+            BRIEF_SPRITE_LEVEL, (ANIMATIONPIXEL*)self->ColFile, sprite);
     }
 
     TickPanelControl((PANELCONTROLPTR)self);
@@ -288,7 +348,7 @@ VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self)
 // 0x1000d680
 U32 CLASSCALL ActionBriefControl(BRIEFCONTROLPTR self)
 {
-    if (self->ArrColFile == NULL) { return CONTROLACTION_BRIEF_OK; }
+    if (self->AnimationColors == NULL) { return CONTROLACTION_BRIEF_OK; }
 
     U32 action = ActionPanelControl((PANELCONTROLPTR)self);
 
@@ -304,23 +364,23 @@ U32 CLASSCALL ActionBriefControl(BRIEFCONTROLPTR self)
         else { self->Ticks = ticks; }
     }
 
-    if (self->SeqFileStart < self->SequenceCount)
+    if (self->SequenceStart < self->SequenceCount)
     {
         // TODO make this pretty
         U32 iVar2 = 0; // TODO
         do
         {
-            if (0xFFFFF < ((U32*)self->SeqFile)[self->SeqFileStart]) { break; }
+            if (0xFFFFF < ((U32*)self->Sequences)[self->SequenceStart]) { break; }
 
-            iVar2 = self->SeqFileStart + 1;
-            self->SeqFileStart = iVar2;
+            iVar2 = self->SequenceStart + 1;
+            self->SequenceStart = iVar2;
         } while (iVar2 < self->SequenceCount);
 
-        if (self->SequenceCount <= self->SeqFileStart) { self->SeqFileStart = 0; }
+        if (self->SequenceCount <= self->SequenceStart) { self->SequenceStart = 0; }
     }
-    else { self->SeqFileStart = 0; }
+    else { self->SequenceStart = 0; }
 
-    self->SeqFileStart = self->SeqFileStart + 1;
+    self->SequenceStart = self->SequenceStart + 1;
 
 LAB_1000d70b:
     if (self->ColFile != NULL)
@@ -384,28 +444,83 @@ BOOL AcquireCurrentGameMapMissionNames(LPSTR mapName, LPSTR missionName)
 }
 
 // 0x1000d8d0
-U32 InitializeSprite(LPCSTR name, LPVOID* content) // TODO name, types
+BRIEFCONTROLSPRITETYPE InitializeBriefControlSprite(LPCSTR name, LPVOID* content)
 {
-    if (*content != NULL) { return -1; } // TODO
+    if (*content != NULL) { return BRIEFCONTROLSPRITETYPE_INVALID; }
 
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-    if (!OpenAssetFile(&file, name)) { return 0; } // TODO
+    if (!OpenAssetFile(&file, name)) { return BRIEFCONTROLSPRITETYPE_NONE; }
 
-    *content = malloc(0x800); // TODO
-    ZeroMemory(*content, 0x800); // TODO
+    *content = malloc(MAX_BRIEF_CONTENT_SIZE);
+    ZeroMemory(*content, MAX_BRIEF_CONTENT_SIZE);
 
-    ReadAssetFile(&file, *content, 8);
+    ReadAssetFile(&file, *content, 2 * sizeof(U32));
 
+    CONST U32* header = (U32*)*content;
 
-    // TODO NOT IMPLEMENTED
+    if (header[0] == 0x308 && header[1] == 0xB123) // TODO
+    {
+        U8 colors[MAX_RGB_COLOR_COUNT];
 
-    return 0;
+        if (ReadAssetFile(&file, colors, MAX_RGB_COLOR_COUNT) != MAX_RGB_COLOR_COUNT)
+        {
+            CloseAssetFile(&file);
+
+            return BRIEFCONTROLSPRITETYPE_NONE;
+        }
+
+        PIXEL* pixels = (PIXEL*)*content;
+
+        for (U32 x = 0; x < MAX_PALETTE_SIZE; x++)
+        {
+            CONST U32 r = ((colors[3 * x + 0] << 8) >> State.Renderer->RedOffset) & State.Renderer->ActualRedMask;
+            CONST U32 g = ((colors[3 * x + 1] << 8) >> State.Renderer->GreenOffset) & State.Renderer->ActualGreenMask;
+            CONST U32 b = ((colors[3 * x + 2] << 8) >> State.Renderer->BlueOffset) & State.Renderer->ActualBlueMask;
+
+            pixels[x] = r | g | b;
+        }
+
+        CloseAssetFile(&file);
+
+        return BRIEFCONTROLSPRITETYPE_UNKNOWN_1;
+    }
+    else
+    {
+        PIXEL* pixels = (PIXEL*)*content;
+        CONST U32 length = ReadAssetFile(&file, &pixels[4], 0x3F8); // TODO
+
+        // NOTE. Used in the American add-on campaign animated background - the fireplace in the background.
+
+        if (length == 0x3F8) // TODO
+        {
+            for (U32 x = 0; x < MAX_PALETTE_SIZE; x++) { pixels[x * 2] = ADJUSTSPRITECOLOR(pixels[x * 2]); }
+
+            CloseAssetFile(&file);
+
+            return BRIEFCONTROLSPRITETYPE_UNKNOWN_2;
+        }
+
+        // NOTE. Used for the backgrounds for the briefs, such as tables, glasses, flags, etc.
+
+        if (length == 0x1F8) // TODO
+        {
+            for (U32 x = 0; x < MAX_PALETTE_SIZE; x++) { pixels[x] = ADJUSTSPRITECOLOR(pixels[x]); }
+
+            CloseAssetFile(&file);
+
+            return BRIEFCONTROLSPRITETYPE_UNKNOWN_1;
+        }
+    }
+
+    CloseAssetFile(&file);
+
+    return BRIEFCONTROLSPRITETYPE_NONE;
 }
 
 // 0x1000d8a0
-S32 OpenBinaryFile(LPCSTR name, LPVOID* content) // TODO name, types
+S32 AcquireBriefControlAssetContent(LPCSTR name, LPVOID* content)
 {
-    if (*content != NULL) { return -1; } // TODO
+    if (*content != NULL) { return INVALID_ASSET_FILE_SIZE; }
 
     return AcquireAssetContent(name, content, 0);
 }
