@@ -193,14 +193,14 @@ CONTROLTYPE CLASSCALL AcquireControlTypeToggle(LPVOID);
 #define CONTROLACTION_BRIEF                                 1082
 #define CONTROLACTION_BRIEF_OK                              1083
 #define CONTROLACTION_BRIEF_MENU                            1084
-#define CONTROLACTION_BRIEF_THIRDBUTTON                     1085
+#define CONTROLACTION_BRIEF_THIRDBUTTON                     1085 /* Brief Pause */
 #define CONTROLACTION_INITIALIZE_NETWORK                    1086
 #define CONTROLACTION_1087                                  1087 /* TODO */
 #define CONTROLACTION_1088                                  1088 /* TODO */
 #define CONTROLACTION_1089                                  1089 /* TODO  Play network game? */
 #define CONTROLACTION_1090                                  1090 /* TODO */
-#define CONTROLACTION_1091                                  1091 /* TODO */
-#define CONTROLACTION_ERROR_GAME_EXPORT                     1092
+#define CONTROLACTION_GAME_START                            1091 /* TODO Single game/campaign start ? */
+#define CONTROLACTION_GAME_EXPORT_ERROR                     1092
 #define CONTROLACTION_1093                                  1093 /* TODO */
 #define CONTROLACTION_MSGBOX_OK                             1094
 #define CONTROLACTION_MSGBOX_CANCEL                         1095
@@ -224,7 +224,7 @@ CONTROLTYPE CLASSCALL AcquireControlTypeToggle(LPVOID);
 #define CONTROLACTION_STATISTICS_12                         (CONTROLACTION_STATISTICS_BASE + 11)
 #define CONTROLACTION_STATISTICS_13                         (CONTROLACTION_STATISTICS_BASE + 12)
 #define CONTROLACTION_MAP_HOVER                             1114
-#define CONTROLACTION_PLAY_COMPLETED                        1115
+#define CONTROLACTION_PLAY_COMPLETED                        1115 /* TODO */
 #define CONTROLACTION_1116                                  1116 /* TODO */
 #define CONTROLACTION_PLAY_SHORT_INTRO2                     1117
 #define CONTROLACTION_PLAY_SHORT_INTRO3                     1118

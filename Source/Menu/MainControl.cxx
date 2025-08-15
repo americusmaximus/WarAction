@@ -212,8 +212,8 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_1088:
     case CONTROLACTION_1089:
     case CONTROLACTION_1090:
-    case CONTROLACTION_1091:
-    case CONTROLACTION_ERROR_GAME_EXPORT:
+    case CONTROLACTION_GAME_START:
+    case CONTROLACTION_GAME_EXPORT_ERROR:
     case CONTROLACTION_PLAY_SHORT_INTRO2:
     case CONTROLACTION_PLAY_SHORT_INTRO3:
     case CONTROLACTION_1119: { self->Active = NULL; action = self->Action; break; }
@@ -311,9 +311,23 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     case CONTROLACTION_SINGLE2_BRITISH:
     case CONTROLACTION_SINGLE2_GERMAN:
     case CONTROLACTION_SINGLE2_RUSSIAN:
-    case CONTROLACTION_SINGLE2_AMERICAN: { action = SaveSingleNewControlState((SINGLENEWCONTROLPTR)self->Active) ? CONTROLACTION_BRIEF : CONTROLACTION_ERROR_GAME_EXPORT; break; }
+    case CONTROLACTION_SINGLE2_AMERICAN:
+    {
+        action = SaveSingleNewControlState((SINGLENEWCONTROLPTR)self->Active)
+            ? CONTROLACTION_BRIEF : CONTROLACTION_GAME_EXPORT_ERROR;
+
+        break;
+    }
     case CONTROLACTION_SINGLE3_LOAD: { State.App->InitModule = GAME_MODULE_STATE_INDEX; break; }
-    case CONTROLACTION_SINGLE4_LOAD: { action = InitializeSingleGame() ? CONTROLACTION_BRIEF : CONTROLACTION_ERROR_GAME_EXPORT; break; }
+    case CONTROLACTION_SINGLE4_LOAD:
+    {
+        // Single player game triggered through a screen with map/mission selection.
+
+        action = InitializeSingleGame()
+            ? CONTROLACTION_BRIEF : CONTROLACTION_GAME_EXPORT_ERROR;
+
+        break;
+    }
     case CONTROLACTION_SINGLE5_CONTINUE:
     {
         LogMessage("GECK: curMap=%d, curMis=%d, nextMap=%d, nextMis=%d\n",
@@ -327,7 +341,13 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
 
         action = CONTROLACTION_BRIEF; break;
     }
-    case CONTROLACTION_SINGLE5_REPLAY: { action = RestartModule() ? CONTROLACTION_BRIEF : CONTROLACTION_ERROR_GAME_EXPORT; break; }
+    case CONTROLACTION_SINGLE5_REPLAY:
+    {
+        action = RestartGame()
+            ? CONTROLACTION_BRIEF : CONTROLACTION_GAME_EXPORT_ERROR;
+
+        break;
+    }
     case CONTROLACTION_SINGLE5_EXIT: { action = CONTROLACTION_MAIN_SINGLE; check1 = TRUE; break; }
     case CONTROLACTION_DIAL_DIAL: { check1 = TRUE; break; }
     case CONTROLACTION_JMULTI1_OK: { action = CONTROLACTION_INITIALIZE_NETWORK; break; }
@@ -417,11 +437,13 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
         CONST S32 mission = AcquireCurrentGameMission();
 
         if (map != DEFAULT_GAME_MAP_INDEX && mission != DEFAULT_GAME_MISSION_INDEX
-            && PlayVideoControl(self->Video, map, mission, START_VIDEO_TEXT_ASSET_PARAM)) { action = CONTROLACTION_PLAY_COMPLETED; }
+            && PlayVideoControl(self->Video, map, mission, START_VIDEO_TEXT_ASSET_PARAM)) {
+            action = CONTROLACTION_PLAY_COMPLETED;
+        }
 
         break;
     }
-    case CONTROLACTION_BRIEF_OK: { action = CONTROLACTION_1091; check1 = TRUE; break; }
+    case CONTROLACTION_BRIEF_OK: { action = CONTROLACTION_GAME_START; check1 = TRUE; break; }
     case CONTROLACTION_INITIALIZE_NETWORK:
     {
         if (NetworkState.State.IsActive) { CloseNetworkModuleStateConnection(&NetworkState.State); }
@@ -572,10 +594,6 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
     {
         ShowMessageControl(&MessageControlState,
             AcquireAssetMessage(ASSET_MESSAGE_WAITING_FOR_OTHERS_TO_RESPOND), MESSAGE_MODE_WAIT);
-
-        // TODO: Triggered when starting single player game from a map selector
-
-        // TODO NOT IMPLEMENTED
         /*
         puVar17 = auStack_2f4;
         for (iVar20 = 0xba; iVar20 != 0; iVar20 = iVar20 + -1) {
@@ -754,12 +772,20 @@ U32 CLASSCALL ActionMainControl(MAINCONTROLPTR self)
             check1 = TRUE;
         }
         else { State.App->InitModule = GAME_MODULE_STATE_INDEX; }
-
         */
         break;
     }
-    case CONTROLACTION_1091: { if (!InitializeGameState()) { action = CONTROLACTION_ERROR_GAME_EXPORT; check1 = TRUE; } break; }
-    case CONTROLACTION_ERROR_GAME_EXPORT:
+    case CONTROLACTION_GAME_START:
+    {
+        if (!InitializeGameState())
+        {
+            action = CONTROLACTION_GAME_EXPORT_ERROR;
+            check1 = TRUE;
+        }
+
+        break;
+    }
+    case CONTROLACTION_GAME_EXPORT_ERROR:
     {
         ShowMessageControl(&MessageControlState,
             AcquireAssetMessage(ASSET_MESSAGE_ERROR_EXPORTING_GAME), MESSAGE_BUTTON_OK);

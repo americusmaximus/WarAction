@@ -26,4 +26,8 @@ SOFTWARE.
 
 #include <Game.hxx>
 
+BOOL InitializeGameState(VOID);
 BOOL InitializeSingleGame(VOID);
+BOOL RestartGame(VOID);
+STATUS AcquireGameStatus(VOID);
+VOID DeleteGameState(VOID);

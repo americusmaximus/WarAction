@@ -249,7 +249,6 @@ VOID CLASSCALL InitializeSoundStateBackBuffer(SOUNDSTATEPTR self, LPCSTR name)
     LogMessage("SOUND : Loading back `%s`\n", name);
 
     BINFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (OpenBinFile(&file, name, BINFILEOPENTYPE_READ))
     {
         self->Buffers.Back = InitializeSoundState(self->State, &file, AcquireBinFileSize(&file), 2, 16, 22050, TRUE);
@@ -405,7 +404,6 @@ BOOL CLASSCALL InitializeSoundStateSample(SOUNDSTATEPTR self, LPCSTR name)
 VOID CLASSCALL InitializeSoundStateActionBuffer(SOUNDSTATEPTR self, LPCSTR name)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (OpenAssetFile(&file, name))
     {
         U16 magic = 0;

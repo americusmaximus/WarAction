@@ -69,7 +69,6 @@ VOID CLASSCALL InitializeShortcuts(SHORTCUTSPTR self)
     std::map<std::string, std::string> names;
 
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, "shortcuts")) { return; }
 
     DOSSIER dossier;

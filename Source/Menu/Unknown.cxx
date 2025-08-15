@@ -37,14 +37,6 @@ U32 DAT_10058e18; // TODO
 
 U32 DAT_100470cc; // TODO
 
-// 0x10019d10
-BOOL FUN_10019d10(VOID) // TODO
-{
-    // TODO NOT IMPLEMENTED
-
-    return FALSE;
-}
-
 // 0x1001d7c0
 BOOL FUN_1001d7c0(VOID) // TODO the network game can start: true/false
 {

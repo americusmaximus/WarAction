@@ -26,15 +26,17 @@ SOFTWARE.
 #include "Native.Basic.hxx"
 #include "Renderer.Basic.hxx"
 
-#define MAX_MAP_SIZE            128
+#define MAX_MAP_SIZE                        128
 
-#define MAX_MAP_STRUCT3_COUNT   16 /* TODO */
-#define MAX_MAP_STRUCT4_COUNT   32 /* TODO */
+#define MAX_MAP_STRUCT3_COUNT               16 /* TODO */
+#define MAX_MAP_STRUCT4_COUNT               32 /* TODO */
 
-#define MAP_FILE_SINGLE_MAGIC   0x4D535353 /* MSSS */
-#define MAP_FILE_MULTI_MAGIC    0x4D4D5353 /* MMSS */
+#define MAP_FILE_SINGLE_MAGIC               0x4D535353 /* MSSS */
+#define MAP_FILE_MULTI_MAGIC                0x4D4D5353 /* MMSS */
 
-#define MAX_SCRIPTS_COUNT       1024
+#define MAX_SCRIPTS_COUNT                   1024
+
+#define MAX_MAP_MISSION_PLAYER_NAME_LENGTH  37
 
 typedef struct MapHeader
 {
@@ -284,3 +286,18 @@ typedef enum ScriptsCommand
     SCRIPTSCOMMAND_SCRIPT_START                                             = 0x464F4143,
     SCRIPTSCOMMAND_SCRIPT_END                                               = 0x7FFFFFFF,
 } SCRIPTSCOMMAND, * SCRIPTSCOMMANDPTR;
+
+#pragma pack(push, 1)
+typedef struct MapMissionPlayer
+{
+    CHAR Name[MAX_MAP_MISSION_PLAYER_NAME_LENGTH];
+    CHAR Unk00[0x13C]; // TODO
+} MAPMISSIONPLAYER, * MAPMISSIONPLAYERPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct MapMissionWoofer
+{
+    CHAR Unk00[78]; // TODO
+} MAPMISSIONWOOFER, * MAPMISSIONWOOFERPTR;
+#pragma pack(pop)

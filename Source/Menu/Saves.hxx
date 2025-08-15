@@ -80,11 +80,6 @@ typedef struct SaveModuleStateContainer // TODO better name
 
 EXTERN SAVEMODULESTATECONTAINER SaveState;
 
-BOOL InitializeGameState(VOID);
-VOID DeleteGameState(VOID);
-
-// TODO Improve names of the functions
-
 BOOL LoadGameState(BINFILEPTR save);
 BOOL LoadSaveState(LPCSTR save);
 BOOL SaveGameState(BINFILEPTR save);
@@ -94,10 +89,12 @@ BOOL UnpackSaveFile(LPCSTR save);
 
 S32 AcquireCurrentGameMap(VOID);
 S32 AcquireCurrentGameMission(VOID);
+
 BOOL SaveMapMission(CONST S32 map, CONST S32 mission);
 BOOL SaveMission(CONST S32 mission);
 BOOL SaveMap(CONST S32 map);
 BOOL SaveMapState(CONST S32 map);
-BOOL FUN_10018c00(LPCSTR name); // TODO name
-VOID FUN_10018880(LPCSTR source, LPCSTR destination); // TODO name
+
 BOOL FUN_100185f0(LPCSTR path); // TODO name
+BOOL FUN_10018c00(LPCSTR name); // TODO name
+VOID CopySaveFile(LPCSTR source, LPCSTR destination);

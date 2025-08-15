@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,6 @@ ASSETSTATEMODULECONTAINER AssetsState;
 U32 AcquireAssetContent(LPCSTR name, LPVOID* content, CONST U32 size)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, name))
     {
         LogMessage("BFILE : Can't open \"%s\"\n", name);

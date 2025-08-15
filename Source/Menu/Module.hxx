@@ -27,7 +27,6 @@ SOFTWARE.
 BOOL InitializeModuleAction(VOID);
 BOOL ExecuteModuleAction(VOID);
 BOOL ReleaseModuleAction(VOID);
-BOOL RestartModule(VOID);
 
 VOID AcquireStartArguments(VOID);
 VOID AcquireStartArguments(LPCSTR value, LPSTR* args, LPSTR values, U32* count, U32* length);
@@ -35,6 +34,5 @@ BOOL AcquireStartArguments(LPCSTR name, LPSTR value, CONST U32 length);
 VOID ReleaseStartArguments(VOID);
 
 VOID AcquireIniFileState(VOID);
-STATUS AcquireGameStatus(VOID);
 
 BOOL ConsumeQueuedCommands(VOID);

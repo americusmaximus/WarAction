@@ -82,7 +82,7 @@ U32 CLASSCALL PointBinFile(BINFILEPTR self, CONST LONG distance, CONST DWORD met
 }
 
 // 0x10022130
-U32 CLASSCALL AcquireBinFileSize(BINFILEPTR self)
+S32 CLASSCALL AcquireBinFileSize(BINFILEPTR self)
 {
     return GetFileSize(BINFILEHANDLE(self->Value), NULL);
 }
@@ -163,18 +163,20 @@ VOID AcquireBinFile(LPSTR name, CONST U32 archive, CONST BOOL overwrite)
 }
 
 // 0x100187c0
-VOID CopyBinFile(BINFILEPTR src, BINFILEPTR dst, CONST U32 size)
+VOID CopyBinFile(BINFILEPTR src, BINFILEPTR dst, CONST S32 size)
 {
-    U32 actual = size;
+    if (size <= 0) { return; }
 
-    while (actual != 0)
+    S32 length = size;
+
+    do
     {
-        CONST U32 length = ((GRAPHICS_RESOLUTION_640 * GRAPHICS_RESOLUTION_480 * sizeof(PIXEL)) - 1) < actual
-            ? (GRAPHICS_RESOLUTION_640 * GRAPHICS_RESOLUTION_480 * sizeof(PIXEL)) : actual;
+        CONST U32 chunk = ((GRAPHICS_RESOLUTION_640 * GRAPHICS_RESOLUTION_480 * sizeof(PIXEL)) - 1) < length
+            ? (GRAPHICS_RESOLUTION_640 * GRAPHICS_RESOLUTION_480 * sizeof(PIXEL)) : length;
 
-        ReadBinFile(src, State.Renderer->Surface.Back, size);
-        WriteBinFile(dst, State.Renderer->Surface.Back, size);
+        ReadBinFile(src, State.Renderer->Surface.Back, chunk);
+        WriteBinFile(dst, State.Renderer->Surface.Back, chunk);
 
-        actual = actual - length;
-    }
+        length = length - chunk;
+    } while (length != 0);
 }

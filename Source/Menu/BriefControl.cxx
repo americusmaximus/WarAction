@@ -299,7 +299,7 @@ VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self)
     {
         CONST U32 index = self->Sequences[x];
 
-        if (index >= 0xFFFF) { break; } // TODO
+        if (0xFFFF < index) { break; } // TODO
 
         CONST ANIMATIONSPRITEHEADERPTR header = (ANIMATIONSPRITEHEADERPTR)self->AnimationSprite;
         IMAGEPALETTESPRITEPTR sprite =
@@ -350,39 +350,39 @@ U32 CLASSCALL ActionBriefControl(BRIEFCONTROLPTR self)
 {
     if (self->AnimationColors == NULL) { return CONTROLACTION_BRIEF_OK; }
 
-    U32 action = ActionPanelControl((PANELCONTROLPTR)self);
+    CONST U32 action = ActionPanelControl((PANELCONTROLPTR)self);
 
-    if (action == CONTROLACTION_BRIEF_THIRDBUTTON) { FUN_1000e910(self->Description); }
+    if (action == CONTROLACTION_BRIEF_THIRDBUTTON) {
+        // When pause button is hit, expected behavior:
+        // 1. Description is paused, no new text is rendered or scrolled.
+        // 2. The visual map animations are still happening as usual.
 
-    {
-        U32 ticks = GetTickCount();
-        self->Description->Self->Action(self->Description);
-
-        if (ticks - self->Ticks < 67) goto LAB_1000d70b; // TODO
-
-        if (ticks < self->Ticks + 132) { self->Ticks = self->Ticks + 66; } // TODO
-        else { self->Ticks = ticks; }
+        FUN_1000e910(self->Description); // TODO
     }
 
-    if (self->SequenceStart < self->SequenceCount)
+    U32 ticks = GetTickCount();
+    self->Description->Self->Action(self->Description);
+
+    if (self->Ticks + 67 <= ticks)
     {
-        // TODO make this pretty
-        U32 iVar2 = 0; // TODO
-        do
+        self->Ticks = ticks < self->Ticks + 132 ? self->Ticks + 66 : ticks;
+
+        if (self->SequenceStart < self->SequenceCount)
         {
-            if (0xFFFFF < ((U32*)self->Sequences)[self->SequenceStart]) { break; }
+            do
+            {
+                if (0xFFFFF < self->Sequences[self->SequenceStart]) { break; } // TODO
 
-            iVar2 = self->SequenceStart + 1;
-            self->SequenceStart = iVar2;
-        } while (iVar2 < self->SequenceCount);
+                self->SequenceStart = self->SequenceStart + 1;
+            } while (self->SequenceStart < self->SequenceCount);
 
-        if (self->SequenceCount <= self->SequenceStart) { self->SequenceStart = 0; }
+            if (self->SequenceCount <= self->SequenceStart) { self->SequenceStart = 0; }
+        }
+        else { self->SequenceStart = 0; }
+
+        self->SequenceStart = self->SequenceStart + 1;
     }
-    else { self->SequenceStart = 0; }
 
-    self->SequenceStart = self->SequenceStart + 1;
-
-LAB_1000d70b:
     if (self->ColFile != NULL)
     {
         if (self->Unk20 != 0)
@@ -397,6 +397,7 @@ LAB_1000d70b:
         if (self->Unk19 <= self->Unk18)
         {
             AnimationIndex = (AnimationIndex + 1) % (*(int*)((int)self->ColPckFile + 4) + -1); // TODO
+
             self->Unk18 = 0;
 
             if (AnimationIndex == 0) { self->Unk20 = self->Unk21; }

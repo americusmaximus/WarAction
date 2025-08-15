@@ -35,7 +35,6 @@ ASSETSTATEMODULECONTAINER AssetsState;
 BOOL AcquireAssetContent(LPCSTR name, CONST U32 offset, LPVOID content, CONST U32 size)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, name))
     {
         LogError("CAFILE", "File not found %s\n", name);
@@ -64,7 +63,6 @@ BOOL AcquireAssetContent(LPCSTR name, CONST U32 offset, LPVOID content, CONST U3
 LPVOID AcquireAssetContent(LPCSTR name, CONST U32 offset, CONST U32 size)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, name))
     {
         LogError("CAFILE", "File not found %s\n", name);
@@ -109,7 +107,6 @@ LPVOID AcquireAssetContent(LPCSTR name, CONST U32 offset, CONST U32 size)
 LPVOID AcquireAssetContentIndexes(LPCSTR name, U32* indexes, CONST U32 count)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, name))
     {
         LogError("CAFILE", "File not found %s\n", name);
@@ -149,7 +146,6 @@ LPVOID AcquireAssetContentIndexes(LPCSTR name, U32* indexes, CONST U32 count)
 LPVOID AcquireAssetContentCount(LPCSTR name, U32* count)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, name))
     {
         LogError("CAFILE", "File not found %s\n", name);
@@ -180,7 +176,6 @@ LPVOID AcquireAssetContentCount(LPCSTR name, U32* count)
 U32 AcquireAssetContentOffset(LPCSTR name, CONST U32 indx, LPVOID content, CONST U32 size)
 {
     ASSETFILE file = { (BFH)INVALID_BINFILE_VALUE };
-
     if (!OpenAssetFile(&file, name))
     {
         LogError("CAFILE", "File not found %s\n", name);
