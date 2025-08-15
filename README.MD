@@ -41,9 +41,9 @@ Notes:
 2. Additionally the code contains support of 32-bit color mode, which is needed in order to run the game in windowed mode on modern systems.
 
 ### Menu
-Status: In Progress...
-	Single player - done. Bugs are likely to be present.
-	Multi player - in progress...
+Status:
+- [x] Single player. Likely to contain multiple bugs.
+- [ ] Multi player. In progress, unusable...
 
 The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
 
