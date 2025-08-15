@@ -37,7 +37,7 @@ The launcher module is the game's executable. Its purpose is to do initial setup
 The game ships with 3 renderer modules. The renderers have, essentially, the same codebase, the only difference is the size of the game screen supported. Available options are: 640x480, 800x600, and 1024x768.
 
 Notes:
-1. Re-engineered code contains additional conditional code using DirectDraw 7 interfaces to render the game. This is enabled on x64 build configuration.
+1. Re-engineered code contains additional conditional code using DirectDraw 7 interfaces to render the game. This is enabled on 64-bit build configuration.
 2. Additionally the code contains support of 32-bit color mode, which is needed in order to run the game in windowed mode on modern systems.
 
 ### Menu
@@ -45,7 +45,7 @@ Status:
 - [x] Single player. Likely to contain multiple bugs.
 - [ ] Multi player. In progress, unusable...
 
-The menu module is responsible for guiding the user through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers  control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
+The menu module is responsible for guiding the player through all kinds of options and activities such as starting a new campaign, loading a game, or setting up a multiplayer game. Once done - it transfers control to the game module, and the game module can transfer control back to the menu module. The game module transfers the control back as well to display statistics and transition between maps and missions.
 
 Notes:
 1. Re-engineered code contains proper support of windowed mode with correct window position tracking and mouse input handling.
@@ -55,9 +55,9 @@ Status: In Progress...
 
 The game module is responsible for the actual gameplay, associated resource management, game state, etc, and can pass the control back to the menu module for video playback, showing mission statistics, and so on.
 
-Notes:
-1. TODO: Add support of windowed mode, properly track window location and offset cursor position for clicking and object selection.
-2. TODO: Add support of 32-bit color in cases when the module is directly writes to the renderer surface without calling renderer functions, such as in function at 0x10070f80.
+TODO:
+- [ ] Support of windowed mode, properly track window location and offset cursor position for clicking and object selection.
+- [ ] Support 32-bit color rendering in cases when the module is directly writes to the renderer surface without calling renderer functions, as in function at 0x10070f80.
 
 ![Sudden Strike](Extras/Screenshot.png)
 
