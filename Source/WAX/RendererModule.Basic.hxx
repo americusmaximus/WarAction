@@ -168,7 +168,7 @@ typedef struct FogSprite
 
 typedef struct Renderer
 {
-    struct 
+    struct
     {
         S32     X;
         S32     Y;
@@ -221,9 +221,8 @@ typedef struct Renderer
 
     FOGSPRITE                   Fog[MAX_FOG_SPRITE_COUNT];
 
-    // Rhombs palette from RHOMB.PL (16,348 colors).
     PIXEL                       Rhombs[MAX_PALETTE_SIZE * MAX_RHOMB_COUNT];
-    
+
     U8                          Unknown[1536]; // TODO
 
     HWND                        HWND;
