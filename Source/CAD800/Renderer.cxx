@@ -4193,7 +4193,7 @@ VOID DrawMainSurfacePaletteSpriteCompact(S32 x, S32 y, PIXEL* palette, IMAGEPALE
 VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL* palette, IMAGEPALETTESPRITEPTR sprite)
 {
     CONST U32 colorMask = ((U32)ModuleState.ActualGreenMask << 16) | ModuleState.ActualBlueMask | ModuleState.ActualRedMask;
-    RendererState.Sprite.VanishOffset = vanishOffset;
+    RendererState.Sprite.Level = vanishOffset;
     RendererState.Sprite.ColorMask = colorMask;
     RendererState.Sprite.AdjustedColorMask = colorMask | (colorMask << 1);
 
@@ -4314,10 +4314,10 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
                             for (ptrdiff_t i = 0; i < availCount; ++i)
                             {
                                 U32 tempDoublePixel = ((U32)sx[i] << 16) | sx[i];
-                                U32 tempDoublePixel2 = (RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.VanishOffset) >> 5))
-                                    | ((RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.VanishOffset) >> 5)) >> 16);
+                                U32 tempDoublePixel2 = (RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.Level) >> 5))
+                                    | ((RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.Level) >> 5)) >> 16);
                                 U32 tempDoublePixel3 = ((U32)pixel << 16) | pixel;
-                                U32 tempDoublePixel4 = RendererState.Sprite.ColorMask & (((31 - RendererState.Sprite.VanishOffset) * (RendererState.Sprite.ColorMask & tempDoublePixel3)) >> 5);
+                                U32 tempDoublePixel4 = RendererState.Sprite.ColorMask & (((31 - RendererState.Sprite.Level) * (RendererState.Sprite.ColorMask & tempDoublePixel3)) >> 5);
                                 U32 tempDoublePixel5 = tempDoublePixel4 | (tempDoublePixel4 >> 16);
 
                                 sx[i] = (U16)(tempDoublePixel2 + tempDoublePixel5);
@@ -4335,10 +4335,10 @@ VOID DrawMainSurfaceVanishingPaletteSprite(S32 x, S32 y, S32 vanishOffset, PIXEL
                             CONST PIXEL pixel = palette[indx];
 
                             U32 tempDoublePixel = ((U32)sx[i] << 16) | sx[i];
-                            U32 tempDoublePixel2 = (RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.VanishOffset) >> 5))
-                                | ((RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.VanishOffset) >> 5)) >> 16);
+                            U32 tempDoublePixel2 = (RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.Level) >> 5))
+                                | ((RendererState.Sprite.ColorMask & (((RendererState.Sprite.ColorMask & tempDoublePixel) * RendererState.Sprite.Level) >> 5)) >> 16);
                             U32 tempDoublePixel3 = ((U32)pixel << 16) | pixel;
-                            U32 tempDoublePixel4 = RendererState.Sprite.ColorMask & (((31 - RendererState.Sprite.VanishOffset) * (RendererState.Sprite.ColorMask & tempDoublePixel3)) >> 5);
+                            U32 tempDoublePixel4 = RendererState.Sprite.ColorMask & (((31 - RendererState.Sprite.Level) * (RendererState.Sprite.ColorMask & tempDoublePixel3)) >> 5);
                             U32 tempDoublePixel5 = tempDoublePixel4 | (tempDoublePixel4 >> 16);
 
                             sx[i] = (U16)(tempDoublePixel2 + tempDoublePixel5);

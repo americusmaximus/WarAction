@@ -93,7 +93,7 @@ typedef struct RendererStateContainer
         PIXEL*  MinX;               // 0x1001005c
         PIXEL*  MaxX;               // 0x10010060
         U32     Width;              // 0x10010064
-        S32     VanishOffset;       // 0x10010068
+        S32     Level;              // 0x10010068
 
         struct
         {
@@ -117,7 +117,6 @@ typedef struct RendererStateContainer
         U32     ColorMask;          // 0x10010030
         S32     DisplayedHalfs;     // 0x10010034
         PIXEL*  Stencil;            // 0x10010038
-        S8      Unk04;              // 0x1001003c
 
         S32     Diff;               // 0x1001003d
         S32     Height;             // 0x10010041
