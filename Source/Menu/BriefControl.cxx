@@ -307,7 +307,7 @@ VOID CLASSCALL TickBriefControl(BRIEFCONTROLPTR self)
 
         if (self->AnimationSpriteType == BRIEFCONTROLSPRITETYPE_UNKNOWN_1)
         {
-            State.Renderer->Actions.DrawMainSurfacePaletteSprite(0, 0,
+            State.Renderer->Actions.DrawMainSurfacePaletteSpriteCompact(0, 0,
                 (PIXEL*)self->AnimationColors, sprite);
         }
         else

@@ -64,7 +64,7 @@ RENDERERPTR InitializeModule()
     ModuleState.Actions.DrawBackSurfaceColorPoint                   = DrawBackSurfaceColorPoint;
     ModuleState.Actions.ShadeMainSurfaceRhomb                       = ShadeMainSurfaceRhomb;
     ModuleState.Actions.CleanMainSurfaceRhomb                       = CleanMainSurfaceRhomb;
-    ModuleState.Actions.DrawMainSurfacePaletteSprite                = DrawMainSurfacePaletteSpriteCompact;
+    ModuleState.Actions.DrawMainSurfacePaletteSpriteCompact         = DrawMainSurfacePaletteSpriteCompact;
     ModuleState.Actions.DrawMainSurfaceSprite                       = DrawMainSurfaceSprite;
     ModuleState.Actions.DrawMainSurfacePaletteBlendSprite           = DrawMainSurfacePaletteBlendSprite;
     ModuleState.Actions.DrawMainSurfacePaletteSpriteStencil         = DrawMainSurfacePaletteSpriteStencil;

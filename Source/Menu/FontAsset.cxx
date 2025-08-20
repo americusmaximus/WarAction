@@ -271,12 +271,12 @@ VOID CLASSCALL DrawFontAssetItem(FONTASSETPTR self, CONST U32 x, CONST U32 y, CO
     {
     case FONTTYPE_BASIC:
     {
-        State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y, self->Pixels,
+        State.Renderer->Actions.DrawMainSurfacePaletteSpriteCompact(x, y, self->Pixels,
             (IMAGEPALETTESPRITEPTR)AcquireBinAssetContent(&self->Asset, value & VK_INPUT)); break;
     }
     case FONTTYPE_COMPLEX:
     {
-        State.Renderer->Actions.DrawMainSurfacePaletteSprite(x, y + self->Height - self->Offset,
+        State.Renderer->Actions.DrawMainSurfacePaletteSpriteCompact(x, y + self->Height - self->Offset,
             self->Pixels, AcquireFontAssetItem(self->Font, value)); break;
     }
     }
@@ -293,7 +293,7 @@ VOID DrawFontAssetText(CONST U32 x, CONST U32 y, LPCSTR text, LPCVOID asset, PIX
     {
         CONST IMAGEPALETTESPRITEPTR sprite = AcquireFontAssetItem(asset, item);
 
-        State.Renderer->Actions.DrawMainSurfacePaletteSprite(offset, y, pixels, sprite);
+        State.Renderer->Actions.DrawMainSurfacePaletteSpriteCompact(offset, y, pixels, sprite);
 
         offset = offset + sprite->Width + spacing;
     }
