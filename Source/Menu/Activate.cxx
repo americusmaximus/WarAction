@@ -2338,7 +2338,8 @@ VOID ActivateInputInitializeState(VOID)
 // 0x10023a40
 VOID ActivateInputInitialize(VOID)
 {
-    InitializeActionHandler(&InputState.Initialize, &ActionState.Initialize, INPUT_ACTION_HANDLER_PRIORITY, InitializeDirectInputAction);
+    InitializeActionHandler(&InputState.Initialize,
+        &ActionState.Initialize, INPUT_ACTION_HANDLER_PRIORITY, InitializeDirectInputAction);
 }
 
 // 0x10023a60
@@ -2363,7 +2364,8 @@ VOID ActivateInputExecuteState(VOID)
 // 0x10023a90
 VOID ActivateInputExecute(VOID)
 {
-    InitializeActionHandler(&InputState.Execute, &ActionState.Execute, INPUT_ACTION_HANDLER_PRIORITY, AcquireDirectInputAction);
+    InitializeActionHandler(&InputState.Execute,
+        &ActionState.Execute, INPUT_ACTION_HANDLER_PRIORITY, AcquireDirectInputAction);
 }
 
 // 0x10023ab0
@@ -2388,7 +2390,8 @@ VOID ActivateInputReleaseState(VOID)
 // 0x10023ae0
 VOID ActivateInputRelease(VOID)
 {
-    InitializeActionHandler(&InputState.Release, &ActionState.Release, INPUT_ACTION_HANDLER_PRIORITY, ReleaseDirectInputAction);
+    InitializeActionHandler(&InputState.Release,
+        &ActionState.Release, INPUT_ACTION_HANDLER_PRIORITY, ReleaseDirectInputAction);
 }
 
 // 0x10023b00
@@ -2413,7 +2416,8 @@ VOID ActivateInputMessageState(VOID)
 // 0x10023b30
 VOID ActivateInputMessage(VOID)
 {
-    InitializeActionHandler(&InputState.Message, &ActionState.Message, INPUT_ACTION_HANDLER_PRIORITY, (ACTIONHANDLERLAMBDA)InputMessageAction);
+    InitializeActionHandler(&InputState.Message,
+        &ActionState.Message, INPUT_ACTION_HANDLER_PRIORITY, (ACTIONHANDLERLAMBDA)InputMessageAction);
 }
 
 // 0x10023b50
