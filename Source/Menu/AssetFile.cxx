@@ -37,7 +37,7 @@ BFH AcquireAssetFileIndex(LPCSTR name)
     {
         CONST BINFILECONTENTPTR file = &AssetsState.Files[indx];
 
-        if (file->Type != BINFILECONTENTTYPE_NONE && _strcmpi(file->Name, name) == 0) { return indx; }
+        if (file->Type != BINFILECONTENTTYPE_NONE && strcmpi(file->Name, name) == 0) { return indx; }
 
         indx = (indx + 1) % MAX_BINARY_FILE_COUNT;
     }
