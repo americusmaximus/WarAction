@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ BOOL InitializeModuleAction(VOID)
 
     if (!State.Renderer->Actions.InitializeWindow(State.Renderer->Surface.Width, State.Renderer->Surface.Height)) { return FALSE; }
 
-    SelectWindowInputState((WINDOWINPUTSTATE)(WINDOWINPUTSTATE_ACCEPT_KEYBOARD | WINDOWINPUTSTATE_ACCEPT_MOUSE));
+    SelectWindowInputState((WINDOWINPUTSTATE)(WINDOWINPUTSTATE_KEYBOARD | WINDOWINPUTSTATE_MOUSE));
 
     if (!FUN_1008e320()) { return FALSE; }
 

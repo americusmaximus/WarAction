@@ -44,7 +44,7 @@ WINDOWCONTAINER WindowState;
 // 0x1008e5d0
 VOID SelectWindowInputState(CONST WINDOWINPUTSTATE state)
 {
-    if (!(state & (WINDOWINPUTSTATE)(WINDOWINPUTSTATE_ACCEPT_KEYBOARD | WINDOWINPUTSTATE_ACCEPT_MOUSE)))
+    if (!(state & (WINDOWINPUTSTATE)(WINDOWINPUTSTATE_KEYBOARD | WINDOWINPUTSTATE_MOUSE)))
     {
         if (WindowState.State != WINDOWINPUTSTATE_NONE) { ReleaseWindowActionHandler(WindowMessageHandler); }
     }
@@ -63,7 +63,7 @@ VOID SelectWindowInputState(CONST WINDOWINPUTSTATE state)
 // 0x1008ead0
 BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* result)
 {
-    if (WindowState.State & WINDOWINPUTSTATE_ACCEPT_MOUSE)
+    if (WindowState.State & WINDOWINPUTSTATE_MOUSE)
     {
         CONST U32 ticks = WindowState.IsActive ? GetTickCount() : wp;
 
@@ -179,7 +179,7 @@ BOOL WindowMessageHandler(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp, LRESULT* re
         }
     }
 
-    if (WindowState.State & WINDOWINPUTSTATE_ACCEPT_KEYBOARD)
+    if (WindowState.State & WINDOWINPUTSTATE_KEYBOARD)
     {
         switch (msg)
         {

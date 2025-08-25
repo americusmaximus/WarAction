@@ -241,7 +241,7 @@ BOOL InitializeModuleAction(VOID)
     InitializeBinAsset(&AssetsState.Assets.MN2Texts, "mn2_texts.dat", TRUE);
     AsStringBinAsset(&AssetsState.Assets.MN2Texts);
 
-    SelectWindowInputState((WINDOWINPUTSTATE)(WINDOWINPUTSTATE_ACCEPT_KEYBOARD | WINDOWINPUTSTATE_ACCEPT_MOUSE));
+    SelectWindowInputState((WINDOWINPUTSTATE)(WINDOWINPUTSTATE_KEYBOARD | WINDOWINPUTSTATE_MOUSE));
 
     WindowState.IsActive = TRUE;
 
