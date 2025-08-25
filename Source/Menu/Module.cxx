@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Activation.hxx"
+#include "Activate.hxx"
 #include "Assets.hxx"
 #include "ControlCommand.hxx"
 #include "Cursor.hxx"

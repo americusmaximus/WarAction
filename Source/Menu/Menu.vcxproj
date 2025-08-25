@@ -209,7 +209,7 @@
   <ItemGroup>
     <ClCompile Include="Action.cxx" />
     <ClCompile Include="ActionArea.cxx" />
-    <ClCompile Include="Activation.cxx" />
+    <ClCompile Include="Activate.cxx" />
     <ClCompile Include="AssetFile.cxx" />
     <ClCompile Include="Assets.cxx" />
     <ClCompile Include="Audio.cxx" />
@@ -291,7 +291,7 @@
   <ItemGroup>
     <ClInclude Include="Action.hxx" />
     <ClInclude Include="ActionArea.hxx" />
-    <ClInclude Include="Activation.hxx" />
+    <ClInclude Include="Activate.hxx" />
     <ClInclude Include="AssetFile.hxx" />
     <ClInclude Include="Assets.hxx" />
     <ClInclude Include="Audio.hxx" />
