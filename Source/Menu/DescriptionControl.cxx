@@ -78,15 +78,15 @@ DESCRIPTIONCONTROLPTR CLASSCALL ActivateDescriptionControl(DESCRIPTIONCONTROLPTR
     self->Text = NULL;
     self->Color = WHITE_COLOR;
 
-    STRINGVALUE name;
-    AcquireSettingsValue(&name, IDS_BRIEF_DELAY_1);
-    self->MinDelay = AcquireSettingsValue(name, DEFAULT_MIN_DELAY);
+    STRINGVALUE value;
+    AcquireSettingsValue(&value, IDS_BRIEF_DELAY_1);
+    self->MinDelay = AcquireSettingsValue(value, DEFAULT_MIN_DELAY);
 
-    AcquireSettingsValue(&name, IDS_BRIEF_DELAY_2);
-    self->MidDelay = AcquireSettingsValue(name, DEFAULT_MED_DELAY);
+    AcquireSettingsValue(&value, IDS_BRIEF_DELAY_2);
+    self->MidDelay = AcquireSettingsValue(value, DEFAULT_MED_DELAY);
 
-    AcquireSettingsValue(&name, IDS_BRIEF_DELAY_3);
-    self->MaxDelay = AcquireSettingsValue(name, DEFAULT_MAX_DELAY);
+    AcquireSettingsValue(&value, IDS_BRIEF_DELAY_3);
+    self->MaxDelay = AcquireSettingsValue(value, DEFAULT_MAX_DELAY);
 
     return self;
 }

@@ -41,9 +41,8 @@ VOID CLASSCALL ActivateComputer(COMPUTERPTR self, LPCSTR type)
     {
         STRINGVALUE value;
         AcquireStringValue(&value, "%ssUpb", type);
-        CONST S32 count = AcquireSettingsValue(value, 0);
 
-        self->Count = self->Capacity = count;
+        self->Count = self->Capacity = AcquireSettingsValue(value, 0);
     }
 
     if (self->Count == 0)
@@ -65,7 +64,9 @@ VOID CLASSCALL ActivateComputer(COMPUTERPTR self, LPCSTR type)
 
             STRINGVALUE setting;
             STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);
+
             strcpy(player, actual->Value);
+
             ReleaseStringValue(actual);
         }
         else
@@ -102,6 +103,7 @@ VOID CLASSCALL ReleaseComputer(COMPUTERPTR self)
 {
     {
         STRINGVALUE name, value;
+
         AcquireStringValue(&name, "%ssUpb", self->Type);
         AcquireStringValue(&value, "%d", self->Count);
 

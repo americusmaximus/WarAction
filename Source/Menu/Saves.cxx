@@ -980,6 +980,7 @@ BOOL FUN_10018c00(LPCSTR name)
 
             wsprintfA(path, "%s%03i%03i.ssc", actual->Value,
                 AcquireCurrentGameMap(), AcquireCurrentGameMission());
+
             ReleaseStringValue(actual);
         }
 

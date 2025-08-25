@@ -110,7 +110,7 @@ VOID EnqueueActionArea(ACTIONAREAPTR area)
 }
 
 // 0x100223f0
-VOID DequeueActionArea(ACTIONAREAPTR self)
+VOID DequeueActionArea(ACTIONAREAPTR area)
 {
     ACTIONAREAPTR current = ActionAreaState.Items;
     ACTIONAREAPTR next = NULL;
@@ -119,7 +119,7 @@ VOID DequeueActionArea(ACTIONAREAPTR self)
     {
         ACTIONAREAPTR value = current;
 
-        while (value != self)
+        while (value != area)
         {
             current = value->Next;
             next = value;

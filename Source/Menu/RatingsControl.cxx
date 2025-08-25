@@ -191,7 +191,6 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
         if (indx != INVALID_LIST_CONTROL_INDEX)
         {
             CHAR text[MAX_RATINGS_CONTROL_TEXT_LENGTH];
-            STRINGVALUE value;
 
             if (self->Type == RATINGSTYPE_SINGLE)
             {
@@ -200,6 +199,7 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
                 LPSTR colon = strchr(text, ':');
                 if (colon != NULL) { colon[0] = NULL; }
 
+                STRINGVALUE value;
                 AcquireStatisticsControlStatistics(self->Statistics,
                     AcquireStringValue(&value, "%s.%s", text,
                         AcquireStatisticsFileExtension(FILE_EXT_SINGLE, GAMEDIFFICULTY_UNKNOWN))->Value);
@@ -218,12 +218,11 @@ U32 CLASSCALL ActionRatingsControl(RATINGSCONTROLPTR self)
                 LPSTR space = strchr(text, ' ');
                 if (space != NULL) { space[0] = NULL; }
 
+                STRINGVALUE value;
                 AcquireStatisticsControlStatistics(self->Statistics,
                     AcquireStringValue(&value, "%s.%s", text,
                         AcquireStatisticsFileExtension(FILE_EXT_CAMPAIGN, GAMEDIFFICULTY_UNKNOWN))->Value);
             }
-
-            ReleaseStringValue(&value);
         }
     }
 

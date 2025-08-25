@@ -33,12 +33,12 @@ typedef struct ActionAreaStateModuleContainer
 
 EXTERN ACTIONAREASTATEMODULECONTAINER ActionAreaState;
 
-VOID CLASSCALL SelectActionAreaDimensions(ACTIONAREAPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height);
 VOID CLASSCALL ReleaseActionArea(ACTIONAREAPTR self);
+VOID CLASSCALL SelectActionAreaAction(ACTIONAREAPTR self, CONST U32 action);
+VOID CLASSCALL SelectActionAreaDimensions(ACTIONAREAPTR self, CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height);
 
 ACTIONAREAPTR AcquireActionArea(CONST U32 action);
 VOID ActivateActionArea(CONST S32 x, CONST S32 y, CONST S32 width, CONST S32 height, CONST U32 options, CONST U32 action, CONST U32 priority);
 VOID DequeueActionArea(ACTIONAREAPTR self);
 VOID EnqueueActionArea(ACTIONAREAPTR area);
-VOID CLASSCALL SelectActionAreaAction(ACTIONAREAPTR self, CONST U32 action);
 BOOL ReplaceActionAreaAction(CONST U32 current, CONST U32 action);

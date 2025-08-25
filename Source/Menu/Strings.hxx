@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,6 @@ SOFTWARE.
 
 #define MAX_STRING_FILTER_ITEM_COUNT    128
 
-LPSTR CLASSCALL AcquireStringValueValue(STRINGVALUEPTR self);
-STRINGVALUEPTR AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...);
-STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value);
-VOID CLASSCALL ReleaseStringValue(STRINGVALUEPTR self);
-
 typedef struct StringsState
 {
     CHAR Scratch[MAX_SCRATCH_STRING_LENGTH]; // 0x10045fc4
@@ -40,6 +35,11 @@ typedef struct StringsState
 
 EXTERN STRINGSSTATE StringsState;
 EXTERN CONST WCHAR DefaultUnicodeStringFilter[MAX_STRING_FILTER_ITEM_COUNT];
+
+LPSTR CLASSCALL AcquireStringValueValue(STRINGVALUEPTR self);
+STRINGVALUEPTR AcquireStringValue(STRINGVALUEPTR self, LPCSTR format, ...);
+STRINGVALUEPTR CLASSCALL AcquireStringValue(STRINGVALUEPTR self, STRINGVALUEPTR value);
+VOID CLASSCALL ReleaseStringValue(STRINGVALUEPTR self);
 
 LPSTR* AcquireNextStringValue(LPSTR* input, LPSTR* result, CONST U32 count);
 

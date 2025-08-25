@@ -22,7 +22,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "Game.hxx"
+#include "Basic.hxx"
 
 BOOL InitializeModuleAction(VOID);
 BOOL ExecuteModuleAction(VOID);

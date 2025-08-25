@@ -20,7 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Activate.hxx"
 #include "Assets.hxx"
 #include "ControlCommand.hxx"
 #include "Cursor.hxx"
@@ -49,6 +48,7 @@ using namespace Mathematics;
 CONTROLCOMMAND ModuleCommand;
 
 // 0x10020e20
+// a.k.a. CA_ETEXT_Init
 BOOL InitializeModuleAction(VOID)
 {
     ClipCursor(NULL);
@@ -83,10 +83,8 @@ BOOL InitializeModuleAction(VOID)
     case STATUS_RESTART: { return RestartGame() && InitializeGameState(); }
     }
 
-    STRINGVALUE value;
-
     {
-        STRINGVALUE name;
+        STRINGVALUE name, value;
         AcquireSettingsValue(&name, IDS_MENU_RESOURCE);
         AcquireStringValue(&value, StringsState.Scratch);
 
@@ -99,7 +97,7 @@ BOOL InitializeModuleAction(VOID)
     }
 
     {
-        STRINGVALUE name;
+        STRINGVALUE name, value;
         AcquireSettingsValue(&name, IDS_MENU_RESOURCE);
         AcquireStringValue(&value, StringsState.Scratch);
 
@@ -112,7 +110,7 @@ BOOL InitializeModuleAction(VOID)
     }
 
     {
-        STRINGVALUE name;
+        STRINGVALUE name, value;
         AcquireSettingsValue(&name, IDS_BRIEFINGS);
         AcquireStringValue(&value, StringsState.Scratch);
 
@@ -125,7 +123,7 @@ BOOL InitializeModuleAction(VOID)
     }
 
     {
-        STRINGVALUE name;
+        STRINGVALUE name, value;
         AcquireSettingsValue(&name, IDS_BRIEFINGS);
         AcquireStringValue(&value, StringsState.Scratch);
 
@@ -605,7 +603,6 @@ VOID ReleaseStartArguments(VOID)
 }
 
 // 0x10017490
-// a.k.a. CA_ETEXT_Init
 VOID AcquireIniFileState(VOID)
 {
     State.IsIniActive = GetPrivateProfileIntA("debug", "useinifile", FALSE, State.App->Ini);

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024 - 2025 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -121,11 +121,9 @@ S32 AcquireSettingsValue(STRINGVALUE name, S32 value)
         return result;
     }
 
-    STRINGVALUE val;
-    AcquireStringValue(&val, INVALID_SETTINGS_STRING_VALUE);
-
-    STRINGVALUE nm;
+    STRINGVALUE nm, val;
     AcquireStringValue(&nm, &name);
+    AcquireStringValue(&val, INVALID_SETTINGS_STRING_VALUE);
 
     STRINGVALUE setting;
     STRINGVALUEPTR actual = AcquireSettingsValue(&setting, nm, val);
@@ -171,29 +169,27 @@ BOOL AcquireRendererSettingsValue(VOID)
 
         // Draw Mode
         {
-            STRINGVALUE value;
+            STRINGVALUE name, value;
+            AcquireSettingsValue(&name, IDS_DRAW_MODE_INDEX, RendererVideoMode);
             AcquireStringValue(&value, "undefined");
 
-            STRINGVALUE configuration;
-            AcquireSettingsValue(&configuration, IDS_DRAW_MODE_INDEX, RendererVideoMode);
-
             STRINGVALUE setting;
-            STRINGVALUEPTR actual = AcquireSettingsValue(&setting, configuration, value);
+            STRINGVALUEPTR actual = AcquireSettingsValue(&setting, name, value);
 
             CHAR output[MAX_SETTINGS_OUTPUT_VALUE_LENGTH];
             strcpy(output, actual->Value);
 
-            ReleaseStringValue(&setting);
+            ReleaseStringValue(actual);
 
             if (!InitializeRendererStateModule(output)) { return FALSE; }
         }
 
         // Full Screen
         {
-            STRINGVALUE configuration;
-            AcquireSettingsValue(&configuration, IDS_FULL_SCREEN);
+            STRINGVALUE value;
+            AcquireSettingsValue(&value, IDS_FULL_SCREEN);
 
-            CONST BOOL fullscreen = (BOOL)AcquireSettingsValue(configuration, TRUE);
+            CONST BOOL fullscreen = (BOOL)AcquireSettingsValue(value, TRUE);
 
             if (!State.Renderer.State->Actions.InitializeDirectX(State.Window->HWND, fullscreen)) { return FALSE; }
         }
