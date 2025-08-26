@@ -35,6 +35,7 @@
     <ClInclude Include="DirectSound.hxx" />
     <ClInclude Include="Dossier.hxx" />
     <ClInclude Include="Extension.hxx" />
+    <ClInclude Include="FontAsset.hxx" />
     <ClInclude Include="Game.hxx" />
     <ClInclude Include="Graphics.Basic.hxx" />
     <ClInclude Include="Logger.hxx" />

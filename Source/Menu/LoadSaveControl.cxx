@@ -31,6 +31,8 @@ SOFTWARE.
 
 #include <..\Text\Resources.hxx>
 
+#include <stdlib.h>
+
 // 0x1003a68c
 LOADSAVECONTROLSELF LoadSaveControlSelfState =
 {

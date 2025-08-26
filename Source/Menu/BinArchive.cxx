@@ -24,6 +24,7 @@ SOFTWARE.
 #include "BinFile.hxx"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 // 0x10001930
 BOOL InitializeBinArchives(LPSTR names)

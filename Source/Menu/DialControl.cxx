@@ -26,6 +26,8 @@ SOFTWARE.
 #include "DialControl.hxx"
 #include "Strings.hxx"
 
+#include <stdlib.h>
+
 #define MAX_MULTIPLAYER_JOIN_NAME_LENGTH    64
 #define MAX_MULTIPLAYER_PLAYER_INFO_LENGTH  256
 

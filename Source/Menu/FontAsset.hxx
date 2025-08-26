@@ -22,40 +22,9 @@ SOFTWARE.
 
 #pragma once
 
-#include "BinAsset.hxx"
 #include "Strings.hxx"
 
-#include <DirectDraw.hxx>
-#include <Renderer.Basic.hxx>
-
-#define FONTALIGNMENT_LEFT              (-1)
-#define FONTALIGNMENT_CENTER            0
-#define FONTALIGNMENT_RIGHT             1
-
-#define COMPLEXFONTALIGNMENT_LEFT       0
-#define COMPLEXFONTALIGNMENT_RIGHT      1
-#define COMPLEXFONTALIGNMENT_CENTER     2
-
-#define MAX_FONT_ASSET_CHARACTER_COUNT  256
-
-typedef enum FontType
-{
-    FONTTYPE_BASIC          = 0,
-    FONTTYPE_COMPLEX        = 1,
-    FONTTYPE_FORCE_DWORD    = 0x7FFFFFF
-} FONTTYPE, * FONTTYPEPTR;
-
-typedef struct FontAsset
-{
-    FONTTYPE    Type;
-    BINASSET    Asset;
-    U32         Color;
-    PIXEL*      Palette;
-    LPVOID      Font; // TODO Type
-    PIXEL       Pixels[MAX_FONT_ASSET_CHARACTER_COUNT];
-    U32         Height;
-    U32         Offset;
-} FONTASSET, * FONTASSETPTR;
+#include <FontAsset.hxx>
 
 BOOL CLASSCALL InitializeFontAsset(FONTASSETPTR self, LPCSTR name, CONST FONTTYPE type);
 FONTASSETPTR CLASSCALL ActivateFontAsset(FONTASSETPTR self);

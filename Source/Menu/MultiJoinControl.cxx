@@ -24,6 +24,8 @@ SOFTWARE.
 #include "ControlCommand.hxx"
 #include "MultiJoinControl.hxx"
 
+#include <stdlib.h>
+
 #define MAX_MULTIPLAYER_JOIN_NAME_LENGTH 64
 
 // 0x1003a614
