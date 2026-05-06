@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024, 2026 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@ SOFTWARE.
 */
 
 #include "Action.hxx"
-#include "Activation.hxx"
+#include "Activate.hxx"
 #include "State.hxx"
 
 // 0x100566b0

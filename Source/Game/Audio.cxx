@@ -30,16 +30,16 @@ SOFTWARE.
 
 #define MAX_AUDIO_WAIT_TIME         10000
 
-// 0x10046b60
+// 0x1034fc78
 AUDIOPLAYER AudioPlayerState;
 
-// 0x1003a320
+// 0x100a7f14
 AUDIOPLAYERSELF AudioPlayerSelfState =
 {
     ReleaseAudioPlayer
 };
 
-// 0x10002940
+// 0x10055410
 AUDIOPLAYERPTR CLASSCALL ActivateAudioPlayer(AUDIOPLAYERPTR self)
 {
     self->Self = &AudioPlayerSelfState;
@@ -49,7 +49,7 @@ AUDIOPLAYERPTR CLASSCALL ActivateAudioPlayer(AUDIOPLAYERPTR self)
     return self;
 }
 
-// 0x10002960
+// 0x10055430
 AUDIOPLAYERPTR CLASSCALL ReleaseAudioPlayer(AUDIOPLAYERPTR self, CONST OBJECTRELEASETYPE mode)
 {
     DisposeAudioPlayer(self);
@@ -59,13 +59,13 @@ AUDIOPLAYERPTR CLASSCALL ReleaseAudioPlayer(AUDIOPLAYERPTR self, CONST OBJECTREL
     return self;
 }
 
-// 0x10002980
+// 0x10055450
 VOID CLASSCALL DisposeAudioPlayer(AUDIOPLAYERPTR self)
 {
     self->Self = &AudioPlayerSelfState;
 }
 
-// 0x10002990
+// 0x10055460
 BOOL CLASSCALL InitializeAudioPlayerEvent(AUDIOPLAYERPTR self, CONST U32 count)
 {
     self->Tracks = count;
@@ -76,13 +76,23 @@ BOOL CLASSCALL InitializeAudioPlayerEvent(AUDIOPLAYERPTR self, CONST U32 count)
     return TRUE;
 }
 
-// 0x100029c0
+// 0x10055490
+BOOL CLASSCALL StopAudioPlayerEvent(AUDIOPLAYERPTR self)
+{
+    self->Command = AUDIOCOMMAND_STOP;
+
+    SetEvent(self->Event);
+
+    return TRUE;
+}
+
+// 0x100554b0
 DWORD WINAPI AudioPlayerWorker(LPVOID context)
 {
     return AudioPlayerWorker((AUDIOPLAYERPTR)context);
 }
 
-// 0x100029d0
+// 0x100554c0
 VOID CLASSCALL InitializeAudioPlayer(AUDIOPLAYERPTR self)
 {
     self->Event = CreateEventA(NULL, FALSE, FALSE, "CDDA_pulse");
@@ -99,7 +109,7 @@ VOID CLASSCALL InitializeAudioPlayer(AUDIOPLAYERPTR self)
     self->IsActive = TRUE;
 }
 
-// 0x10002a30
+// 0x10055520
 BOOL CLASSCALL InitializeAudioPlayerMixer(AUDIOPLAYERPTR self)
 {
     self->Mixer = NULL;
@@ -142,7 +152,40 @@ BOOL CLASSCALL InitializeAudioPlayerMixer(AUDIOPLAYERPTR self)
     return TRUE;
 }
 
-// 0x10002b20
+// 0x10055610
+BOOL CLASSCALL SelectAudioPlayerMixerChannelVolumeDetails(AUDIOPLAYERPTR self, MIXERCONTROLDETAILS_UNSIGNED volume)
+{
+    if (self->Control == INVALID_MIXER_CONTROL_ID) { return FALSE; }
+
+    MIXERCONTROLDETAILS details;
+
+    details.cbStruct = sizeof(MIXERCONTROLDETAILS);
+    details.dwControlID = self->Control;
+    details.cChannels = 1;
+    details.hwndOwner = NULL;
+    details.cbDetails = sizeof(MIXERCONTROLDETAILS_UNSIGNED);
+    details.paDetails = &volume;
+
+    return mixerSetControlDetails(self->Mixer, &details, MIXER_OBJECTF_MIXER) == MMSYSERR_NOERROR;
+}
+
+// 0x10055670
+BOOL CLASSCALL SelectAudioPlayerMixerChannelDetails(AUDIOPLAYERPTR self, PMIXERCONTROLDETAILS_UNSIGNED channel)
+{
+    if (self->Control == INVALID_MIXER_CONTROL_ID) { return FALSE; }
+
+    MIXERCONTROLDETAILS details;
+
+    details.cbStruct = sizeof(MIXERCONTROLDETAILS);
+    details.dwControlID = self->Control;
+    details.cChannels = 1;
+    details.hwndOwner = NULL;
+    details.cbDetails = sizeof(MIXERCONTROLDETAILS_UNSIGNED);
+    details.paDetails = channel;
+
+    return mixerSetControlDetails(self->Mixer, &details, MIXER_OBJECTF_MIXER) == MMSYSERR_NOERROR;
+}
+
 BOOL CLASSCALL SelectAudioPlayerMixerDetails(AUDIOPLAYERPTR self, CONST U32 count, PMIXERCONTROLDETAILS_UNSIGNED channels)
 {
     if (self->Control == INVALID_MIXER_CONTROL_ID) { return FALSE; }
@@ -159,13 +202,13 @@ BOOL CLASSCALL SelectAudioPlayerMixerDetails(AUDIOPLAYERPTR self, CONST U32 coun
     return mixerSetControlDetails(self->Mixer, &details, MIXER_OBJECTF_MIXER) == MMSYSERR_NOERROR;
 }
 
-// 0x10002b80
+// 0x100556d0
 U32 CLASSCALL AcquireAudioPlayerMode(AUDIOPLAYERPTR self)
 {
     return self->Mode;
 }
 
-// 0x10002b90
+// 0x100556e0
 BOOL SendAudioPlayerMessage(AUDIOPLAYERPTR self, LPCSTR format, ...)
 {
     CHAR message[MAX_AUDIOPLAYER_MESSAGE_LENGTH];
@@ -178,7 +221,7 @@ BOOL SendAudioPlayerMessage(AUDIOPLAYERPTR self, LPCSTR format, ...)
     return mciSendStringA(message, self->Message, MAX_AUDIOPLAYER_MESSAGE_LENGTH, NULL) == MMSYSERR_NOERROR;
 }
 
-// 0x10002be0
+// 0x10055730
 BOOL CLASSCALL ReleaseAudioPlayerEvent(AUDIOPLAYERPTR self)
 {
     self->Command = AUDIOCOMMAND_CLOSE;
@@ -189,7 +232,7 @@ BOOL CLASSCALL ReleaseAudioPlayerEvent(AUDIOPLAYERPTR self)
     return TRUE;
 }
 
-// 0x10002c10
+// 0x10055760
 BOOL CLASSCALL AudioPlayerWorker(AUDIOPLAYERPTR self)
 {
     self->Channels.Channels = (PMIXERCONTROLDETAILS_UNSIGNED)malloc(self->Channels.Count * sizeof(MIXERCONTROLDETAILS_UNSIGNED));
@@ -264,24 +307,4 @@ BOOL CLASSCALL AudioPlayerWorker(AUDIOPLAYERPTR self)
             return TRUE;
         }
     }
-}
-
-// 0x10002e70
-BOOL CLASSCALL AcquireAudioPlayerPosition(AUDIOPLAYERPTR self, U32* hours, U32* minutes, U32* seconds, U32* frames)
-{
-    self->IsSuccess = SendAudioPlayerMessage(self, "status cdx position");
-
-    if (self->IsSuccess)
-    {
-        sscanf(self->Message, "%d:%d:%d:%d",
-            &self->Length.Hours, &self->Length.Minutes, &self->Length.Seconds, &self->Length.Frames);
-    }
-
-    *hours = self->Length.Hours;
-    *minutes = self->Length.Minutes;
-    *seconds = self->Length.Seconds;
-    *frames = self->Length.Frames;
-    *hours = *hours - 1;
-
-    return TRUE;
 }

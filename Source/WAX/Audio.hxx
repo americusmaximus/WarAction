@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 - 2025 Americus Maximus
+Copyright (c) 2024 - 2026 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@ SOFTWARE.
 #pragma once
 
 #include "Basic.hxx"
+#include "Native.Basic.hxx"
 #include "Objects.hxx"
 
 #include <mmeapi.h>
@@ -102,7 +103,10 @@ BOOL CLASSCALL AudioPlayerWorker(AUDIOPLAYERPTR self);
 BOOL CLASSCALL InitializeAudioPlayerEvent(AUDIOPLAYERPTR self, CONST U32 count);
 BOOL CLASSCALL InitializeAudioPlayerMixer(AUDIOPLAYERPTR self);
 BOOL CLASSCALL ReleaseAudioPlayerEvent(AUDIOPLAYERPTR self);
+BOOL CLASSCALL SelectAudioPlayerMixerChannelDetails(AUDIOPLAYERPTR self, PMIXERCONTROLDETAILS_UNSIGNED channel);
+BOOL CLASSCALL SelectAudioPlayerMixerChannelVolumeDetails(AUDIOPLAYERPTR self, MIXERCONTROLDETAILS_UNSIGNED channel);
 BOOL CLASSCALL SelectAudioPlayerMixerDetails(AUDIOPLAYERPTR self, CONST U32 count, PMIXERCONTROLDETAILS_UNSIGNED channels);
+BOOL CLASSCALL StopAudioPlayerEvent(AUDIOPLAYERPTR self);
 U32 CLASSCALL AcquireAudioPlayerMode(AUDIOPLAYERPTR self);
 VOID CLASSCALL DisposeAudioPlayer(AUDIOPLAYERPTR self);
 VOID CLASSCALL InitializeAudioPlayer(AUDIOPLAYERPTR self);

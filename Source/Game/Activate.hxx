@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 Americus Maximus
+Copyright (c) 2024, 2026 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "Activation.hxx"
+#pragma once
 
-// 0x100ac000
-// NOTE: This is a workaround for static initialization of objects, variables, states, etc.
-VOID Activate(VOID)
-{
-    // TODO NOT IMPLEMENTED
-}
+#include "Basic.hxx"
+
+VOID Activate(VOID);
+
+VOID ActivateAudioPlayerState(VOID);
+VOID ReleaseAudioPlayerAction(VOID);

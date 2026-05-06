@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2024 - 2025 Americus Maximus
+Copyright (c) 2024 - 2026 Americus Maximus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@ SOFTWARE.
 
 #include "Activate.hxx"
 #include "Assets.hxx"
-#include "Audio.hxx"
 #include "Computer.hxx"
 #include "Cursor.hxx"
 #include "Input.hxx"
@@ -34,6 +33,8 @@ SOFTWARE.
 #include "StarControl.hxx"
 #include "Statistics.hxx"
 #include "Window.hxx"
+
+#include <Audio.hxx>
 
 #include <stdlib.h>
 
