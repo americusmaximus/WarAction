@@ -42,12 +42,13 @@ SOFTWARE.
 #define MAX_NAME_LENGTH32  32
 #define MAX_NAME_LENGTH64  64
 
+//GUID struct, create in map editor OLE32.DLL::CoCreateGuid
 typedef struct MapHeader
 {
-    U32 Unk00; // TODO
-    U32 Unk01; // TODO
-    U32 Unk02; // TODO
-    U32 Unk03; // TODO
+    U32 Data1; // TODO
+    U32 Data2; // TODO
+    U32 Data3; // TODO
+    U32 Data4; // TODO
 } MAPHEADER, * MAPHEADERPTR;
 
 typedef struct MapMinMax

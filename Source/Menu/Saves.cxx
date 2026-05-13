@@ -1328,8 +1328,9 @@ BOOL FUN_100185f0(LPCSTR path) // TODO name
 }
 
 
+// 0x100177e0
 // parsing multiplayer map/mis for game.dll
-BOOL FUN_100177e0(LPCSTR name) // TODO name
+BOOL ParsingMultiplayerMap(LPCSTR name) // TODO name
 {
     ZIPFILE zip;
     ZeroMemory(&zip, sizeof(ZIPFILE));
@@ -1523,7 +1524,7 @@ BOOL FUN_100177e0(LPCSTR name) // TODO name
         CloseBinFile(&file);
     }
 
-    FUN_100186f0(name); // TODO
+    CreatingMultiplayerBattleInfo(name); // TODO
 
     {
         OpenBinFile(&file, "XCHNG\\TOGAME\\mis_phrases", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
@@ -1549,8 +1550,10 @@ BOOL FUN_100177e0(LPCSTR name) // TODO name
     return TRUE;
 }
 
-
-BOOL FUN_100186f0(LPCSTR name) // TODO
+// 0x100186f0
+BOOL CreatingMultiplayerBattleInfo(LPCSTR name) // TODO
 {
+    CHAR test[480]; // TODO struct
+    BINFILE file = { (BFH)INVALID_BINFILE_VALUE };
 
 }

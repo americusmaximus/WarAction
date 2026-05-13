@@ -29,10 +29,10 @@ SOFTWARE.
 // 0x10017e00
 MAPPTR CLASSCALL ActivateMap(MAPPTR self)
 {
-    self->Header.Unk00 = 0; // TODO
-    self->Header.Unk01 = 0; // TODO
-    self->Header.Unk02 = 0; // TODO
-    self->Header.Unk03 = 0; // TODO
+    self->Header.Data1 = 0; // TODO
+    self->Header.Data2 = 0; // TODO
+    self->Header.Data3 = 0; // TODO
+    self->Header.Data4 = 0; // TODO
 
     self->Descriptor.Actors.Min_Players = 0;
     self->Descriptor.Actors.Max_Players = 0;

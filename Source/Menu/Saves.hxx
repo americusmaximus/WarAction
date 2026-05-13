@@ -95,8 +95,8 @@ BOOL SaveMission(CONST S32 mission);
 BOOL SaveMap(CONST S32 map);
 BOOL SaveMapState(CONST S32 map);
 
-BOOL FUN_100177e0(LPCSTR name); // TODO name
+BOOL ParsingMultiplayerMap(LPCSTR name); // TODO name?
 BOOL FUN_100185f0(LPCSTR path); // TODO name
-BOOL FUN_100186f0(LPCSTR name); // TODO name
+BOOL CreatingMultiplayerBattleInfo(LPCSTR name); // TODO not LPCSTR, is structure
 BOOL FUN_10018c00(LPCSTR name); // TODO name
 VOID CopySaveFile(LPCSTR source, LPCSTR destination);
