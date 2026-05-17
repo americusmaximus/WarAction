@@ -48,5 +48,5 @@ BOOL ParseMapScripts(MAPPTR map, ZIPFILEPTR file);
 BOOL ValidateMultiMapFile(LPCSTR name);
 BOOL ValidateSingleMapFile(LPCSTR name);
 VOID ParseMapScriptCommands(MAPPTR map, S32* commands);
-VOID FUN_100181f0(MAPPTR map, S32 value); // TODO name
-
+VOID ActivateAirships(MAPPTR map, S32 value); // TODO name
+BOOL CheckMultiMap(LPCSTR name);

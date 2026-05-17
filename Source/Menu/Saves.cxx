@@ -35,7 +35,7 @@ SOFTWARE.
 #define MAX_MAP_LAND_NAME_COUNT         32
 #define MAX_MAP_LAND_NAME_LENGTH        16
 
-#define MAX_MAP_OBJECT_LENGTH           8
+//#define MAX_MAP_OBJECT_LENGTH           8
 #define MAX_MAP_UNIT_NAME_LENGTH        16
 #define MAX_MAP_MISSION_GROUPS_LENGTH   2700
 
@@ -517,6 +517,7 @@ BOOL FUN_10019d10(VOID) // TODO
 }
 
 // 0x10019680
+// parsing singl map/mis for game.dll
 BOOL WriteSaveState(LPCSTR save)
 {
     ZIPFILE zip;
@@ -558,10 +559,10 @@ BOOL WriteSaveState(LPCSTR save)
     U32 width = 0, height = 0;
 
     {
-        CHAR name[32]; // TODO. A struct?
+        MAPPARAMETERS header;
         U32 type = MAPTYPE_SUMMER;
 
-        ReadZipFile(&zip, name, 0x20); // TODO
+        ReadZipFile(&zip, &header, sizeof(MAPPARAMETERS));
         ReadZipFile(&zip, &type, sizeof(U32));
         ReadZipFile(&zip, &width, sizeof(U32));
         ReadZipFile(&zip, &height, sizeof(U32));
@@ -593,7 +594,7 @@ BOOL WriteSaveState(LPCSTR save)
         OpenBinFile(&file, "XCHNG\\TOGAME\\map_mini", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
         CONST U32 length =
-            width <= MAX_MAP_SIZE && height <= MAX_MAP_SIZE ? width * height * 2 : height * width / 2;
+            width <= MAX_MAP_SIZE && height <= MAX_MAP_SIZE ? width * height * sizeof(PIXEL) : height * width / sizeof(PIXEL);
 
         WriteZipFile(&zip, &file, length);
 
@@ -603,7 +604,7 @@ BOOL WriteSaveState(LPCSTR save)
     {
         OpenBinFile(&file, "XCHNG\\TOGAME\\map_rhombs", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
-        WriteZipFile(&zip, &file, width * height * 2); // TODO
+        WriteZipFile(&zip, &file, width * height * sizeof(MAPRHOMBS)); // TODO
 
         CloseBinFile(&file);
     }
@@ -635,7 +636,7 @@ BOOL WriteSaveState(LPCSTR save)
 
         U32 count = 0;
         ReadZipFile(&zip, &count, sizeof(U32));
-        WriteZipFile(&zip, &file, count * MAX_MAP_OBJECT_LENGTH);
+        WriteZipFile(&zip, &file, count * sizeof(MAPOBJECT));
 
         CloseBinFile(&file);
     }
@@ -707,16 +708,16 @@ BOOL WriteSaveState(LPCSTR save)
 
         for (U32 x = 0; x < count; x++)
         {
-            U32 local_2c8; // TODO
-            ReadZipFile(&zip, &local_2c8, 4); // TODO
+            U32 length; // Point script line size
+            ReadZipFile(&zip, &length, sizeof(length)); // Find out the size of the script string
 
-            local_2c8 = local_2c8 - 4; // TODO
+            length = length - sizeof(length); // New script line size
 
-            WriteBinFile(&file, &local_2c8, 4); // TODO
+            WriteBinFile(&file, &length, sizeof(length)); 
 
-            U32 local_2b8; // TODO
-            ReadZipFile(&zip, &local_2b8, 4); // TODO
-            WriteZipFile(&zip, &file, local_2c8); // TODO
+            U32 caof;
+            ReadZipFile(&zip, &caof, sizeof(caof)); // Skip CAOF
+            WriteZipFile(&zip, &file, length); // We write the string itself, excluding CAOF
         }
 
         CloseBinFile(&file);
@@ -753,7 +754,7 @@ BOOL WriteSaveState(LPCSTR save)
     {
         OpenBinFile(&file, "XCHNG\\TOGAME\\mis_objects", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
-        WriteZipFile(&zip, &file, 400); // TODO
+        WriteZipFile(&zip, &file, sizeof(MAPMISSIONOBJECT));
 
         CloseBinFile(&file);
     }
@@ -853,7 +854,7 @@ BOOL SaveMapState(CONST S32 map)
         {
             OpenBinFile(&file, "XCHNG\\STATE\\map_rhombs", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
-            WriteZipFile(&zip, &file, width * height * 2); // TODO
+            WriteZipFile(&zip, &file, width * height * sizeof(MAPRHOMBS));
 
             CloseBinFile(&file);
         }
@@ -869,7 +870,7 @@ BOOL SaveMapState(CONST S32 map)
         {
             OpenBinFile(&file, "XCHNG\\STATE\\map_mini1", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
-            WriteZipFile(&zip, &file, width * height * 2); // TODO
+            WriteZipFile(&zip, &file, width * height * sizeof(PIXEL));
 
             CloseBinFile(&file);
         }
@@ -897,7 +898,7 @@ BOOL SaveMapState(CONST S32 map)
 
             U32 count = 0;
             ReadZipFile(&zip, &count, sizeof(U32));
-            WriteZipFile(&zip, &file, count * MAX_MAP_OBJECT_LENGTH);
+            WriteZipFile(&zip, &file, count * sizeof(MAPOBJECT));
 
             CloseBinFile(&file);
         }
@@ -943,6 +944,7 @@ BOOL SaveMap(CONST S32 map)
 }
 
 // 0x10018c00
+// parsing companing map/mis for game.dll
 BOOL FUN_10018c00(LPCSTR name)
 {
     if (AcquireCurrentGameMap() == DEFAULT_GAME_MAP_INDEX)
@@ -955,13 +957,13 @@ BOOL FUN_10018c00(LPCSTR name)
 
         // Replace the first name in the mission to player's name.
 
-        CHAR player[MAX_MAP_MISSION_PLAYER_NAME_LENGTH];
-        ReadBinFile(&file, player, MAX_MAP_MISSION_PLAYER_NAME_LENGTH);
+        CHAR player[sizeof(MAPPLAYER)];
+        ReadBinFile(&file, player, sizeof(MAPPLAYER));
 
         strcpy(player, name);
 
         PointBinFile(&file, sizeof(U32), FILE_BEGIN);
-        WriteBinFile(&file, player, MAX_MAP_MISSION_PLAYER_NAME_LENGTH);
+        WriteBinFile(&file, player, sizeof(MAPPLAYER));
 
         PointBinFile(&file, AcquireBinFileSize(&file), FILE_BEGIN);
         CloseBinFile(&file);
@@ -1010,7 +1012,8 @@ BOOL FUN_10018c00(LPCSTR name)
         U32 iStack_3e8, iStack_3ec, iStack_3f0, uStack_3f4, iStack_3f8; // TODO
 
         {
-            U32 auStack_33c, uStack_400; // TODO
+            U32 auStack_33c; // TODO
+            U32 type = MAPTYPE_SUMMER;
 
             ReadZipFile(&zip, &iStack_3e8, 4); // TODO
             ReadZipFile(&zip, &iStack_3ec, 4); // TODO
@@ -1019,7 +1022,7 @@ BOOL FUN_10018c00(LPCSTR name)
 
             OpenBinFile(&reader, "XCHNG\\STATE\\map_info", BINFILEOPENTYPE_READ);
 
-            ReadBinFile(&reader, &uStack_400, 4); // TODO
+            ReadBinFile(&reader, &type, sizeof(U32));
             ReadBinFile(&reader, &iStack_3f0, 4); // TODO
             ReadBinFile(&reader, &auStack_33c, 4); // TODO
 
@@ -1027,7 +1030,7 @@ BOOL FUN_10018c00(LPCSTR name)
 
             OpenBinFile(&writer, "XCHNG\\TOGAME\\map_info", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
-            WriteBinFile(&writer, &uStack_400, 4); // TODO
+            WriteBinFile(&writer, &type, sizeof(U32));
             WriteBinFile(&writer, &iStack_3e8, 4); // TODO
             WriteBinFile(&writer, &iStack_3ec, 4); // TODO
             WriteBinFile(&writer, &uStack_3f4, 4); // TODO
@@ -1164,13 +1167,13 @@ BOOL FUN_10018c00(LPCSTR name)
             ReadZipFile(&zip, &count, sizeof(U32));
             WriteBinFile(&writer, &count, sizeof(U32));
 
-            CHAR player[MAX_MAP_MISSION_PLAYER_NAME_LENGTH];
-            ReadZipFile(&zip, player, MAX_MAP_MISSION_PLAYER_NAME_LENGTH);
+            CHAR player[sizeof(MAPPLAYER)];
+            ReadZipFile(&zip, player, sizeof(MAPPLAYER));
 
             strcpy(player, name);
 
-            WriteBinFile(&writer, player, MAX_MAP_MISSION_PLAYER_NAME_LENGTH);
-            WriteZipFile(&zip, &writer, count * sizeof(MAPMISSIONPLAYER) - MAX_MAP_MISSION_PLAYER_NAME_LENGTH);
+            WriteBinFile(&writer, player, sizeof(MAPPLAYER));
+            WriteZipFile(&zip, &writer, count * sizeof(MAPMISSIONPLAYER) - sizeof(MAPPLAYER));
 
             CloseBinFile(&writer);
         }
@@ -1203,16 +1206,16 @@ BOOL FUN_10018c00(LPCSTR name)
 
             for (U32 x = 0; x < count; x++)
             {
-                U32 uStack_3fc; // TODO
-                ReadZipFile(&zip, &uStack_3fc, 4); // TODO
+                U32 length;
+                ReadZipFile(&zip, &length, sizeof(length));
 
-                uStack_3fc = uStack_3fc - 4; // TODO
+                length = length - sizeof(length);
 
-                WriteBinFile(&writer, &uStack_3fc, 4); // TODO
+                WriteBinFile(&writer, &length, sizeof(length));
 
-                U32 local_3d8; // TODO
-                ReadZipFile(&zip, &local_3d8, 4); // TODO
-                WriteZipFile(&zip, &writer, uStack_3fc); // TODO
+                U32 caof;
+                ReadZipFile(&zip, &caof, sizeof(caof));
+                WriteZipFile(&zip, &writer, length);
             }
 
             CloseBinFile(&writer);
@@ -1266,7 +1269,7 @@ BOOL FUN_10018c00(LPCSTR name)
         {
             OpenBinFile(&writer, "XCHNG\\TOGAME\\mis_objects", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
 
-            WriteZipFile(&zip, &writer, 400); // TODO
+            WriteZipFile(&zip, &writer, sizeof(MAPMISSIONOBJECT));
 
             CloseBinFile(&writer);
         }
@@ -1322,4 +1325,235 @@ BOOL FUN_100185f0(LPCSTR path) // TODO name
     CloseZipFile(&zip);
 
     return TRUE;
+}
+
+
+// 0x100177e0
+// parsing multiplayer map/mis for game.dll
+BOOL ParsingMultiplayerMap(LPCSTR name) // TODO name
+{
+    ZIPFILE zip;
+    ZeroMemory(&zip, sizeof(ZIPFILE));
+
+    if (!OpenZipFile(&zip, name, ZIPFILE_OPEN_READ)) { return FALSE; }
+
+    BINFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
+    {
+        U32 magic = 0;
+        ReadZipFile(&zip, &magic, sizeof(U32));
+
+        if (magic != MAP_FILE_MULTI_MAGIC) { CloseZipFile(&zip); return FALSE; }
+
+        U32 version = 0;
+        ReadZipFile(&zip, &version, sizeof(U32));
+
+        if (version != MODULE_MULTI_MAP_VERSION_VALUE) { CloseZipFile(&zip); return FALSE; }
+    }
+
+
+    U32 width = 0, height = 0;
+    {
+        MAPPARAMETERS header;
+        U32 type = MAPTYPE_SUMMER;
+
+        ReadZipFile(&zip, &header, 0x80); // TODO 96 bite skip
+        ReadZipFile(&zip, &type, sizeof(U32));
+        ReadZipFile(&zip, &width, sizeof(U32));
+        ReadZipFile(&zip, &height, sizeof(U32));
+
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_info", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        WriteBinFile(&file, &type, sizeof(U32));
+
+        U32 dummy = 0; // TODO
+        WriteBinFile(&file, &dummy, sizeof(U32));
+        WriteBinFile(&file, &dummy, sizeof(U32));
+        WriteBinFile(&file, &width, sizeof(U32));
+        WriteBinFile(&file, &height, sizeof(U32));
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_objects", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        WriteZipFile(&zip, &file, sizeof(MAPMISSIONOBJECT));
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_scripts", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteBinFile(&file, &count, sizeof(U32));
+
+        for (U32 x = 0; x < count; x++)
+        {
+            U32 length;
+            ReadZipFile(&zip, &length, sizeof(length));
+
+            length = length - sizeof(length);
+
+            WriteBinFile(&file, &length, sizeof(length));
+
+            U32 caof;
+            ReadZipFile(&zip, &caof, sizeof(caof));
+            WriteZipFile(&zip, &file, length);
+        }
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_desc", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 length = 0;
+        ReadZipFile(&zip, &length, sizeof(U32));
+        WriteZipFile(&zip, &file, length);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_mini", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        CONST U32 length =
+            width <= MAX_MAP_SIZE && height <= MAX_MAP_SIZE ? width * height * sizeof(PIXEL) : height * width / sizeof(PIXEL);
+
+        WriteZipFile(&zip, &file, length);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_rhombs", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        WriteZipFile(&zip, &file, width * height * sizeof(MAPRHOMBS));
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_flags", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        WriteZipFile(&zip, &file, width * height * 4); // TODO
+        CloseBinFile(&file);
+    }
+
+    {
+        CHAR names[MAX_MAP_LAND_NAME_COUNT * MAX_MAP_LAND_NAME_LENGTH];
+        ZeroMemory(names, MAX_MAP_LAND_NAME_COUNT * MAX_MAP_LAND_NAME_LENGTH);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        ReadZipFile(&zip, names, count * MAX_MAP_LAND_NAME_LENGTH);
+
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_landnames", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+        WriteBinFile(&file, names, MAX_MAP_LAND_NAME_COUNT * MAX_MAP_LAND_NAME_LENGTH);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_objects", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count * sizeof(MAPOBJECT));
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_unitnames", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count * MAX_NAME_LENGTH16);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_woofers", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteBinFile(&file, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count * sizeof(MAPMISSIONWOOFER));
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_zones", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        WriteZipFile(&zip, &file, width * height);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\map_mines", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        WriteZipFile(&zip, &file, width * height);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_support", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_players", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteBinFile(&file, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count * sizeof(MAPMISSIONPLAYER));
+
+        CloseBinFile(&file);
+    }
+
+    CreatingMultiplayerBattleInfo(name); // TODO
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_phrases", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count);
+
+        CloseBinFile(&file);
+    }
+
+    {
+        OpenBinFile(&file, "XCHNG\\TOGAME\\mis_mapunits", BINFILEOPENTYPE_CREATE | BINFILEOPENTYPE_WRITE);
+
+        U32 count = 0;
+        ReadZipFile(&zip, &count, sizeof(U32));
+        WriteZipFile(&zip, &file, count);
+
+        CloseBinFile(&file);
+    }
+    CloseZipFile(&zip);
+
+    return TRUE;
+}
+
+// 0x100186f0
+BOOL CreatingMultiplayerBattleInfo(LPCSTR name) // TODO
+{
+    CHAR test[480]; // TODO struct
+    BINFILE file = { (BFH)INVALID_BINFILE_VALUE };
+
 }

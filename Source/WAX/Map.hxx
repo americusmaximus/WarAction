@@ -29,30 +29,44 @@ SOFTWARE.
 #define MAX_MAP_SIZE                        128
 
 #define MAX_MAP_STRUCT3_COUNT               16 /* TODO */
-#define MAX_MAP_STRUCT4_COUNT               32 /* TODO */
+#define MAX_NUM_MIS_OBJECTS                 100
+#define MAX_NUM_MULTI_MAP_AIRSHIP           32
+#define DEACTIVATED                         0xffff
+
 
 #define MAP_FILE_SINGLE_MAGIC               0x4D535353 /* MSSS */
 #define MAP_FILE_MULTI_MAGIC                0x4D4D5353 /* MMSS */
 
 #define MAX_SCRIPTS_COUNT                   1024
 
-#define MAX_MAP_MISSION_PLAYER_NAME_LENGTH  37
+#define NATION 4
 
+#define MAX_NAME_LENGTH16  16
+#define MAX_NAME_LENGTH32  32
+#define MAX_NAME_LENGTH64  64
+
+//GUID struct, create in map editor OLE32.DLL::CoCreateGuid
 typedef struct MapHeader
 {
-    U32 Unk00; // TODO
-    U32 Unk01; // TODO
-    U32 Unk02; // TODO
-    U32 Unk03; // TODO
+    U32 Data1; // TODO
+    U32 Data2; // TODO
+    U32 Data3; // TODO
+    U32 Data4; // TODO
 } MAPHEADER, * MAPHEADERPTR;
 
 typedef struct MapMinMax
 {
     U32 Min_Players; // TODO
     U32 Max_Players; // TODO
-    U32 Unk02; // TODO
-    U32 Unk03; // TODO
+    U32 Min_Teams; // TODO
+    U32 Max_Teams; // TODO
 } MAPMINMAX, * MAPMINMAXPTR;
+
+typedef struct MapParameters
+{
+    MAPHEADER   Header;
+    MAPMINMAX   Actors;
+} MAPPARAMETERS, * MAPPARAMETERSPTR;
 
 typedef enum MapType
 {
@@ -82,16 +96,15 @@ typedef struct MapStruct3 // TODO
     U16 Unk02; // TODO
 } MAPSTRUCT3, * MAPSTRUCT3PTR;
 
-typedef struct MapStruct4 // TODO
+typedef struct CoordinatesU16 
 {
-    U16 Unk00; // TODO
-    U16 Unk01; // TODO
-} MAPSTRUCT4, * MAPSTRUCT4PTR;
+    U16 U, V;
+} COORDINATESU16, * COORDINATESU16PTR;
 
 typedef struct MissionObjects
 {
-    MAPSTRUCT3 Unk00[MAX_MAP_STRUCT3_COUNT]; // TODO
-    MAPSTRUCT4 Unk01[MAX_MAP_STRUCT4_COUNT]; // TODO
+    COORDINATESU16 Pos;
+    S16            Flags;
 } MISSIONOBJECTS, * MISSIONOBJECTSPTR;
 
 typedef struct MissionScripts
@@ -103,7 +116,8 @@ typedef struct Map
 {
     MAPHEADER       Header;
     MAPDESCRIPTOR   Descriptor;
-    MISSIONOBJECTS  Objects;
+    MAPSTRUCT3      Unk02[MAX_MAP_STRUCT3_COUNT];
+    MISSIONOBJECTS  Objects[MAX_NUM_MULTI_MAP_AIRSHIP];
     LPSTR           Description;
     PIXEL*          Pixels;
     LPSTR           MissionDescription;
@@ -288,16 +302,96 @@ typedef enum ScriptsCommand
 } SCRIPTSCOMMAND, * SCRIPTSCOMMANDPTR;
 
 #pragma pack(push, 1)
+typedef struct MapAviation
+{
+    CHAR    Name[MAX_NAME_LENGTH32];
+    U32     Number;
+    U32     Bombs;
+    U32     Reloads;
+}MAPAVIATION, * MAPAVIATIONPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct MapDescent
+{
+    U8 group;
+    U8 expa;
+    CHAR ID[NATION][MAX_NAME_LENGTH16];
+    U8 number[NATION];
+}MAPDESCENT, * MAPDESCENTPTR;
+#pragma pack (pop)
+
+#pragma pack(push, 1)
+/**
+ * @param Owner - player=0, enemy=1, ally=2, neutral=3.
+ * @param Planesdir - plane rotation, clockwise from 0 to 7, 8 positions in total.
+ */
+typedef struct MapPlayer
+{
+    CHAR    Name[MAX_NAME_LENGTH32];
+    U8      Team;
+    PIXEL   Color;
+    U8      Owner;
+    U8      Planesdir;
+}MAPPLAYER, * MAPPLAYERRPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
 typedef struct MapMissionPlayer
 {
-    CHAR Name[MAX_MAP_MISSION_PLAYER_NAME_LENGTH];
-    CHAR Unk00[0x13C]; // TODO
+    MAPPLAYER   Player;
+    MAPAVIATION AirReinforcement[NATION];
+    MAPDESCENT  Group[2];
 } MAPMISSIONPLAYER, * MAPMISSIONPLAYERPTR;
 #pragma pack(pop)
+
+typedef struct coordinates32
+{
+    S32 U;
+    S32 V;
+} COORDINATES32, * COORDINATES32PTR;
 
 #pragma pack(push, 1)
 typedef struct MapMissionWoofer
 {
-    CHAR Unk00[78]; // TODO
+    CHAR            Name[MAX_NAME_LENGTH64];
+    COORDINATESU16  Pos;
+    U16             Radius;
+    F32             Worse;
+    U16             MinWait;
+    U16             MaxWait;
 } MAPMISSIONWOOFER, * MAPMISSIONWOOFERPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct MapMissionObject
+{
+    COORDINATESU16 Pos[MAX_NUM_MIS_OBJECTS];
+} MAPMISSIONOBJECT, * MAPMISSIONOBJECTPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct MapRhombs
+{
+    U8 TileType;
+    U8 TileGamma;
+}MAPRHOMBS, * MAPRHOMBSPTR;
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+/**
+ * @param Pos - object position on the map.
+ * @param ObG - object grup: 1 - Free objects; 2 - Lying down objects; 3 - Standing objects; 4 - Trees; 5 - Streets; 6 - Buildings; 7 - Fences 8 - Cliffs; 9 - Crater; 10 - Bridges.
+ * @param Ob  - object number.
+ * @param HP  - hitpoint.
+ * @param Typ - ???.
+ */
+typedef struct MapObject
+{
+    COORDINATESU16 Pos;
+    U8             ObG;
+    U8             Ob;
+    U8             HP;
+    U8             Typ;
+}MAPOBJECT, * MAPOBJECTPTR;
 #pragma pack(pop)

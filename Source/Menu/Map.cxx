@@ -29,15 +29,15 @@ SOFTWARE.
 // 0x10017e00
 MAPPTR CLASSCALL ActivateMap(MAPPTR self)
 {
-    self->Header.Unk00 = 0; // TODO
-    self->Header.Unk01 = 0; // TODO
-    self->Header.Unk02 = 0; // TODO
-    self->Header.Unk03 = 0; // TODO
+    self->Header.Data1 = 0; // TODO
+    self->Header.Data2 = 0; // TODO
+    self->Header.Data3 = 0; // TODO
+    self->Header.Data4 = 0; // TODO
 
     self->Descriptor.Actors.Min_Players = 0;
     self->Descriptor.Actors.Max_Players = 0;
-    self->Descriptor.Actors.Unk02 = 0; // TODO
-    self->Descriptor.Actors.Unk03 = 0; // TODO
+    self->Descriptor.Actors.Min_Teams = 0;
+    self->Descriptor.Actors.Max_Teams = 0;
 
     self->Descriptor.Details.Type = MAPTYPE_SUMMER;
     self->Descriptor.Details.Width = 0;
@@ -114,8 +114,8 @@ BOOL InitializeSingleMap(LPCSTR name, MAPPTR map)
 
     map->Descriptor.Actors.Min_Players = 1;
     map->Descriptor.Actors.Max_Players = 1;
-    map->Descriptor.Actors.Unk02 = 1; // TODO
-    map->Descriptor.Actors.Unk03 = 1; // TODO
+    map->Descriptor.Actors.Min_Teams = 1;
+    map->Descriptor.Actors.Max_Teams = 1;
 
     {
         U32 length = 0;
@@ -207,32 +207,35 @@ BOOL InitializeMultiMap(LPCSTR name, MAPPTR map)
     ReadZipFile(&zip, &map->Header, sizeof(MAPHEADER));
     ReadZipFile(&zip, &map->Descriptor.Actors, sizeof(MAPMINMAX));
 
-    ReadZipFile(&zip, &map->Objects.Unk00, MAX_MAP_STRUCT3_COUNT * sizeof(MAPSTRUCT3));
+    ReadZipFile(&zip, &map->Unk02, MAX_MAP_STRUCT3_COUNT * sizeof(MAPSTRUCT3));
 
     for (U32 x = 0; x < MAX_MAP_STRUCT3_COUNT; x++)
     {
-        if (map->Objects.Unk00[x].Unk00 < 0 || map->Objects.Unk00[x].Unk01 < 0
-            || map->Descriptor.Details.Width <= map->Objects.Unk00[x].Unk00
-            || map->Descriptor.Details.Height <= map->Objects.Unk00[x].Unk01
-            || map->Objects.Unk00[x].Unk02 < 0 || (MAX_MAP_SIZE - 1) < map->Objects.Unk00[x].Unk02)
+        if (map->Unk02[x].Unk00 < 0 || map->Unk02[x].Unk01 < 0
+            || map->Descriptor.Details.Width <= map->Unk02[x].Unk00
+            || map->Descriptor.Details.Height <= map->Unk02[x].Unk01
+            || map->Unk02[x].Unk02 < 0 || (MAX_MAP_SIZE - 1) < map->Unk02[x].Unk02)
         {
-            map->Objects.Unk00[x].Unk00 = 0;
-            map->Objects.Unk00[x].Unk02 = 0;
-            map->Objects.Unk00[x].Unk01 = 0;
+            map->Unk02[x].Unk00 = 0;
+            map->Unk02[x].Unk02 = 0;
+            map->Unk02[x].Unk01 = 0;
         }
     }
 
     ReadZipFile(&zip, &map->Descriptor.Details, sizeof(MAPDETAILS));
 
-    for (U32 x = 0; x < MAX_MAP_STRUCT4_COUNT; x++)
     {
-        ReadZipFile(&zip, &map->Objects.Unk01[x], sizeof(U32));
-        map->Objects.Unk01[x].Unk01 = 0xffff; // TODO
-    }
+        // mis_objects module, total file size 400 bytes
+        for (U32 x = 0; x < MAX_NUM_MULTI_MAP_AIRSHIP; x++)
+        {
+            ReadZipFile(&zip, &map->Objects[x].Pos, sizeof(COORDINATESU16));
+            map->Objects[x].Flags = DEACTIVATED;
+        }
 
-    {
-        CHAR buffer[272]; // TODO
-        ReadZipFile(&zip, buffer, 272); // TODO
+        {
+            COORDINATESU16 MisObjects[MAX_NUM_MIS_OBJECTS - MAX_NUM_MULTI_MAP_AIRSHIP];
+            ReadZipFile(&zip, MisObjects, sizeof(MisObjects));
+        }
     }
 
     ParseMapScripts(map, &zip);
@@ -510,20 +513,20 @@ VOID ParseMapScriptCommands(MAPPTR map, S32* commands)
                 {
                     value = ptr[-5];
                     INCREMENT(ptr, -5);
-                    FUN_100181f0(map, value); break;
+                    ActivateAirships(map, value); break;
                 }
                 case SCRIPTSCOMMAND_MULTI_PLANES_FOR_FLAGS:
                 case SCRIPTSCOMMAND_MULTI_PLANES_MISSIONS_FOR_FLAGS:
                 {
                     value = ptr[-3];
                     INCREMENT(ptr, -3);
-                    FUN_100181f0(map, value); break;
+                    ActivateAirships(map, value); break;
                 }
                 case SCRIPTSCOMMAND_MULTI_PHRASE_FOR_FLAGS:
                 {
                     value = ptr[-2];
                     INCREMENT(ptr, -2);
-                    FUN_100181f0(map, value); break;
+                    ActivateAirships(map, value); break;
                 }
                 }
             }
@@ -540,7 +543,61 @@ VOID ParseMapScriptCommands(MAPPTR map, S32* commands)
 }
 
 // 0x100181f0
-VOID FUN_100181f0(MAPPTR map, S32 value)
+VOID ActivateAirships(MAPPTR map, S32 value) // TODO name
 {
-    // TODO
+    S16 activate = DEACTIVATED;
+
+    for (int i = 0; i < MAX_NUM_MULTI_MAP_AIRSHIP; i++) 
+    {
+        if (map->Objects[i].Flags != DEACTIVATED) {
+            if (map->Objects[i].Flags > activate) {
+                activate = map->Objects[i].Flags;
+            }
+        }
+    }
+    // Activates the airship to a specific script
+    S16 newActivate = activate + 1;
+
+    for (int i = 0; i < MAX_NUM_MULTI_MAP_AIRSHIP; i++) 
+    {
+        if (value & (1 << i)) {
+            map->Objects[i].Flags = newActivate;
+        }
+    }
+}
+
+// 0x10017eb0
+BOOL CheckMultiMap(LPCSTR name)
+{
+    ZIPFILE zip;
+    ZeroMemory(&zip, sizeof(ZIPFILE));
+
+    if (!OpenZipFile(&zip, name, ZIPFILE_OPEN_READ)) { return FALSE; }
+
+    {
+        U32 magic = 0;
+        ReadZipFile(&zip, &magic, sizeof(U32));
+
+        if (magic != MAP_FILE_MULTI_MAGIC)
+        {
+            CloseZipFile(&zip);
+
+            return FALSE;
+        }
+    }
+
+    {
+        U32 version = 0;
+        ReadZipFile(&zip, &version, sizeof(U32));
+        if (version != MODULE_MULTI_MAP_VERSION_VALUE)
+        {
+            CloseZipFile(&zip);
+
+            return FALSE;
+        }
+    }
+
+    CloseZipFile(&zip);
+
+    return TRUE;
 }
