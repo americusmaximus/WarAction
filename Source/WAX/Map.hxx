@@ -345,12 +345,6 @@ typedef struct MapMissionPlayer
 } MAPMISSIONPLAYER, * MAPMISSIONPLAYERPTR;
 #pragma pack(pop)
 
-typedef struct coordinates16
-{
-    U16 U;
-    U16 V;
-}COORDINATES16, * COORDINATES16PTR;
-
 typedef struct coordinates32
 {
     S32 U;
@@ -361,7 +355,7 @@ typedef struct coordinates32
 typedef struct MapMissionWoofer
 {
     CHAR            Name[MAX_NAME_LENGTH64];
-    coordinates16   Pos;
+    COORDINATESU16  Pos;
     U16             Radius;
     F32             Worse;
     U16             MinWait;
@@ -372,7 +366,7 @@ typedef struct MapMissionWoofer
 #pragma pack(push, 1)
 typedef struct MapMissionObject
 {
-    coordinates16 Pos[100];
+    COORDINATESU16 Pos[MAX_NUM_MIS_OBJECTS];
 } MAPMISSIONOBJECT, * MAPMISSIONOBJECTPTR;
 #pragma pack(pop)
 
@@ -394,10 +388,10 @@ typedef struct MapRhombs
  */
 typedef struct MapObject
 {
-    coordinates16 Pos;
-    U8 ObG;
-    U8 Ob;
-    U8 HP;
-    U8 Typ;
+    COORDINATESU16 Pos;
+    U8             ObG;
+    U8             Ob;
+    U8             HP;
+    U8             Typ;
 }MAPOBJECT, * MAPOBJECTPTR;
 #pragma pack(pop)
