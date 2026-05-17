@@ -29,7 +29,10 @@ SOFTWARE.
 #define MAX_MAP_SIZE                        128
 
 #define MAX_MAP_STRUCT3_COUNT               16 /* TODO */
-#define MAX_MAP_STRUCT4_COUNT               32 /* TODO */
+#define MAX_NUM_MIS_OBJECTS                 100
+#define MAX_NUM_MULTI_MAP_AIRSHIP           32
+#define DEACTIVATED                         0xffff
+
 
 #define MAP_FILE_SINGLE_MAGIC               0x4D535353 /* MSSS */
 #define MAP_FILE_MULTI_MAGIC                0x4D4D5353 /* MMSS */
@@ -55,8 +58,8 @@ typedef struct MapMinMax
 {
     U32 Min_Players; // TODO
     U32 Max_Players; // TODO
-    U32 Unk02; // TODO
-    U32 Unk03; // TODO
+    U32 Min_Teams; // TODO
+    U32 Max_Teams; // TODO
 } MAPMINMAX, * MAPMINMAXPTR;
 
 typedef struct MapParameters
@@ -93,16 +96,15 @@ typedef struct MapStruct3 // TODO
     U16 Unk02; // TODO
 } MAPSTRUCT3, * MAPSTRUCT3PTR;
 
-typedef struct MapStruct4 // TODO
+typedef struct CoordinatesU16 
 {
-    U16 Unk00; // TODO
-    U16 Unk01; // TODO
-} MAPSTRUCT4, * MAPSTRUCT4PTR;
+    U16 U, V;
+} COORDINATESU16, * COORDINATESU16PTR;
 
 typedef struct MissionObjects
 {
-    MAPSTRUCT3 Unk00[MAX_MAP_STRUCT3_COUNT]; // TODO
-    MAPSTRUCT4 Unk01[MAX_MAP_STRUCT4_COUNT]; // TODO
+    COORDINATESU16 Pos;
+    S16            Flags;
 } MISSIONOBJECTS, * MISSIONOBJECTSPTR;
 
 typedef struct MissionScripts
@@ -114,7 +116,8 @@ typedef struct Map
 {
     MAPHEADER       Header;
     MAPDESCRIPTOR   Descriptor;
-    MISSIONOBJECTS  Objects;
+    MAPSTRUCT3      Unk02[MAX_MAP_STRUCT3_COUNT];
+    MISSIONOBJECTS  Objects[MAX_NUM_MULTI_MAP_AIRSHIP];
     LPSTR           Description;
     PIXEL*          Pixels;
     LPSTR           MissionDescription;
